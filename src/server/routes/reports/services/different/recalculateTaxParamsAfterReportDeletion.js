@@ -21,7 +21,7 @@ var recalculateTaxParamsAfterReportDeletion = (taxParams, report, postfix = "") 
   var recalculatedAdditionalInsuranceFee = taxParams.additionalInsuranceFee - report["totalAdditionalInsuranceFee" + postfix];
   taxParams.additionalInsuranceFee = truncateNum(recalculatedAdditionalInsuranceFee);
 
-  var recalculatedOtherExpenses = taxParams.otherExpenses - report["totalAdditionalInsuranceFee" + postfix];
+  var recalculatedOtherExpenses = taxParams.otherExpenses - report["totalOtherExpenses" + postfix];
   taxParams.otherExpenses = truncateNum(recalculatedOtherExpenses);
 
   return { updatedTaxParams: taxParams };
