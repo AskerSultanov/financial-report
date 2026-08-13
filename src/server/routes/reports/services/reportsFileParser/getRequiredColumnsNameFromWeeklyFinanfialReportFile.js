@@ -96,7 +96,7 @@ function getRequiredColumnsNameFromWeeklyFinanfialReportFile(workSheet, columnsN
   } else {
     retailPriceColumn = expectedRetailPriceTitleColumnName;
   }
-  requiredColumnsName.retailPriceColumn = topCells.find((colName) => colName.colTitle === retailPriceTitleText).colName;
+  requiredColumnsName.retailPriceColumn = retailPriceColumn;
 
   var deductionOrPaymentColumn = workSheet.getCell(expectedDeductionOrPaymentTitleColumnName + titlesRowNum).value === deductionOrPaymentTitleText;
   if (!deductionOrPaymentColumn) {
