@@ -21,7 +21,7 @@ var extractWorkSheetFromFile = async (weeklyFinancialReportsBuffer, paidStorageR
     await wb.xlsx.load(buffer);
     var workSheet = wb.getWorksheet(requiredWeeklyFinancialReportFileWorkSheetName);
 
-    if (!workSheet.actualColumnCount) {
+    if (!workSheet?.actualColumnCount) {
       continue;
     }
 
@@ -65,7 +65,7 @@ var extractWorkSheetFromFile = async (weeklyFinancialReportsBuffer, paidStorageR
       await wb.xlsx.load(buffer);
       var workSheet = wb.getWorksheet(requiredPaidStorageReportFileWorkSheetName);
 
-      if (!workSheet.actualColumnCount) {
+      if (!workSheet?.actualColumnCount) {
         continue;
       }
 
