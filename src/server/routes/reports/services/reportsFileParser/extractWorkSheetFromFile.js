@@ -97,7 +97,7 @@ var extractWorkSheetFromFile = async (weeklyFinancialReportsBuffer, paidStorageR
             );
 
             if (!hasPaidStorageReportForPeriod) {
-              existReportPeriod.oneReportPeriodWorkSheet.paidStorageReports.push({
+              existReportPeriod.onePeriodReports.paidStorageReports.push({
                 dateFrom,
                 dateTo,
                 workSheet,
