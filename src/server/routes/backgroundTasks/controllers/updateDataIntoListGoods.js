@@ -1,15 +1,18 @@
 import { dbClient } from "../../../database/index.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/collections/index.js";
+import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 import splitListGoodsByExistence from "../services/splitListGoodsByExistence.js";
 import extractRequiredListGoodsData from "../../goods/services/extractRequiredListGoodsData.js";
 
+var statusOfReportLoadingStop = true;
 var updateLastUsedTimestampNow = true;
 
-var updateDataIntoListGoods = async (req, res, next) => {
-  var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
-  var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
+var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
 
+var updateDataIntoListGoods = async (req, res, next) => {
   var data = await getAllUserListGoodsIds();
 
   for (var { userId, listGoodsIds, listGoodsSkuNamesAndIds } of data) {
@@ -17,19 +20,31 @@ var updateDataIntoListGoods = async (req, res, next) => {
 
     try {
       await session.withTransaction(async () => {
-        if (listGoodsIds.length) {
-          var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+        var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
 
-          var { rawListGoods } = await wbapi.getPricesAndDiscountsByListGoods(userId, token, listGoodsIds);
+        if (!token) {
+          var loadingStopReason = "isTokenMissing";
+          await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+        } else {
+          var tokenIsExpired = checkTokenExpiry(token);
 
-          var listGoodsFromWBAPI = (await extractRequiredListGoodsData(rawListGoods)).listGoods;
-          var { newSkus, updatedSkus } = splitListGoodsByExistence(listGoodsSkuNamesAndIds, listGoodsFromWBAPI);
+          if (tokenIsExpired) {
+            var loadingStopReason = "tokenIsExpired";
+            await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+          } else {
+            if (listGoodsIds.length) {
+              var { rawListGoods } = await wbapi.getPricesAndDiscountsByListGoods(userId, token, listGoodsIds);
 
-          if (newSkus.length) {
-            await saveNewSkusToDb(userId, newSkus, session);
+              var listGoodsFromWBAPI = (await extractRequiredListGoodsData(rawListGoods)).listGoods;
+              var { newSkus, updatedSkus } = splitListGoodsByExistence(listGoodsSkuNamesAndIds, listGoodsFromWBAPI);
+
+              if (newSkus.length) {
+                await saveNewSkusToDb(userId, newSkus, session);
+              }
+
+              await updateSkusFields(userId, updatedSkus, session);
+            }
           }
-
-          await updateSkusFields(userId, updatedSkus, session);
         }
       });
     } catch (e) {

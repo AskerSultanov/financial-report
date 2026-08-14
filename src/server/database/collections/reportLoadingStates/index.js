@@ -23,8 +23,8 @@ var reportLoadingStatesCollectionServices = {
   pushToReportsQueue: (userId, periods, session, needToResetAbandonedReports) =>
     pushToReportsQueue(reportLoadingStatesCollection, userId, periods, session, needToResetAbandonedReports),
 
-  updateReportLoadingStoppedStatus: (userId, newStatus, session) =>
-    updateReportLoadingStoppedStatus(reportLoadingStatesCollection, userId, newStatus, session),
+  updateReportLoadingStoppedStatus: (userId, newStatus, loadingStopReason, session) =>
+    updateReportLoadingStoppedStatus(reportLoadingStatesCollection, userId, newStatus, loadingStopReason, session),
 
   resetAbandonedReports: (userId) => resetAbandonedReports(reportLoadingStatesCollection, userId),
 };
