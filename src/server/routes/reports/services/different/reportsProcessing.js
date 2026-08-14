@@ -6,7 +6,6 @@ import { WBAPIError } from "../../../../customError/index.js";
 import addNewSkusToListGoods from "./addNewSkusToListGoods.js";
 import dbutils from "../../../../database/collections/index.js";
 import insertReportToReportTree from "../reportTreeBuilder/index.js";
-import listGoodsLoader from "../../../goods/services/listGoodsLoader.js";
 import updateListGoodsMetrics from "../different/updateListGoodsMetrics.js";
 import { recordedToSchemaVersion, reportSchemaVersion } from "../../../../database/migration/schemaVersioning/reportsCollection.js";
 
@@ -83,26 +82,20 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.isCrossYearPeriod = isCrossYearPeriod;
   report.recordedTo = { year, month, schemaVersion: recordedToSchemaVersion };
 
-  var { listGoods } = await getListGoodsFromDb(userId, session);
-
-  if (!isReportFromFile) {
-    if (!listGoods.length) {
-      var listGoods = (await listGoodsLoader(userId, token)).listGoodsFromWBAPI;
-    }
-  }
-
-  var { listGoodsWithNewSkus } = addNewSkusToListGoods(listGoods, skuNamesAndIds, isCrossYearPeriod, startYear, endYear);
-  var { listGoodsWithUpdatedSkuMetrics } = updateListGoodsMetrics(report, listGoodsWithNewSkus);
-
   await saveReportToDb(userId, report, session);
   await updateReportTree(userId, sortedYears, session);
 
-  if (listGoodsWithUpdatedSkuMetrics.length) {
-    await saveListGoodsToDb(userId, listGoodsWithUpdatedSkuMetrics, session);
-  }
-
   if (!isReportFromFile) {
     await setLastReportRequestTimestamp(userId, session);
+  }
+
+  var { listGoods } = await getListGoodsFromDb(userId, session);
+
+  if (listGoods.length) {
+    var { listGoodsWithNewSkus } = addNewSkusToListGoods(listGoods, skuNamesAndIds, isCrossYearPeriod, startYear, endYear);
+    var { listGoodsWithUpdatedSkuMetrics } = updateListGoodsMetrics(report, listGoodsWithNewSkus);
+
+    await saveListGoodsToDb(userId, listGoodsWithUpdatedSkuMetrics, session);
   }
 
   return { reportPeriodIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo, totalTaxAmount: report.totalTaxAmount } };
