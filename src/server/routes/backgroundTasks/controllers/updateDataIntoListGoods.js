@@ -12,7 +12,7 @@ var updateDataIntoListGoods = async (req, res, next) => {
 
   var data = await getAllUserListGoodsIds();
 
-  for (var { userId, listGoodsIds } of data) {
+  for (var { userId, listGoodsIds, listGoodsSkuNamesAndIds } of data) {
     var session = await dbClient.startSession();
 
     try {
@@ -22,8 +22,8 @@ var updateDataIntoListGoods = async (req, res, next) => {
 
           var { rawListGoods } = await wbapi.getPricesAndDiscountsByListGoods(userId, token, listGoodsIds);
 
-          var { listGoods } = await extractRequiredListGoodsData(rawListGoods);
-          var { newSkus, updatedSkus } = splitListGoodsByExistence(listGoodsIds, listGoods);
+          var listGoodsFromWBAPI = (await extractRequiredListGoodsData(rawListGoods)).listGoods;
+          var { newSkus, updatedSkus } = splitListGoodsByExistence(listGoodsSkuNamesAndIds, listGoodsFromWBAPI);
 
           if (newSkus.length) {
             await saveNewSkusToDb(userId, newSkus, session);
