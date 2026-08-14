@@ -47,28 +47,45 @@ var updateListGoodsMetrics = (report, listGoods) => {
     var skuMetrics = skuFilteredBySkuNameAndId.metrics;
 
     if (report.isCrossYearPeriod) {
-      var startYearMetric = skuMetrics.find((i) => i.year === startYear);
+      var indexOfStartYearMetric = skuMetrics.findIndex((metric) => metric.year === startYear);
 
-      if (!startYearMetric) {
-        startYearMetric = { year: startYear, ...defaultSkuMetricsField };
+      var startYearMetric;
+
+      if (indexOfStartYearMetric === -1) {
+        skuMetrics[skuMetrics.length] = { year: startYear, ...defaultSkuMetricsField };
+        startYearMetric = skuMetrics[skuMetrics.length - 1];
+      } else {
+        startYearMetric = skuMetrics[indexOfStartYearMetric];
       }
 
       startYearMetric = aggregateSkuMetrics(startYearMetric, sku, startYearPropPostfix);
 
-      var endYearMetric = skuMetrics.find((i) => i.year === endYear);
+      var indexOfEndYearMetric = skuMetrics.findIndex((metric) => metric.year === endYear);
 
-      if (!endYearMetric) {
-        endYearMetric = { year: endYear, ...defaultSkuMetricsField };
+      var endYearMetric;
+
+      if (indexOfEndYearMetric === -1) {
+        if (indexOfStartYearMetric === -1) {
+          skuMetrics[skuMetrics.length + 1] = { year: endYear, ...defaultSkuMetricsField };
+        } else {
+          skuMetrics[skuMetrics.length] = { year: endYear, ...defaultSkuMetricsField };
+        }
+
+        endYearMetric = skuMetrics[skuMetrics.length - 1];
+      } else {
+        endYearMetric = skuMetrics[indexOfEndYearMetric];
       }
 
       endYearMetric = aggregateSkuMetrics(endYearMetric, sku, endYearPropPostfix);
     } else {
-      var skuMetrics = skuFilteredBySkuNameAndId.metrics;
+      var indexOfSkuMetric = skuMetrics.findIndex((metric) => metric.year === year);
+      var skuMetric;
 
-      var skuMetric = skuMetrics.find((i) => i.year === year);
-
-      if (!skuMetric) {
-        skuMetric = { year, ...defaultSkuMetricsField };
+      if (indexOfSkuMetric === -1) {
+        skuMetrics[skuMetrics.length] = { year, ...defaultSkuMetricsField };
+        skuMetric = skuMetrics[skuMetrics.length - 1];
+      } else {
+        skuMetric = skuMetrics[indexOfSkuMetric];
       }
 
       skuMetric = aggregateSkuMetrics(skuMetric, sku);
