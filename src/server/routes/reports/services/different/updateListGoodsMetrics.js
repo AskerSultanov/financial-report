@@ -39,7 +39,7 @@ var updateListGoodsMetrics = (report, listGoods) => {
 
   for (var sku of report.skus) {
     if (report.isCrossYearPeriod) {
-      var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName).metrics;
+      var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName)?.metrics;
 
       if (skuMetrics?.length) {
         var startYearMetric = skuMetrics.find((i) => i.year === startYear);
@@ -58,7 +58,7 @@ var updateListGoodsMetrics = (report, listGoods) => {
         endYearMetric = aggregateSkuMetrics(endYearMetric, sku, endYearPropPostfix);
       }
     } else {
-      var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName).metrics;
+      var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName)?.metrics;
 
       if (skuMetrics?.length) {
         var skuMetric = skuMetrics.find((i) => i.year === year);
