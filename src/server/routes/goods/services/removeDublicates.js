@@ -1,6 +1,8 @@
 var removeDublicates = (listGoodsFromDb, listGoodsFromWBAPI) => {
-  if (!listGoodsFromDb.length || !listGoodsFromWBAPI.length) {
-    return { dedublicatedListGoods: [] };
+  if (!listGoodsFromWBAPI.length) {
+    return { dedublicatedListGoods: listGoodsFromDb };
+  } else if (!listGoodsFromDb.length) {
+    return { dedublicatedListGoods: listGoodsFromWBAPI };
   }
 
   for (var skuFromWBAPI of listGoodsFromWBAPI) {
