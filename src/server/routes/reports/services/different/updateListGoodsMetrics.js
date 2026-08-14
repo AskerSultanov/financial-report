@@ -1,4 +1,5 @@
 import truncateNum from "../reportParsing/truncateNum.js";
+import { defaultSkuMetricsField } from "./addDefaultMetricsToSku.js";
 
 var startYearPropPostfix = "InCurrentYear";
 var endYearPropPostfix = "InNextYear";
@@ -39,15 +40,35 @@ var updateListGoodsMetrics = (report, listGoods) => {
   for (var sku of report.skus) {
     if (report.isCrossYearPeriod) {
       var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName).metrics;
-      var startYearMetrics = skuMetrics.find((i) => i.year === startYear);
-      var endYearMetrics = skuMetrics.find((i) => i.year === endYear);
 
-      startYearMetrics = aggregateSkuMetrics(startYearMetrics, sku, startYearPropPostfix);
-      endYearMetrics = aggregateSkuMetrics(endYearMetrics, sku, endYearPropPostfix);
+      if (skuMetrics?.length) {
+        var startYearMetric = skuMetrics.find((i) => i.year === startYear);
+
+        if (!startYearMetric) {
+          startYearMetric = { year: startYear, ...defaultSkuMetricsField };
+        }
+
+        var endYearMetric = skuMetrics.find((i) => i.year === endYear);
+
+        if (!endYearMetric) {
+          endYearMetric = { year: endYear, ...defaultSkuMetricsField };
+        }
+
+        startYearMetric = aggregateSkuMetrics(startYearMetric, sku, startYearPropPostfix);
+        endYearMetric = aggregateSkuMetrics(endYearMetric, sku, endYearPropPostfix);
+      }
     } else {
       var skuMetrics = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName).metrics;
-      var skuMetricsOfCurrentYear = skuMetrics.find((i) => i.year === year);
-      skuMetricsOfCurrentYear = aggregateSkuMetrics(skuMetricsOfCurrentYear, sku);
+
+      if (skuMetrics?.length) {
+        var skuMetric = skuMetrics.find((i) => i.year === year);
+
+        if (!skuMetric) {
+          skuMetric = { year, ...defaultSkuMetricsField };
+        }
+
+        skuMetric = aggregateSkuMetrics(skuMetric, sku);
+      }
     }
   }
 

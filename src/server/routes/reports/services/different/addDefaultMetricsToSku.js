@@ -1,4 +1,4 @@
-var defaultSkuMetricsField = {
+export var defaultSkuMetricsField = {
   qty: 0,
   tax: 0,
   fines: 0,
@@ -17,7 +17,7 @@ var defaultSkuMetricsField = {
   additionalInsuranceFee: 0,
 };
 
-var addDefaultMetricsToSku = (listGoods, isCrossYearPeriod, startYear, endYear) => {
+export var addDefaultMetricsToSku = (listGoods, isCrossYearPeriod, startYear, endYear) => {
   for (var sku of listGoods) {
     if (isCrossYearPeriod) {
       if (!sku.metrics.find((i) => i.year === startYear)) {
@@ -36,5 +36,3 @@ var addDefaultMetricsToSku = (listGoods, isCrossYearPeriod, startYear, endYear) 
 
   return listGoods;
 };
-
-export default addDefaultMetricsToSku;

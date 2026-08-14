@@ -1,4 +1,4 @@
-import addDefaultMetricsToSku from "./addDefaultMetricsToSku.js";
+import { addDefaultMetricsToSku } from "./addDefaultMetricsToSku.js";
 
 var addNewSkusToListGoods = (listGoods, skusFromFinancialReports, isCrossYearPeriod, startYear, endYear) => {
   if (!listGoods.length) {
