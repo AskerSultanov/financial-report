@@ -25,7 +25,7 @@ var aggregateSkuMetrics = (skuMetrics, sku, postfix = "") => {
   return skuMetrics;
 };
 
-var updateListGoodsMetrics = (report, listGoods) => {
+var updateListGoodsMetrics = async (report, listGoods) => {
   if (!report.skus.length || !listGoods.length) {
     return { listGoodsWithUpdatedSkuMetrics: [] };
   }

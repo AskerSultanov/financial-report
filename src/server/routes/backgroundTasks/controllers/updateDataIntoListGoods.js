@@ -4,11 +4,14 @@ import dbUtils from "../../../database/collections/index.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 import splitListGoodsByExistence from "../services/splitListGoodsByExistence.js";
 import extractRequiredListGoodsData from "../../goods/services/extractRequiredListGoodsData.js";
+import updateListGoodsMetrics from "../../reports/services/different/updateListGoodsMetrics.js";
 
 var statusOfReportLoadingStop = true;
 var updateLastUsedTimestampNow = true;
+var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
 var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { getReportsByUserId } = dbUtils.reportCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
 var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
 
@@ -33,12 +36,17 @@ var updateDataIntoListGoods = async (req, res, next) => {
             await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
           } else {
             if (listGoodsIds.length) {
+              var { reports } = await getReportsByUserId(userId, session, projectedFields);
               var { rawListGoods } = await wbapi.getPricesAndDiscountsByListGoods(userId, token, listGoodsIds);
 
               var listGoodsFromWBAPI = (await extractRequiredListGoodsData(rawListGoods)).listGoods;
               var { newSkus, updatedSkus } = splitListGoodsByExistence(listGoodsSkuNamesAndIds, listGoodsFromWBAPI);
 
               if (newSkus.length) {
+                for (var report of reports) {
+                  newSkus = updateListGoodsMetrics(report, newSkus).listGoodsWithUpdatedSkuMetrics;
+                }
+
                 await saveNewSkusToDb(userId, newSkus, session);
               }
 
