@@ -4,10 +4,11 @@ import dbUtils from "../../../database/collections/index.js";
 
 var updateLastUsedTimestampNow = true;
 
+var { saveListGoodsToDb } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId, updateLastUsedTimestamp } = dbUtils.tokenCollectionServices;
+
 var loadListGoods = async (req, res, next) => {
   var { userId } = req.body;
-  var { saveListGoodsToDb } = dbUtils.goodsCollectionServices;
-  var { getWBTokenByUserId, updateLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 
   var session = await dbClient.startSession();
 
