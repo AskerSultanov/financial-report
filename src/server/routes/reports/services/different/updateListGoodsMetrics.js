@@ -40,6 +40,10 @@ var updateListGoodsMetrics = async (report, listGoods) => {
   for (var sku of report.skus) {
     var skuFilteredBySkuNameAndId = listGoods.find((i) => i.id === sku.id && i.skuName === sku.skuName);
 
+    if (!skuFilteredBySkuNameAndId) {
+      continue;
+    }
+
     if (!skuFilteredBySkuNameAndId?.metrics) {
       skuFilteredBySkuNameAndId.metrics = [];
     }
