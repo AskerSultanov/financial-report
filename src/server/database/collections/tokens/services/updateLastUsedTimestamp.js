@@ -1,4 +1,4 @@
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 
 var updateLastUsedTimestamp = async (collection, userId, session) => {
   var sessionOpt = session ? { session: session } : {};

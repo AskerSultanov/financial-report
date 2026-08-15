@@ -1,6 +1,6 @@
 import { DatabaseError } from "../../../../customError/index.js";
 
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 
 var getWBTokenByUserId = async (collection, userId, session, updateLastUsedNow = false) => {
   try {

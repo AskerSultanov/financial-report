@@ -1,5 +1,5 @@
 var oneMinuteMs = 60_000;
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 
 var shouldWaitBeforeNextRequest = (lastReportRequestTimestamp) => {
   var nextRequestDelayMs = 0;

@@ -2,7 +2,7 @@ import parseJwt from "../services/parseJwt.js";
 import isTestToken from "../services/isTestToken.js";
 import isPresumablyJwtToken from "../services/isPresumablyJwtToken.js";
 
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 
 var tokenValidator = async (req, res, next) => {
   var token = req.body.token;

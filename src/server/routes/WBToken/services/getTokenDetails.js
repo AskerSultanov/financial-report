@@ -1,6 +1,6 @@
 var millisecondsInOneSec = 1000;
 var millisecondsInDay = 86_400_000;
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 var monthList = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
 var getTokenDetails = (token) => {

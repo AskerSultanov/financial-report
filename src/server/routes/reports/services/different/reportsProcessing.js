@@ -18,7 +18,7 @@ var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.r
 
 var updateLastUsedTimestampNow = true;
 var invalidTokenErrorMsg = "Invalid Token";
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
+var mskTimeOffsetInMs = 10_800_000;
 
 var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
   if (!isReportFromFile) {
