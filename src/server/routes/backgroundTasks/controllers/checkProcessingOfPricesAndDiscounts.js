@@ -4,11 +4,11 @@ import dbUtils from "../../../database/collections/index.js";
 
 var updateLastUsedTimestampNow = true;
 
-var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
-  var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
-  var { setPriceUpdateTimestampAndUpdateStatus } = dbUtils.goodsCollectionServices;
-  var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { setPriceUpdateTimestampAndUpdateStatus } = dbUtils.goodsCollectionServices;
+var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
+var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
   var data = await getAllUserWeeklyPricesAndDiscounts();
 
   for (var { userId, uploadId } of data) {
