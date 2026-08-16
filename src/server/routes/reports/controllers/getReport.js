@@ -9,6 +9,11 @@ var getReport = async (req, res, next) => {
   var { getSkusLastCostPrice } = dbUtils.goodsCollectionServices;
 
   var { report } = await getReportById(userId, reportId);
+
+  if (!report) {
+    return res.sendStatus(404);
+  }
+
   var { skusLastCostPrice } = await getSkusLastCostPrice(userId);
 
   var { skuImages } = await collectImagesAsBase64(userId, report.skus);

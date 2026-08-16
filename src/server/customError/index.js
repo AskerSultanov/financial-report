@@ -8,16 +8,6 @@ class WBAPIError extends Error {
   }
 }
 
-class ReportNotFoundError extends Error {
-  constructor(userId, reportId, message) {
-    super(message);
-    this.status = 404;
-    this.userId = userId;
-    this.message = `the report with id ${reportId} the was not found`;
-    this.name = this.constructor.name;
-  }
-}
-
 class FormDataError extends Error {
   constructor(message, invalidField) {
     super(message);
@@ -28,4 +18,4 @@ class FormDataError extends Error {
   }
 }
 
-export { WBAPIError, FormDataError, ReportNotFoundError };
+export { WBAPIError, FormDataError };

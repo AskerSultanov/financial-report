@@ -1,5 +1,5 @@
 import { MulterError } from "multer";
-import { WBAPIError, FormDataError, ReportNotFoundError } from "../../customError/index.js";
+import { WBAPIError, FormDataError } from "../../customError/index.js";
 
 var errorHandler = async (e, req, res, next) => {
   console.error({
@@ -15,10 +15,6 @@ var errorHandler = async (e, req, res, next) => {
   }
 
   if (e instanceof WBAPIError) {
-    return res.status(e.status).json({ msg: e.message });
-  }
-
-  if (e instanceof ReportNotFoundError) {
     return res.status(e.status).json({ msg: e.message });
   }
 

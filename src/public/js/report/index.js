@@ -26,7 +26,10 @@ var url = "/report/" + userId + "/" + reportId;
 var getReportData = async () => {
   var res = await fetch(url);
 
-  if (!res.ok) {
+  if (res.status === 404) {
+    alert("Отчет не найден");
+    window.location.href = "/";
+  } else if (!res.ok) {
     alert("Ошибка при получении отчета");
     window.location.href = "/";
   }
