@@ -8,14 +8,4 @@ class WBAPIError extends Error {
   }
 }
 
-class FormDataError extends Error {
-  constructor(message, invalidField) {
-    super(message);
-    this.status = 400;
-    this.message = message;
-    this.invalidField = invalidField;
-    this.name = this.constructor.name;
-  }
-}
-
-export { WBAPIError, FormDataError };
+export { WBAPIError };

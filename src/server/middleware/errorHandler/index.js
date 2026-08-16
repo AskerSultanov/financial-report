@@ -1,5 +1,5 @@
 import { MulterError } from "multer";
-import { WBAPIError, FormDataError } from "../../customError/index.js";
+import { WBAPIError } from "../../customError/index.js";
 
 var errorHandler = async (e, req, res, next) => {
   console.error({
@@ -18,9 +18,6 @@ var errorHandler = async (e, req, res, next) => {
     return res.status(e.status).json({ msg: e.message });
   }
 
-  if (e instanceof FormDataError) {
-    return res.status(e.status).json({ msg: e.message, invalidField: e.invalidField });
-  }
   console.log(e.cause);
   res.status(e?.status || 500).json({ msg: "Произошла ошибка..." });
 };

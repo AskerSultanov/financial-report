@@ -1,8 +1,10 @@
-import { FormDataError } from "../../../customError/index.js";
+var checkPasswd = (pwd) => {
+  var msg = "";
+  var passwdIsValid = false;
 
-var checkPasswd = async (pwd) => {
   if (!pwd) {
-    throw new FormDataError("Пароль не может быть пустым");
+    msg = "Пароль не может быть пустым";
+    return { msg, passwdIsValid };
   }
 
   pwd = pwd.trim();
@@ -10,18 +12,21 @@ var checkPasswd = async (pwd) => {
   var pwdIsEmpty = pwd.length === 0;
 
   if (pwdIsEmpty) {
-    throw new FormDataError("Пароль не должен содержать пробелов");
+    msg = "Пароль не должен содержать пробелов";
+    return { msg, passwdIsValid };
   }
 
   if (pwd.length < 4) {
-    throw new FormDataError("Длина пароля должна быть больше 3");
+    msg = "Длина пароля должна быть больше 3";
+    return { msg, passwdIsValid };
   }
 
   if (pwd.length > 21) {
-    throw new FormDataError("Длина пароля должна быть меньше 21");
+    msg = "Длина пароля должна быть меньше 21";
+    return { msg, passwdIsValid };
   }
 
-  return true;
+  return { msg, passwdIsValid: true };
 };
 
 export default checkPasswd;

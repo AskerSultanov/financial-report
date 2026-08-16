@@ -1,4 +1,4 @@
-var jose = import("jose");
+import * as jose from "jose";
 import { randomBytes } from "node:crypto";
 import checkLogin from "../services/checkLogin.js";
 import checkPasswd from "../services/checkPasswd.js";
@@ -13,8 +13,17 @@ var { createUserToDb, getUserByLogin } = dbUtils.userCollectionServices;
 var createUser = async (req, res, next) => {
   var candidate = req.body;
 
-  await checkLogin(candidate.login);
-  await checkPasswd(candidate.passwd);
+  var { loginIsValid, msg } = checkLogin(candidate.login);
+
+  if (!loginIsValid) {
+    return res.status(400).json({ msg });
+  }
+
+  var { passwdIsValid, msg } = checkPasswd(candidate.passwd);
+
+  if (!passwdIsValid) {
+    return res.status(400).json({ msg });
+  }
 
   var session = await dbClient.startSession();
 
@@ -33,7 +42,6 @@ var createUser = async (req, res, next) => {
 
         await createUserToDb(candidate, session);
 
-        jose = await jose;
         var payload = { userId, role: candidate.role };
         var privateKey = await jose.importPKCS8(process.env.pkcs8, alg);
         var token = await new jose.SignJWT(payload).setExpirationTime("1 day").setProtectedHeader({ alg }).sign(privateKey);

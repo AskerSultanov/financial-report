@@ -1,18 +1,22 @@
-import { FormDataError } from "../../../customError/index.js";
+var checkLogin = (login) => {
+  var msg = "";
+  var loginIsValid = false;
 
-var checkLogin = async (login) => {
   if (!login) {
-    throw new FormDataError("Логин не может быть пустым", login);
+    msg = "Логин не может быть пустым " + login;
+    return { msg, loginIsValid };
   }
 
   login = login.trim();
 
   if (login.length < 2) {
-    throw new FormDataError("Минимальная длина логина равна 2", login);
+    msg = "Минимальная длина логина равна 2 " + login;
+    return { msg, loginIsValid };
   }
 
   if (login.length > 20) {
-    throw new FormDataError("Максимальная длина логина равна 20", login);
+    msg = "Максимальная длина логина равна 20 " + login;
+    return { msg, loginIsValid };
   }
 
   var regExp = /[a-zA-Z0-9]/gi;
@@ -20,10 +24,11 @@ var checkLogin = async (login) => {
   var result = login.match(regExp);
 
   if (result.length !== login.length) {
-    throw new FormDataError("Логин должен содержать только латинские буквы или цифры", login);
+    msg = "Логин должен содержать только латинские буквы или цифры" + login;
+    return { msg, loginIsValid };
   }
 
-  return true;
+  return { msg, loginIsValid: true };
 };
 
 export default checkLogin;
