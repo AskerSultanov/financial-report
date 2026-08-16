@@ -2,13 +2,16 @@ import { dbClient } from "../../../database/index.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/collections/index.js";
 import getCurrentDayMSK from "../services/getCurrentDayMSK.js";
+import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
+var statusOfReportLoadingStop = true;
 var updateLastUsedTimestampNow = true;
 
-var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
-  var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
-  var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
+var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
+var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
   var { currentDayIndex } = getCurrentDayMSK();
   var data = await getTodayPricesAndDiscountsByDayIndex(currentDayIndex);
 
@@ -21,10 +24,23 @@ var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
           currentDayPricesAndDiscounts = currentDayPricesAndDiscounts.map(({ data }) => data);
 
           var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
-          var { id, alreadyExists } = await wbapi.setPricesAndDiscounts(userId, token, currentDayPricesAndDiscounts);
 
-          if (!alreadyExists) {
-            await setUploadId(userId, id, session);
+          if (!token) {
+            var loadingStopReason = "isTokenMissing";
+            await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+          } else {
+            var tokenIsExpired = checkTokenExpiry(token);
+
+            if (tokenIsExpired) {
+              var loadingStopReason = "tokenIsExpired";
+              await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+            } else {
+              var { id, alreadyExists } = await wbapi.setPricesAndDiscounts(userId, token, currentDayPricesAndDiscounts);
+
+              if (!alreadyExists) {
+                await setUploadId(userId, id, session);
+              }
+            }
           }
         }
       });
