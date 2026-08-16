@@ -3,7 +3,7 @@ import { join } from "node:path";
 import cookieParser from "cookie-parser";
 import checkRoles from "./middleware/checkRoles.js";
 import errorHandler from "./middleware/errorHandler/index.js";
-import notFoundHandler from "./middleware/notFoundHandler/index.js";
+import pageNotFoundHandler from "./middleware/pageNotFoundHandler/index.js";
 import verifyAuthorization from "./middleware/verifyAuthorization.js";
 import verifyAuthentication from "./middleware/verifyAuthentication.js";
 
@@ -93,7 +93,7 @@ var runServer = async () => {
   app.use("/personal-account", checkRoles(["admin", "user"]), personalAccountRouter);
   app.use("/delete", userDeleteRouter);
 
-  app.all(/.*/, notFoundHandler);
+  app.all(/.*/, pageNotFoundHandler);
 
   app.use(errorHandler);
 
