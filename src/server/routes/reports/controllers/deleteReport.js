@@ -6,13 +6,13 @@ import recalculateSkuMetricsAfterReportDeletion from "../services/different/reca
 var currentYearPropPostfix = "InCurrentYear";
 var nextYearPropPostfix = "InNextYear";
 
+var { deleteReportFromDb } = dbUtils.reportCollectionServices;
+var { deleteReportFromReportTree } = dbUtils.reportsTreeCollectionServices;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
+var { getListGoodsFromDb, updateSkusMetricsInListGoods } = dbUtils.goodsCollectionServices;
+
 var deleteReport = async (req, res, next) => {
   var { userId, reportId, skuNames } = req.body;
-
-  var { deleteReportFromDb } = dbUtils.reportCollectionServices;
-  var { deleteReportFromReportTree } = dbUtils.reportsTreeCollectionServices;
-  var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-  var { getListGoodsFromDb, updateSkusMetricsInListGoods } = dbUtils.goodsCollectionServices;
 
   var session = await dbClient.startSession();
   try {
@@ -29,7 +29,11 @@ var deleteReport = async (req, res, next) => {
         var startYearTaxParams = taxParams.find((params) => params.year === startYear);
         var endYearTaxParams = taxParams.find((params) => params.year === endYear);
 
-        startYearTaxParams = recalculateTaxParamsAfterReportDeletion(startYearTaxParams, reportBeforeDeletion, currentYearPropPostfix).updatedTaxParams;
+        startYearTaxParams = recalculateTaxParamsAfterReportDeletion(
+          startYearTaxParams,
+          reportBeforeDeletion,
+          currentYearPropPostfix,
+        ).updatedTaxParams;
 
         endYearTaxParams = recalculateTaxParamsAfterReportDeletion(endYearTaxParams, reportBeforeDeletion, nextYearPropPostfix).updatedTaxParams;
 

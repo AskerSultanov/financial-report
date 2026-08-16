@@ -1,9 +1,10 @@
 import dbUtils from "../../../database/collections/index.js";
 import generageSKusMetricsFile from "../services/skusMetrics/index.js";
 
+var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+
 var getSkusMetricsFile = async (req, res, next) => {
-  var { userId } = req.params
-  var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+  var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);
   var { skusMetricsFileBuffer } = await generageSKusMetricsFile(listGoods);

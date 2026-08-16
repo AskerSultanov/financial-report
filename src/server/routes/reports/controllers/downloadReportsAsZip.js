@@ -30,9 +30,10 @@ var selectedFields = [
   "reports.totalFinalProfit",
 ];
 
+var { getReportsByUserId } = dbUtils.reportCollectionServices;
+
 var downloadReportsAsZip = async (req, res, next) => {
   var { userId, reportIds } = req.body;
-  var { getReportsByUserId } = dbUtils.reportCollectionServices;
 
   var { reports } = await getReportsByUserId(userId, session, selectedFields, reportIds);
 

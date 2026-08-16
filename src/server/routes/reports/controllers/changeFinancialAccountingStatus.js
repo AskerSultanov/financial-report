@@ -1,9 +1,9 @@
 import dbUtils from "../../../database/collections/index.js";
 
+var { addReportToAccounted, removeReportFromAccounted } = dbUtils.reportCollectionServices;
+
 var changeFinancialAccountingStatus = async (req, res) => {
   var { userId, reportId, newStatus } = req.body;
-
-  var { addReportToAccounted, removeReportFromAccounted } = dbUtils.reportCollectionServices;
 
   if (newStatus) {
     await addReportToAccounted(userId, reportId);

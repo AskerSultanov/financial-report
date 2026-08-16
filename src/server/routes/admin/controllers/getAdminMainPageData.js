@@ -1,8 +1,8 @@
 import dbUtils from "../../../database/collections/index.js";
 
-var getAdminMainPageData = async (req, res, next) => {
-  var { getAllUsersFromDb } = dbUtils.userCollectionServices;
+var { getAllUsersFromDb } = dbUtils.userCollectionServices;
 
+var getAdminMainPageData = async (req, res, next) => {
   var users = await getAllUsersFromDb();
   return res.json(users);
 };

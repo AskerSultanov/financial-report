@@ -4,9 +4,10 @@ import dbUtils from "../../../database/collections/index.js";
 
 var updateWBTokenLastUsedTimestampNow = true;
 
+var { updateSingleSku } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+
 var setNewPricesAndDiscountsToSku = async (req, res, next) => {
-  var { updateSingleSku } = dbUtils.goodsCollectionServices;
-  var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
   var { userId, skuDataToUpdate, setNewPriceNow, expectedPriceExists } = req.body;
 
   var session = await dbClient.startSession();

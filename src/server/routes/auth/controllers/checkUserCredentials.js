@@ -7,9 +7,9 @@ var oneDayMs = 86_400_000;
 var mskTimeOffsetInMs = 10_800_000;
 var exp = Date.now() + oneDayMs + mskTimeOffsetInMs;
 
-var checkUserCredentials = async (req, res, next) => {
-  var { getUserByLogin } = dbUtils.userCollectionServices;
+var { getUserByLogin } = dbUtils.userCollectionServices;
 
+var checkUserCredentials = async (req, res, next) => {
   var existUser = await getUserByLogin(req.body.login);
 
   if (!existUser) {

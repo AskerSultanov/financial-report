@@ -7,8 +7,8 @@ var statusOfReportLoadingStop = true;
 var updateWBTokenLastUsedTimestampNow = true;
 
 var { setPriceUpdateTimestampAndUpdateStatus } = dbUtils.goodsCollectionServices;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
 var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {

@@ -8,11 +8,11 @@ import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFrom
 var mskTimeOffsetInMs = 10_800_000;
 var updateWBTokenLastUsedTimestampNow = true;
 
+var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenCollectionServices;
+var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsCollectionServices;
+
 var saveToken = async (req, res, next) => {
   var { userId, token, tokenPayload } = req.body;
-
-  var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenCollectionServices;
-  var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsCollectionServices;
 
   var session = await dbClient.startSession();
 

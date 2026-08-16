@@ -8,6 +8,8 @@ import dbUtils from "../../../database/collections/index.js";
 var alg = "RS256";
 var oneDayMs = 24 * 3600 * 1000;
 
+var { createUserToDb, getUserByLogin } = dbUtils.userCollectionServices;
+
 var createUser = async (req, res, next) => {
   var candidate = req.body;
 
@@ -15,7 +17,6 @@ var createUser = async (req, res, next) => {
   await checkPasswd(candidate.passwd);
 
   var session = await dbClient.startSession();
-  var { createUserToDb, getUserByLogin } = dbUtils.userCollectionServices;
 
   try {
     await session.withTransaction(async () => {

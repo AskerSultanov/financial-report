@@ -6,8 +6,8 @@ import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
 var statusOfReportLoadingStop = true;
 
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
 var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {

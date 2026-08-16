@@ -1,8 +1,8 @@
 import dbUtils from "../../../database/collections/index.js";
 
-var changeWeeklyPricesOrDiscounts = async (req, res, next) => {
-  var { updatePriceAndDiscount } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { updatePriceAndDiscount } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
+var changeWeeklyPricesOrDiscounts = async (req, res, next) => {
   var { userId, skuId, skuDataToUpdate, checkedWeekDays } = req.body;
 
   await updatePriceAndDiscount(userId, skuId, skuDataToUpdate, checkedWeekDays);

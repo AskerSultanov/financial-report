@@ -2,10 +2,11 @@ import dbUtils from "../../../database/collections/index.js";
 import { generageWeeklyPricesFile } from "../services/weeklyPrices/index.js";
 import mergeListGoodsWithWeeklyPricesAndDiscounts from "../services/mergeListGoodsWithWeeklyPricesAndDiscounts.js";
 
+var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+
 var getWeeklyPricesFile = async (req, res, next) => {
   var { userId } = req.params;
-  var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-  var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
   var { listGoods } = await getListGoodsFromDb(userId);
   var { weeklyPricesAndDiscounts } = await getWeeklyPricesAndDiscountsFromDb(userId);

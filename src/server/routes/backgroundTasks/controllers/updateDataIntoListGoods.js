@@ -10,8 +10,8 @@ var statusOfReportLoadingStop = true;
 var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
 var { getReportsByUserId } = dbUtils.reportCollectionServices;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
 
 var updateDataIntoListGoods = async (req, res, next) => {

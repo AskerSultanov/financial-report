@@ -1,9 +1,10 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/collections/index.js";
 
+var { deleteUserFromDb } = dbUtils.userCollectionServices;
+
 var deleteUser = async (req, res, next) => {
   var { userId } = req.body;
-  var { deleteUserFromDb } = dbUtils.userCollectionServices;
   var session = await dbClient.startSession();
 
   try {

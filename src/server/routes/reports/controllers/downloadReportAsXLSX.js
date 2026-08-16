@@ -1,9 +1,10 @@
 import dbUtils from "../../../database/collections/index.js";
 import { getReportAsXLSXBuffer } from "../services/reportAsXLSXBuffer/index.js";
 
+var { getReportById } = dbUtils.reportCollectionServices;
+
 var downloadReportAsXLSX = async (req, res, next) => {
   var { userId, reportId } = req.body;
-  var { getReportById } = dbUtils.reportCollectionServices;
 
   var { report } = await getReportById(userId, reportId);
 
