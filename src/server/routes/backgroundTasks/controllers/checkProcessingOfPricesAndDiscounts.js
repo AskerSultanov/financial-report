@@ -4,10 +4,10 @@ import dbUtils from "../../../database/collections/index.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
 var statusOfReportLoadingStop = true;
-var updateLastUsedTimestampNow = true;
+var updateWBTokenLastUsedTimestampNow = true;
 
-var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
 var { setPriceUpdateTimestampAndUpdateStatus } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
 var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
@@ -20,7 +20,7 @@ var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
     try {
       await session.withTransaction(async () => {
         if (uploadId) {
-          var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+          var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
 
           if (token) {
             var loadingStopReason = "isTokenMissing";
@@ -32,6 +32,8 @@ var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
               var loadingStopReason = "tokenIsExpired";
               await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
             } else {
+              await updateWBTokenLastUsedTimestamp(userId, session);
+
               var { historyGoods } = await wbapi.getPriceUploadDetails(userId, uploadId, token);
 
               await setPriceUpdateTimestampAndUpdateStatus(userId, historyGoods, session);

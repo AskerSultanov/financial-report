@@ -7,11 +7,10 @@ import extractRequiredListGoodsData from "../../goods/services/extractRequiredLi
 import updateListGoodsMetrics from "../../reports/services/different/updateListGoodsMetrics.js";
 
 var statusOfReportLoadingStop = true;
-var updateLastUsedTimestampNow = true;
 var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
-var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
 var { getReportsByUserId } = dbUtils.reportCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
 var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
 
@@ -23,7 +22,7 @@ var updateDataIntoListGoods = async (req, res, next) => {
 
     try {
       await session.withTransaction(async () => {
-        var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+        var { token } = await getWBTokenByUserId(userId, session);
 
         if (!token) {
           var loadingStopReason = "isTokenMissing";
@@ -36,6 +35,8 @@ var updateDataIntoListGoods = async (req, res, next) => {
             await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
           } else {
             if (listGoodsIds.length) {
+              await updateWBTokenLastUsedTimestamp(userId, session);
+
               var { reports } = await getReportsByUserId(userId, session, projectedFields);
               var { rawListGoods } = await wbapi.getPricesAndDiscountsByListGoods(userId, token, listGoodsIds);
 

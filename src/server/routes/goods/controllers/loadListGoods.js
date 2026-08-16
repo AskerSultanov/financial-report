@@ -5,12 +5,12 @@ import removeDublicates from "../services/removeDublicates.js";
 import updateListGoodsMetrics from "../../reports/services/different/updateListGoodsMetrics.js";
 
 var skuNames = null;
-var updateLastUsedTimestampNow = true;
+var updateWBTokenLastUsedTimestampNow = true;
 var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
 var { getReportsByUserId } = dbUtils.reportCollectionServices;
 var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-var { getWBTokenByUserId, updateLastUsedTimestamp } = dbUtils.tokenCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 
 var loadListGoods = async (req, res, next) => {
   var { userId } = req.body;
@@ -19,7 +19,7 @@ var loadListGoods = async (req, res, next) => {
 
   try {
     await session.withTransaction(async () => {
-      var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+      var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
 
       if (!token) {
         return res.status(400).json({ msg: "В первую очередь нужно загрузить токен личного кабинета WB" });

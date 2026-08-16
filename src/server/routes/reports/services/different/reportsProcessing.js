@@ -16,7 +16,7 @@ var { getReportTree, updateReportTree } = dbutils.reportsTreeCollectionServices;
 var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsCollectionServices;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStatesCollectionServices;
 
-var updateLastUsedTimestampNow = true;
+var updateWBTokenLastUsedTimestampNow = true;
 var invalidTokenErrorMsg = "Invalid Token";
 var mskTimeOffsetInMs = 10_800_000;
 
@@ -24,7 +24,7 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   if (!isReportFromFile) {
     var currentTimestamp = Date.now() + mskTimeOffsetInMs;
 
-    var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+    var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
 
     var tokenPayload = parseJwt(token);
 

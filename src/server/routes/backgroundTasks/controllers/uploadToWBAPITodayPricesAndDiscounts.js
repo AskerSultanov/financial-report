@@ -5,9 +5,8 @@ import getCurrentDayMSK from "../services/getCurrentDayMSK.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
 var statusOfReportLoadingStop = true;
-var updateLastUsedTimestampNow = true;
 
-var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
 var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
 
@@ -23,7 +22,7 @@ var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
         if (currentDayPricesAndDiscounts) {
           currentDayPricesAndDiscounts = currentDayPricesAndDiscounts.map(({ data }) => data);
 
-          var { token } = await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow);
+          var { token } = await getWBTokenByUserId(userId, session);
 
           if (!token) {
             var loadingStopReason = "isTokenMissing";
@@ -35,6 +34,8 @@ var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
               var loadingStopReason = "tokenIsExpired";
               await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
             } else {
+              await updateWBTokenLastUsedTimestamp(userId, session);
+
               var { id, alreadyExists } = await wbapi.setPricesAndDiscounts(userId, token, currentDayPricesAndDiscounts);
 
               if (!alreadyExists) {

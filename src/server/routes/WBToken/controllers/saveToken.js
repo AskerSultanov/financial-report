@@ -6,7 +6,7 @@ import listGoodsLoader from "../../goods/services/listGoodsLoader.js";
 import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFromLIstGoods.js";
 
 var mskTimeOffsetInMs = 10_800_000;
-var updateLastUsedTimestampNow = true;
+var updateWBTokenLastUsedTimestampNow = true;
 
 var saveToken = async (req, res, next) => {
   var { userId, token, tokenPayload } = req.body;
@@ -18,7 +18,7 @@ var saveToken = async (req, res, next) => {
 
   try {
     await session.withTransaction(async () => {
-      var currentToken = (await getWBTokenByUserId(userId, session, updateLastUsedTimestampNow)).token;
+      var currentToken = (await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow)).token;
 
       if (currentToken === token) {
         return res.sendStatus(409);
