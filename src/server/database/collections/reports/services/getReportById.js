@@ -1,4 +1,4 @@
-import { DatabaseError, ReportNotFoundError } from "../../../../customError/index.js";
+import { ReportNotFoundError } from "../../../../customError/index.js";
 
 var getReportById = async (collection, userId, reportId, session) => {
   var sessionOpt = session ? { session: session } : {};
@@ -14,8 +14,6 @@ var getReportById = async (collection, userId, reportId, session) => {
     if (e instanceof ReportNotFoundError) {
       throw e;
     }
-
-    throw new DatabaseError(userId, e);
   }
 };
 

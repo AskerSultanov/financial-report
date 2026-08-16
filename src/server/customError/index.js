@@ -1,24 +1,3 @@
-class DatabaseError extends Error {
-  constructor(userId, e, message) {
-    super(message);
-    this.status = 500;
-    this.userId = userId;
-    this.cause = e?.cause ?? "";
-    this.stack = e?.stack ?? "";
-    this.message = e?.message || message;
-    this.name = this.constructor.name;
-  }
-}
-
-class DatabaseConnectionError extends Error {
-  constructor(message) {
-    super(message);
-    this.status = 500;
-    this.message = "Database connection is not established";
-    this.name = this.constructor.name;
-  }
-}
-
 class WBAPIError extends Error {
   constructor(userId, status, message) {
     super(message);
@@ -49,16 +28,4 @@ class FormDataError extends Error {
   }
 }
 
-class DBMigrationError extends Error {
-  constructor(userId, reportIds, message) {
-    super(message);
-
-    this.status = 500;
-    this.userId = userId;
-    this.reportIds = reportIds;
-    this.name = this.constructor.name;
-    this.message = "Error: Migration is failed, see the details in the error.log";
-  }
-}
-
-export { WBAPIError, FormDataError, DatabaseError, DBMigrationError, ReportNotFoundError, DatabaseConnectionError };
+export { WBAPIError, FormDataError, ReportNotFoundError };

@@ -1,5 +1,5 @@
 import { MulterError } from "multer";
-import { WBAPIError, FormDataError, DatabaseError, ReportNotFoundError, DatabaseConnectionError } from "../../customError/index.js";
+import { WBAPIError, FormDataError, ReportNotFoundError } from "../../customError/index.js";
 
 var errorHandler = async (e, req, res, next) => {
   console.error({
@@ -12,10 +12,6 @@ var errorHandler = async (e, req, res, next) => {
 
   if (e instanceof MulterError) {
     return res.sendStatus(500);
-  }
-
-  if (e instanceof DatabaseError && DatabaseConnectionError) {
-    return res.sendStatus(e.status);
   }
 
   if (e instanceof WBAPIError) {

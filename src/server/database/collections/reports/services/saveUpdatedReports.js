@@ -1,4 +1,3 @@
-import { DatabaseError } from "../../../../customError/index.js";
 var createQuery = (reports) => {
   var query = {};
   var arrayFilters = [];
@@ -15,15 +14,11 @@ var createQuery = (reports) => {
 };
 
 var saveUpdatedReports = async (collection, userId, reports, session) => {
-  try {
-    var { query, arrayFilters } = createQuery(reports);
+  var { query, arrayFilters } = createQuery(reports);
 
-    var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
+  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
 
-    return result.modifiedCount;
-  } catch (e) {
-    throw new DatabaseError(userId, e);
-  }
+  return result.modifiedCount;
 };
 
 export default saveUpdatedReports;
