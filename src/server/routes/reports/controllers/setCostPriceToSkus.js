@@ -3,9 +3,10 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/collections/index.js";
 import getPrevSkuData from "../services/different/getPrevSkuData.js";
 import getPrevTotalsData from "../services/different/getPrevTotalsData.js";
-import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
-import processOfSkuCostPriceSetting from "../services/different/processOfSkuCostPriceSetting.js";
 import excludeEqualParams from "../services/different/excludeEqualParams.js";
+import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
+import verifyAllSkusExistInReport from "../services/different/verifyAllSkusExistInReport.js";
+import processOfSkuCostPriceSetting from "../services/different/processOfSkuCostPriceSetting.js";
 
 var currentYearPostfix = "InCurrentYear";
 var endYearPostfix = "InNextYear";
@@ -28,6 +29,17 @@ var setCostPriceToSkus = async (req, res, next) => {
   try {
     await session.withTransaction(async () => {
       var { report } = await getReportById(userId, reportId);
+
+      if (!report) {
+        return res.sendStatus(404);
+      }
+
+      var { allSkusExist } = verifyAllSkusExistInReport(report.skus, skuNames);
+
+      if (!allSkusExist) {
+        return res.sendStatus(400);
+      }
+
       var allTaxParams = await getTaxParamsFromDb(userId, null, session);
       var { listGoods } = await getListGoodsFromDb(userId, skuNames, session);
 
@@ -50,6 +62,10 @@ var setCostPriceToSkus = async (req, res, next) => {
         var skuFromListGoods = listGoods.find((sku) => sku.id === id && sku.skuName === skuName);
 
         var skuIndex = skus.findIndex((sku) => sku.id === id && sku.skuName === skuName);
+
+        if (skuIndex === -1) {
+          continue;
+        }
 
         prevSkuData = getPrevSkuData(skus[skuIndex]);
 
