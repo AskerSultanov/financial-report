@@ -1,4 +1,4 @@
-var jose = import("jose");
+import * as jose from "jose";
 import dbUtils from "../../../database/collections/index.js";
 import checkCredentials from "../services/checkCredentials.js";
 
@@ -24,7 +24,6 @@ var checkUserCredentials = async (req, res, next) => {
 
   var role = existUser.login === process.env.adminName ? "admin" : "user";
 
-  jose = await jose;
   var payload = { role, userId: existUser.userId };
   var privateKey = await jose.importPKCS8(process.env.pkcs8, alg);
   var token = await new jose.SignJWT(payload).setExpirationTime(exp).setProtectedHeader({ alg }).sign(privateKey, {});
