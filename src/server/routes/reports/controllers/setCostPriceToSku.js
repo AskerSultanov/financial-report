@@ -22,10 +22,25 @@ var setCostPriceToSku = async (req, res, next) => {
   try {
     await session.withTransaction(async () => {
       var { report } = await getReportById(userId, reportId, session);
-      var taxParams = await getTaxParamsFromDb(userId, year, session);
-      var { skuFromListGoods } = await getSkuFromListGoods(userId, skuId, skuName, session);
+
+      if (!report) {
+        return res.sendStatus(404);
+      }
 
       var { skus, ...totalParams } = report;
+
+      if (skus[skuIndex].skuName !== skuName) {
+        var expectedSkuIndex = skus.findIndex((sku) => sku.skuName === skuName);
+
+        if (expectedSkuIndex === -1) {
+          return res.sendStatus(400);
+        }
+
+        skuIndex = expectedSkuIndex;
+      }
+
+      var taxParams = await getTaxParamsFromDb(userId, year, session);
+      var { skuFromListGoods } = await getSkuFromListGoods(userId, skuId, skuName, session);
 
       var postfix = "";
       var startYear = +report.dateFrom.split("-")[0];
