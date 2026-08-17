@@ -42,7 +42,7 @@ var setCostPriceToSkus = async (req, res, next) => {
 
       var prevSkuData;
       var prevReportTotals = getPrevTotalsData(totalParams);
-      
+
       var skusDataToClient = [];
       var skuMetricsToUpdate = [];
 
@@ -99,8 +99,7 @@ var setCostPriceToSkus = async (req, res, next) => {
           skuMetricsToUpdate.push({ id, skuName, metrics: skuFromListGoods.metrics });
         } else {
           if (skus[skuIndex].costPrice !== lastCostPrice) {
-            skus[skuIndex].costPrice = lastCostPrice;
-
+            console.log({ updatedSku });
             var result = await processOfSkuCostPriceSetting(skus[skuIndex], skuFromListGoods, taxParamsOfYear, prevSkuData);
             skus[skuIndex] = result.updatedSku;
 
