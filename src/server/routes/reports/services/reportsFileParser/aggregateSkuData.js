@@ -53,7 +53,7 @@ var aggregateSkuData = (workSheet, skuNamesAndIds, reportId, requiredColumnsName
     }
 
     var storageCostPerSku = avrgStorageCostForEachItem * rowNums.length;
-    avrgStorageDataForEachSku.push({ vendorCode: skuName, warehousePrice: storageCostPerSku });
+    avrgStorageDataForEachSku.push({ vendorCode: skuName, warehousePrice: storageCostPerSku, date: sku.saleDt });
   }
 
   return { skus, avrgStorageDataForEachSku };
