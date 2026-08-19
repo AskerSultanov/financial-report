@@ -7,7 +7,6 @@ var extractRequiredListGoodsData = async (rawListGoods) => {
       discount: item.discount,
       discountedPrice: item.sizes[0].discountedPrice,
       clubDiscountedPrice: item.sizes[0].clubDiscountedPrice,
-      metrics: [],
     };
   });
 

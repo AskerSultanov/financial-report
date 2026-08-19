@@ -1,20 +1,18 @@
 import truncateNum from "../reportParsing/truncateNum.js";
 
-var recalculateTaxParams = (taxParams, prevReportTotals, currentReportTotals, postfix = "") => {
-  var recalculatedFinalProfit =
-    taxParams.finalProfit - prevReportTotals["totalFinalProfit" + postfix] + currentReportTotals["totalFinalProfit" + postfix];
+var recalculateTaxParams = (updatedTaxParamsFieldsBySku, prevReportTotals, currentReportTotals, postfix = "") => {
+  var finalProfitKey = "totalFinalProfit" + postfix;
+  var otherExpensesKey = "totalOtherExpenses" + postfix;
 
-  var recalculatedOtherExpenses =
-    taxParams.otherExpenses - prevReportTotals["totalOtherExpenses" + postfix] + currentReportTotals["totalOtherExpenses" + postfix];
+  var updatedTaxParamsField = { ...updatedTaxParamsFieldsBySku };
 
-  var recalculatedInsuranceFee =
-    taxParams.paidInsuranceFee - prevReportTotals["totalInsuranceFee" + postfix] + currentReportTotals["totalInsuranceFee" + postfix];
+  var recalculatedFinalProfit = updatedTaxParamsField.finalProfit - prevReportTotals[finalProfitKey] + currentReportTotals[finalProfitKey];
+  var recalculatedOtherExpenses = updatedTaxParamsField.otherExpenses - prevReportTotals[otherExpensesKey] + currentReportTotals[otherExpensesKey];
 
-  taxParams.finalProfit = truncateNum(recalculatedFinalProfit);
-  taxParams.otherExpenses = truncateNum(recalculatedOtherExpenses);
-  taxParams.paidInsuranceFee = truncateNum(recalculatedInsuranceFee);
+  updatedTaxParamsField.finalProfit = truncateNum(recalculatedFinalProfit);
+  updatedTaxParamsField.otherExpenses = truncateNum(recalculatedOtherExpenses);
 
-  return { recalculatedTaxParams: taxParams };
+  return { updatedTaxParamsField };
 };
 
 export default recalculateTaxParams;

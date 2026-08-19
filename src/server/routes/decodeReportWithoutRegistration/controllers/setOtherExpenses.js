@@ -42,18 +42,19 @@ var setOtherExpensesToSku = async (req, res, next) => {
     postfix = year === startYear ? currentYearPostfix : endYearPostfix;
   }
 
-  if (sku["otherExpenses" + postfix] === req.body["otherExpenses" + postfix]) {
+  var otherExpensesKey = "otherExpenses" + postfix;
+
+  if (sku[otherExpensesKey] === req.body[otherExpensesKey]) {
     return res.sendStatus(409);
   }
 
   var prevSkuData = getPrevSkuData(sku);
   var prevReportTotals = getPrevTotalsData(totals);
 
-  sku["otherExpenses" + postfix] = req.body["otherExpenses" + postfix];
+  sku[otherExpensesKey] = req.body[otherExpensesKey];
 
-  var { updatedSku } = await processOfSkuCostPriceSetting(sku, skuFromListGoodsStub, { taxRate, ...taxParamsStub }, prevSkuData, postfix);
-
-  var { updatedTotals } = calc.total.restParams(totals, prevSkuData, sku, isCrossYearPeriod, postfix);
+  var { updatedSkuFields } = processOfSkuCostPriceSetting(sku, { taxRate, ...taxParamsStub }, prevSkuData, postfix);
+  var { updatedTotals } = calc.total.restParams(totals, prevSkuData, updatedSkuFields, isCrossYearPeriod, postfix);
 
   var skuDataToClient = excludeEqualParams(prevSkuData, updatedSku);
   var totalsDataToClient = excludeEqualParams(prevReportTotals, updatedTotals);

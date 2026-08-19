@@ -1,33 +1,51 @@
 import calc from "../calcServices/index.js";
 import truncateNum from "../reportParsing/truncateNum.js";
-import recalculateFinalSkuMetrics from "./recalculateFinalSkuMetrics.js";
 
-var processOfSkuCostPriceSetting = async (sku, skuFromListGoods, taxParams, prevSkuData, postfix) => {
+var currentYearPostfix = "InCurrentYear";
+var endYearPostfix = "InNextYear";
+
+var processOfSkuCostPriceSetting = (sku, taxParams, prevSkuData, postfix) => {
   var { year } = taxParams;
 
   if (postfix) {
-    var { skuWithCalculatedParams, updatedTaxParams } = calc.sku.restParams(sku, taxParams, postfix);
+    var finalProfitKey;
+    var preTaxProfitKey;
+    var insuranceFeeKey;
+    var otherExpensesKey;
 
-    skuFromListGoods = recalculateFinalSkuMetrics(year, skuFromListGoods, skuWithCalculatedParams, prevSkuData, postfix);
+    var { updatedSkuFields, updatedTaxParamsFieldsBySku } = calc.sku.restParams(sku, taxParams, postfix);
 
-    var recalculatedPreTaxProfit = skuWithCalculatedParams.preTaxProfitInCurrentYear + skuWithCalculatedParams.preTaxProfitInNextYear;
-    skuWithCalculatedParams.preTaxProfit = truncateNum(recalculatedPreTaxProfit);
+    if (postfix.startsWith(currentYearPostfix)) {
+      preTaxProfitKey = "preTaxProfit" + currentYearPostfix;
+      finalProfitKey = "finalProfit" + currentYearPostfix;
+      insuranceFeeKey = "insuranceFee" + currentYearPostfix;
+      otherExpensesKey = "otherExpenses" + postfix;
 
-    var recalculatedFinalProfit = skuWithCalculatedParams.finalProfitInCurrentYear + skuWithCalculatedParams.finalProfitInNextYear;
-    skuWithCalculatedParams.finalProfit = truncateNum(recalculatedFinalProfit);
+      updatedSkuFields.preTaxProfit = truncateNum(sku.preTaxProfitInNextYear + updatedSkuFields[preTaxProfitKey]);
+      updatedSkuFields.finalProfit = truncateNum(sku.finalProfitInNextYear + updatedSkuFields[finalProfitKey]);
+      updatedSkuFields.insuranceFee = truncateNum(sku.insuranceFeeInNextYear + updatedSkuFields[insuranceFeeKey]);
+      updatedSkuFields.otherExpenses = truncateNum(sku.otherExpensesInNextYear + updatedSkuFields[otherExpensesKey]);
+    } else {
+      preTaxProfitKey = "preTaxProfit" + endYearPostfix;
+      finalProfitKey = "finalProfit" + endYearPostfix;
+      insuranceFeeKey = "insuranceFee" + endYearPostfix;
+      otherExpensesKey = "otherExpenses" + postfix;
 
-    var recalculatedInsuranceFee = skuWithCalculatedParams.insuranceFeeInCurrentYear + skuWithCalculatedParams.insuranceFeeInNextYear;
-    skuWithCalculatedParams.insuranceFee = truncateNum(recalculatedInsuranceFee);
+      updatedSkuFields.preTaxProfit = truncateNum(sku.preTaxProfitInCurrentYear + updatedSkuFields[preTaxProfitKey]);
+      updatedSkuFields.finalProfit = truncateNum(sku.finalProfitInCurrentYear + updatedSkuFields[finalProfitKey]);
+      updatedSkuFields.insuranceFee = truncateNum(sku.insuranceFeeInCurrentYear + updatedSkuFields[insuranceFeeKey]);
+      updatedSkuFields.otherExpenses = truncateNum(sku.otherExpensesInCurrentYear + updatedSkuFields[otherExpensesKey]);
+    }
 
-    skuWithCalculatedParams.profitMargin = calc.profitMargin(skuWithCalculatedParams.finalProfit, skuWithCalculatedParams.retailAmount);
+    updatedSkuFields.profitMargin = calc.profitMargin(updatedSkuFields.finalProfit, sku.retailAmount);
 
-    return { updatedSkuMetrics: skuFromListGoods.metrics, taxParams: updatedTaxParams, updatedSku: skuWithCalculatedParams };
+    var updatedSkuNew = { userId: sku?.userId, reportId: sku?.reportId, skuName: sku.skuName, updatedSkuFields };
+    return { updatedSkuFields, updatedTaxParamsFieldsBySku };
   } else {
-    var { skuWithCalculatedParams, updatedTaxParams } = calc.sku.restParams(sku, taxParams);
+    var { updatedSkuFields, updatedTaxParamsFieldsBySku } = calc.sku.restParams(sku, taxParams);
 
-    skuFromListGoods = recalculateFinalSkuMetrics(year, skuFromListGoods, skuWithCalculatedParams, prevSkuData);
-
-    return { updatedSkuMetrics: skuFromListGoods.metrics, taxParams: updatedTaxParams, updatedSku: skuWithCalculatedParams };
+    var updatedSkuNew = { userId: sku?.userId, reportId: sku?.reportId, skuName: sku.skuName, updatedSkuFields };
+    return { updatedSkuFields, updatedTaxParamsFieldsBySku };
   }
 };
 

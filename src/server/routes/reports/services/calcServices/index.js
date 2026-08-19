@@ -4,13 +4,13 @@ var sku = {};
 var total = {};
 
 import finalProfit from "./utils/finalProfit.js";
-import restSKUParams from "./utils/restSKUParams.js";
+import restSkuParams from "./utils/restSkuParams.js";
 import skuProfitMargin from "./utils/profitMargin.js";
 import insuranceFee from "./utils/insuranceFee.js";
 import storageCostFromPaidStorageReport from "./utils/SKUStorageCostFromPaidStorageReport.js";
 
 sku.finalProfit = finalProfit;
-sku.restParams = restSKUParams;
+sku.restParams = restSkuParams;
 sku.profitMargin = skuProfitMargin;
 sku.insuranceFee = insuranceFee;
 sku.storageCostFromPaidStorageReport = storageCostFromPaidStorageReport;
@@ -18,14 +18,12 @@ sku.storageCostFromPaidStorageReport = storageCostFromPaidStorageReport;
 import totalSold from "./utils/totalSold.js";
 import totalStorageCost from "./utils/totalStorageCost.js";
 import totalProfitMargin from "./utils/totalProfitMargin.js";
-import totalRestParams from "./utils/newRestReportTotalParams.js";
-import oldTotalRestParams from "./utils/oldRestReportTotalParams.js";
+import restReportTotalParams from "./utils/restReportTotalParam.js";
 
 total.sold = totalSold;
-total.restParams = totalRestParams;
+total.restParams = restReportTotalParams;
 total.storageCost = totalStorageCost;
 total.profitMargin = totalProfitMargin;
-total.oldTotalRestParams = oldTotalRestParams;
 
 calc.sku = sku;
 calc.total = total;

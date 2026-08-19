@@ -8,10 +8,8 @@ import getListGoodsFromDb from "./services/getListGoodsFromDb.js";
 import updateSkuInListGoods from "./services/updateSkuInListGoods.js";
 import getSkuFromListGoods from "./services/getSkuFromListGoods.js";
 import getSkusLastCostPrice from "./services/getSkusLastCostPrice.js";
-import saveUpdatedSkuMetrics from "./services/saveUpdatedSkuMetrics.js";
 import updateSkuDisableStatus from "./services/updateSkuDisableStatus.js";
 import getAllUserListGoodsIds from "./services/getAllUserListGoodsIds.js";
-import updateSkusMetricsInListGoods from "./services/updateSkusMetricsInListGoods.js";
 import setPriceUpdateTimestampAndUpdateStatus from "./services/setPriceUpdateTimestampAndUpdateStatus.js";
 
 var goodsCollectionServices = {
@@ -33,13 +31,10 @@ var goodsCollectionServices = {
 
   updateSkuInListGoods: (userId, skuId, skuName, data, session) => updateSkuInListGoods(goodsCollection, userId, skuId, skuName, data, session),
 
-  updateSkusMetricsInListGoods: (userId, updatedSkus, session) => updateSkusMetricsInListGoods(goodsCollection, userId, updatedSkus, session),
-
   updateSkuDisableStatusToDb: (userId, skuName, disabled) => updateSkuDisableStatus(goodsCollection, userId, skuName, disabled),
 
-  setPriceUpdateTimestampAndUpdateStatus: (userId, priceData, session) => setPriceUpdateTimestampAndUpdateStatus(goodsCollection, userId, priceData, session),
-
-  saveUpdatedSkuMetrics: (userId, skuId, metrics, session) => saveUpdatedSkuMetrics(goodsCollection, userId, skuId, metrics, session),
+  setPriceUpdateTimestampAndUpdateStatus: (userId, priceData, session) =>
+    setPriceUpdateTimestampAndUpdateStatus(goodsCollection, userId, priceData, session),
 
   deleteListGoodsFromDb: (userId, session) => deleteListGoods(goodsCollection, userId, session),
 };

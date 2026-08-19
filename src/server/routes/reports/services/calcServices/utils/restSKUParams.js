@@ -4,66 +4,93 @@ import calcInsuranceFee from "./insuranceFee.js";
 import calcPreTaxProfit from "./preTaxProfit.js";
 import truncateNum from "../../reportParsing/truncateNum.js";
 
-var calcRestSKUParams = (sku, taxParams, propPostfix = "") => {
-  sku["isCostPriceSet" + propPostfix] = true;
+var calcRestSkuParams = (sku, taxParams, postfix = "") => {
+  var updatedSkuFields = {};
 
-  sku["preTaxProfit" + propPostfix] = calcPreTaxProfit(sku, propPostfix);
+  var costPriceKey = "costPrice" + postfix;
+  var finalProfitKey = "finalProfit" + postfix;
+  var preTaxProfitKey = "preTaxProfit" + postfix;
+  var profitMarginKey = "profitMargin" + postfix;
+  var retailAmountKey = "retailAmount" + postfix;
+  var insuranceFeeKey = "insuranceFee" + postfix;
+  var otherExpensesKey = "otherExpenses" + postfix;
+  var isCostPriceSetKey = "isCostPriceSet" + postfix;
 
-  var { sku, taxParams } = recalculateInsuranceFee(sku, taxParams, propPostfix);
+  updatedSkuFields[isCostPriceSetKey] = true;
+  updatedSkuFields[costPriceKey] = sku[costPriceKey];
+  updatedSkuFields[otherExpensesKey] = sku[otherExpensesKey];
+  updatedSkuFields[preTaxProfitKey] = calcPreTaxProfit(sku, postfix);
 
-  if (!sku["finalProfit" + propPostfix]) {
-    sku["finalProfit" + propPostfix] = 0;
+  var prevSkuInsuranceFee = sku[insuranceFeeKey];
+
+  var { updatedSkuFields, updatedTaxParamsFields } = recalculateInsuranceFee(updatedSkuFields, prevSkuInsuranceFee, taxParams, postfix);
+
+  if (!sku[finalProfitKey]) {
+    sku[finalProfitKey] = 0;
   }
 
-  var previousSkuFinalProfit = sku["finalProfit" + propPostfix];
+  sku[insuranceFeeKey] = updatedSkuFields[insuranceFeeKey];
+  sku[preTaxProfitKey] = updatedSkuFields[preTaxProfitKey];
 
-  sku["finalProfit" + propPostfix] = calcFinalProfit(sku, propPostfix);
+  updatedSkuFields[finalProfitKey] = calcFinalProfit(sku, postfix);
+  updatedSkuFields[profitMarginKey] = calcProfitMargin(updatedSkuFields[finalProfitKey], sku[retailAmountKey]);
 
-  sku["profitMargin" + propPostfix] = calcProfitMargin(sku["finalProfit" + propPostfix], sku["retailAmount" + propPostfix]);
+  updatedSkuFields = Object.assign(updatedSkuFields, updatedSkuFields);
 
-  return { updatedTaxParams: taxParams, skuWithCalculatedParams: sku };
+  return { updatedSkuFields, updatedTaxParamsFieldsBySku: updatedTaxParamsFields };
 };
 
-export default calcRestSKUParams;
+export default calcRestSkuParams;
 
-var recalculateInsuranceFee = function (sku, taxParams, propPostfix) {
+var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, taxParams, postfix) {
+  var insuranceFeeKey = "insuranceFee" + postfix;
+  var preTaxProfitKey = "preTaxProfit" + postfix;
+  var isInsuranceFeeIncludedKey = "isInsuranceFeeIncluded" + postfix;
+
+  var updatedTaxParamsFields = {};
+  updatedTaxParamsFields.finalProfit = taxParams.finalProfit;
+  updatedTaxParamsFields.otherExpenses = taxParams.otherExpenses;
+  updatedTaxParamsFields.paidInsuranceFee = taxParams.paidInsuranceFee;
+
   if (taxParams.mandatoryInsuranceFeeIsPaid) {
-    sku["insuranceFee" + propPostfix] = 0;
-    sku["isInsuranceFeeIncluded" + propPostfix] = false;
+    updatedSkuFields[insuranceFeeKey] = 0;
+    updatedSkuFields[isInsuranceFeeIncludedKey] = false;
 
-    return { sku, taxParams };
+    return { updatedSkuFields, updatedTaxParamsFields };
   }
 
-  sku["insuranceFee" + propPostfix] = calcInsuranceFee(sku["preTaxProfit" + propPostfix], taxParams.mandatoryInsuranceFeeRate);
-  sku["isInsuranceFeeIncluded" + propPostfix] = true;
+  updatedSkuFields[insuranceFeeKey] = calcInsuranceFee(updatedSkuFields[preTaxProfitKey], taxParams.mandatoryInsuranceFeeRate);
+  updatedSkuFields[isInsuranceFeeIncludedKey] = true;
 
-  taxParams.paidInsuranceFee += sku["insuranceFee" + propPostfix];
+  var recalculatedPaidInsuranceFee = taxParams.paidInsuranceFee - prevSkuInsuranceFee + updatedSkuFields[insuranceFeeKey];
+  updatedTaxParamsFields.paidInsuranceFee = truncateNum(recalculatedPaidInsuranceFee);
 
-  if (taxParams.paidInsuranceFee >= taxParams.mandatoryInsuranceFee) {
-    var difference = taxParams.paidInsuranceFee - taxParams.mandatoryInsuranceFee;
+  if (updatedTaxParamsFields.paidInsuranceFee >= taxParams.mandatoryInsuranceFee) {
+    var difference = updatedTaxParamsFields.paidInsuranceFee - taxParams.mandatoryInsuranceFee;
 
-    var newInsuranceFee = sku["insuranceFee" + propPostfix] - difference;
+    var newInsuranceFee = updatedSkuFields[insuranceFeeKey] - difference;
+
     if (newInsuranceFee === 0) {
-      sku["isInsuranceFeeIncluded" + propPostfix] = false;
+      updatedSkuFields[isInsuranceFeeIncludedKey] = false;
     }
 
-    sku["insuranceFee" + propPostfix] = newInsuranceFee;
+    updatedSkuFields[insuranceFeeKey] = newInsuranceFee;
 
-    taxParams.mandatoryInsuranceFeeRate = 0;
-    taxParams.mandatoryInsuranceFeeIsPaid = true;
-    taxParams.paidInsuranceFee = taxParams.mandatoryInsuranceFee;
+    updatedTaxParamsFields.mandatoryInsuranceFeeRate = 0;
+    updatedTaxParamsFields.mandatoryInsuranceFeeIsPaid = true;
+    updatedTaxParamsFields.paidInsuranceFee = taxParams.mandatoryInsuranceFee;
   }
 
-  var totalInsuranceFee = taxParams.paidInsuranceFee + taxParams.additionalInsuranceFee;
+  var totalInsuranceFee = updatedTaxParamsFields.paidInsuranceFee + taxParams.additionalInsuranceFee;
 
   if (totalInsuranceFee >= taxParams.maxInsuranceFee) {
-    taxParams.excessInsuranceRate = 0;
-    taxParams.insuranceFeeIsPaid = true;
-    taxParams.mandatoryInsuranceFeeRate = 0;
-    taxParams.mandatoryInsuranceFeeIsPaid = true;
-    taxParams.additionalInsuranceFeeIsPaid = true;
-    taxParams.requiresAdditionalInsuranceFee = false;
+    updatedTaxParamsFields.excessInsuranceRate = 0;
+    updatedTaxParamsFields.insuranceFeeIsPaid = true;
+    updatedTaxParamsFields.mandatoryInsuranceFeeRate = 0;
+    updatedTaxParamsFields.mandatoryInsuranceFeeIsPaid = true;
+    updatedTaxParamsFields.additionalInsuranceFeeIsPaid = true;
+    updatedTaxParamsFields.requiresAdditionalInsuranceFee = false;
   }
 
-  return { sku, taxParams };
+  return { updatedSkuFields, updatedTaxParamsFields };
 };

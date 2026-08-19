@@ -11,6 +11,8 @@ import checkReportExistsToDb from "./services/checkReportExistsToDb.js";
 import removeReportFromAccounted from "./services/removeReportFromAccounted.js";
 import getAllDataFromReportCollection from "./services/getAllDataFromReportCollection.js";
 
+import saveUpdatedReportNew from "./services/saveUpdatedReportNew.js";
+
 var reportCollectionServices = {
   addReportToAccounted: (userId, reportId) => addReportToAccounted(reportCollection, userId, reportId),
 
@@ -27,6 +29,11 @@ var reportCollectionServices = {
 
   removeReportFromAccounted: (userId, reportId) => removeReportFromAccounted(reportCollection, userId, reportId),
   deleteReportFromDb: (userId, reportId, session) => deleteReportFromDb(reportCollection, userId, reportId, session),
+
+  //new
+
+  saveUpdatedReportNew: (userId, reportId, updatedTotals, updatedSkus, session) =>
+    saveUpdatedReportNew(reportCollection, userId, reportId, updatedTotals, updatedSkus, session),
 };
 
 export default reportCollectionServices;

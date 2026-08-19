@@ -1,4 +1,4 @@
-var projectQueries = ["listGoods.id", "listGoods.skuName", "listGoods.metrics"];
+var projectQueries = ["listGoods.id", "listGoods.skuName"];
 
 var getListGoodsFromDb = async (collection, userId, skuNames, session) => {
   var sessionOption = session ? { session } : {};

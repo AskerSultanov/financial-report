@@ -2,8 +2,8 @@ import Joi from "joi";
 import calc from "../../reports/services/calcServices/index.js";
 import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
 import getPrevTotalsData from "../../reports/services/different/getPrevTotalsData.js";
-import processOfSkuCostPriceSetting from "../../reports/services/different/processOfSkuCostPriceSetting.js";
 import excludeEqualParams from "../../reports/services/different/excludeEqualParams.js";
+import processOfSkuCostPriceSetting from "../../reports/services/different/processOfSkuCostPriceSetting.js";
 
 var skuFromListGoodsStub = [];
 var currentYearPostfix = "InCurrentYear";
@@ -43,23 +43,24 @@ var setCostPrice = async (req, res, next) => {
     postfix = year === startYear ? currentYearPostfix : endYearPostfix;
   }
 
-  if (sku["costPrice" + postfix] === req.body["costPrice" + postfix]) {
+  var costPriceKey = "costPrice" + postfix;
+
+  if (sku[costPriceKey] === req.body[costPriceKey]) {
     return res.sendStatus(409);
   }
 
   var prevSkuData = getPrevSkuData(sku);
   var prevReportTotals = getPrevTotalsData(totals);
 
-  sku["costPrice" + postfix] = req.body["costPrice" + postfix];
+  sku[costPriceKey] = req.body[costPriceKey];
 
-  var { updatedSku } = await processOfSkuCostPriceSetting(sku, skuFromListGoodsStub, { taxRate, ...taxParamsStub }, prevSkuData, postfix);
+  var { updatedSkuFields } = processOfSkuCostPriceSetting(sku, { taxRate, ...taxParamsStub }, prevSkuData, postfix);
+  var { updatedTotals } = calc.total.restParams(totals, prevSkuData, updatedSkuFields, isCrossYearPeriod, postfix);
 
-  var { updatedTotals } = calc.total.restParams(totals, prevSkuData, sku, isCrossYearPeriod, postfix);
-
-  var skuDataToClient = excludeEqualParams(prevSkuData, updatedSku);
+  var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
   var totalsDataToClient = excludeEqualParams(prevReportTotals, updatedTotals);
 
-  skuDataToClient["costPrice" + postfix] = req.body["costPrice" + postfix];
+  skuDataToClient[costPriceKey] = req.body[costPriceKey];
 
   return res.json({
     userId,

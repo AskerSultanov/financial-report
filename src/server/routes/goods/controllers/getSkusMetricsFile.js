@@ -4,6 +4,7 @@ import generageSKusMetricsFile from "../services/skusMetrics/index.js";
 var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
 
 var getSkusMetricsFile = async (req, res, next) => {
+  return res.sendStatus(200);
   var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);

@@ -6,7 +6,6 @@ import { WBAPIError } from "../../../../customError/index.js";
 import addNewSkusToListGoods from "./addNewSkusToListGoods.js";
 import dbutils from "../../../../database/collections/index.js";
 import insertReportToReportTree from "../reportTreeBuilder/index.js";
-import updateListGoodsMetrics from "../different/updateListGoodsMetrics.js";
 import { recordedToSchemaVersion, reportSchemaVersion } from "../../../../database/migration/schemaVersioning/reportsCollection.js";
 
 var { getWBTokenByUserId } = dbutils.tokenCollectionServices;
@@ -89,13 +88,13 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     await setLastReportRequestTimestamp(userId, session);
   }
 
-  var { listGoods } = await getListGoodsFromDb(userId, session);
+  var skuNamesStub = null;
+  var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, session);
 
   if (listGoods.length) {
     var { listGoodsWithNewSkus } = addNewSkusToListGoods(listGoods, skuNamesAndIds, isCrossYearPeriod, startYear, endYear);
-    var { listGoodsWithUpdatedSkuMetrics } = updateListGoodsMetrics(report, listGoodsWithNewSkus);
 
-    await saveListGoodsToDb(userId, listGoodsWithUpdatedSkuMetrics, session);
+    await saveListGoodsToDb(userId, listGoodsWithNewSkus, session);
   }
 
   return { reportPeriodIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo, totalTaxAmount: report.totalTaxAmount } };

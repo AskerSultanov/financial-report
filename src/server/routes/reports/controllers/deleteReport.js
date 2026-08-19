@@ -1,7 +1,6 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/collections/index.js";
 import recalculateTaxParamsAfterReportDeletion from "../services/different/recalculateTaxParamsAfterReportDeletion.js";
-import recalculateSkuMetricsAfterReportDeletion from "../services/different/recalculateSkuMetricsAfterReportDeletion.js";
 
 var currentYearPropPostfix = "InCurrentYear";
 var nextYearPropPostfix = "InNextYear";
@@ -9,7 +8,6 @@ var nextYearPropPostfix = "InNextYear";
 var { deleteReportFromDb } = dbUtils.reportCollectionServices;
 var { deleteReportFromReportTree } = dbUtils.reportsTreeCollectionServices;
 var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-var { getListGoodsFromDb, updateSkusMetricsInListGoods } = dbUtils.goodsCollectionServices;
 
 var deleteReport = async (req, res, next) => {
   var { userId, reportId, skuNames } = req.body;
@@ -17,7 +15,6 @@ var deleteReport = async (req, res, next) => {
   var session = await dbClient.startSession();
   try {
     await session.withTransaction(async () => {
-      var { listGoods } = await getListGoodsFromDb(userId, skuNames, session);
       var taxParams = await getTaxParamsFromDb(userId, null, session);
 
       var { reportBeforeDeletion } = await deleteReportFromDb(userId, reportId, session);
@@ -45,10 +42,7 @@ var deleteReport = async (req, res, next) => {
         await changeTaxParamsToDb(userId, session, updatedTaxParams);
       }
 
-      var { listGoodsWithRecalculatedSkuMetrics } = recalculateSkuMetricsAfterReportDeletion(startYear, endYear, listGoods, reportBeforeDeletion);
-
       await deleteReportFromReportTree(userId, year, month, reportId, session);
-      await updateSkusMetricsInListGoods(userId, listGoodsWithRecalculatedSkuMetrics, session);
     });
 
     return res.sendStatus(200);

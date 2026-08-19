@@ -2,6 +2,9 @@ var downloadWeeklyPricesFileButton = document.getElementById("download-weekly-pr
 
 var downloadWeeklyPricesFileButtonHandler = (userId) => {
   downloadWeeklyPricesFileButton.addEventListener("click", async (e) => {
+    alert("Пока недоступно");
+    return;
+
     var url = "/goods/prices-discounts/file/" + userId;
 
     var res = await fetch(url);

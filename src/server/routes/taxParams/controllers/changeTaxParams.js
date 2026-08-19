@@ -6,7 +6,6 @@ import recalculateReportsWithNewTaxRate from "../services/recalculateReportsWith
 import recalculateReportsWithNewMandatoryInsuranceRate from "../services/recalculateReportsWithNewMandatoryInsuranceRate.js";
 
 var { changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-var { getListGoodsFromDb, saveListGoodsToDb } = dbUtils.goodsCollectionServices;
 var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportCollectionServices;
 
 var changeTaxParams = async (req, res, next) => {
@@ -29,8 +28,8 @@ var changeTaxParams = async (req, res, next) => {
 
   try {
     await session.withTransaction(async () => {
-      var { listGoods } = await getListGoodsFromDb(userId, session);
       var { reports } = await getReportsByUserId(userId, session);
+
       var requiredReports = reports.filter((report) => {
         if (report.isCrossYearPeriod) {
           var startYear = +report.dateFrom.split("-")[0];
@@ -52,16 +51,14 @@ var changeTaxParams = async (req, res, next) => {
           if (requiredReports.length) {
             var resetPaidTaxAmount = -oldTaxParams.mandatoryInsuranceFee;
 
-            var { updatedReports, finalProfit, paidTaxAmount, listGoodsWithUpdatedSkuMetrics } = recalculateReportsWithNewTaxRate(
+            var { updatedReports, finalProfit, paidTaxAmount } = recalculateReportsWithNewTaxRate(
               requiredReports,
-              listGoods,
               resetPaidTaxAmount,
               newTaxRate,
               year,
             );
 
             await saveUpdatedReports(userId, updatedReports, session);
-            await saveListGoodsToDb(userId, listGoodsWithUpdatedSkuMetrics, session);
             await changeTaxParamsToDb(userId, session, { year, finalProfit, paidTaxAmount, taxRate: newTaxRate });
           } else {
             await changeTaxParamsToDb(userId, session, { year, taxRate: newTaxRate });
@@ -73,8 +70,12 @@ var changeTaxParams = async (req, res, next) => {
 
           if (requiredReports.length) {
             var { mandatoryInsuranceFee } = oldTaxParams;
-            var { updatedReports, listGoodsWithUpdatedSkuMetrics, finalProfit, paidInsuranceFee, mandatoryInsuranceFeeIsPaid } =
-              recalculateReportsWithNewMandatoryInsuranceRate(year, requiredReports, listGoods, mandatoryInsuranceFee, newMandatoryInsuranceFeeRate);
+            var { updatedReports, finalProfit, paidInsuranceFee, mandatoryInsuranceFeeIsPaid } = recalculateReportsWithNewMandatoryInsuranceRate(
+              year,
+              requiredReports,
+              mandatoryInsuranceFee,
+              newMandatoryInsuranceFeeRate,
+            );
 
             await saveUpdatedReports(userId, updatedReports, session);
 
