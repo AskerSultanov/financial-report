@@ -15,9 +15,10 @@ var { getReportTree, updateReportTree } = dbutils.reportsTreeCollectionServices;
 var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsCollectionServices;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStatesCollectionServices;
 
-var updateWBTokenLastUsedTimestampNow = true;
-var invalidTokenErrorMsg = "Invalid Token";
 var mskTimeOffsetInMs = 10_800_000;
+var selectedFields = ["id", "skuName"];
+var invalidTokenErrorMsg = "Invalid Token";
+var updateWBTokenLastUsedTimestampNow = true;
 
 var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
   if (!isReportFromFile) {
@@ -90,7 +91,7 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
 
   var skuNames = report.skus.map((sku) => sku.skuName);
 
-  var { listGoods } = await getListGoodsFromDb(userId, skuNames, session);
+  var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields, session);
 
   var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
 

@@ -1,17 +1,15 @@
-var filterCostsForReportSkus = async (skusFromReport, skusLastCostPrice) => {
-  var filteredSkusLastCostPrice = [];
+var filterCostsForReportSkus = (skusFromReport, skusFromListGoods) => {
+  var filteredSkusWithLastCostPrices = [];
 
-  while (skusLastCostPrice.length) {
-    var skuLastCostPrice = skusLastCostPrice.shift();
+  for (var skuFromReport of skusFromReport) {
+    var skuFromListGoods = skusFromListGoods.find((item) => item.skuName === skuFromReport.skuName);
 
-    if (skuLastCostPrice.lastCostPrice) {
-      if (skusFromReport.find((sku) => sku.id === skuLastCostPrice.id && sku.skuName === skuLastCostPrice.skuName)) {
-        filteredSkusLastCostPrice.push(skuLastCostPrice);
-      }
+    if (skuFromListGoods?.lastCostPrice && skuFromListGoods?.lastCostPrice !== skuFromReport?.costPrice) {
+      filteredSkusWithLastCostPrices.push(skuFromListGoods);
     }
   }
 
-  return { skusLastCostPrice: filteredSkusLastCostPrice };
+  return { filteredSkusWithLastCostPrices };
 };
 
 export default filterCostsForReportSkus;

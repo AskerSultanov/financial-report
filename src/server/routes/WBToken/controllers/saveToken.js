@@ -5,6 +5,8 @@ import dbUtils from "../../../database/collections/index.js";
 import listGoodsLoader from "../../goods/services/listGoodsLoader.js";
 import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFromLIstGoods.js";
 
+var skuNamesStub = null;
+var selectedFieldsStub = null;
 var mskTimeOffsetInMs = 10_800_000;
 var updateWBTokenLastUsedTimestampNow = true;
 
@@ -26,7 +28,7 @@ var saveToken = async (req, res, next) => {
 
       await saveWBTokenToDb(userId, token, session);
 
-      var { listGoods } = await getListGoodsFromDb(userId, session);
+      var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, selectedFieldsStub, session);
       var { listGoodsFromWBAPI } = await listGoodsLoader(userId, token);
 
       if (!listGoods.length) {

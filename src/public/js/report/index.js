@@ -40,7 +40,7 @@ var getReportData = async () => {
 };
 
 var main = async () => {
-  var { report, skuImages, skusLastCostPrice } = await getReportData();
+  var { report, skuImages, skusWithLastCostPrices } = await getReportData();
   var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } = report;
   var { year } = recordedTo;
 
@@ -66,7 +66,7 @@ var main = async () => {
     createSKUsTable(report, postfixStub, year);
   }
 
-  setSkusLastCostPricesButtonHandler(skus, reportId, year, skusLastCostPrice);
+  setSkusLastCostPricesButtonHandler(skus, reportId, year, dateFrom, dateTo, skusWithLastCostPrices);
 
   reportInfo(report);
 

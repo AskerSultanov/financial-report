@@ -6,7 +6,42 @@ import updateSKUsTableFields from "../updateSKUsTableFields.js";
 import updateTotalsTableFields from "../updateTotalsTableFields.js";
 import financialAccountingStatusButtonHander from "../../../financialAccountingStatusButtonHander.js";
 
-var getSkusCostPriceContainer = (skusCostPrice) => {
+var getSelectedYear = () => {
+  var yearSelector = document.getElementById("year-selector");
+
+  var selectedYear;
+
+  for (var option of yearSelector.children) {
+    if (option.selected) {
+      selectedYear = +option.text;
+    }
+  }
+
+  return { selectedYear };
+};
+
+var createYearSelector = (skusCostPrices) => {
+  var yearSelector = document.createElement("select");
+  yearSelector.id = "year-selector";
+
+  skusCostPrices.map((sku) => {
+    var option = document.createElement("option");
+    option.value = sku.year;
+    option.textContent = sku.year;
+
+    yearSelector.append(option);
+  });
+
+  var yearSelectorLabel = document.createElement("label");
+  yearSelectorLabel.textContent = "Установить цены за год";
+
+  var yearSelectorContainer = createDiv();
+  yearSelectorContainer.append(yearSelectorLabel, yearSelector);
+
+  return yearSelectorContainer;
+};
+
+var createSkusCostPriceContainer = (skusCostPrice) => {
   var container = createDiv("last-cost-prices-modal");
 
   var list = createDiv("last-cost-prices-modal__list");
@@ -21,6 +56,10 @@ var getSkusCostPriceContainer = (skusCostPrice) => {
     item.appendChild(costPrice);
     list.appendChild(item);
   });
+
+  var yearSelector = createYearSelector(skusCostPrice);
+
+  container.append(yearSelector);
 
   container.appendChild(list);
   return container;
@@ -38,6 +77,9 @@ var skusLastCostPriceModal = (reportId, taxYear, skusLastCostPrice) => {
   var saveButtonTextContent = "Установить";
   var event = "click";
   var cb = async () => {
+    var { selectedYear } = getSelectedYear();
+    console.log({ selectedYear });
+
     var userId = document.cookie.split("=")[1];
 
     var { skusDataToClient, totals, years } = await sendCostPrices(userId, reportId, taxYear, skusLastCostPrice);
@@ -55,7 +97,7 @@ var skusLastCostPriceModal = (reportId, taxYear, skusLastCostPrice) => {
   var cancelButton = createButton("modal-button modal-button-cancel", cancelButtonTextContent, { event, cb });
 
   buttonsContainer.append(cancelButton, saveButton);
-  modalContent.append(title, getSkusCostPriceContainer(skusLastCostPrice), buttonsContainer);
+  modalContent.append(title, createSkusCostPriceContainer(skusLastCostPrice), buttonsContainer);
   modal.append(modalContent);
   document.body.append(modal);
 

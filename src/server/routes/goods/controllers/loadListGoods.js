@@ -3,7 +3,7 @@ import listGoodsLoader from "../services/listGoodsLoader.js";
 import dbUtils from "../../../database/collections/index.js";
 import removeDublicates from "../services/removeDublicates.js";
 
-var skuNames = null;
+var skuNamesStub = null;
 var updateWBTokenLastUsedTimestampNow = true;
 var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
@@ -22,7 +22,7 @@ var loadListGoods = async (req, res, next) => {
       if (!token) {
         return res.status(400).json({ msg: "В первую очередь нужно загрузить токен личного кабинета WB" });
       } else {
-        var { listGoods } = await getListGoodsFromDb(userId, skuNames, session);
+        var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, session);
 
         var { listGoodsFromWBAPI } = await listGoodsLoader(userId, token);
 

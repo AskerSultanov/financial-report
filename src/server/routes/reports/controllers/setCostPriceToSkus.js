@@ -9,6 +9,8 @@ import recalculateTaxParams from "../services/different/recalculateTaxParams.js"
 import verifyAllSkusExistInReport from "../services/different/verifyAllSkusExistInReport.js";
 import processOfSkuCostPriceSetting from "../services/different/processOfSkuCostPriceSetting.js";
 
+var selectedFields = ["id", "skuName"];
+
 var currentYearPostfix = "InCurrentYear";
 var endYearPostfix = "InNextYear";
 
@@ -21,6 +23,7 @@ var setCostPriceToSkus = async (req, res, next) => {
     return res.sendStatus(400);
   }
 
+  return res.sendStatus(200);
   var { userId, reportId, taxYear, costPrices } = req.body;
 
   var session = await dbClient.startSession();
@@ -95,8 +98,7 @@ var setCostPriceToSkus = async (req, res, next) => {
       await changeTaxParamsToDb(userId, session, taxParams);
       await saveUpdatedReportNew(userId, reportId, updatedTotals, updatedSkus, session);
 
-      var skuNamesStub = null;
-      var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, session);
+      var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields, session);
 
       var newSkusToListGoods = [];
 
@@ -113,7 +115,7 @@ var setCostPriceToSkus = async (req, res, next) => {
         await saveNewSkusToDb(userId, newSkusToListGoods, session);
       }
 
-      // await updateSkusFields(userId);
+      await updateSkusFields(userId);
 
       return res.json({ years, skusDataToClient, totals: { data: updatedTotals } });
     });

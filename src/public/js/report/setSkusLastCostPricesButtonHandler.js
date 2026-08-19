@@ -18,7 +18,7 @@ var removeDuplicateCosts = (skus, skusLastCostPrice) => {
   }
 };
 
-var setSkusLastCostPricesButtonHandler = (skus, reportId, taxYear, skusLastCostPrice) => {
+var setSkusLastCostPricesButtonHandler = (skus, reportId, taxYear, dateFrom, dateTo, skusLastCostPrice) => {
   removeDuplicateCosts(skus, skusLastCostPrice);
 
   skusLastCostPrice.forEach((sku) => (sku.year = taxYear));
