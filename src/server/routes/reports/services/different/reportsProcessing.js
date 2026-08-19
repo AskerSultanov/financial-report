@@ -3,14 +3,14 @@ import sortYearsTree from "./sortYearTree.js";
 import parseReports from "../reportParsing/index.js";
 import parseJwt from "../../../WBToken/services/parseJwt.js";
 import { WBAPIError } from "../../../../customError/index.js";
-import addNewSkusToListGoods from "./addNewSkusToListGoods.js";
+import getNewSkusToListGoods from "./getNewSkusToListGoods.js";
 import dbutils from "../../../../database/collections/index.js";
 import insertReportToReportTree from "../reportTreeBuilder/index.js";
 import { recordedToSchemaVersion, reportSchemaVersion } from "../../../../database/migration/schemaVersioning/reportsCollection.js";
 
 var { getWBTokenByUserId } = dbutils.tokenCollectionServices;
 var { saveReportToDb } = dbutils.reportCollectionServices;
-var { getListGoodsFromDb, saveListGoodsToDb } = dbutils.goodsCollectionServices;
+var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsCollectionServices;
 var { getReportTree, updateReportTree } = dbutils.reportsTreeCollectionServices;
 var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsCollectionServices;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStatesCollectionServices;
@@ -88,13 +88,14 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     await setLastReportRequestTimestamp(userId, session);
   }
 
-  var skuNamesStub = null;
-  var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, session);
+  var skuNames = report.skus.map((sku) => sku.skuName);
 
-  if (listGoods.length) {
-    var { listGoodsWithNewSkus } = addNewSkusToListGoods(listGoods, skuNamesAndIds, isCrossYearPeriod, startYear, endYear);
+  var { listGoods } = await getListGoodsFromDb(userId, skuNames, session);
 
-    await saveListGoodsToDb(userId, listGoodsWithNewSkus, session);
+  var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
+
+  if (newSkus.length) {
+    await saveNewSkusToDb(userId, newSkus, session);
   }
 
   return { reportPeriodIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo, totalTaxAmount: report.totalTaxAmount } };
