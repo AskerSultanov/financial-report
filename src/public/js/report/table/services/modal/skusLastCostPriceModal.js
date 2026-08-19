@@ -43,7 +43,6 @@ var skusLastCostPriceModal = (reportId, taxYear, skusLastCostPrice) => {
     var { skusDataToClient, totals, years } = await sendCostPrices(userId, reportId, taxYear, skusLastCostPrice);
 
     updateTotalsTableFields(totals, years);
-    financialAccountingStatusButtonHander(userId, reportId);
 
     skusDataToClient.map((sku) => updateSKUsTableFields(sku, years));
 

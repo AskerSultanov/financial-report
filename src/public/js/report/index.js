@@ -75,11 +75,7 @@ var main = async () => {
   downloadReportAsXLSXButtonHandler(report);
   deleteReportHandler(userId, reportId, skus);
 
-  var isFinancesAccountingEditable = skus.find((sku) => sku.isCostPriceSet);
-
-  if (isFinancesAccountingEditable) {
-    financialAccountingStatusButtonHander(userId, reportId);
-  }
+  financialAccountingStatusButtonHander(userId, reportId);
 };
 
 main();

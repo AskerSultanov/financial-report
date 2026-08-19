@@ -35,7 +35,7 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess, postfix) 
     }
 
     var data = await sendChangedData(skuData, isGuestAccess, "setcostprice");
-    console.log({ data });
+
     if (!data) {
       return;
     }
@@ -48,8 +48,6 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess, postfix) 
 
     if (isGuestAccess) {
       updateReportFromLocalStorage(data);
-    } else {
-      financialAccountingStatusButtonHander(skuData.userId, skuData.reportId);
     }
   };
 

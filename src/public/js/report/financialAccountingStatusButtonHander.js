@@ -1,18 +1,10 @@
-var buttonsContainer = document.getElementById("buttons-container");
-
 var url = "/report/financial-accounting-status/";
+var button = document.getElementById("financial-accounting-status-button");
 
 var yes = "Да";
 var no = "Нет";
 
 var financialAccountingStatusButtonHander = (userId, reportId) => {
-  var button = document.createElement("button");
-  button.id = "financial-accounting-status-button";
-  button.textContent = "Изменить статус учета финансов";
-  button.className = "top-btn financial-accounting-status-btn";
-
-  buttonsContainer.prepend(button);
-
   button.onclick = async () => {
     var financialAccountingStatusSpanElem = document.getElementById("financial-accounting-status");
     var currentStatus = false;
