@@ -4,7 +4,6 @@ import sendCostPrices from "./sendCostPrices.js";
 import createButton from "./utils/createButton.js";
 import updateSKUsTableFields from "../updateSKUsTableFields.js";
 import updateTotalsTableFields from "../updateTotalsTableFields.js";
-import updateCostPricesIntoSkusTable from "../updateCostPricesIntoSkusTable.js";
 import financialAccountingStatusButtonHander from "../../../financialAccountingStatusButtonHander.js";
 
 var getSkusCostPriceContainer = (skusCostPrice) => {
@@ -44,7 +43,6 @@ var skusLastCostPriceModal = (reportId, taxYear, skusLastCostPrice) => {
     var { skusDataToClient, totals, years } = await sendCostPrices(userId, reportId, taxYear, skusLastCostPrice);
 
     updateTotalsTableFields(totals, years);
-    updateCostPricesIntoSkusTable(skusLastCostPrice, years);
     financialAccountingStatusButtonHander(userId, reportId);
 
     skusDataToClient.map((sku) => updateSKUsTableFields(sku, years));
