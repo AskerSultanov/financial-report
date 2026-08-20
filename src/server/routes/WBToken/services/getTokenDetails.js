@@ -7,8 +7,8 @@ var getTokenDetails = (token) => {
   var { exp, id } = token;
 
   var expInMilliseconds = exp * millisecondsInOneSec;
-  var isExpired = currentTimestamp > expInMilliseconds;
   var currentTimestamp = Date.now() + mskTimeOffsetInMs;
+  var isExpired = currentTimestamp > expInMilliseconds;
 
   var daysLeft;
 
@@ -16,8 +16,7 @@ var getTokenDetails = (token) => {
     daysLeft = "-";
   } else {
     var difference = expInMilliseconds - currentTimestamp;
-    var daysLeft = difference / millisecondsInDay;
-    daysLeft = daysLeft.toString().split(".")[0]; //truncate days
+    var daysLeft = (difference / millisecondsInDay).toString().split(".")[0];
   }
 
   var currentDate = new Date(currentTimestamp).toISOString();
