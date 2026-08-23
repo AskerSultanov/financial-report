@@ -9,7 +9,6 @@ import getSkuFromListGoods from "./services/getSkuFromListGoods.js";
 import updateSkuInListGoods from "./services/updateSkuInListGoods.js";
 import getSkusLastCostPrice from "./services/getSkusLastCostPrice.js";
 import updateSkusInListGoods from "./services/updateSkusInListGoods.js";
-import updateSkuDisableStatus from "./services/updateSkuDisableStatus.js";
 import getAllUserListGoodsIds from "./services/getAllUserListGoodsIds.js";
 import setPriceUpdateTimestampAndUpdateStatus from "./services/setPriceUpdateTimestampAndUpdateStatus.js";
 
@@ -33,8 +32,6 @@ var goodsCollectionServices = {
   updateSkuInListGoods: (userId, skuName, data, session) => updateSkuInListGoods(goodsCollection, userId, skuName, data, session),
 
   updateSkusInListGoods: (userId, updatedSkus, session) => updateSkusInListGoods(goodsCollection, userId, updatedSkus, session),
-
-  updateSkuDisableStatusToDb: (userId, skuName, disabled) => updateSkuDisableStatus(goodsCollection, userId, skuName, disabled),
 
   setPriceUpdateTimestampAndUpdateStatus: (userId, priceData, session) =>
     setPriceUpdateTimestampAndUpdateStatus(goodsCollection, userId, priceData, session),

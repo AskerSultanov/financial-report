@@ -13,8 +13,9 @@ var createQuery = (skuName, data) => {
 };
 
 var updateSkuInListGoods = async (collection, userId, skuName, data, session) => {
+  var sessionOptions = session ? { session } : {};
   var { query, arrayFilters } = createQuery(skuName, data);
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
+  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOptions });
   return result;
 };
 
