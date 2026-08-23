@@ -4,24 +4,25 @@ import dbUtils from "../../../database/collections/index.js";
 
 var updateWBTokenLastUsedTimestampNow = true;
 
-var { updateSingleSku } = dbUtils.goodsCollectionServices;
 var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { updateSkuInListGoods } = dbUtils.goodsCollectionServices;
 
 var setNewPricesAndDiscountsToSku = async (req, res, next) => {
-  var { userId, skuDataToUpdate, setNewPriceNow, expectedPriceExists } = req.body;
-
+  var { userId, skuName, skuDataToUpdate, setNewPriceNow, expectedPriceExists } = req.body;
   var session = await dbClient.startSession();
 
   try {
     await session.withTransaction(async () => {});
     if (setNewPriceNow) {
       var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
-      var data = [{ ...skuDataToUpdate }];
 
-      await updateSingleSku(userId, skuDataToUpdate, session);
+      var data = [skuDataToUpdate];
       await wbapi.setPricesAndDiscounts(userId, token, data);
+
+      await updateSkuInListGoods(userId, skuName, { price: skuDataToUpdate.data.price, discount: skuDataToUpdate.data.discount }, session);
     }
   } catch (e) {
+    console.log(e);
     return res.sendStatus(304);
   } finally {
     if (session) {

@@ -1,4 +1,4 @@
-var sendPriceAndDiscount = async (skuId, skuDataToUpdate, checkedWeekDays, setNewPriceNow, expectedPriceExists = false) => {
+var sendPriceAndDiscount = async (skuId, skuName, skuDataToUpdate, checkedWeekDays, setNewPriceNow, expectedPriceExists = false) => {
   var userId = document.cookie.split("=")[1];
   var url = "/goods/prices-discounts/";
 
@@ -8,6 +8,7 @@ var sendPriceAndDiscount = async (skuId, skuDataToUpdate, checkedWeekDays, setNe
     body: JSON.stringify({
       skuId,
       userId,
+      skuName,
       skuDataToUpdate,
       checkedWeekDays,
       setNewPriceNow,

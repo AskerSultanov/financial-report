@@ -18,7 +18,7 @@ var createPriceInput = (skuName) => {
     }
 
     var discountElem = document.getElementById(skuName + "-discount-input-modal");
-    var discount = discountElem.value;
+    var discount = +discountElem.value;
 
     if (typeof discount !== "number" || isNaN(discount) || discount < 0) {
       return;

@@ -9,6 +9,7 @@ var skuObjectSchema = Joi.object({
 var schema = Joi.object({
   skuId: Joi.number().required(),
   userId: Joi.string().required(),
+  skuName: Joi.string().required(),
   skuDataToUpdate: skuObjectSchema,
   setNewPriceNow: Joi.boolean().required(),
   expectedPriceExists: Joi.boolean().required(),

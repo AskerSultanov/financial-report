@@ -1,8 +1,6 @@
 import { goodsCollection } from "../../connections/index.js";
 import saveNewSkusToDb from "./services/saveNewSkusToDb.js";
-import updateSingleSku from "./services/updateSingleSku.js";
 import deleteListGoods from "./services/deleteListGoods.js";
-import updateSkusFields from "./services/updateSkusFields.js";
 import saveListGoodsToDb from "./services/saveListGoodsToDb.js";
 import getListGoodsFromDb from "./services/getListGoodsFromDb.js";
 import getSkuFromListGoods from "./services/getSkuFromListGoods.js";
@@ -24,10 +22,6 @@ var goodsCollectionServices = {
   saveListGoodsToDb: (userId, listGoods, session) => saveListGoodsToDb(goodsCollection, userId, listGoods, session),
 
   saveNewSkusToDb: (userId, newSkus, session) => saveNewSkusToDb(goodsCollection, userId, newSkus, session),
-
-  updateSingleSku: (userId, sku, session) => updateSingleSku(goodsCollection, userId, sku, session),
-
-  updateSkusFields: (userId, updatedSkus, session) => updateSkusFields(goodsCollection, userId, updatedSkus, session),
 
   updateSkuInListGoods: (userId, skuName, data, session) => updateSkuInListGoods(goodsCollection, userId, skuName, data, session),
 

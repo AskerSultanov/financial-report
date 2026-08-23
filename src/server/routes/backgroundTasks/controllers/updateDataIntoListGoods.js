@@ -9,7 +9,7 @@ var statusOfReportLoadingStop = true;
 
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
 var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
-var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusFields } = dbUtils.goodsCollectionServices;
+var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusInListGoods } = dbUtils.goodsCollectionServices;
 
 var updateDataIntoListGoods = async (req, res, next) => {
   var data = await getAllUserListGoodsIds();
@@ -43,7 +43,7 @@ var updateDataIntoListGoods = async (req, res, next) => {
                 await saveNewSkusToDb(userId, newSkus, session);
               }
 
-              await updateSkusFields(userId, updatedSkus, session);
+              await updateSkusInListGoods(userId, updatedSkus, session);
             }
           }
         }

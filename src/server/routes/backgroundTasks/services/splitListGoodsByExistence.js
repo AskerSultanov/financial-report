@@ -4,7 +4,6 @@ var splitListGoodsByExistence = (listGoodsFromDb, listGoodsFromWBAPI) => {
 
   for (var skuFromWBAPI of listGoodsFromWBAPI) {
     var existSku = listGoodsFromDb.find((item) => item.skuName === skuFromWBAPI.skuName && item.id === skuFromWBAPI.id);
-
     if (existSku) {
       updatedSkus.push(skuFromWBAPI);
     } else {
