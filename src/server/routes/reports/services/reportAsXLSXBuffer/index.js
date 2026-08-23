@@ -4,17 +4,28 @@ import getMonthlySummary from "./services/getMonthlySummary.js";
 import createTotalsSheet from "./services/createTotalsSheet.js";
 import writeTotalsTitleToSheet from "./services/writeTotalsTitleToSheet.js";
 import writeTotalValuesToSheet from "./services/writeTotalValuesToSheet.js";
+import calcReportTotalsFromSkus from "../calcServices/utils/calcReportTotalsFromSkus.js";
 
 var getReportAsXLSXBuffer = async (report) => {
+  var { dateFrom, dateTo, reportId, skus } = report;
+
+  var reportTotals = {};
+  reportTotals.dateFrom = dateFrom;
+  reportTotals.dateTo = dateTo;
+  reportTotals.reportId = reportId;
+
+  var restReportTotals = calcReportTotalsFromSkus(skus).reportTotals;
+  reportTotals = Object.assign(reportTotals, restReportTotals);
+
   var workbook = new ExcelJS.Workbook();
 
   var skusSheet = workbook.addWorksheet("Товары");
-
-  skusSheet = await createSKUsSheet(report, skusSheet);
-
   var totalsSheet = workbook.addWorksheet("Сводка");
 
-  totalsSheet = await createTotalsSheet(report, totalsSheet);
+  var indentToTotalsData = skus.length + 2;
+
+  skusSheet = await createSKUsSheet(skus, skusSheet);
+  totalsSheet = await createTotalsSheet(reportTotals, totalsSheet, indentToTotalsData);
 
   var buffer = await workbook.xlsx.writeBuffer();
 
@@ -37,18 +48,15 @@ var getMonthlySummaryAsXLSXBuffer = async (reports) => {
   var isCrossYearPeriodReport = reports.filter((report) => report.isCrossYearPeriod);
 
   if (isCrossYearPeriodReport.length) {
-    var currentYearPostfix = "InCurrentYear";
-    var nextYearPostfix = "InNextYear";
-
     var startYear = isCrossYearPeriodReport[0].dateFrom.split("-")[0];
     var currentYearSheet = workbook.addWorksheet("Сводка за " + startYear);
-    var currentYearMonthlySummary = await getMonthlySummary(isCrossYearPeriodReport, currentYearPostfix);
+    var currentYearMonthlySummary = await getMonthlySummary(isCrossYearPeriodReport);
     currentYearSheet = await writeTotalsTitleToSheet(currentYearSheet, indent);
     currentYearSheet = await writeTotalValuesToSheet(currentYearSheet, indent, currentYearMonthlySummary);
 
     var endYear = isCrossYearPeriodReport[0].dateTo.split("-")[0];
     var nextYearSheet = workbook.addWorksheet("Сводка за " + endYear);
-    var nextYearMonthlySummary = await getMonthlySummary(isCrossYearPeriodReport, nextYearPostfix);
+    var nextYearMonthlySummary = await getMonthlySummary(isCrossYearPeriodReport);
     nextYearSheet = await writeTotalsTitleToSheet(nextYearSheet, indent);
     nextYearSheet = await writeTotalValuesToSheet(nextYearSheet, indent, nextYearMonthlySummary);
   }

@@ -1,14 +1,13 @@
-var updateReportFromLocalStorage = ({ userId, sku, totals }) => {
+var updateReportFromLocalStorage = ({ userId, sku }) => {
   var reportAsJSON = localStorage.getItem(userId);
   var report = JSON.parse(reportAsJSON);
 
-  var skuFromLocalStorage = report.skus[sku.skuIndex];
-  for (var fieldName of Object.keys(sku.data)) {
-    skuFromLocalStorage[fieldName] = sku.data[fieldName];
-  }
+  var skuFromLocalStorage = report.skus.find((skuFromLocalStorage) => skuFromLocalStorage.skuName === sku.skuName);
 
-  for (var fieldName of Object.keys(totals.data)) {
-    report[fieldName] = totals.data[fieldName];
+  if (skuFromLocalStorage) {
+    for (var key in sku.data) {
+      skuFromLocalStorage[key] = sku.data[key];
+    }
   }
 
   localStorage.setItem(userId, JSON.stringify(report));

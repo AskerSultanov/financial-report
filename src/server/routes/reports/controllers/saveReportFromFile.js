@@ -29,7 +29,7 @@ var saveReportFromFile = async (req, res, next) => {
       var { reportTree } = await getReportTree(userId, session);
       var { emptyReportPeriods } = await getEmptyReportPeriods(userId, session);
 
-      for (var { dateFrom, dateTo, reportId, onePeriodReports } of workSheets) {
+      for (var { dateFrom, dateTo, onePeriodReports } of workSheets) {
         var reportExistInEmptyReportPeriods = emptyReportPeriods.find((item) => item.dateFrom === dateFrom);
 
         if (!reportExistInEmptyReportPeriods) {

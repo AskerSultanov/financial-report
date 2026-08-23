@@ -1,4 +1,4 @@
-var calcSKUStorageCostFromPaidStorageReport = (report, skuName) => {
+var calcSkuStorageCostFromPaidStorageReport = (report, skuName) => {
   var sku = report.filter((e) => e.vendorCode == skuName);
 
   var SKUStorageCost = sku.reduce((acc, sku) => acc + sku.warehousePrice, 0);
@@ -6,4 +6,4 @@ var calcSKUStorageCostFromPaidStorageReport = (report, skuName) => {
   return SKUStorageCost;
 };
 
-export default calcSKUStorageCostFromPaidStorageReport;
+export default calcSkuStorageCostFromPaidStorageReport;

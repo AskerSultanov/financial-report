@@ -30,17 +30,17 @@ var skuSchema = new Schema(
     finalProfit: numberOptions,
     profitMargin: numberOptions,
     isCostPriceSet: { type: Boolean, default: false },
+    year: { type: Number, required: true },
     isInsuranceFeeIncluded: booleanOptions,
     averageProfit: numberOptions,
     averageRetailPrice: numberOptions,
     averageStorageCost: numberOptions,
     averageAdvertisingCost: numberOptions,
-    schemaVersion: { type: Number },
     id: { type: Number, required: true },
   },
   { _id: false },
 );
-var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: stringOptions, schemaVersion: { type: Number } }, { _id: false });
+var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: stringOptions }, { _id: false });
 
 var reportSchema = new Schema(
   {
@@ -48,36 +48,13 @@ var reportSchema = new Schema(
     reportId: numberOptions,
     dateFrom: stringOptions,
     dateTo: stringOptions,
-    totalSellerPayoutAmount: numberOptions,
-    totalSold: numberOptions,
-    totalFines: numberOptions,
-    totalProductCosts: numberOptions,
-    totalReturnAmount: numberOptions,
-    totalStorageCost: numberOptions,
-    totalDeliveryCost: numberOptions,
-    totalRetailAmount: numberOptions,
-    totalPaidAcceptance: numberOptions,
-    totalAdvertisingCosts: numberOptions,
-    totalDeductionOrPayment: numberOptions,
-    totalAdditionalPayment: numberOptions,
-    totalTaxAmount: numberOptions,
-    totalInsuranceFee: numberOptions,
-    totalOtherExpenses: numberOptions,
-    totalTaxableAmount: numberOptions,
-    totalAdditionalInsuranceFee: numberOptions,
-    totalProfit: numberOptions,
-    totalPreTaxProfit: numberOptions,
-    totalFinalProfit: numberOptions,
-    totalProfitMargin: numberOptions,
     taxRate: { type: Number, default: 6 },
-    nextYearTaxRate: nonRequiredNumberOptions,
-    recordedTo: { type: recordedToSchema, requred: true },
-    schemaVersion: { type: Number },
-    buybackReportIsExist: { type: Boolean, default: false },
     isCrossYearPeriod: { type: Boolean, default: false },
+    recordedTo: { type: recordedToSchema, requred: true },
+    buybackReportIsExist: { type: Boolean, default: false },
     isFinancesAccounted: { type: Boolean, default: false },
-    skus: [{ type: skuSchema, required: true }],
     reportIsEmpty: { type: Boolean, default: false },
+    skus: [{ type: skuSchema, required: true }],
   },
   { _id: false },
 );
@@ -103,7 +80,6 @@ var reportsSchema = new Schema({
   userId: stringOptions,
   reports: { type: [reportSchema], required: false },
   reportsWithAccountedFinances: { type: [reportsWithAccountedFinancesSchema], required: false },
-  schemaVersion: { type: Number },
 });
 
 export default reportsSchema;

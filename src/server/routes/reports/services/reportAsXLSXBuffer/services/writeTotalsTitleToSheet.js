@@ -3,18 +3,18 @@ var totalTitles = [
   "Конец отчетного периода",
   "ID отчета",
   "Сумма продаж",
-  "К перечислению за товар",
+  "Налогооблагаемая база",
   "Продано шт.",
   "Возвратов шт.",
-  "Логистика",
-  "Хранение",
-  "Приемка",
+  "К перечислению за товар",
+  "Себестоимость",
   "Прочите расходы",
+  "Логистика",
+  "Приемка",
   "Штрафы",
   "Удержания/выплаты",
+  "Хранение",
   "Реклама",
-  "Себестоимость",
-  "Налогооблагаемая база",
   "Налоги",
   "Cтраховые взносы",
   "Доп. страховые взносы",
@@ -25,7 +25,7 @@ var totalTitles = [
 var fontStyles = { bold: true, font: 10 };
 var alignmentStyles = { vertical: "middle", horizontal: "left" };
 
-var writeTotalsTitleToSheet = async (sheet, cellNum) => {
+var writeTotalsTitleToSheet = (sheet, cellNum) => {
   var cellName = "A";
   var firstColumnNum = 1;
 

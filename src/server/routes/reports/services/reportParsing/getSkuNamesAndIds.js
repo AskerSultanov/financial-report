@@ -3,8 +3,8 @@ var getSkuNamesAndIds = (report) => {
 
   for (var sku of report) {
     if (sku.vendorCode) {
-      if (!uniqueMap.has(sku.nmId)) {
-        uniqueMap.set(sku.nmId, { id: sku.nmId, name: sku.vendorCode });
+      if (!uniqueMap.has(sku.vendorCode)) {
+        uniqueMap.set(sku.vendorCode, { id: sku.nmId, name: sku.vendorCode });
       }
     }
   }

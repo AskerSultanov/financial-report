@@ -1,14 +1,14 @@
-import createDiv from "./utils/createDiv.js";
-import createTitle from "./utils/createTitle.js";
-import createInput from "./utils/createInput.js";
-import createButton from "./utils/createButton.js";
-import sendChangedData from "../sendChangedData.js";
-import updateSKUsTableFields from "../updateSKUsTableFields.js";
-import updateTotalsTableFields from "../updateTotalsTableFields.js";
-import getReportDataFromLocalStorage from "./getReportDataFromLocalStorage.js";
-import updateReportFromLocalStorage from "../updateReportFromLocalStorage.js";
+import createDiv from "../utils/createDiv.js";
+import createTitle from "../utils/createTitle.js";
+import createInput from "../utils/createInput.js";
+import createButton from "../utils/createButton.js";
+import sendChangedData from "../../sendChangedData.js";
+import updateSkusTableFields from "../../updateSkusTableFields.js";
+import updateTotalsTableFields from "../../updateTotalsTableFields.js";
+import getReportDataFromLocalStorage from "../getReportDataFromLocalStorage.js";
+import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
 
-var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess, postfix) => {
+var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   var modalContent = createDiv("modal-content");
 
@@ -24,7 +24,7 @@ var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess, p
   var cb = async () => {
     document.body.removeChild(modal);
 
-    skuData["otherExpenses" + postfix] = +otherExpensesInput.value;
+    skuData.otherExpenses = +otherExpensesInput.value;
 
     if (isGuestAccess) {
       var reportData = getReportDataFromLocalStorage(skuData);
@@ -40,7 +40,7 @@ var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess, p
     otherExpensesDisplayElement.otherExpensesnt = otherExpensesInput.value;
 
     var { years, sku, totals } = data;
-    updateSKUsTableFields(sku, years);
+    updateSkusTableFields(sku, years);
     updateTotalsTableFields(totals, years);
 
     if (isGuestAccess) {

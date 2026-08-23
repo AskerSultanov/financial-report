@@ -1,14 +1,21 @@
 import dbUtils from "../../../database/collections/index.js";
 import generageSKusMetricsFile from "../services/skusMetrics/index.js";
+import sortSkusBySkuNameAndYear from "../services/skusMetrics/sortSkusBySkuNameAndYear.js";
+import mergeSkuDataBySkuNameAndYear from "../services/skusMetrics/mergeSkuDataBySkuNameAndYear.js";
 
 var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+var { getReportsByUserId } = dbUtils.reportCollectionServices;
 
 var getSkusMetricsFile = async (req, res, next) => {
-  return res.sendStatus(200);
   var { userId } = req.params;
 
+  var { reports } = await getReportsByUserId(userId);
   var { listGoods } = await getListGoodsFromDb(userId);
-  var { skusMetricsFileBuffer } = await generageSKusMetricsFile(listGoods);
+
+  var { sortedSkusBySkuNameAndYear } = sortSkusBySkuNameAndYear(listGoods, reports);
+  var { mergedSkus } = mergeSkuDataBySkuNameAndYear(listGoods, sortedSkusBySkuNameAndYear);
+
+  var { skusMetricsFileBuffer } = await generageSKusMetricsFile(mergedSkus);
 
   res.set({
     "Content-Disposition": 'attachment; filename="file.xlsx"',

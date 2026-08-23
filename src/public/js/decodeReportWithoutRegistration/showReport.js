@@ -1,45 +1,47 @@
 import createSKUsTable from "./createSKUsTable.js";
 import createTotalsTable from "./createTotalsTable.js";
-import splitReportByYear from "../report/table/services/splitReportByYear.js";
+import calcReportTotalsFromSkus from "../report/table/calcReportTotalsFromSkus.js";
 import { enableDownloadReportAsXLSXButton } from "./downloadReportAsXLSXButton.js";
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
 import downloadReportAsXLSXButtonHandler from "../report/downloadReportAsXLSXButtonHandler.js";
 
-var postfixStub = "";
 var yearValueStub = "";
 var isGuestAccess = true;
 var reportSummaryLabelTextStub = "";
-var startYearPostfix = "InCurrentYear";
-var endYearPostfix = "InNextYear";
 var downloadReportLink = "/decode-report-without-registration/xlsx/";
 var newTextContentToDecodeReportWithoutRegistrationButton = "Получить новый отчёт";
 var decodeReportWithoutRegistrationButton = document.getElementById("decode-report-without-registration-button");
 
 var showReport = async (report) => {
-  var { dateFrom, dateTo, isCrossYearPeriod } = report;
+  var { dateFrom, dateTo, isCrossYearPeriod, skus } = report;
 
   var startYear = +report.dateFrom.split("-")[0];
+  var endYear = +report.dateTo.split("-")[0];
+
+  var { reportTotals } = calcReportTotalsFromSkus(skus);
 
   if (isCrossYearPeriod) {
-    var endYear = +report.dateTo.split("-")[0];
+    var startYearSkus = skus.filter((sku) => sku.year === startYear);
+    var endYearSkus = skus.filter((sku) => sku.year === endYear);
 
-    var fullPeriod = startYear + "-" + endYear;
     var fullReportPeriodText = getReportPeriodText(dateFrom, dateTo).reportPeriodText;
 
-    createTotalsTable(report, yearValueStub, isCrossYearPeriod, fullReportPeriodText, postfixStub);
+    createTotalsTable(reportTotals, yearValueStub, isCrossYearPeriod, fullReportPeriodText);
 
-    var { startYearReportData, endYearReportData } = splitReportByYear(report, isGuestAccess);
-
+    var startYearReportTotals = calcReportTotalsFromSkus(startYearSkus).reportTotals;
     var startReportPeriodText = getReportPeriodText(dateFrom, dateTo, dateFrom).reportPeriodText;
-    createTotalsTable(startYearReportData, startYear, isCrossYearPeriod, startReportPeriodText, startYearPostfix);
-    createSKUsTable(startYearReportData, startYearPostfix, startYear);
 
+    createTotalsTable(startYearReportTotals, startYear, isCrossYearPeriod, startReportPeriodText);
+    createSKUsTable(report, startYearSkus, startYear);
+
+    var endYearReportTotals = calcReportTotalsFromSkus(endYearSkus).reportTotals;
     var endReportPeriodText = getReportPeriodText(dateFrom, dateTo, dateTo).reportPeriodText;
-    createTotalsTable(endYearReportData, endYear, isCrossYearPeriod, endReportPeriodText, endYearPostfix);
-    createSKUsTable(endYearReportData, endYearPostfix, endYear);
+
+    createTotalsTable(endYearReportTotals, endYear, isCrossYearPeriod, endReportPeriodText);
+    createSKUsTable(report, endYearSkus, endYear);
   } else {
-    createTotalsTable(report, yearValueStub, isCrossYearPeriod, reportSummaryLabelTextStub, postfixStub);
-    createSKUsTable(report, postfixStub, startYear);
+    createTotalsTable(reportTotals, yearValueStub, isCrossYearPeriod, reportSummaryLabelTextStub);
+    createSKUsTable(report, skus, startYear);
   }
 
   enableDownloadReportAsXLSXButton();

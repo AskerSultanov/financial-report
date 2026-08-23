@@ -1,9 +1,3 @@
-var currentYearPostfix = "InCurrentYear";
-var nextYearPostfix = "InNextYear";
-
-var reversedCurrentYearPostfix = currentYearPostfix.split("").reverse().join("");
-var reversedNextYearPostfix = nextYearPostfix.split("").reverse().join("");
-
 var excludeEqualParams = (prevData, currentData) => {
   var nonEqualParams = {};
 

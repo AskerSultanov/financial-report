@@ -1,13 +1,9 @@
 import Joi from "joi";
 import calc from "../../reports/services/calcServices/index.js";
 import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
-import getPrevTotalsData from "../../reports/services/different/getPrevTotalsData.js";
 import excludeEqualParams from "../../reports/services/different/excludeEqualParams.js";
-import processOfSkuCostPriceSetting from "../../reports/services/different/processOfSkuCostPriceSetting.js";
 
 var skuFromListGoodsStub = [];
-var currentYearPostfix = "InCurrentYear";
-var endYearPostfix = "InNextYear";
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -33,31 +29,18 @@ var setOtherExpensesToSku = async (req, res, next) => {
   var { isCrossYearPeriod } = totals;
 
   var years = [];
-  var postfix = "";
-  var startYear = +dateFrom.split("-")[0];
-  var endYear = +dateTo.split("-")[0];
 
-  if (isCrossYearPeriod) {
-    years = [startYear, endYear];
-    postfix = year === startYear ? currentYearPostfix : endYearPostfix;
-  }
-
-  var otherExpensesKey = "otherExpenses" + postfix;
-
-  if (sku[otherExpensesKey] === req.body[otherExpensesKey]) {
+  if (sku.otherExpenses === req.body.otherExpenses) {
     return res.sendStatus(409);
   }
 
   var prevSkuData = getPrevSkuData(sku);
-  var prevReportTotals = getPrevTotalsData(totals);
 
-  sku[otherExpensesKey] = req.body[otherExpensesKey];
+  sku.otherExpenses = req.body.otherExpenses;
 
-  var { updatedSkuFields } = processOfSkuCostPriceSetting(sku, { taxRate, ...taxParamsStub }, prevSkuData, postfix);
-  var { updatedTotals } = calc.total.restParams(totals, prevSkuData, updatedSkuFields, isCrossYearPeriod, postfix);
+  var { updatedSkuFields } = calc.sku.restParams(sku, prevSkuData, { taxRate, ...taxParamsStub }, prevSkuData);
 
   var skuDataToClient = excludeEqualParams(prevSkuData, updatedSku);
-  var totalsDataToClient = excludeEqualParams(prevReportTotals, updatedTotals);
 
   return res.json({
     userId,
@@ -67,7 +50,6 @@ var setOtherExpensesToSku = async (req, res, next) => {
       skuIndex,
       data: skuDataToClient,
     },
-    totals: { data: totalsDataToClient },
   });
 };
 

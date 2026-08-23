@@ -1,36 +1,82 @@
-var updateTotalsTableFields = (totals, years) => {
-  for (var fieldName of Object.keys(totals.data)) {
-    var elemId = fieldName + "-";
+import calcProfitMargin from "../calcProfitMargin.js";
 
-    var elem = document.getElementById(elemId);
+var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
+  var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
 
-    if (elem) {
-      elem.textContent = totals.data[fieldName];
+  for (var skuKey of skuKeys) {
+    var totalFieldId = skuKey + "-";
 
-      if (totals.data[fieldName] < 0) {
-        elem.style.color = "red";
+    var totalField = document.getElementById(totalFieldId);
+
+    if (totalField) {
+      var prevTotalFieldValue = +totalField.textContent;
+      var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
+
+      totalField.textContent = newTotalFieldValue.toFixed(2);
+
+      if (newTotalFieldValue < 0) {
+        totalField.style.color = "red";
       } else {
-        elem.style.color = "#04ff00";
+        totalField.style.color = "#04ff00";
       }
     }
   }
 
+  var finalProfitElem = document.getElementById("finalProfit-");
+  var retailAmountElem = document.getElementById("retailAmount-");
+
+  var finalProfitElemValue = +finalProfitElem.textContent;
+  var retailAmountElemValue = +retailAmountElem.textContent;
+
+  var profitMargin = calcProfitMargin(finalProfitElemValue, retailAmountElemValue);
+
+  var profitMarginElem = document.getElementById("profitMargin-");
+  profitMarginElem.textContent = profitMargin;
+
+  if (profitMargin < 0) {
+    profitMarginElem.style.color = "red";
+  } else {
+    profitMarginElem.style.color = "#04ff00";
+  }
+
   if (years.length) {
     for (var year of years) {
-      for (var fieldName of Object.keys(totals.data)) {
-        var elemId = fieldName + "-" + year;
+      var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
 
-        var elem = document.getElementById(elemId);
+      for (var skuKey of skuKeys) {
+        var totalFieldId = skuKey + "-" + year;
 
-        if (elem) {
-          elem.textContent = totals.data[fieldName];
+        var totalField = document.getElementById(totalFieldId);
 
-          if (totals.data[fieldName] < 0) {
-            elem.style.color = "red";
+        if (totalField) {
+          var prevTotalFieldValue = +totalField.textContent;
+          var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
+
+          totalField.textContent = newTotalFieldValue.toFixed(2);
+
+          if (newTotalFieldValue < 0) {
+            totalField.style.color = "red";
           } else {
-            elem.style.color = "#04ff00";
+            totalField.style.color = "#04ff00";
           }
         }
+      }
+
+      var finalProfitElem = document.getElementById("finalProfit-" + year);
+      var retailAmountElem = document.getElementById("retailAmount-" + year);
+
+      var finalProfitElemValue = +finalProfitElem.textContent;
+      var retailAmountElemValue = +retailAmountElem.textContent;
+
+      var profitMargin = calcProfitMargin(finalProfitElemValue, retailAmountElemValue);
+
+      var profitMarginElem = document.getElementById("profitMargin-" + year);
+      profitMarginElem.textContent = profitMargin;
+
+      if (profitMargin < 0) {
+        profitMarginElem.style.color = "red";
+      } else {
+        profitMarginElem.style.color = "#04ff00";
       }
     }
   }

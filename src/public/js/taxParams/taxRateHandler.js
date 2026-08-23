@@ -33,7 +33,7 @@ var taxRateHandler = (userId) => {
       return alert("Недопустимое значение");
     }
 
-    var success = await sendNewTaxParam(userId, selectedYear, reportsNeedRecalculation, selectedYearTaxParams, { taxRate: newTaxRate });
+    var success = await sendNewTaxParam(userId, selectedYear, reportsNeedRecalculation, { taxRate: newTaxRate });
 
     input.value = "";
 

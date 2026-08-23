@@ -29,7 +29,7 @@ var mandatoryInsuranceFeeHandler = (userId) => {
       return alert("Недопустимое значение");
     }
 
-    var success = await sendNewTaxParam(userId, selectedYear, false, selectedYearTaxParams, {
+    var success = await sendNewTaxParam(userId, selectedYear, false, {
       mandatoryInsuranceFee: newMandatoryInsuranceFee,
     });
 

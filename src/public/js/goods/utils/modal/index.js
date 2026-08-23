@@ -3,7 +3,7 @@ import createLabel from "./createLabel.js";
 import createButton from "./createButton.js";
 import createPriceInput from "./createPriceInput.js";
 import saveButtonHandler from "./saveButtonHandler.js";
-import createDiscountnput from "./createDiscountnput.js";
+import createDiscountInput from "./createDiscountInput.js";
 import cancelButtonHandler from "./cancelButtonHandler.js";
 import createWeekDaysPicker from "./createWeekDaysPicker.js";
 import createDiscountedPriceField from "./createDiscountedPriceField.js";
@@ -23,7 +23,7 @@ var createModal = (item) => {
   var priceInput = createPriceInput(item.skuName);
   var priceLabel = createLabel(priceInput, "цена", "wrapinput - yes");
 
-  var discountInput = createDiscountnput(item.skuName);
+  var discountInput = createDiscountInput(item.skuName);
   var discountLabel = createLabel(discountInput, "скидка", "wrapinput - yes");
 
   var discountedPriceField = createDiscountedPriceField(item);

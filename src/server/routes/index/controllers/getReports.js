@@ -2,9 +2,6 @@ import dbUtils from "../../../database/collections/index.js";
 
 var projectonFields = [
   "reports.reportId",
-  "reports.totalTaxAmount",
-  "reports.totalFinalProfit",
-  "reports.totalProductCosts",
   "reports.isFinancesAccounted",
 ];
 

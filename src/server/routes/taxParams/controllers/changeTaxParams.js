@@ -5,58 +5,39 @@ import defaultTaxParams from "../../../database/defaultTaxParams.js";
 import recalculateReportsWithNewTaxRate from "../services/recalculateReportsWithNewTaxRate.js";
 import recalculateReportsWithNewMandatoryInsuranceRate from "../services/recalculateReportsWithNewMandatoryInsuranceRate.js";
 
-var { changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportCollectionServices;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
+var { getReportsByUserId, saveUpdatedReports, saveUpdatedReport } = dbUtils.reportCollectionServices;
 
 var changeTaxParams = async (req, res, next) => {
-  var { userId, year, oldTaxParams, reportsNeedRecalculation, data } = req.body;
+  var { userId, year, reportsNeedRecalculation, data } = req.body;
 
   var { taxParamKeyName } = getTaxParamKeyName(data);
-
-  if (!reportsNeedRecalculation) {
-    try {
-      await changeTaxParamsToDb(userId, null, { year, [taxParamKeyName]: data[taxParamKeyName] });
-      res.sendStatus(200);
-    } catch (e) {
-      res.sendStatus(304);
-    }
-
-    return;
-  }
 
   var session = await dbClient.startSession();
 
   try {
     await session.withTransaction(async () => {
+      var taxParams = await getTaxParamsFromDb(userId, year, session);
+
       var { reports } = await getReportsByUserId(userId, session);
 
-      var requiredReports = reports.filter((report) => {
-        if (report.isCrossYearPeriod) {
-          var startYear = +report.dateFrom.split("-")[0];
-          var endYear = +report.dateTo.split("-")[0];
-          if (startYear === year || endYear === year) {
-            return report;
-          }
-        } else {
-          if (report.recordedTo.year === year) {
-            return report;
-          }
-        }
-      });
+      if (taxParams[taxParamKeyName] === data[taxParamKeyName]) {
+        return res.sendStatus(409);
+      }
+
+      if (!reportsNeedRecalculation) {
+        await changeTaxParamsToDb(userId, session, { year, [taxParamKeyName]: data[taxParamKeyName] });
+        return res.sendStatus(200);
+      }
 
       switch (taxParamKeyName) {
         case "taxRate":
           var newTaxRate = data[taxParamKeyName];
 
-          if (requiredReports.length) {
-            var resetPaidTaxAmount = -oldTaxParams.mandatoryInsuranceFee;
+          if (reports.length) {
+            var resetPaidTaxAmount = -taxParams.mandatoryInsuranceFee;
 
-            var { updatedReports, finalProfit, paidTaxAmount } = recalculateReportsWithNewTaxRate(
-              requiredReports,
-              resetPaidTaxAmount,
-              newTaxRate,
-              year,
-            );
+            var { updatedReports, finalProfit, paidTaxAmount } = recalculateReportsWithNewTaxRate(reports, resetPaidTaxAmount, newTaxRate, year);
 
             await saveUpdatedReports(userId, updatedReports, session);
             await changeTaxParamsToDb(userId, session, { year, finalProfit, paidTaxAmount, taxRate: newTaxRate });
@@ -65,14 +46,15 @@ var changeTaxParams = async (req, res, next) => {
           }
 
           break;
+
         case "mandatoryInsuranceFeeRate":
           var newMandatoryInsuranceFeeRate = data[taxParamKeyName];
 
-          if (requiredReports.length) {
+          if (reports.length) {
             var { mandatoryInsuranceFee } = oldTaxParams;
             var { updatedReports, finalProfit, paidInsuranceFee, mandatoryInsuranceFeeIsPaid } = recalculateReportsWithNewMandatoryInsuranceRate(
               year,
-              requiredReports,
+              reports,
               mandatoryInsuranceFee,
               newMandatoryInsuranceFeeRate,
             );

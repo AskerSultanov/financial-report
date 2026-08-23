@@ -7,7 +7,7 @@ var alignmentStyles = {
   horizontal: "center",
 };
 
-var writeSKUsToSheet = async (sheet, skus) => {
+var writeSKUsToSheet = (sheet, skus) => {
   var cellNum = 2;
 
   for (var i = 0; i < skus.length; i++) {

@@ -1,6 +1,7 @@
 var createTdElement = (data, id, ending, title) => {
   var td = document.createElement("td");
-  td.append(data);
+
+  td.append(data || "-");
 
   if (id) {
     td.id = id + "-" + ending;

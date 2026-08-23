@@ -1,15 +1,15 @@
 import truncateNum from "../../reportParsing/truncateNum.js";
 
-var calcPreTaxProfit = (sku, propPostfix = "") => {
+var calcPreTaxProfit = (sku) => {
   var productCosts;
 
-  if (sku["profit" + propPostfix] === 0 || sku["qty" + propPostfix] === 0) {
+  if (sku.profit === 0 || sku.qty === 0) {
     productCosts = 0;
   } else {
-    productCosts = sku["qty" + propPostfix] * sku["costPrice" + propPostfix];
+    productCosts = sku.qty * sku.costPrice;
   }
 
-  var preTaxProfit = sku["profit" + propPostfix] - sku["otherExpenses" + propPostfix] - productCosts;
+  var preTaxProfit = sku.profit - sku.otherExpenses - productCosts;
   return truncateNum(preTaxProfit);
 };
 

@@ -63,10 +63,6 @@ var getReportFromWBAPI = async (req, res, next) => {
   report.taxRate = taxRate;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
-  report.totalFinalProfit = 0;
-  report.totalProductCosts = 0;
-  report.totalProfitMargin = 0;
-  report.totalOtherExpenses = 0;
   report.isCrossYearPeriod = isCrossYearPeriod;
 
   return res.json({ report });

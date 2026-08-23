@@ -1,17 +1,17 @@
-import createDiv from "./utils/createDiv.js";
-import createTitle from "./utils/createTitle.js";
-import createInput from "./utils/createInput.js";
-import createButton from "./utils/createButton.js";
-import sendChangedData from "../sendChangedData.js";
-import updateSKUsTableFields from "../updateSKUsTableFields.js";
-import updateTotalsTableFields from "../updateTotalsTableFields.js";
-import updateReportFromLocalStorage from "../updateReportFromLocalStorage.js";
-import getReportDataFromLocalStorage from "./getReportDataFromLocalStorage.js";
-import financialAccountingStatusButtonHander from "../../../financialAccountingStatusButtonHander.js";
+import createDiv from "../utils/createDiv.js";
+import createTitle from "../utils/createTitle.js";
+import createInput from "../utils/createInput.js";
+import createButton from "../utils/createButton.js";
+import sendChangedData from "../../sendChangedData.js";
+import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
+import updateSkusTableFields from "../../updateSkusTableFields.js";
+import updateTotalsTableFields from "../../updateTotalsTableFields.js";
+import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
+import getReportDataFromLocalStorage from "../getReportDataFromLocalStorage.js";
 
 var event = "click";
 
-var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess, postfix) => {
+var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   var modalContent = createDiv("modal-content");
 
@@ -27,12 +27,7 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess, postfix) 
   var saveCb = async () => {
     document.body.removeChild(modal);
 
-    skuData["costPrice" + postfix] = +costPriceInput.value;
-
-    if (isGuestAccess) {
-      var reportData = getReportDataFromLocalStorage(skuData);
-      skuData = Object.assign(skuData, reportData);
-    }
+    skuData.costPrice = +costPriceInput.value;
 
     var data = await sendChangedData(skuData, isGuestAccess, "setcostprice");
 
@@ -42,9 +37,10 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess, postfix) 
 
     costPriceDisplayElement.textContent = costPriceInput.value;
 
-    var { sku, totals, years } = data;
-    updateSKUsTableFields(sku, years);
-    updateTotalsTableFields(totals, years);
+    var { sku, years } = data;
+    var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
+    updateSkusTableFields(sku);
+    updateTotalsTableFields(sku.data, years, prevSkuFieldsValue);
 
     if (isGuestAccess) {
       updateReportFromLocalStorage(data);

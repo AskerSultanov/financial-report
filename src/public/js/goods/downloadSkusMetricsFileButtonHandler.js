@@ -2,9 +2,6 @@ var downloadSkusMetricsFileButton = document.getElementById("download-skus-metri
 
 var downloadSkusMetricsFileButtonHandler = (userId) =>
   (downloadSkusMetricsFileButton.onclick = async () => {
-    alert("Пока недоступно");
-    return;
-
     var url = "/goods/metrics/download/" + userId;
     var res = await fetch(url);
     var blob = await res.blob();

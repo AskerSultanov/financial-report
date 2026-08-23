@@ -18,10 +18,8 @@ sku.storageCostFromPaidStorageReport = storageCostFromPaidStorageReport;
 import totalSold from "./utils/totalSold.js";
 import totalStorageCost from "./utils/totalStorageCost.js";
 import totalProfitMargin from "./utils/totalProfitMargin.js";
-import restReportTotalParams from "./utils/restReportTotalParam.js";
 
 total.sold = totalSold;
-total.restParams = restReportTotalParams;
 total.storageCost = totalStorageCost;
 total.profitMargin = totalProfitMargin;
 

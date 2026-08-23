@@ -1,19 +1,16 @@
 import reportInfo from "./reportInfo.js";
-import createSKUsTable from "./table/createSKUsTable.js";
-import createTotalsTable from "./table/createTotalsTable.js";
+import createSkusTable from "./table/createSkusTable.js";
 import deleteReportHandler from "./deleteReportHandler.js";
-import splitReportByYear from "./table/services/splitReportByYear.js";
+import createTotalsTable from "./table/createTotalsTable.js";
+import calcReportTotalsFromSkus from "./table/calcReportTotalsFromSkus.js";
 import injectBase64IntoImgTags from "./table/services/injectBase64IntoImgTags.js";
 import downloadReportAsXLSXButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
 import setSkusLastCostPricesButtonHandler from "./setSkusLastCostPricesButtonHandler.js";
 import financialAccountingStatusButtonHander from "./financialAccountingStatusButtonHander.js";
 
-var postfixStub = "";
 var yearValueStub = "";
 var reportSummaryLabelTextStub = "";
-var currentYearPostfix = "InCurrentYear";
-var nextYearPostfix = "InNextYear";
 var splitedPathName = window.location.pathname.split("/");
 var userId = splitedPathName.includes("user") ? splitedPathName[3] : document.cookie.split("=")[1];
 
@@ -41,41 +38,46 @@ var getReportData = async () => {
 
 var main = async () => {
   var { report, skuImages, skusWithLastCostPrices } = await getReportData();
-  var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } = report;
+
+  var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod, taxRate } = report;
   var { year } = recordedTo;
 
+  var startYear = +dateFrom.split("-")[0];
+  var endYear = +dateTo.split("-")[0];
+  var years = [startYear, endYear];
+
+  var { reportTotals } = calcReportTotalsFromSkus(skus);
+
   if (isCrossYearPeriod) {
-    var startYear = dateFrom.split("-")[0];
-    var endYear = dateTo.split("-")[0];
+    var startYearSkus = skus.filter((sku) => sku.year === startYear);
+    var endYearSkus = skus.filter((sku) => sku.year === endYear);
 
-    var fullPeriod = startYear + "-" + endYear;
     var fullReportPeriodText = getReportPeriodText(dateFrom, dateTo).reportPeriodText;
-    createTotalsTable(report, yearValueStub, isCrossYearPeriod, fullReportPeriodText, postfixStub);
 
-    var { startYearReportData, endYearReportData } = splitReportByYear(report);
+    createTotalsTable(reportTotals, yearValueStub, isCrossYearPeriod, fullReportPeriodText);
 
+    var startYearReportTotals = calcReportTotalsFromSkus(startYearSkus).reportTotals;
     var startReportPeriodText = getReportPeriodText(dateFrom, dateTo, dateFrom).reportPeriodText;
-    createTotalsTable(startYearReportData, startYear, isCrossYearPeriod, startReportPeriodText, currentYearPostfix);
-    createSKUsTable(startYearReportData, currentYearPostfix, startYear);
+    createTotalsTable(startYearReportTotals, startYear, isCrossYearPeriod, startReportPeriodText);
 
+    createSkusTable(userId, reportId, startYear, startYearSkus);
+
+    var endYearReportTotals = calcReportTotalsFromSkus(endYearSkus).reportTotals;
     var endReportPeriodText = getReportPeriodText(dateFrom, dateTo, dateTo).reportPeriodText;
-    createTotalsTable(endYearReportData, endYear, isCrossYearPeriod, endReportPeriodText, nextYearPostfix);
-    createSKUsTable(endYearReportData, nextYearPostfix, endYear);
+    createTotalsTable(endYearReportTotals, endYear, isCrossYearPeriod, endReportPeriodText);
+
+    createSkusTable(userId, reportId, endYear, endYearSkus);
   } else {
-    createTotalsTable(report, yearValueStub, isCrossYearPeriod, reportSummaryLabelTextStub, postfixStub);
-    createSKUsTable(report, postfixStub, year);
+    createTotalsTable(reportTotals, yearValueStub, isCrossYearPeriod, reportSummaryLabelTextStub);
+    createSkusTable(userId, reportId, year, skus);
   }
 
-  setSkusLastCostPricesButtonHandler(skus, reportId, year, dateFrom, dateTo, skusWithLastCostPrices);
-
   reportInfo(report);
-
   injectBase64IntoImgTags(skuImages);
-
   downloadReportAsXLSXButtonHandler(report);
   deleteReportHandler(userId, reportId, skus);
-
   financialAccountingStatusButtonHander(userId, reportId);
+  setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
 };
 
 main();

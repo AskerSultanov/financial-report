@@ -24,7 +24,7 @@ var fileUploadHandler = (userId) => {
   button.onclick = (e) => {
     alert("Пока недоступно");
     return;
-    
+
     e.preventDefault();
     input.click();
 

@@ -12,7 +12,7 @@ var createQuery = (skuName, data) => {
   return { query, arrayFilters };
 };
 
-var updateSkuInListGoods = async (collection, userId, skuId, skuName, data, session) => {
+var updateSkuInListGoods = async (collection, userId, skuName, data, session) => {
   var { query, arrayFilters } = createQuery(skuName, data);
   var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
   return result;

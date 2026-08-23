@@ -34,6 +34,7 @@ var getReportFromFiles = async (req, res) => {
   if (!workSheets.length) {
     return res.json({ report: {}, reportPeriodIsEmpty: true });
   }
+
   var { dateFrom, dateTo, onePeriodReports } = workSheets[0];
 
   var startYear = +dateFrom.split("-")[0];
@@ -43,7 +44,21 @@ var getReportFromFiles = async (req, res) => {
   var userId = randomBytes(15).toString("hex");
 
   var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(userId, onePeriodReports);
+
+  if (reportPeriodIsEmpty) {
+    return res.json({ reports, reportPeriodIsEmpty });
+  }
+
   var { reportId } = reports.weeklyFinancialReport[0];
+
+  var report = {};
+
+  report.dateTo = dateTo;
+  report.userId = userId;
+  report.dateFrom = dateFrom;
+  report.reportId = reportId;
+  report.taxRate = taxParamsStub.taxRate;
+  report.isCrossYearPeriod = isCrossYearPeriod;
 
   if (isCrossYearPeriod) {
     var startYearTaxParamsStub = Object.assign({}, { year: startYear, ...taxParamsStub });
@@ -51,21 +66,12 @@ var getReportFromFiles = async (req, res) => {
 
     var taxParams = { startYearTaxParams: startYearTaxParamsStub, endYearTaxParams: endYearTaxParamsStub };
 
-    var { report } = await parseReports(reports, taxParams, isCrossYearPeriod);
+    var { skus } = await parseReports(reports, taxParams, isCrossYearPeriod);
+    report.skus = skus;
   } else {
-    var { report } = await parseReports(reports, { year: startYear, ...taxParamsStub });
+    var { skus } = await parseReports(reports, { year: startYear, ...taxParamsStub });
+    report.skus = skus;
   }
-
-  report.userId = userId;
-  report.dateTo = dateTo;
-  report.dateFrom = dateFrom;
-  report.reportId = reportId;
-  report.totalFinalProfit = 0;
-  report.totalProductCosts = 0;
-  report.totalProfitMargin = 0;
-  report.totalOtherExpenses = 0;
-  report.taxRate = taxParamsStub.taxRate;
-  report.isCrossYearPeriod = isCrossYearPeriod;
 
   return res.json({ report, reportPeriodIsEmpty });
 };

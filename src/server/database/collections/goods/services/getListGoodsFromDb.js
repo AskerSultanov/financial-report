@@ -1,65 +1,23 @@
-var getListGoodsFromDb = async (collection, userId, skuNames, selectedFields = [], session) => {
-  var sessionOption = session ? { session } : {};
+var getListGoodsFromDb = async (collection, userId, skuNames, selectedFields, session) => {
+  var sessionOptions = session ? { session } : {};
+
+  var data = await collection.findOne({ userId }, null, { ...sessionOptions }).select(selectedFields);
 
   if (Array.isArray(skuNames) && skuNames.length) {
-    if (Array.isArray(selectedFields) && selectedFields?.length) {
-      var projectFields = {};
-      selectedFields.map((field) => {
-        var key = field.split(".")[1];
-        projectFields[key] = "$$r." + key;
-      });
+    var requiredSkusFromListGoods = [];
 
-      var data = await collection.aggregate(
-        [
-          { $match: { userId, "listGoods.skuName": { $in: skuNames } } },
-          {
-            $project: {
-              userId: 1,
-              listGoods: {
-                $map: {
-                  input: {
-                    $filter: {
-                      input: "$listGoods",
-                      cond: { $in: ["$$this.skuName", skuNames] },
-                    },
-                  },
-                  as: "r",
-                  in: projectFields,
-                },
-              },
-            },
-          },
-        ],
-        { ...sessionOption },
-      );
+    for (var sku of data?.listGoods) {
+      var requiredSku = skuNames.find((skuName) => skuName === sku.skuName);
 
-      return { listGoods: data[0]?.listGoods ? data[0].listGoods : [] };
+      if (requiredSku) {
+        requiredSkusFromListGoods.push(sku);
+      }
     }
 
-    var data = await collection.aggregate(
-      [
-        { $match: { userId, "listGoods.skuName": { $in: skuNames } } },
-        {
-          $project: {
-            userId: 1,
-            listGoods: {
-              $filter: {
-                input: "$listGoods",
-                cond: { $in: ["$$this.skuName", skuNames] },
-              },
-            },
-          },
-        },
-      ],
-      { ...sessionOption },
-    );
-
-    return { listGoods: data[0]?.listGoods ? data[0].listGoods : [] };
-  } else {
-    var data = await collection.findOne({ userId }, null, { ...sessionOption });
-    
-    return { listGoods: data?.listGoods ? data.listGoods.toObject() : [] };
+    return { listGoods: requiredSkusFromListGoods };
   }
+
+  return { listGoods: data?.listGoods ? data.listGoods.toObject() : [] };
 };
 
 export default getListGoodsFromDb;

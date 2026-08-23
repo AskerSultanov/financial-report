@@ -1,67 +1,72 @@
 import calc from "../calcServices/index.js";
-import { skuSchemaVersion } from "../../../../database/migration/schemaVersioning/reportsCollection.js";
 
-var parseSku = async (name, skuQty, skuFilteredReport, storageData, taxRate, totals, propPostfix = "") => {
+var parseSku = async (name, skuQty, skuFilteredReport, storageData, taxRate, totals) => {
   var { totalSold, totalStorageCost, totalAdvertisingCosts } = totals;
 
-  var sku = initSku(propPostfix);
+  if (!skuFilteredReport.length) {
+    return {};
+  }
 
-  sku["qty" + propPostfix] = await calc.quantity(skuFilteredReport);
-  sku["taxableAmount" + propPostfix] = calc.taxableAmount(skuFilteredReport);
-  sku["fines" + propPostfix] = calc.sum(skuFilteredReport, "penalty", "truncate-on");
-  sku["acceptance" + propPostfix] = calc.sum(skuFilteredReport, "paidAcceptance", "truncate-on");
-  sku["retailAmount" + propPostfix] = calc.retailAmount(skuFilteredReport);
-  sku["tax" + propPostfix] = calc.taxAmount(sku["taxableAmount" + propPostfix], taxRate);
-  sku["returnAmount" + propPostfix] = calc.returnAmount(skuFilteredReport);
-  sku["deliveryCost" + propPostfix] = calc.sum(skuFilteredReport, "deliveryService", "truncate-on");
-  sku["deductionOrPayment" + propPostfix] = calc.sum(skuFilteredReport, "deduction", "truncate-on");
-  sku["additionalPayment" + propPostfix] = calc.sum(skuFilteredReport, "additionalPayment", "truncate-on");
-  sku["sellerPayoutAmount" + propPostfix] = calc.sellerPayoutAmount(skuFilteredReport);
-  sku["averageRetailPrice" + propPostfix] = calc.averageRetailPrice(sku["qty" + propPostfix], skuFilteredReport);
-  sku["storageCost" + propPostfix] = calc.storageCost(name, storageData);
-  sku["averageStorageCost" + propPostfix] = calc.averageStorageCost(totalStorageCost, totalSold, sku["qty" + propPostfix]);
-  sku["averageAdvertisingCost" + propPostfix] = calc.averageAdvertisingCost(skuQty, totalAdvertisingCosts);
-  sku["profit" + propPostfix] = calc.profit(sku, propPostfix);
+  var id = skuFilteredReport[0].nmId;
+  var sku = initSku(id, name);
 
-  sku.schemaVersion = skuSchemaVersion;
+  var saleYear = +skuFilteredReport[0].saleDt.split("-")[0];
+  sku.year = saleYear;
+
+  sku.qty = calc.quantity(skuFilteredReport);
+  sku.taxableAmount = calc.taxableAmount(skuFilteredReport);
+  sku.fines = calc.sum(skuFilteredReport, "penalty", "truncate-on");
+  sku.acceptance = calc.sum(skuFilteredReport, "paidAcceptance", "truncate-on");
+  sku.retailAmount = calc.retailAmount(skuFilteredReport);
+  sku.tax = calc.taxAmount(sku.taxableAmount, taxRate);
+  sku.returnAmount = calc.returnAmount(skuFilteredReport);
+  sku.deliveryCost = calc.sum(skuFilteredReport, "deliveryService", "truncate-on");
+  sku.deductionOrPayment = calc.sum(skuFilteredReport, "deduction", "truncate-on");
+  sku.additionalPayment = calc.sum(skuFilteredReport, "additionalPayment", "truncate-on");
+  sku.sellerPayoutAmount = calc.sellerPayoutAmount(skuFilteredReport);
+  sku.averageRetailPrice = calc.averageRetailPrice(sku.qty, skuFilteredReport);
+  sku.storageCost = calc.storageCost(name, storageData);
+  sku.averageStorageCost = calc.averageStorageCost(totalStorageCost, totalSold, sku.qty);
+  sku.averageAdvertisingCost = calc.averageAdvertisingCost(skuQty, totalAdvertisingCosts);
+  sku.profit = calc.profit(sku);
+
   return sku;
 };
 
 export default parseSku;
 
-var initSku = function (postfix) {
+var initSku = function (id, name) {
   var sku = {};
 
-  if (!postfix) {
-    sku.schemaVersion = skuSchemaVersion;
-  }
+  sku.id = id;
+  sku.skuName = name;
 
-  sku["qty" + postfix] = 0;
-  sku["tax" + postfix] = 0;
-  sku["fines" + postfix] = 0;
-  sku["profit" + postfix] = 0;
-  sku["costPrice" + postfix] = 0;
-  sku["acceptance" + postfix] = 0;
-  sku["storageCost" + postfix] = 0;
-  sku["finalProfit" + postfix] = 0;
-  sku["insuranceFee" + postfix] = 0;
-  sku["returnAmount" + postfix] = 0;
-  sku["profitMargin" + postfix] = 0;
-  sku["deliveryCost" + postfix] = 0;
-  sku["retailAmount" + postfix] = 0;
-  sku["taxableAmount" + postfix] = 0;
-  sku["averageProfit" + postfix] = 0;
-  sku["otherExpenses" + postfix] = 0;
-  sku["preTaxProfit" + postfix] = 0;
-  sku["isCostPriceSet" + postfix] = false;
-  sku["additionalPayment" + postfix] = 0;
-  sku["deductionOrPayment" + postfix] = 0;
-  sku["averageRetailPrice" + postfix] = 0;
-  sku["sellerPayoutAmount" + postfix] = 0;
-  sku["averageStorageCost" + postfix] = 0;
-  sku["averageAdvertisingCost" + postfix] = 0;
-  sku["additionalInsuranceFee" + postfix] = 0;
-  sku["isInsuranceFeeIncluded" + postfix] = false;
+  sku.qty = 0;
+  sku.tax = 0;
+  sku.fines = 0;
+  sku.profit = 0;
+  sku.costPrice = 0;
+  sku.acceptance = 0;
+  sku.storageCost = 0;
+  sku.finalProfit = 0;
+  sku.insuranceFee = 0;
+  sku.returnAmount = 0;
+  sku.profitMargin = 0;
+  sku.deliveryCost = 0;
+  sku.retailAmount = 0;
+  sku.taxableAmount = 0;
+  sku.averageProfit = 0;
+  sku.otherExpenses = 0;
+  sku.preTaxProfit = 0;
+  sku.isCostPriceSet = false;
+  sku.additionalPayment = 0;
+  sku.deductionOrPayment = 0;
+  sku.averageRetailPrice = 0;
+  sku.sellerPayoutAmount = 0;
+  sku.averageStorageCost = 0;
+  sku.averageAdvertisingCost = 0;
+  sku.additionalInsuranceFee = 0;
+  sku.isInsuranceFeeIncluded = false;
 
   return sku;
 };

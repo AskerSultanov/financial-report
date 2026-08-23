@@ -1,16 +1,18 @@
 var joiSchemaValidator =
   (schema, needToValidateReqParams = false) =>
   (req, res, next) => {
+    var error;
+
     if (needToValidateReqParams) {
       if (!req.params) {
         return res.sendStatus(400);
       }
-      var { error } = schema.validate(req.params);
+      error = schema.validate(req.params).error;
     } else {
       if (!req.body) {
         return res.sendStatus(400);
       }
-      var { error } = schema.validate(req.body);
+      error = schema.validate(req.body).error;
     }
 
     if (error) {

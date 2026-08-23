@@ -1,61 +1,32 @@
 import createTdElement from "../report/table/services/createTdElement.js";
 
-var createTotalsTable = (report, reportPeriodYear, isCrossYearPeriod, reportSummaryLabelText, postfix) => {
+var nonUsedFields = ["insuranceFee", "additionalInsuranceFee"];
+
+var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText) => {
   var tableRow = document.createElement("tr");
 
-  var totalRetailAmountTd = createTdElement(report.totalRetailAmount);
-  var totalSoldTd = createTdElement(report.totalSold);
-  var totalReturnAmountTd = createTdElement(report.totalReturnAmount);
-  var totalSellerPayoutAmountTd = createTdElement(report.totalSellerPayoutAmount);
-  var totalDeductionOrPaymentTd = createTdElement(report.totalDeductionOrPayment);
-  var totalStorageCostTd = createTdElement(report.totalStorageCost);
-  var totalProductCostsTd = createTdElement(report.totalProductCosts);
-  var totalDeliveryCostTd = createTdElement(report.totalDeliveryCost);
-  var totalPaidAcceptanceTd = createTdElement(report.totalPaidAcceptance);
+  var yearTd = createTdElement(year);
+  tableRow.append(yearTd);
 
-  var totalOtherExpensesTdId = "totalOtherExpenses" + postfix + "-" + reportPeriodYear;
-  var totalOtherExpensesTd = createTdElement(report.totalOtherExpenses, totalOtherExpensesTdId);
+  for (var key in report) {
+    if (nonUsedFields.includes(key)) {
+      continue;
+    }
 
-  var totalProfitMarginTdId = "totalProfitMargin" + postfix + "-" + reportPeriodYear;
-  var totalProfitMarginTd = createTdElement(report.totalProfitMargin, totalProfitMarginTdId);
+    var elemId = year ? key + "-" + year : key + "-";
 
-  var totalFinesTd = createTdElement(report.totalFines);
-  var totalAdvertisingCosts = createTdElement(report.totalAdvertisingCosts);
-  var totalTaxAmountTd = createTdElement(report.totalTaxAmount);
-
-  var totalFinalProfitTdId = "totalFinalProfit" + postfix + "-" + reportPeriodYear;
-  var totalFinalProfitTd = createTdElement(report.totalFinalProfit, totalFinalProfitTdId);
-
-  if (+report.totalFinalProfit < 0) {
-    totalFinalProfitTd.style.color = "red";
+    var tdElement = createTdElement(report[key], elemId);
+    tableRow.append(tdElement);
   }
-
-  tableRow.append(
-    totalRetailAmountTd,
-    totalSoldTd,
-    totalReturnAmountTd,
-    totalSellerPayoutAmountTd,
-    totalProductCostsTd,
-    totalOtherExpensesTd,
-    totalDeliveryCostTd,
-    totalPaidAcceptanceTd,
-    totalFinesTd,
-    totalDeductionOrPaymentTd,
-    totalStorageCostTd,
-    totalAdvertisingCosts,
-    totalTaxAmountTd,
-    totalProfitMarginTd,
-    totalFinalProfitTd,
-  );
 
   var tableBody = document.createElement("tbody");
   tableBody.append(tableRow);
-  tableBody.id = "table-body-" + reportPeriodYear;
+  tableBody.id = "table-body-" + year;
 
-  var { tableHead } = createTotalsTableHead(reportPeriodYear);
+  var { tableHead } = createTotalsTableHead(year);
 
   var table = document.createElement("table");
-  table.id = "totals-table-" + reportPeriodYear;
+  table.id = "totals-table-" + year;
 
   table.append(tableHead, tableBody);
 
@@ -70,22 +41,24 @@ var createTotalsTable = (report, reportPeriodYear, isCrossYearPeriod, reportSumm
 };
 
 var tableHeadContent = `
-        <th>WB реализовал</th>
-        <th>Продано шт.</th>
-        <th>Возвратов</th>
-        <th>К перечислению продавцу</th>
-        <th>Себестоимость проданного товара</th>
-        <th>Прочие расходы</th>
-        <th>Доставка</th>
-        <th>Приёмка</th>
-        <th>Штрафы</th>
-        <th>Удержания/Выплаты</th>
-        <th>Хранение</th>
-        <th>Реклама</th>
-        <th>Налоги</th>
-        <th>Маржинальность %</th>
-        <th>Итого</th>
-`;
+            <th>Отчётный год</th>
+            <th>WB реализовал</th>
+            <th>Налогооблагаемая база</th>
+            <th>Продано шт.</th>
+            <th>Возвратов</th>
+            <th>Перечисления продавцу</th>
+            <th>Себестоимость товаров</th>
+            <th>Прочие расходы</th>
+            <th>Доставка</th>
+            <th>Приёмка</th>
+            <th>Штрафы</th>
+            <th>Удержания/Выплаты</th>
+            <th>Хранение</th>
+            <th>Реклама</th>
+            <th>Налоги</th>
+            <th>Маржинальность %</th>
+            <th>Итого</th>
+          `;
 
 function createTotalsTableHead() {
   var tableHead = document.createElement("thead");

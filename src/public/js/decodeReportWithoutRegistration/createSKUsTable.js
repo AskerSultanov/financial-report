@@ -1,14 +1,12 @@
 import createTdElement from "../report/table/services/createTdElement.js";
-import openCostPriceModal from "../report/table/services/modal/openCostPriceModal.js";
-import openOtherExpensesModal from "../report/table/services/modal/openOtherExpensesModal.js";
+import openCostPriceModal from "../report/table/services/modal/costPriceModal/openCostPriceModal.js";
+import openOtherExpensesModal from "../report/table/services/modal/otherExpensesModal/openOtherExpensesModal.js";
 
 var isGuestAccess = true;
 
-var createSKUsTable = (report, postfix, reportPeriodYear) => {
-  var skuIndex = 0;
+var createSKUsTable = (report, skus, year) => {
   var tableBody = document.createElement("tbody");
-
-  var { userId, reportId, skus } = report;
+  var { userId, reportId, taxRate, dateFrom, dateTo } = report;
 
   for (var sku of skus) {
     var tableRow = document.createElement("tr");
@@ -17,21 +15,31 @@ var createSKUsTable = (report, postfix, reportPeriodYear) => {
     var returnAmount = createTdElement(sku.returnAmount);
 
     var data = {
+      year,
       userId,
-      reportId,
-      skuIndex,
-      skuId: sku.id,
+      taxRate,
+      dateFrom,
+      dateTo,
       skuName: sku.skuName,
-      year: reportPeriodYear,
-      taxRate: report.taxRate,
-      dateFrom: report.dateFrom,
-      dateTo: report.dateTo,
-      ["costPrice" + postfix]: sku.costPrice,
-      ["otherExpenses" + postfix]: sku.otherExpenses,
+      costPrice: sku.costPrice,
+      isCrossYearPeriod: report.isCrossYearPeriod,
+      sku: {
+        tax: sku.tax,
+        qty: sku.qty,
+        profit: sku.profit,
+        costPrice: sku.costPrice,
+        finalProfit: sku.finalProfit,
+        profitMargin: sku.profitMargin,
+        retailAmount: sku.retailAmount,
+        insuranceFee: sku.insuranceFee,
+        preTaxProfit: sku.preTaxProfit,
+        otherExpenses: sku.otherExpenses,
+        additionalInsuranceFee: sku.additionalInsuranceFee,
+      },
     };
 
-    var costPriceInputField = openCostPriceModal(data, isGuestAccess, postfix);
-    var otherExpensesInputField = openOtherExpensesModal(data, isGuestAccess, postfix);
+    var costPriceInputField = openCostPriceModal(data, isGuestAccess);
+    var otherExpensesInputField = openOtherExpensesModal(data, isGuestAccess);
 
     var costPrice = createTdElement(costPriceInputField);
     var otherExpenses = createTdElement(otherExpensesInputField);
@@ -42,10 +50,10 @@ var createSKUsTable = (report, postfix, reportPeriodYear) => {
     var acceptance = createTdElement(sku.acceptance);
     var profit = createTdElement(sku.profit);
 
-    var profitMarginTdId = "profitMargin" + postfix + "-" + skuIndex + "-" + reportPeriodYear;
+    var profitMarginTdId = "profitMargin" + "-" + sku.skuName + "-" + year;
     var profitMargin = createTdElement(sku.profitMargin, profitMarginTdId);
 
-    var finalProfitTdId = "finalProfit" + postfix + "-" + skuIndex + "-" + reportPeriodYear;
+    var finalProfitTdId = "finalProfit" + "-" + sku.skuName + "-" + year;
     var finalProfit = createTdElement(sku.finalProfit, finalProfitTdId);
 
     tableRow.append(
@@ -65,11 +73,10 @@ var createSKUsTable = (report, postfix, reportPeriodYear) => {
     );
 
     tableBody.append(tableRow);
-    skuIndex++;
   }
 
   var table = document.createElement("table");
-  table.id = "skus-table-" + reportPeriodYear;
+  table.id = "skus-table-" + year;
 
   var { tableHead } = createSkusTableHead();
 

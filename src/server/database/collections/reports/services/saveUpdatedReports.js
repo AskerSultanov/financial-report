@@ -1,24 +1,33 @@
-var createQuery = (reports) => {
-  var query = {};
-  var arrayFilters = [];
+var createBulkQuery = (userId, updatedReports) => {
+  var bulkOptions = [];
 
-  for (var report of reports) {
-    var { reportId } = report;
-    var key = `reports.$[report${reportId}]`;
-    query[key] = report;
+  for (var { reportId, updatedSkus } of updatedReports) {
+    var query = {};
+    var arrayFilters = [];
 
-    arrayFilters.push({ [`report${reportId}.reportId`]: reportId });
+    if (Array.isArray(updatedSkus) && updatedSkus.length) {
+      var count = 0;
+
+      for (var updatedSku of updatedSkus) {
+        var skuFilterName = `skuElem${count}`;
+        arrayFilters.push({ [`${skuFilterName}.skuName`]: updatedSku.skuName });
+
+        for (var skuKey of Object.keys(updatedSku.data)) {
+          var queryKey = `reports.$.skus.$[${skuFilterName}].${skuKey}`;
+          query[queryKey] = updatedSku.data[skuKey];
+        }
+
+        count++;
+      }
+    }
   }
 
-  return { query, arrayFilters };
+  return { bulkOptions };
 };
 
-var saveUpdatedReports = async (collection, userId, reports, session) => {
-  var { query, arrayFilters } = createQuery(reports);
-
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
-
-  return result.modifiedCount;
+var saveUpdatedReports = async (collection, userId, updatedReports, session) => {
+  var { bulkOptions } = createBulkQuery(userId, updatedReports);
+  return await collection.bulkWrite(bulkOptions, { session });
 };
 
 export default saveUpdatedReports;

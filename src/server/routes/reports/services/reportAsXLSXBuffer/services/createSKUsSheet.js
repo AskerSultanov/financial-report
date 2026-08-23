@@ -2,11 +2,11 @@ import { writeSKUsToSheet } from "./writeSKUsToSheet.js";
 import writeSKUsTitleToSheet from "./writeSKUsTitleToSheet.js";
 import { getRequiredSKUFieldsName } from "./getRequiredSKUFieldsName.js";
 
-var createSKUsSheet = async (report, sheet) => {
-  var skus = getRequiredSKUFieldsName(report.skus);
+var createSKUsSheet = async (skus, sheet) => {
+  var skus = getRequiredSKUFieldsName(skus);
 
-  sheet = await writeSKUsToSheet(sheet, skus);
-  sheet = await writeSKUsTitleToSheet(sheet);
+  sheet = writeSKUsToSheet(sheet, skus);
+  sheet = writeSKUsTitleToSheet(sheet);
 
   return sheet;
 };

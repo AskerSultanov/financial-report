@@ -9,38 +9,6 @@ var getRequiredSkuProperties = ({
   insuranceFee,
   preTaxProfit,
   otherExpenses,
-  isCostPriceSet,
-  isInsuranceFeeIncluded,
-  additionalInsuranceFee,
-  additionalInsuranceFeeIsPaid,
-  taxInCurrentYear,
-  qtyInCurrentYear,
-  profitInCurrentYear,
-  costPriceInCurrentYear,
-  finalProfitInCurrentYear,
-  profitMarginInCurrentYear,
-  retailAmountInCurrentYear,
-  insuranceFeeInCurrentYear,
-  preTaxProfitInCurrentYear,
-  otherExpensesInCurrentYear,
-  isCostPriceSetInCurrentYear,
-  isInsuranceFeeIncludedInCurrentYear,
-  additionalInsuranceFeeInCurrentYear,
-  additionalInsuranceFeeIsPaidInCurrentYear,
-  taxInNextYear,
-  qtyInNextYear,
-  profitInNextYear,
-  costPriceInNextYear,
-  finalProfitInNextYear,
-  profitMarginInNextYear,
-  retailAmountInNextYear,
-  insuranceFeeInNextYear,
-  preTaxProfitInNextYear,
-  otherExpensesInNextYear,
-  isCostPriceSetInNextYear,
-  isInsuranceFeeIncludedInNextYear,
-  additionalInsuranceFeeInNextYear,
-  additionalInsuranceFeeIsPaidInNextYear,
 }) => {
   return {
     tax,
@@ -53,100 +21,18 @@ var getRequiredSkuProperties = ({
     insuranceFee,
     preTaxProfit,
     otherExpenses,
-    isCostPriceSet,
-    isInsuranceFeeIncluded,
-    additionalInsuranceFee,
-    additionalInsuranceFeeIsPaid,
-    taxInCurrentYear,
-    qtyInCurrentYear,
-    profitInCurrentYear,
-    costPriceInCurrentYear,
-    finalProfitInCurrentYear,
-    profitMarginInCurrentYear,
-    retailAmountInCurrentYear,
-    insuranceFeeInCurrentYear,
-    preTaxProfitInCurrentYear,
-    otherExpensesInCurrentYear,
-    isCostPriceSetInCurrentYear,
-    isInsuranceFeeIncludedInCurrentYear,
-    additionalInsuranceFeeInCurrentYear,
-    additionalInsuranceFeeIsPaidInCurrentYear,
-    taxInNextYear,
-    qtyInNextYear,
-    profitInNextYear,
-    costPriceInNextYear,
-    finalProfitInNextYear,
-    profitMarginInNextYear,
-    retailAmountInNextYear,
-    insuranceFeeInNextYear,
-    preTaxProfitInNextYear,
-    otherExpensesInNextYear,
-    isCostPriceSetInNextYear,
-    isInsuranceFeeIncludedInNextYear,
-    additionalInsuranceFeeInNextYear,
-    additionalInsuranceFeeIsPaidInNextYear,
   };
 };
 
-var getRequiredReportTotalsProperties = ({
-  isCrossYearPeriod,
-  totalRetailAmount,
-  totalFinalProfit,
-  totalProfitMargin,
-  totalProductCosts,
-  totalInsuranceFee,
-  totalPreTaxProfit,
-  totalOtherExpenses,
-  totalRetailAmountInCurrentYear,
-  totalFinalProfitInCurrentYear,
-  totalProfitMarginInCurrentYear,
-  totalProductCostsInCurrentYear,
-  totalInsuranceFeeInCurrentYear,
-  totalPreTaxProfitInCurrentYear,
-  totalOtherExpensesInCurrentYear,
-  totalRetailAmountInNextYear,
-  totalFinalProfitInNextYear,
-  totalProfitMarginInNextYear,
-  totalProductCostsInNextYear,
-  totalInsuranceFeeInNextYear,
-  totalPreTaxProfitInNextYear,
-  totalOtherExpensesInNextYear,
-}) => {
-  return {
-    isCrossYearPeriod,
-    totalRetailAmount,
-    totalFinalProfit,
-    totalProfitMargin,
-    totalProductCosts,
-    totalInsuranceFee,
-    totalPreTaxProfit,
-    totalOtherExpenses,
-    totalRetailAmountInCurrentYear,
-    totalFinalProfitInCurrentYear,
-    totalProfitMarginInCurrentYear,
-    totalProductCostsInCurrentYear,
-    totalInsuranceFeeInCurrentYear,
-    totalPreTaxProfitInCurrentYear,
-    totalOtherExpensesInCurrentYear,
-    totalRetailAmountInNextYear,
-    totalFinalProfitInNextYear,
-    totalProfitMarginInNextYear,
-    totalProductCostsInNextYear,
-    totalInsuranceFeeInNextYear,
-    totalPreTaxProfitInNextYear,
-    totalOtherExpensesInNextYear,
-  };
-};
-
-var getReportDataFromLocalStorage = ({ userId, skuIndex }) => {
+var getReportDataFromLocalStorage = (skuData) => {
+  var { userId, skuName } = skuData;
   var reportAsJSON = localStorage.getItem(userId);
   var report = JSON.parse(reportAsJSON);
 
-  var data = {};
+  var skuFromReport = report.skus.find((sku) => sku.skuName === skuName);
 
-  data.sku = getRequiredSkuProperties(report.skus[skuIndex]);
-  data.totals = getRequiredReportTotalsProperties(report);
-  return data;
+  var requiredSkuData = getRequiredSkuProperties(skuFromReport);
+  return requiredSkuData;
 };
 
 export default getReportDataFromLocalStorage;

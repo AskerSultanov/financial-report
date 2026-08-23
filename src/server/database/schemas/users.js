@@ -1,7 +1,6 @@
 import { Schema } from "mongoose";
 
 var usersSchema = new Schema({
-  schemaVersion: { type: Number },
   passwd: { type: String, required: true },
   registeredAt: { type: Date, required: true },
   login: { type: String, required: true, unique: true },

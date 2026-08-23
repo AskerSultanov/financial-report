@@ -4,48 +4,38 @@ import calcInsuranceFee from "./insuranceFee.js";
 import calcPreTaxProfit from "./preTaxProfit.js";
 import truncateNum from "../../reportParsing/truncateNum.js";
 
-var calcRestSkuParams = (sku, taxParams, postfix = "") => {
+var calcRestSkuParams = (sku, prevSkuData, taxParams) => {
   var updatedSkuFields = {};
 
-  var costPriceKey = "costPrice" + postfix;
-  var finalProfitKey = "finalProfit" + postfix;
-  var preTaxProfitKey = "preTaxProfit" + postfix;
-  var profitMarginKey = "profitMargin" + postfix;
-  var retailAmountKey = "retailAmount" + postfix;
-  var insuranceFeeKey = "insuranceFee" + postfix;
-  var otherExpensesKey = "otherExpenses" + postfix;
-  var isCostPriceSetKey = "isCostPriceSet" + postfix;
+  updatedSkuFields.isCostPriceSet = true;
+  updatedSkuFields.costPrice = sku.costPrice;
+  updatedSkuFields.otherExpenses = sku.otherExpenses;
 
-  updatedSkuFields[isCostPriceSetKey] = true;
-  updatedSkuFields[costPriceKey] = sku[costPriceKey];
-  updatedSkuFields[otherExpensesKey] = sku[otherExpensesKey];
-  updatedSkuFields[preTaxProfitKey] = calcPreTaxProfit(sku, postfix);
+  var newPreTaxProfit = calcPreTaxProfit(sku);
+  sku.preTaxProfit = newPreTaxProfit;
+  updatedSkuFields.preTaxProfit = newPreTaxProfit;
 
-  var prevSkuInsuranceFee = sku[insuranceFeeKey];
+  var prevSkuInsuranceFee = prevSkuData.insuranceFee;
+  var { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields } = recalculateInsuranceFee(updatedSkuFields, prevSkuInsuranceFee, taxParams);
 
-  var { updatedSkuFields, updatedTaxParamsFields } = recalculateInsuranceFee(updatedSkuFields, prevSkuInsuranceFee, taxParams, postfix);
+  sku.insuranceFee = skuInsuranceFee;
+  updatedSkuFields.insuranceFee = skuInsuranceFee;
+  updatedSkuFields.isInsuranceFeeIncluded = isInsuranceFeeIncluded;
 
-  if (!sku[finalProfitKey]) {
-    sku[finalProfitKey] = 0;
-  }
+  var newFinalProfit = calcFinalProfit(sku);
+  var newProfitMargin = calcProfitMargin(newFinalProfit, sku.retailAmount);
 
-  sku[insuranceFeeKey] = updatedSkuFields[insuranceFeeKey];
-  sku[preTaxProfitKey] = updatedSkuFields[preTaxProfitKey];
-
-  updatedSkuFields[finalProfitKey] = calcFinalProfit(sku, postfix);
-  updatedSkuFields[profitMarginKey] = calcProfitMargin(updatedSkuFields[finalProfitKey], sku[retailAmountKey]);
-
-  updatedSkuFields = Object.assign(updatedSkuFields, updatedSkuFields);
+  updatedSkuFields.finalProfit = newFinalProfit;
+  updatedSkuFields.profitMargin = newProfitMargin;
 
   return { updatedSkuFields, updatedTaxParamsFieldsBySku: updatedTaxParamsFields };
 };
 
 export default calcRestSkuParams;
 
-var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, taxParams, postfix) {
-  var insuranceFeeKey = "insuranceFee" + postfix;
-  var preTaxProfitKey = "preTaxProfit" + postfix;
-  var isInsuranceFeeIncludedKey = "isInsuranceFeeIncluded" + postfix;
+var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, taxParams) {
+  var skuInsuranceFee = 0;
+  var isInsuranceFeeIncluded = false;
 
   var updatedTaxParamsFields = {};
   updatedTaxParamsFields.finalProfit = taxParams.finalProfit;
@@ -53,28 +43,24 @@ var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, t
   updatedTaxParamsFields.paidInsuranceFee = taxParams.paidInsuranceFee;
 
   if (taxParams.mandatoryInsuranceFeeIsPaid) {
-    updatedSkuFields[insuranceFeeKey] = 0;
-    updatedSkuFields[isInsuranceFeeIncludedKey] = false;
-
-    return { updatedSkuFields, updatedTaxParamsFields };
+    return { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields };
   }
 
-  updatedSkuFields[insuranceFeeKey] = calcInsuranceFee(updatedSkuFields[preTaxProfitKey], taxParams.mandatoryInsuranceFeeRate);
-  updatedSkuFields[isInsuranceFeeIncludedKey] = true;
+  skuInsuranceFee = calcInsuranceFee(updatedSkuFields.preTaxProfit, taxParams.mandatoryInsuranceFeeRate);
 
-  var recalculatedPaidInsuranceFee = taxParams.paidInsuranceFee - prevSkuInsuranceFee + updatedSkuFields[insuranceFeeKey];
+  isInsuranceFeeIncluded = true;
+
+  var recalculatedPaidInsuranceFee = taxParams.paidInsuranceFee - prevSkuInsuranceFee + skuInsuranceFee;
   updatedTaxParamsFields.paidInsuranceFee = truncateNum(recalculatedPaidInsuranceFee);
 
   if (updatedTaxParamsFields.paidInsuranceFee >= taxParams.mandatoryInsuranceFee) {
     var difference = updatedTaxParamsFields.paidInsuranceFee - taxParams.mandatoryInsuranceFee;
 
-    var newInsuranceFee = updatedSkuFields[insuranceFeeKey] - difference;
+    skuInsuranceFee -= difference;
 
-    if (newInsuranceFee === 0) {
-      updatedSkuFields[isInsuranceFeeIncludedKey] = false;
+    if (skuInsuranceFee === 0) {
+      isInsuranceFeeIncluded = false;
     }
-
-    updatedSkuFields[insuranceFeeKey] = newInsuranceFee;
 
     updatedTaxParamsFields.mandatoryInsuranceFeeRate = 0;
     updatedTaxParamsFields.mandatoryInsuranceFeeIsPaid = true;
@@ -92,5 +78,5 @@ var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, t
     updatedTaxParamsFields.requiresAdditionalInsuranceFee = false;
   }
 
-  return { updatedSkuFields, updatedTaxParamsFields };
+  return { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields };
 };

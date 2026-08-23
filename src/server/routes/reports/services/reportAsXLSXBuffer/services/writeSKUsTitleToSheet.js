@@ -5,7 +5,6 @@ var titles = [
   "Кол-во",
   "Возвраты",
   "Себестоимость",
-  "Средняя розничная \nцена",
   "Доставка",
   "Удержания/    выплаты",
   "Хранение",
@@ -31,7 +30,7 @@ var alignmentStyles = {
   wrapText: true,
 };
 
-var writeSKUsTitleToSheet = async (sheet) => {
+var writeSKUsTitleToSheet = (sheet) => {
   var cellNum = 1;
   var columnNum = 1;
   for (var i = 0; i < columns.length; i++) {

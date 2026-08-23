@@ -1,13 +1,10 @@
 import truncateNum from "../reportParsing/truncateNum.js";
 
-var recalculateTaxParams = (updatedTaxParamsFieldsBySku, prevReportTotals, currentReportTotals, postfix = "") => {
-  var finalProfitKey = "totalFinalProfit" + postfix;
-  var otherExpensesKey = "totalOtherExpenses" + postfix;
-
+var recalculateTaxParams = (updatedTaxParamsFieldsBySku, prevSkuData, newSkuData) => {
   var updatedTaxParamsField = { ...updatedTaxParamsFieldsBySku };
 
-  var recalculatedFinalProfit = updatedTaxParamsField.finalProfit - prevReportTotals[finalProfitKey] + currentReportTotals[finalProfitKey];
-  var recalculatedOtherExpenses = updatedTaxParamsField.otherExpenses - prevReportTotals[otherExpensesKey] + currentReportTotals[otherExpensesKey];
+  var recalculatedFinalProfit = updatedTaxParamsField.finalProfit - prevSkuData.finalProfit + newSkuData.finalProfit;
+  var recalculatedOtherExpenses = updatedTaxParamsField.otherExpenses - prevSkuData.otherExpenses + newSkuData.otherExpenses;
 
   updatedTaxParamsField.finalProfit = truncateNum(recalculatedFinalProfit);
   updatedTaxParamsField.otherExpenses = truncateNum(recalculatedOtherExpenses);

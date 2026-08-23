@@ -5,9 +5,10 @@ import deleteListGoods from "./services/deleteListGoods.js";
 import updateSkusFields from "./services/updateSkusFields.js";
 import saveListGoodsToDb from "./services/saveListGoodsToDb.js";
 import getListGoodsFromDb from "./services/getListGoodsFromDb.js";
-import updateSkuInListGoods from "./services/updateSkuInListGoods.js";
 import getSkuFromListGoods from "./services/getSkuFromListGoods.js";
+import updateSkuInListGoods from "./services/updateSkuInListGoods.js";
 import getSkusLastCostPrice from "./services/getSkusLastCostPrice.js";
+import updateSkusInListGoods from "./services/updateSkusInListGoods.js";
 import updateSkuDisableStatus from "./services/updateSkuDisableStatus.js";
 import getAllUserListGoodsIds from "./services/getAllUserListGoodsIds.js";
 import setPriceUpdateTimestampAndUpdateStatus from "./services/setPriceUpdateTimestampAndUpdateStatus.js";
@@ -29,7 +30,9 @@ var goodsCollectionServices = {
 
   updateSkusFields: (userId, updatedSkus, session) => updateSkusFields(goodsCollection, userId, updatedSkus, session),
 
-  updateSkuInListGoods: (userId, skuId, skuName, data, session) => updateSkuInListGoods(goodsCollection, userId, skuId, skuName, data, session),
+  updateSkuInListGoods: (userId, skuName, data, session) => updateSkuInListGoods(goodsCollection, userId, skuName, data, session),
+
+  updateSkusInListGoods: (userId, updatedSkus, session) => updateSkusInListGoods(goodsCollection, userId, updatedSkus, session),
 
   updateSkuDisableStatusToDb: (userId, skuName, disabled) => updateSkuDisableStatus(goodsCollection, userId, skuName, disabled),
 

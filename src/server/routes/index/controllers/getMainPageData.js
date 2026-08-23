@@ -6,9 +6,6 @@ var getLastNonEmptyReportIds = (lastYear) => lastYear?.months.find((item) => ite
 
 var projectonFields = [
   "reports.reportId",
-  "reports.totalTaxAmount",
-  "reports.totalFinalProfit",
-  "reports.totalProductCosts",
   "reports.isFinancesAccounted",
 ];
 

@@ -1,74 +1,25 @@
 import createTdElement from "./services/createTdElement.js";
 
-var createTotalsTable = (report, reportPeriodYear, isCrossYearPeriod, reportSummaryLabelText, postfix) => {
+var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText) => {
   var tableRow = document.createElement("tr");
 
-  var reportPeriodYearTd = createTdElement(reportPeriodYear);
-  var totalRetailAmountTd = createTdElement(report.totalRetailAmount);
-  var totalSellerPayoutAmountTd = createTdElement(report.totalSellerPayoutAmount);
-  var totalProductCostsTd = createTdElement(report.totalProductCosts);
+  var yearTd = createTdElement(year);
+  tableRow.append(yearTd);
 
-  var totalOtherExpensesTdId = "totalOtherExpenses" + postfix + "-" + reportPeriodYear;
-  var totalOtherExpensesTd = createTdElement(report.totalOtherExpenses, totalOtherExpensesTdId);
+  for (var key in report) {
+    var elemId = year ? key + "-" + year : key + "-";
 
-  var totalDeductionOrPaymentTd = createTdElement(report.totalDeductionOrPayment);
-  var totalStorageCostTd = createTdElement(report.totalStorageCost);
-  var totalDeliveryCostTd = createTdElement(report.totalDeliveryCost);
-  var totalPaidAcceptanceTd = createTdElement(report.totalPaidAcceptance);
-
-  var totalProfitMarginTdId = "totalProfitMargin" + postfix + "-" + reportPeriodYear;
-  var totalProfitMarginTd = createTdElement(report.totalProfitMargin, totalProfitMarginTdId);
-
-  var totalSoldTd = createTdElement(report.totalSold);
-  var totalReturnAmountTd = createTdElement(report.totalReturnAmount);
-  var totalFinesTd = createTdElement(report.totalFines);
-  var totalAdvertisingCostsTd = createTdElement(report.totalAdvertisingCosts);
-  var totalTaxAmountTd = createTdElement(report.totalTaxAmount);
-
-  var totalInsuranceFeeTdId = "totalInsuranceFee" + postfix + "-" + reportPeriodYear;
-  var totalInsuranceFeeTd = createTdElement(report.totalInsuranceFee, totalInsuranceFeeTdId);
-
-  var totalAdditionalInsuranceFeeTd = createTdElement(report.totalAdditionalInsuranceFee);
-
-  var totalFinalProfitTdId = "totalFinalProfit" + postfix + "-" + reportPeriodYear;
-  var totalFinalProfitTd = createTdElement(report.totalFinalProfit, totalFinalProfitTdId);
-
-  if (report.totalFinalProfit < 0) {
-    totalFinalProfitTd.style.color = "red";
+    var tdElement = createTdElement(report[key], elemId);
+    tableRow.append(tdElement);
   }
-
-  if (report.totalProfitMargin < 0) {
-    totalProfitMarginTd.style.color = "red";
-  }
-
-  tableRow.append(
-    reportPeriodYearTd,
-    totalRetailAmountTd,
-    totalSoldTd,
-    totalReturnAmountTd,
-    totalSellerPayoutAmountTd,
-    totalProductCostsTd,
-    totalOtherExpensesTd,
-    totalDeliveryCostTd,
-    totalPaidAcceptanceTd,
-    totalFinesTd,
-    totalDeductionOrPaymentTd,
-    totalStorageCostTd,
-    totalAdvertisingCostsTd,
-    totalTaxAmountTd,
-    totalInsuranceFeeTd,
-    totalAdditionalInsuranceFeeTd,
-    totalProfitMarginTd,
-    totalFinalProfitTd,
-  );
 
   var tableBody = document.createElement("tbody");
   tableBody.append(tableRow);
-  tableBody.id = "table-body-" + reportPeriodYear;
+  tableBody.id = "table-body-" + year;
 
-  var { tableHead } = createTotalsTableHead(reportPeriodYear);
+  var { tableHead } = createTotalsTableHead(year);
   var table = document.createElement("table");
-  table.id = "totals-table-" + reportPeriodYear;
+  table.id = "totals-table-" + year;
 
   table.append(tableHead, tableBody);
 
@@ -87,6 +38,7 @@ export default createTotalsTable;
 var tableHeadContent = `
             <th>Отчётный год</th>
             <th>WB реализовал</th>
+            <th>Налогооблагаемая база</th>
             <th>Продано шт.</th>
             <th>Возвратов</th>
             <th>Перечисления продавцу</th>
