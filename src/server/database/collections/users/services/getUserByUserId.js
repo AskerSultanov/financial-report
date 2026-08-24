@@ -1,4 +1,4 @@
-var getUserByUserId = async (collection, userId) => {
-  return await collection.findOne({ userId });
+var getUserByUserId = async (userModel, userId) => {
+  return await userModel.findOne({ userId });
 };
 export default getUserByUserId;

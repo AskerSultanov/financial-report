@@ -1,5 +1,5 @@
-var getWeeklyPricesAndDiscounts = async (collection, userId) => {
-  var { weeklyPricesAndDiscounts } = await collection.findOne({ userId });
+var getWeeklyPricesAndDiscounts = async (weeklyPricesAndDiscountsModel, userId) => {
+  var { weeklyPricesAndDiscounts } = await weeklyPricesAndDiscountsModel.findOne({ userId });
   return { weeklyPricesAndDiscounts };
 };
 

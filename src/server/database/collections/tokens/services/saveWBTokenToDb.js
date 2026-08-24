@@ -1,5 +1,5 @@
-var saveWBTokenToDb = async (collection, userId, token, session) => {
-  var result = await collection.updateOne(
+var saveWBTokenToDb = async (tokenModel, userId, token, session) => {
+  var result = await tokenModel.updateOne(
     { userId },
     {
       $set: { token, tokenHasBeenRemoved: false },

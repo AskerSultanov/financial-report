@@ -1,7 +1,7 @@
-var updateReportsTree = async (collection, userId, years, session) => {
+var updateReportsTree = async (reportTreeModel, userId, years, session) => {
   var sessionOptions = session ? { session } : {};
 
-  var result = await collection.updateOne(
+  var result = await reportTreeModel.updateOne(
     { userId },
     {
       $set: { years: years },

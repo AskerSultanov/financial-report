@@ -1,4 +1,4 @@
-import { weeklyPricesAndDiscountsCollection } from "../../connections/index.js";
+import { weeklyPricesAndDiscountsModel } from "../../models/index.js";
 import setUploadId from "./services/setUploadId.js";
 import getUploadId from "./services/getUploadId.js";
 import updatePriceAndDiscount from "./services/updatePriceAndDiscount.js";
@@ -9,20 +9,20 @@ import getAllUserWeeklyPricesAndDiscounts from "./services/getAllUserWeeklyPrice
 import getTodayPricesAndDiscountsByDayIndex from "./services/getTodayPricesAndDiscountsByDayIndex.js";
 
 var weeklyPricesAndDiscountsCollectionServices = {
-  getAllUserWeeklyPricesAndDiscounts: () => getAllUserWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsCollection),
-  getWeeklyPricesAndDiscountsFromDb: (userId) => getWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsCollection, userId),
-  getTodayPricesAndDiscountsByDayIndex: (dayIndex) => getTodayPricesAndDiscountsByDayIndex(weeklyPricesAndDiscountsCollection, dayIndex),
+  getAllUserWeeklyPricesAndDiscounts: () => getAllUserWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsModel),
+  getWeeklyPricesAndDiscountsFromDb: (userId) => getWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsModel, userId),
+  getTodayPricesAndDiscountsByDayIndex: (dayIndex) => getTodayPricesAndDiscountsByDayIndex(weeklyPricesAndDiscountsModel, dayIndex),
 
   updatePriceAndDiscount: (userId, skuId, sku, checkedWeekDays) =>
-    updatePriceAndDiscount(weeklyPricesAndDiscountsCollection, userId, skuId, sku, checkedWeekDays),
+    updatePriceAndDiscount(weeklyPricesAndDiscountsModel, userId, skuId, sku, checkedWeekDays),
 
-  getUploadId: (userId) => getUploadId(weeklyPricesAndDiscountsCollection, userId),
-  setUploadId: (userId, uploadId, session) => setUploadId(weeklyPricesAndDiscountsCollection, userId, uploadId, session),
+  getUploadId: (userId) => getUploadId(weeklyPricesAndDiscountsModel, userId),
+  setUploadId: (userId, uploadId, session) => setUploadId(weeklyPricesAndDiscountsModel, userId, uploadId, session),
 
   setWeeklyPricesAndDiscountsToDb: (userId, weeklyPricesAndDiscounts, session) =>
-    setWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsCollection, userId, weeklyPricesAndDiscounts, session),
+    setWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsModel, userId, weeklyPricesAndDiscounts, session),
 
-  deleteWeeklyPricesAndDiscountsFromDb: (userId) => deleteWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsCollection, userId),
+  deleteWeeklyPricesAndDiscountsFromDb: (userId) => deleteWeeklyPricesAndDiscounts(weeklyPricesAndDiscountsModel, userId),
 };
 
 export default weeklyPricesAndDiscountsCollectionServices;

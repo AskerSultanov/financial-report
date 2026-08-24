@@ -1,4 +1,4 @@
-import { reportLoadingStatesCollection } from "../../connections/index.js";
+import { reportLoadingStateModel } from "../../models/index.js";
 
 import pushToReportsQueue from "./services/pushToReportsQueue.js";
 import getReportLoadingState from "./services/getReportLoadingState.js";
@@ -11,22 +11,22 @@ import addReportToEmptyReportPeriods from "./services/addReportToEmptyReportPeri
 import updateReportLoadingStoppedStatus from "./services/updateReportLoadingStoppedStatus.js";
 
 var reportLoadingStatesCollectionServices = {
-  getEmptyReportPeriods: (userId, session) => getEmptyReportPeriods(reportLoadingStatesCollection, userId, session),
-  getReportLoadingState: (userId, session, selectedFields) => getReportLoadingState(reportLoadingStatesCollection, userId, session, selectedFields),
-  deleteReportLoadingStates: (userId, session) => deleteReportLoadingStates(reportLoadingStatesCollection, userId, session),
-  prependToReportsQueue: (userId, dateFrom, dateTo) => prependToReportsQueue(reportLoadingStatesCollection, userId, dateFrom, dateTo),
-  setLastReportRequestTimestamp: (userId, session) => setLastReportRequestTimestamp(reportLoadingStatesCollection, userId, session),
+  getEmptyReportPeriods: (userId, session) => getEmptyReportPeriods(reportLoadingStateModel, userId, session),
+  getReportLoadingState: (userId, session, selectedFields) => getReportLoadingState(reportLoadingStateModel, userId, session, selectedFields),
+  deleteReportLoadingStates: (userId, session) => deleteReportLoadingStates(reportLoadingStateModel, userId, session),
+  prependToReportsQueue: (userId, dateFrom, dateTo) => prependToReportsQueue(reportLoadingStateModel, userId, dateFrom, dateTo),
+  setLastReportRequestTimestamp: (userId, session) => setLastReportRequestTimestamp(reportLoadingStateModel, userId, session),
 
   addReportToEmptyReportPeriods: (userId, dateFrom, dateTo, session) =>
-    addReportToEmptyReportPeriods(reportLoadingStatesCollection, userId, dateFrom, dateTo, session),
+    addReportToEmptyReportPeriods(reportLoadingStateModel, userId, dateFrom, dateTo, session),
 
   pushToReportsQueue: (userId, periods, session, needToResetAbandonedReports) =>
-    pushToReportsQueue(reportLoadingStatesCollection, userId, periods, session, needToResetAbandonedReports),
+    pushToReportsQueue(reportLoadingStateModel, userId, periods, session, needToResetAbandonedReports),
 
   updateReportLoadingStoppedStatus: (userId, newStatus, loadingStopReason, session) =>
-    updateReportLoadingStoppedStatus(reportLoadingStatesCollection, userId, newStatus, loadingStopReason, session),
+    updateReportLoadingStoppedStatus(reportLoadingStateModel, userId, newStatus, loadingStopReason, session),
 
-  resetAbandonedReports: (userId) => resetAbandonedReports(reportLoadingStatesCollection, userId),
+  resetAbandonedReports: (userId) => resetAbandonedReports(reportLoadingStateModel, userId),
 };
 
 export default reportLoadingStatesCollectionServices;

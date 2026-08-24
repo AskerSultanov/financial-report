@@ -1,3 +1,3 @@
-var getUserByLogin = async (collection, login, session) => await collection.findOne({ login }, null, session);
+var getUserByLogin = async (userModel, login, session) => await userModel.findOne({ login }, null, session);
 
 export default getUserByLogin;

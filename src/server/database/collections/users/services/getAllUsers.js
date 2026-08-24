@@ -1,5 +1,5 @@
-var getAllUsersFromDb = async (collection) => {
-  var users = await collection.find({}, { _id: 0, passwd: 0 });
+var getAllUsersFromDb = async (userModel) => {
+  var users = await userModel.find({}, { _id: 0, passwd: 0 });
   return { users };
 };
 

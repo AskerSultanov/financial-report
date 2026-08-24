@@ -1,5 +1,5 @@
-var deleteReportTreeByUserId = async (collection, userId) => {
-  var result = await collection.updateOne(
+var deleteReportTreeByUserId = async (reportTreeModel, userId) => {
+  var result = await reportTreeModel.updateOne(
     { userId },
     {
       $set: { years: [] },

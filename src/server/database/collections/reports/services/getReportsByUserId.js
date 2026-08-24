@@ -1,4 +1,4 @@
-var getReportsByUserId = async (collection, userId, session, selectedFields, reportIds) => {
+var getReportsByUserId = async (reportModel, userId, session, selectedFields, reportIds) => {
   var sessionOptions = session ? { session } : {};
 
   if (reportIds) {
@@ -9,7 +9,7 @@ var getReportsByUserId = async (collection, userId, session, selectedFields, rep
       projectFields[key] = "$$r." + key;
     });
 
-    var data = await collection
+    var data = await reportModel
       .aggregate([
         {
           $match: {
@@ -41,12 +41,12 @@ var getReportsByUserId = async (collection, userId, session, selectedFields, rep
   }
 
   if (selectedFields) {
-    var { reports } = await collection.findOne({ userId }, null, { ...sessionOptions }).select(selectedFields);
+    var { reports } = await reportModel.findOne({ userId }, null, { ...sessionOptions }).select(selectedFields);
 
     return { reports };
   }
 
-  var data = await collection.findOne({ userId }, null, { ...sessionOptions });
+  var data = await reportModel.findOne({ userId }, null, { ...sessionOptions });
 
   return { reports: data.toObject().reports };
 };

@@ -21,13 +21,13 @@ var createQuery = (updatedSkus) => {
   return { query, arrayFilters };
 };
 
-var updateSkusInListGoods = async (collection, userId, updatedSkus, session) => {
+var updateSkusInListGoods = async (goodsModel, userId, updatedSkus, session) => {
   var sessionOpt = session ? { session: session } : {};
 
   var { query, arrayFilters } = createQuery(updatedSkus);
 
   if (arrayFilters.length) {
-    await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
+    await goodsModel.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
   }
 };
 

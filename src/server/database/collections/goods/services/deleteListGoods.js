@@ -1,4 +1,4 @@
-var deleteListGoods = async (collection, userId, session) =>
-  await collection.updateOne({ userId }, { $set: { listGoods: [] } }, { session: session });
+var deleteListGoods = async (goodsModel, userId, session) =>
+  await goodsModel.updateOne({ userId }, { $set: { listGoods: [] } }, { session: session });
 
 export default deleteListGoods;

@@ -1,7 +1,7 @@
 var mskTimeOffsetInMs = 10_800_000;
 
-var addReportToAccounted = async (collection, userId, reportId) => {
-  return await collection.updateMany({ userId, "reports.reportId": reportId }, [
+var addReportToAccounted = async (reportModel, userId, reportId) => {
+  return await reportModel.updateMany({ userId, "reports.reportId": reportId }, [
     {
       $set: {
         reports: {

@@ -2,7 +2,7 @@ var createQuery = (updatedSkus) => {
   var query = {};
   var arrayFilters = [];
 
-  if (Array.isArray(updatedSkus) && updatedSkus.length) {
+  if (Array.isArray(updatedSkus) && updatedSkus?.length) {
     var count = 0;
 
     for (var updatedSku of updatedSkus) {
@@ -20,9 +20,9 @@ var createQuery = (updatedSkus) => {
   return { query, arrayFilters };
 };
 
-var saveUpdatedReport = async (collection, userId, reportId, updatedSkus, session) => {
+var saveUpdatedReport = async (reportModel, userId, reportId, updatedSkus, session) => {
   var { query, arrayFilters } = createQuery(updatedSkus);
-  return await collection.updateOne({ userId, "reports.reportId": reportId }, { $set: query }, { arrayFilters, session: session });
+  return await reportModel.updateOne({ userId, "reports.reportId": reportId }, { $set: query }, { arrayFilters, session: session });
 };
 
 export default saveUpdatedReport;

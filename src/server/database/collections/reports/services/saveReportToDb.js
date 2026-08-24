@@ -1,5 +1,5 @@
-var saveReportToDb = async (collection, userId, report, session) => {
-  var result = await collection.updateOne(
+var saveReportToDb = async (reportModel, userId, report, session) => {
+  var result = await reportModel.updateOne(
     { userId },
     {
       $push: {

@@ -1,22 +1,13 @@
-import {
-  userCollection,
-  goodsCollection,
-  tokenCollection,
-  reportCollection,
-  taxParamsCollection,
-  reportsTreeCollection,
-  reportLoadingStatesCollection,
-  weeklyPricesAndDiscountsCollection,
-} from "../../../connections/index.js";
+import * as models from "../../../models/index.js";
 
 var deleteUserFromDb = async (userId, session) => {
-  await userCollection.deleteOne({ userId }, session);
-  await tokenCollection.deleteOne({ userId }, session);
-  await reportCollection.deleteOne({ userId }, session);
-  await goodsCollection.deleteOne({ userId }, session);
-  await taxParamsCollection.deleteOne({ userId }, session);
-  await reportsTreeCollection.deleteOne({ userId }, session);
-  await reportLoadingStatesCollection.deleteOne({ userId }, session);
-  await weeklyPricesAndDiscountsCollection.deleteOne({ userId }, session);
+  await models.userModel.deleteOne({ userId }, session);
+  await models.tokenModel.deleteOne({ userId }, session);
+  await models.reportModel.deleteOne({ userId }, session);
+  await models.goodsModel.deleteOne({ userId }, session);
+  await models.taxParamModel.deleteOne({ userId }, session);
+  await models.reportTreeModel.deleteOne({ userId }, session);
+  await models.reportLoadingStateModel.deleteOne({ userId }, session);
+  await models.weeklyPricesAndDiscountsModel.deleteOne({ userId }, session);
 };
 export default deleteUserFromDb;

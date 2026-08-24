@@ -1,7 +1,7 @@
-var deleteReportFromReportTree = async (collection, userId, year, month, reportId, session) => {
+var deleteReportFromReportTree = async (reportTreeModel, userId, year, month, reportId, session) => {
   var sessionOpt = session ? { session: session } : {};
 
-  var result = await collection.updateOne(
+  var result = await reportTreeModel.updateOne(
     {
       userId,
       "years.year": year,

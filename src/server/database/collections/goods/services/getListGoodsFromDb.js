@@ -1,7 +1,7 @@
-var getListGoodsFromDb = async (collection, userId, skuNames, selectedFields, session) => {
+var getListGoodsFromDb = async (goodsModel, userId, skuNames, selectedFields, session) => {
   var sessionOptions = session ? { session } : {};
 
-  var data = await collection.findOne({ userId }, null, { ...sessionOptions }).select(selectedFields);
+  var data = await goodsModel.findOne({ userId }, null, { ...sessionOptions }).select(selectedFields);
 
   if (Array.isArray(skuNames) && skuNames.length) {
     var requiredSkusFromListGoods = [];

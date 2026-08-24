@@ -1,6 +1,6 @@
-var saveNewSkusToDb = async (collection, userId, newSkus, session) => {
+var saveNewSkusToDb = async (goodsModel, userId, newSkus, session) => {
   var sessionOptions = session ? { session } : {};
-  var result = await collection.updateOne({ userId }, { $push: { listGoods: { $each: [...newSkus] } } }, { ...sessionOptions });
+  var result = await goodsModel.updateOne({ userId }, { $push: { listGoods: { $each: [...newSkus] } } }, { ...sessionOptions });
   return result;
 };
 

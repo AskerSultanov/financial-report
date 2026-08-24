@@ -1,14 +1,14 @@
-var pushToReportsQueue = async (collection, userId, periods, session, needToResetAbandonedReports = false) => {
+var pushToReportsQueue = async (reportLoadingStateModel, userId, periods, session, needToResetAbandonedReports = false) => {
   var sessionOpt = session ? { session } : {};
 
   if (needToResetAbandonedReports) {
-    await collection.updateOne(
+    await reportLoadingStateModel.updateOne(
       { userId },
       { $push: { reportsQueue: { $each: [...periods] } }, $set: { abandonedReports: [] } },
-      { session: session },
+      { ...sessionOpt },
     );
   } else {
-    await collection.updateOne({ userId }, { $push: { reportsQueue: { $each: [...periods] } } }, { session: session });
+    await reportLoadingStateModel.updateOne({ userId }, { $push: { reportsQueue: { $each: [...periods] } } }, { ...sessionOpt });
   }
 };
 

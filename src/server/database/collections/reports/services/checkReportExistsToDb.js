@@ -1,5 +1,5 @@
-var checkReportExistsToDb = async (collection, userId, dateFrom, dateTo) => {
-  var report = await collection.findOne({ userId, "reports.dateFrom": dateFrom, "reports.dateTo": dateTo });
+var checkReportExistsToDb = async (reportModel, userId, dateFrom, dateTo) => {
+  var report = await reportModel.findOne({ userId, "reports.dateFrom": dateFrom, "reports.dateTo": dateTo });
 
   return report;
 };

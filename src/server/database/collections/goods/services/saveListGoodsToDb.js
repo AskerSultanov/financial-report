@@ -1,9 +1,9 @@
 import { WBAPIError } from "../../../../customError/index.js";
 
-var saveListGoodsToDb = async (collection, userId, listGoods, session) => {
+var saveListGoodsToDb = async (goodsModel, userId, listGoods, session) => {
   try {
     var sessionOpt = session ? { session: session } : {};
-    var result = await collection.updateOne({ userId }, { $set: { listGoods } }, { ...sessionOpt });
+    var result = await goodsModel.updateOne({ userId }, { $set: { listGoods } }, { ...sessionOpt });
 
     return result;
   } catch (e) {

@@ -1,4 +1,4 @@
-var changeTaxParamsToDb = async (collection, userId, session, ...updatedTaxParams) => {
+var changeTaxParamsToDb = async (taxParamModel, userId, session, ...updatedTaxParams) => {
   var count = 0;
   var query = {};
   var arrayFilters = [];
@@ -15,7 +15,7 @@ var changeTaxParamsToDb = async (collection, userId, session, ...updatedTaxParam
     count++;
   }
 
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
+  var result = await taxParamModel.updateOne({ userId }, { $set: query }, { arrayFilters, session: session });
 
   return result.acknowledged;
 };

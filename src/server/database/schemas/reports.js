@@ -1,53 +1,48 @@
 import { Schema } from "mongoose";
 
-var booleanOptions = { type: Boolean };
-var numberOptions = { type: Number, default: 0 };
-var stringOptions = { type: String, required: true };
-var nonRequiredNumberOptions = { type: Number, required: false };
-
 var skuSchema = new Schema(
   {
-    skuName: stringOptions,
-    qty: numberOptions,
-    taxableAmount: numberOptions,
-    costPrice: numberOptions,
-    otherExpenses: numberOptions,
-    revenue: numberOptions,
-    sellerPayoutAmount: numberOptions,
-    fines: numberOptions,
-    returnAmount: numberOptions,
-    retailAmount: numberOptions,
-    deliveryCost: numberOptions,
-    storageCost: numberOptions,
-    acceptance: numberOptions,
-    deductionOrPayment: numberOptions,
-    additionalPayment: numberOptions,
-    tax: numberOptions,
-    insuranceFee: numberOptions,
-    additionalInsuranceFee: numberOptions,
-    profit: numberOptions,
-    preTaxProfit: numberOptions,
-    finalProfit: numberOptions,
-    profitMargin: numberOptions,
+    id: { type: Number, required: true },
+    skuName: { type: String, required: true },
+    qty: { type: Number, required: true, default: 0 },
+    taxableAmount: { type: Number, required: true, default: 0 },
+    costPrice: { type: Number, required: true, default: 0 },
+    otherExpenses: { type: Number, required: true, default: 0 },
+    revenue: { type: Number, required: true, default: 0 },
+    sellerPayoutAmount: { type: Number, required: true, default: 0 },
+    fines: { type: Number, required: true, default: 0 },
+    returnAmount: { type: Number, required: true, default: 0 },
+    retailAmount: { type: Number, required: true, default: 0 },
+    deliveryCost: { type: Number, required: true, default: 0 },
+    storageCost: { type: Number, required: true, default: 0 },
+    acceptance: { type: Number, required: true, default: 0 },
+    deductionOrPayment: { type: Number, required: true, default: 0 },
+    additionalPayment: { type: Number, required: true, default: 0 },
+    tax: { type: Number, required: true, default: 0 },
+    insuranceFee: { type: Number, required: true, default: 0 },
+    additionalInsuranceFee: { type: Number, required: true, default: 0 },
+    profit: { type: Number, required: true, default: 0 },
+    preTaxProfit: { type: Number, required: true, default: 0 },
+    finalProfit: { type: Number, required: true, default: 0 },
+    profitMargin: { type: Number, required: true, default: 0 },
     isCostPriceSet: { type: Boolean, default: false },
     year: { type: Number, required: true },
-    isInsuranceFeeIncluded: booleanOptions,
-    averageProfit: numberOptions,
-    averageRetailPrice: numberOptions,
-    averageStorageCost: numberOptions,
-    averageAdvertisingCost: numberOptions,
-    id: { type: Number, required: true },
+    isInsuranceFeeIncluded: { type: Boolean, required: true, default: false },
+    averageProfit: { type: Number, required: true, default: 0 },
+    averageRetailPrice: { type: Number, required: true, default: 0 },
+    averageStorageCost: { type: Number, required: true, default: 0 },
+    averageAdvertisingCost: { type: Number, required: true, default: 0 },
   },
   { _id: false },
 );
-var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: stringOptions }, { _id: false });
+var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: { type: String, required: true } }, { _id: false });
 
 var reportSchema = new Schema(
   {
-    userId: stringOptions,
-    reportId: numberOptions,
-    dateFrom: stringOptions,
-    dateTo: stringOptions,
+    userId: { type: String, required: true },
+    reportId: { type: Number, required: true, unique: true },
+    dateFrom: { type: String, required: true },
+    dateTo: { type: String, required: true },
     taxRate: { type: Number, default: 6 },
     isCrossYearPeriod: { type: Boolean, default: false },
     recordedTo: { type: recordedToSchema, requred: true },
@@ -61,9 +56,9 @@ var reportSchema = new Schema(
 
 var reportsWithAccountedFinancesSchema = new Schema(
   {
-    userId: stringOptions,
-    dateFrom: stringOptions,
-    dateTo: stringOptions,
+    userId: { type: String, required: true },
+    dateFrom: { type: String, required: true },
+    dateTo: { type: String, required: true },
     reportId: { type: Number, required: true },
     tax: { type: Number, required: true, default: 0 },
     financesAccountedAt: { type: Date, required: true },
@@ -81,5 +76,7 @@ var reportsSchema = new Schema({
   reports: { type: [reportSchema], required: false },
   reportsWithAccountedFinances: { type: [reportsWithAccountedFinancesSchema], required: false },
 });
+
+reportsSchema.index({ userId: 1, "reports.reportId": 1 }, { unique: true });
 
 export default reportsSchema;

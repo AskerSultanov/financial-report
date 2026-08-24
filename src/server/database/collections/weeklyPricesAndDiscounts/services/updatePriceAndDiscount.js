@@ -19,10 +19,10 @@ var createQuery = (skuId, skuDataToUpdate, checkedWeekDays) => {
   return { query, arrayFilters };
 };
 
-var updatePriceAndDiscount = async (collection, userId, skuId, skuDataToUpdate, checkedWeekDays) => {
+var updatePriceAndDiscount = async (weeklyPricesAndDiscountsModel, userId, skuId, skuDataToUpdate, checkedWeekDays) => {
   var { query, arrayFilters } = createQuery(skuId, skuDataToUpdate, checkedWeekDays);
 
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters });
+  var result = await weeklyPricesAndDiscountsModel.updateOne({ userId }, { $set: query }, { arrayFilters });
 
   return result?.acknowledged;
 };

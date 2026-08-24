@@ -1,4 +1,4 @@
-import { userCollection } from "../../connections/index.js";
+import { userModel } from "../../models/index.js";
 
 import resetUserData from "./services/resetUserData.js";
 import getUserById from "./services/getUserByUserId.js";
@@ -11,11 +11,11 @@ import deleteUsersFromDb from "./services/deleteUsersFromDb.js";
 var userCollectionServices = {
   createUserToDb: (user, session) => createUserToDb(user, session),
 
-  getUserByLogin: (login, session) => getUserByLogin(userCollection, login, session),
+  getUserByLogin: (login, session) => getUserByLogin(userModel, login, session),
 
-  getUserById: (userId) => getUserById(userCollection, userId),
+  getUserById: (userId) => getUserById(userModel, userId),
 
-  getAllUsersFromDb: () => getAllUsersFromDb(userCollection),
+  getAllUsersFromDb: () => getAllUsersFromDb(userModel),
 
   resetUserData: (userId) => resetUserData(userId),
 

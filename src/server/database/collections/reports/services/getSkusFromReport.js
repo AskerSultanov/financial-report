@@ -1,5 +1,5 @@
-var getSkusFromReport = async (collection, userId, reportId, skuNames, session) => {
-  var data = await collection.aggregate(
+var getSkusFromReport = async (reportModel, userId, reportId, skuNames, session) => {
+  var data = await reportModel.aggregate(
     [
       { $match: { userId, "reports.reportId": reportId } },
       { $unwind: "$reports" },

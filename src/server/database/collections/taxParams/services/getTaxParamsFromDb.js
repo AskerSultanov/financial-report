@@ -1,6 +1,6 @@
-var getTaxParamsFromDb = async (collection, userId, year, session) => {
+var getTaxParamsFromDb = async (taxParamModel, userId, year, session) => {
   var sessionOpt = session ? { session: session } : {};
-  var data = await collection.findOne({ userId }, null, { ...sessionOpt });
+  var data = await taxParamModel.findOne({ userId }, null, { ...sessionOpt });
 
   if (year) {
     return data.toObject().years.find((date) => date.year == year);

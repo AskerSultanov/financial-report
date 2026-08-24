@@ -33,10 +33,10 @@ var createQuery = (priceData) => {
   return { query, arrayFilters };
 };
 
-var setPriceUpdateTimestampAndUpdateStatus = async (collection, userId, priceData, session) => {
+var setPriceUpdateTimestampAndUpdateStatus = async (goodsModel, userId, priceData, session) => {
   var sessionOpt = session ? { session: session } : {};
   var { query, arrayFilters } = createQuery(priceData);
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
+  var result = await goodsModel.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
   return result;
 };
 

@@ -1,29 +1,22 @@
 import argon2 from "argon2";
-import {
-  userCollection,
-  goodsCollection,
-  tokenCollection,
-  reportCollection,
-  taxParamsCollection,
-  reportsTreeCollection,
-  reportLoadingStatesCollection,
-  weeklyPricesAndDiscountsCollection,
-} from "../../../connections/index.js";
+import * as models from "../../../models/index.js";
 
 var mskTimeOffsetInMs = 10_800_000;
 
 var createUserToDb = async (user, session) => {
   var { userId, role, login, passwd } = user;
-  var hashedPasswd = await argon2.hash(passwd + "", "youSecretKey");
 
-  await tokenCollection.insertOne({ userId }, session);
-  await reportCollection.insertOne({ userId }, session);
-  await taxParamsCollection.insertOne({ userId }, session);
-  await reportLoadingStatesCollection.insertOne({ userId }, session);
-  await goodsCollection.insertOne({ userId, listGoods: [] }, session);
-  await reportsTreeCollection.insertOne({ userId, years: [] }, session);
-  await weeklyPricesAndDiscountsCollection.insertOne({ userId }, session);
-  await userCollection.insertOne({ login, userId, role, passwd: hashedPasswd, registeredAt: new Date(Date.now() + mskTimeOffsetInMs) }, session);
+  var registeredAt = new Date(Date.now() + mskTimeOffsetInMs);
+  var hashedPasswd = await argon2.hash(passwd + "", { secret: process.env.SECRET_KEY });
+
+  await models.tokenModel.insertOne({ userId }, session);
+  await models.reportModel.insertOne({ userId }, session);
+  await models.taxParamModel.insertOne({ userId }, session);
+  await models.reportLoadingStateModel.insertOne({ userId }, session);
+  await models.goodsModel.insertOne({ userId, listGoods: [] }, session);
+  await models.reportTreeModel.insertOne({ userId, years: [] }, session);
+  await models.weeklyPricesAndDiscountsModel.insertOne({ userId }, session);
+  await models.userModel.insertOne({ login, userId, role, registeredAt, passwd: hashedPasswd }, session);
 };
 
 export default createUserToDb;

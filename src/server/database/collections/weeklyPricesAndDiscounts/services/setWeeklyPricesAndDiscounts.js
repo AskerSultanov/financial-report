@@ -1,5 +1,5 @@
-var setWeeklyPricesAndDiscounts = async (collection, userId, weeklyPricesAndDiscounts, session) => {
-  var result = await collection.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts } }, { session: session });
+var setWeeklyPricesAndDiscounts = async (weeklyPricesAndDiscountsModel, userId, weeklyPricesAndDiscounts, session) => {
+  var result = await weeklyPricesAndDiscountsModel.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts } }, { session: session });
   return result.acknowledged;
 };
 

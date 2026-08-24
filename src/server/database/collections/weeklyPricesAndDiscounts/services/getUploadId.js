@@ -1,5 +1,5 @@
-var getUploadId = async (collection, userId) => {
-  var { uploadId } = await collection.findOne({ userId });
+var getUploadId = async (weeklyPricesAndDiscountsModel, userId) => {
+  var { uploadId } = await weeklyPricesAndDiscountsModel.findOne({ userId });
 
   return { uploadId };
 };

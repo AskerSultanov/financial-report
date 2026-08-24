@@ -1,12 +1,5 @@
 import { dbClient } from "../../../index.js";
-import {
-  goodsCollection,
-  reportCollection,
-  taxParamsCollection,
-  reportsTreeCollection,
-  reportLoadingStatesCollection,
-  weeklyPricesAndDiscountsCollection,
-} from "../../../connections/index.js";
+import * as models from "../../../models/index.js";
 
 var defaultReportLoadingState = {
   queueLength: 0,
@@ -27,12 +20,12 @@ var resetUserData = async (userId) => {
 
   try {
     await session.withTransaction(async () => {
-      await reportCollection.updateOne({ userId }, { $set: { reports: [] } }, { session });
-      await goodsCollection.updateOne({ userId }, { $set: { listGoods: [] } }, { session });
-      await taxParamsCollection.updateOne({ userId }, { $set: { years: [] } }, { session });
-      await reportsTreeCollection.updateOne({ userId }, { $set: { years: [] } }, { session });
-      await weeklyPricesAndDiscountsCollection.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts: [] } });
-      await reportLoadingStatesCollection.updateOne({ userId }, { $set: { ...defaultReportLoadingState } }, { session });
+      await models.reportModel.updateOne({ userId }, { $set: { reports: [] } }, { session });
+      await models.goodsModel.updateOne({ userId }, { $set: { listGoods: [] } }, { session });
+      await models.taxParamModel.updateOne({ userId }, { $set: { years: [] } }, { session });
+      await models.reportTreeModel.updateOne({ userId }, { $set: { years: [] } }, { session });
+      await models.weeklyPricesAndDiscountsModel.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts: [] } });
+      await models.reportLoadingStateModel.updateOne({ userId }, { $set: { ...defaultReportLoadingState } }, { session });
     });
   } catch {
     success = false;

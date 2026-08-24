@@ -1,5 +1,5 @@
-var deleteTaxYears = async (collection, userId) => {
-  var result = await collection.updateOne(
+var deleteTaxYears = async (taxParamModel, userId) => {
+  var result = await taxParamModel.updateOne(
     { userId },
     {
       $set: { years: [] },
