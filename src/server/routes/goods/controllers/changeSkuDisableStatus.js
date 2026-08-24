@@ -1,6 +1,6 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { updateSkuInListGoods } = dbUtils.goodsCollectionServices;
+var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
 
 var changeSkuDisableStatus = async (req, res, next) => {
   var { userId, skuName, disableStatus } = req.body;

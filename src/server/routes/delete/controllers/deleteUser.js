@@ -1,7 +1,7 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { deleteUserFromDb } = dbUtils.userCollectionServices;
+var { deleteUserFromDb } = dbUtils.userModelUtils;
 
 var deleteUser = async (req, res, next) => {
   var { userId } = req.body;

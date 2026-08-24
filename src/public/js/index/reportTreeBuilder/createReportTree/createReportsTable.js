@@ -14,22 +14,10 @@ var createReportsTable = (year, month, reportIds, reports) => {
 
     var report = reports.find((report) => report.reportId == reportId);
 
-    var { totalFinalProfit, totalProductCosts, totalTaxAmount, isFinancesAccounted } = report;
+    var { isFinancesAccounted } = report;
 
     var fullPeriodTd = getReportPeriod(dateFrom, dateTo);
 
-    var totalFinalProfitTdId = null;
-    var totalFinalProfitTdClassName = "totalFinalProfit";
-    var totalFinalProfitTd = createTdElement(totalFinalProfit, totalFinalProfitTdId, totalFinalProfitTdClassName);
-
-    if (totalFinalProfit < 0) {
-      totalFinalProfitTd.style.color = "red";
-    } else {
-      totalFinalProfitTd.style.color = "#04ff00";
-    }
-
-    var totalProductCostsTd = createTdElement(totalProductCosts);
-    var totalTaxAmountTd = createTdElement(totalTaxAmount);
     var reportLink = getReportLink(reportId);
 
     var financesAccountedTd = createTdElement();
@@ -41,7 +29,7 @@ var createReportsTable = (year, month, reportIds, reports) => {
       financesAccountedTd.innerHTML = '<span style="color: red;">&#10008;</span>';
     }
 
-    tr.append(fullPeriodTd, totalFinalProfitTd, totalProductCostsTd, totalTaxAmountTd, financesAccountedTd, reportLink);
+    tr.append(fullPeriodTd, financesAccountedTd, reportLink);
 
     tbody.append(tr);
   }

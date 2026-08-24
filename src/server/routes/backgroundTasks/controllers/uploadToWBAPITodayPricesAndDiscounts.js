@@ -1,14 +1,14 @@
 import { dbClient } from "../../../database/index.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getCurrentDayMSK from "../services/getCurrentDayMSK.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
 var statusOfReportLoadingStop = true;
 
-var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
-var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
+var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
   var { currentDayIndex } = getCurrentDayMSK();

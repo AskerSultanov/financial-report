@@ -5,8 +5,9 @@ import tokenSchema from "../schemas/token.js";
 import reportsSchema from "../schemas/reports.js";
 import taxParamsSchema from "../schemas/taxParams.js";
 import reportsTreeSchema from "../schemas/reportsTree.js";
-import reportLoadingStatesSchema from "../schemas/reportLoadingState.js";
+import reportLoadingStateSchema from "../schemas/reportLoadingState.js";
 import weeklyPricesAndDiscountsSchema from "../schemas/weeklyPricesAndDiscounts.js";
+import reportsWithAccountedFinancesSchema from "../schemas/reportsWithAccountedFinances.js";
 
 var userModel = dbClient.model("User", usersSchema);
 var goodsModel = dbClient.model("Goods", goodsSchema);
@@ -14,7 +15,18 @@ var tokenModel = dbClient.model("Token", tokenSchema);
 var reportModel = dbClient.model("Report", reportsSchema);
 var taxParamModel = dbClient.model("Tax_Param", taxParamsSchema);
 var reportTreeModel = dbClient.model("Reports_Tree", reportsTreeSchema);
-var reportLoadingStateModel = dbClient.model("Report_Loading_State", reportLoadingStatesSchema);
+var reportLoadingStateModel = dbClient.model("Report_Loading_State", reportLoadingStateSchema);
 var weeklyPricesAndDiscountsModel = dbClient.model("Weekly_prices_and_discounts", weeklyPricesAndDiscountsSchema);
+var reportsWithAccountedFinancesModel = dbClient.model("reports-with-accounted-finances", reportsWithAccountedFinancesSchema);
 
-export { userModel, goodsModel, reportModel, tokenModel, taxParamModel, reportTreeModel, reportLoadingStateModel, weeklyPricesAndDiscountsModel };
+export {
+  userModel,
+  goodsModel,
+  reportModel,
+  tokenModel,
+  taxParamModel,
+  reportTreeModel,
+  reportLoadingStateModel,
+  weeklyPricesAndDiscountsModel,
+  reportsWithAccountedFinancesModel,
+};

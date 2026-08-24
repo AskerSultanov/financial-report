@@ -1,17 +1,13 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var projectonFields = [
-  "reports.reportId",
-  "reports.isFinancesAccounted",
-];
+var projectonFields = ["reportId", "isFinancesAccounted"];
 
-var { getReportsByUserId } = dbUtils.reportCollectionServices;
+var { getReportsByUserId } = dbUtils.reportModelUtils;
 
 var getReports = async (req, res, next) => {
   var { userId, reportIds } = req.body;
 
   var { reports } = await getReportsByUserId(userId, null, projectonFields, reportIds);
-
   return res.json({ reports });
 };
 

@@ -1,13 +1,13 @@
 import calc from "../services/calcServices/index.js";
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "../services/different/getPrevSkuData.js";
 import excludeEqualParams from "../services/different/excludeEqualParams.js";
 import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
 
-var { updateSkuInListGoods } = dbUtils.goodsCollectionServices;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-var { saveUpdatedReport, getSkuFromReport, getReportById } = dbUtils.reportCollectionServices;
+var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { saveUpdatedReport, getSkuFromReport, getReportById } = dbUtils.reportModelUtils;
 
 var setCostPriceToSku = async (req, res, next) => {
   var { userId, reportId, skuName, year, costPrice } = req.body;
@@ -21,7 +21,13 @@ var setCostPriceToSku = async (req, res, next) => {
         return res.sendStatus(404);
       }
 
-      var sku = report.skus[0];
+      var sku;
+
+      if (report.skus.length > 1) {
+        sku = report.skus.find((sku) => sku.year === year);
+      } else {
+        sku = report.skus[0];
+      }
 
       if (sku.costPrice === costPrice) {
         return res.sendStatus(409);

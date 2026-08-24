@@ -1,5 +1,5 @@
 import * as jose from "jose";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import checkCredentials from "../services/checkCredentials.js";
 
 var alg = "RS256";
@@ -7,7 +7,7 @@ var oneDayMs = 86_400_000;
 var mskTimeOffsetInMs = 10_800_000;
 var exp = Date.now() + oneDayMs + mskTimeOffsetInMs;
 
-var { getUserByLogin } = dbUtils.userCollectionServices;
+var { getUserByLogin } = dbUtils.userModelUtils;
 
 var checkUserCredentials = async (req, res, next) => {
   var existUser = await getUserByLogin(req.body.login);

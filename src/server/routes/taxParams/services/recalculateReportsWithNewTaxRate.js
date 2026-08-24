@@ -13,7 +13,6 @@ var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxY
       if (sku.year === taxYear) {
         var updatedSkuFields = {};
 
-        var prevSkuTax = sku.tax;
         var newSkuTax = calc.taxAmount(sku.taxableAmount, newTaxRate);
 
         paidTaxAmount += newSkuTax;
@@ -21,8 +20,6 @@ var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxY
 
         if (sku.isCostPriceSet) {
           sku.tax = newSkuTax;
-
-          var prevSkuFinalProfit = sku.finalProfit;
 
           var newSkuFinalProfit = calc.sku.finalProfit(sku);
 
@@ -34,7 +31,7 @@ var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxY
       }
     }
 
-    if (Object.keys(updatedSkuFields).length) {
+    if (Object.keys(updatedSkus).length) {
       updatedReports.push({ reportId, updatedSkus });
     }
   }

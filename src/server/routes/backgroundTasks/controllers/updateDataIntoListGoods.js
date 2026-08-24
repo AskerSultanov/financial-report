@@ -1,15 +1,15 @@
 import { dbClient } from "../../../database/index.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 import splitListGoodsByExistence from "../services/splitListGoodsByExistence.js";
 import extractRequiredListGoodsData from "../../goods/services/extractRequiredListGoodsData.js";
 
 var statusOfReportLoadingStop = true;
 
-var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStatesCollectionServices;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
-var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusInListGoods } = dbUtils.goodsCollectionServices;
+var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
+var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusInListGoods } = dbUtils.goodsModelUtils;
 
 var updateDataIntoListGoods = async (req, res, next) => {
   var data = await getAllUserListGoodsIds();

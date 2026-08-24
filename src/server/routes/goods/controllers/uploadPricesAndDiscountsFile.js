@@ -1,9 +1,9 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import { readWeeklyPricesFile } from "../services/weeklyPrices/index.js";
 
-var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-var { setWeeklyPricesAndDiscountsToDb } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
+var { setWeeklyPricesAndDiscountsToDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var uploadPricesAndDiscountsFile = async (req, res, next) => {
   var userId = req.body.userId;

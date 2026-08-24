@@ -1,14 +1,14 @@
 import { dbClient } from "../../../database/index.js";
 import listGoodsLoader from "../services/listGoodsLoader.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import removeDublicates from "../services/removeDublicates.js";
 
 var skuNamesStub = null;
 var updateWBTokenLastUsedTimestampNow = true;
 var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
-var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenCollectionServices;
+var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsModelUtils;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 
 var loadListGoods = async (req, res, next) => {
   var { userId } = req.body;

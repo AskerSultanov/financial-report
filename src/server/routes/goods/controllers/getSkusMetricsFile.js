@@ -1,10 +1,10 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import generageSKusMetricsFile from "../services/skusMetrics/index.js";
 import sortSkusBySkuNameAndYear from "../services/skusMetrics/sortSkusBySkuNameAndYear.js";
 import mergeSkuDataBySkuNameAndYear from "../services/skusMetrics/mergeSkuDataBySkuNameAndYear.js";
 
-var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-var { getReportsByUserId } = dbUtils.reportCollectionServices;
+var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
+var { getReportsByUserId } = dbUtils.reportModelUtils;
 
 var getSkusMetricsFile = async (req, res, next) => {
   var { userId } = req.params;

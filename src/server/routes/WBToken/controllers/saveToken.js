@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { dbClient } from "../../../database/index.js";
 import getTokenDetails from "../services/getTokenDetails.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import listGoodsLoader from "../../goods/services/listGoodsLoader.js";
 import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFromLIstGoods.js";
 
@@ -10,8 +10,8 @@ var selectedFieldsStub = null;
 var mskTimeOffsetInMs = 10_800_000;
 var updateWBTokenLastUsedTimestampNow = true;
 
-var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenCollectionServices;
-var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenModelUtils;
+var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsModelUtils;
 
 var saveToken = async (req, res, next) => {
   var { userId, token, tokenPayload } = req.body;

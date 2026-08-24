@@ -32,7 +32,7 @@ var emptyReportPeriodItemSchema = new Schema(
   { _id: false },
 );
 
-var reportLoadingStatesSchema = new Schema({
+var reportLoadingStateSchema = new Schema({
   userId: { type: String, required: true, unique: true },
   queueLength: { type: Number, default: 0 },
   queueCapacity: { type: Number, default: 0 },
@@ -48,4 +48,4 @@ var reportLoadingStatesSchema = new Schema({
   emptyReportPeriods: { type: [emptyReportPeriodItemSchema], required: false },
 });
 
-export default reportLoadingStatesSchema;
+export default reportLoadingStateSchema;

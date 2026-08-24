@@ -1,6 +1,6 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { deleteReportTreeByUserId } = dbUtils.reportsTreeCollectionServices;
+var { deleteReportTreeByUserId } = dbUtils.reportsTreeModelUtils;
 
 var deleteAllReportingPeriods = async (req, res, next) => {
   var { userId } = req.params;

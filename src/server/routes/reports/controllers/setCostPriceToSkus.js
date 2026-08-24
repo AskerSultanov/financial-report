@@ -1,14 +1,14 @@
 import calc from "../services/calcServices/index.js";
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "../services/different/getPrevSkuData.js";
 import excludeEqualParams from "../services/different/excludeEqualParams.js";
 import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
 import verifyAllSkusExistInReport from "../services/different/verifyAllSkusExistInReport.js";
 
-var { updateSkusInListGoods } = dbUtils.goodsCollectionServices;
-var { saveUpdatedReport, getSkusFromReport } = dbUtils.reportCollectionServices;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
+var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
+var { saveUpdatedReport, getSkusFromReport } = dbUtils.reportModelUtils;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setCostPriceToSkus = async (req, res, next) => {
   if (!req.body.costPrices.length) {

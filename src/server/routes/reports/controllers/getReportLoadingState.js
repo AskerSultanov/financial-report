@@ -1,4 +1,4 @@
-import reportLoadingStatesCollectionServices from "../../../database/collections/reportLoadingStates/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
 var session = null;
 
@@ -16,7 +16,7 @@ var selectedFieldsToLoadingState = [
 var getReportLoadingState = async (req, res, next) => {
   var { userId } = req.params;
 
-  var reportLoadingState = await reportLoadingStatesCollectionServices.getReportLoadingState(userId, session, selectedFieldsToLoadingState);
+  var reportLoadingState = await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(userId, session, selectedFieldsToLoadingState);
 
   return res.json(reportLoadingState);
 };

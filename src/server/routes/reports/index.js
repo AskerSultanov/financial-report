@@ -40,7 +40,7 @@ router.delete("/", joiSchemaValidator(joiSchemas.deleteReportSchema), deleteRepo
 router.post("/as-zip/", joiSchemaValidator(joiSchemas.downloadReportsAsZipSchema), downloadReportsAsZip);
 router.post("/as-xlsx/", joiSchemaValidator(joiSchemas.downloadReportAsXLSXSchema), downloadReportAsXLSX);
 
-router.get("/loading-state/:userId/", joiSchemaValidator(joiSchemas.getReportLoadingStateSchema, needToValidateReqParams), getReportLoadingState);
+router.get("/loading-state/:userId/", joiSchemaValidator(joiSchemas.getreportLoadingStatechema, needToValidateReqParams), getReportLoadingState);
 router.post("/loading-state/abandoned/", joiSchemaValidator(joiSchemas.resumeAbandonedReportsLoadingSchema), resumeAbandonedReportsLoading);
 router.post("/files", upload.array("file", maxReportFilesCount), saveReportFromFile);
 

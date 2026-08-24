@@ -1,5 +1,5 @@
-import dbUtils from "../../../database/collections/index.js";
-var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+import dbUtils from "../../../database/modelsUtil/index.js";
+var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 
 var getListGoods = async (req, res) => {
   var { userId } = req.params;

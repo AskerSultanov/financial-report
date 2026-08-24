@@ -1,8 +1,8 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import shouldWaitBeforeNextRequest from "../services/different/shouldWaitBeforeNextRequest.js";
 import sendReportPeriodsToReportLoader from "../services/different/sendReportPeriodsToReportLoader.js";
 
-var { getReportLoadingState } = dbUtils.reportLoadingStatesCollectionServices;
+var { getReportLoadingState } = dbUtils.reportLoadingStateModelUtils;
 
 var reportLoadDelegate = async (req, res, next) => {
   var { needToLoadAllReports } = req.body;

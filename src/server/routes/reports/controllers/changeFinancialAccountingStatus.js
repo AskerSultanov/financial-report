@@ -1,12 +1,12 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { addReportToAccounted, removeReportFromAccounted } = dbUtils.reportCollectionServices;
+var { addReportToAccounted, removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var changeFinancialAccountingStatus = async (req, res) => {
-  var { userId, reportId, newStatus } = req.body;
+  var { userId, reportId, dateFrom, dateTo, newStatus } = req.body;
 
   if (newStatus) {
-    await addReportToAccounted(userId, reportId);
+    await addReportToAccounted(userId, reportId, dateFrom, dateTo);
   } else {
     await removeReportFromAccounted(userId, reportId);
   }

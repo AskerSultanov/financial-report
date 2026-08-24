@@ -1,4 +1,4 @@
-import reportLoadingStateCollectionServices from "../../../database/collections/reportLoadingStates/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import sendResumeAbandonedReportsLoadingRequest from "../services/different/sendResumeAbandonedReportsLoadingRequest.js";
 
 var session = null;
@@ -10,11 +10,11 @@ var resumeAbandonedReportsLoading = async (req, res) => {
   var success;
 
   if (needToResumeLoading) {
-    await reportLoadingStateCollectionServices.pushToReportsQueue(userId, abandonedReports, session, needToResetAbandonedReports);
+    await dbUtils.reportLoadingStateModelUtils.pushToReportsQueue(userId, abandonedReports, session, needToResetAbandonedReports);
 
     success = await sendResumeAbandonedReportsLoadingRequest(userId);
   } else {
-    success = (await reportLoadingStateCollectionServices.resetAbandonedReports(userId)).modifiedCount;
+    success = (await dbUtils.reportLoadingStateModelUtils.resetAbandonedReports(userId)).modifiedCount;
   }
 
   return success ? res.sendStatus(200) : res.sendStatus(304);

@@ -1,9 +1,9 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import { generageWeeklyPricesFile } from "../services/weeklyPrices/index.js";
 import mergeListGoodsWithWeeklyPricesAndDiscounts from "../services/mergeListGoodsWithWeeklyPricesAndDiscounts.js";
 
-var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
-var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsCollectionServices;
+var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
+var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var getWeeklyPricesFile = async (req, res, next) => {
   var { userId } = req.params;

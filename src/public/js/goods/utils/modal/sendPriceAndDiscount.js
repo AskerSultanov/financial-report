@@ -16,7 +16,11 @@ var sendPriceAndDiscount = async (skuId, skuName, skuDataToUpdate, checkedWeekDa
     }),
   });
 
-  if (!res.ok) {
+  if (res.status === 401) {
+    var { msg } = await res.json();
+    alert(msg);
+    return;
+  } else if (!res.ok) {
     alert("Не удалось сохранить...");
     return;
   }

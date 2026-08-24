@@ -1,6 +1,6 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenModelUtils;
 
 var checkTokenExists = async (req, res, next) => {
   var { userId } = req.params;

@@ -1,11 +1,14 @@
 import { dbClient } from "../../../database/index.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
+import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 
+var statusOfReportLoadingStop = true;
 var updateWBTokenLastUsedTimestampNow = true;
 
-var { getWBTokenByUserId } = dbUtils.tokenCollectionServices;
-var { updateSkuInListGoods } = dbUtils.goodsCollectionServices;
+var { getWBTokenByUserId } = dbUtils.tokenModelUtils;
+var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
+var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
 
 var setNewPricesAndDiscountsToSku = async (req, res, next) => {
   var { userId, skuName, skuDataToUpdate, setNewPriceNow, expectedPriceExists } = req.body;
@@ -15,6 +18,20 @@ var setNewPricesAndDiscountsToSku = async (req, res, next) => {
     await session.withTransaction(async () => {});
     if (setNewPriceNow) {
       var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
+
+      if (!token) {
+        var loadingStopReason = "isTokenMissing";
+        await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+        return res.status(401).json({ msg: "Отсутствует токен личного кабинета WB" });
+      }
+
+      var tokenIsExpired = checkTokenExpiry(token);
+
+      if (tokenIsExpired) {
+        var loadingStopReason = "tokenIsExpired";
+        await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+        return res.status(401).json({ msg: "Токен личного кабинета WB просрочен" });
+      }
 
       var data = [skuDataToUpdate];
       await wbapi.setPricesAndDiscounts(userId, token, data);

@@ -19,6 +19,7 @@ var pathParts = window.location.pathname.split("/");
 var reportId = pathParts.at(-1);
 
 var url = "/report/" + userId + "/" + reportId;
+var urlToDownloadReportAsXLSX = "/report/as-xlsx/";
 
 var getReportData = async () => {
   var res = await fetch(url);
@@ -74,9 +75,9 @@ var main = async () => {
 
   reportInfo(report);
   injectBase64IntoImgTags(skuImages);
-  downloadReportAsXLSXButtonHandler(report);
+  downloadReportAsXLSXButtonHandler(report, urlToDownloadReportAsXLSX);
   deleteReportHandler(userId, reportId, skus);
-  financialAccountingStatusButtonHander(userId, reportId);
+  financialAccountingStatusButtonHander(userId, reportId, dateFrom, dateTo);
   setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
 };
 

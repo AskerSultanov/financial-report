@@ -1,12 +1,12 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
 var removeUser = async (req, res, next) => {
   var session = await dbClient.startSession();
 
   try {
     await session.withTransaction(async () => {
-      await dbUtils.userCollectionServices.deleteUserFromDb(req.body.userId, session);
+      await dbUtils.userModelUtils.deleteUserFromDb(req.body.userId, session);
       res.sendStatus(200);
     });
   } catch (e) {

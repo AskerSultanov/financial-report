@@ -4,15 +4,15 @@ import parseReports from "../reportParsing/index.js";
 import parseJwt from "../../../WBToken/services/parseJwt.js";
 import { WBAPIError } from "../../../../customError/index.js";
 import getNewSkusToListGoods from "./getNewSkusToListGoods.js";
-import dbutils from "../../../../database/collections/index.js";
+import dbutils from "../../../../database/modelsUtil/index.js";
 import insertReportToReportTree from "../reportTreeBuilder/index.js";
 
-var { saveReportToDb } = dbutils.reportCollectionServices;
-var { getWBTokenByUserId } = dbutils.tokenCollectionServices;
-var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsCollectionServices;
-var { getReportTree, updateReportTree } = dbutils.reportsTreeCollectionServices;
-var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsCollectionServices;
-var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStatesCollectionServices;
+var { saveReportToDb } = dbutils.reportModelUtils;
+var { getWBTokenByUserId } = dbutils.tokenModelUtils;
+var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
+var { getReportTree, updateReportTree } = dbutils.reportsTreeModelUtils;
+var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsModelUtils;
+var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStateModelUtils;
 
 var mskTimeOffsetInMs = 10_800_000;
 var invalidTokenErrorMsg = "Invalid Token";
@@ -89,7 +89,7 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.reportIsEmpty = !skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
 
-  await saveReportToDb(userId, report, session);
+  await saveReportToDb(report, session);
   await updateReportTree(userId, sortedYears, session);
 
   if (!isReportFromFile) {

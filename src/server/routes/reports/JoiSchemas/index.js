@@ -7,7 +7,7 @@ import setCostPriceToSkuSchema from "./setCostPriceToSku.js";
 import setCostPriceToSkusSchema from "./setCostPriceToSkus.js";
 import downloadReportAsXLSXSchema from "./downloadReportAsXLSX.js";
 import downloadReportsAsZipSchema from "./downloadReportsAsZip.js";
-import getReportLoadingStateSchema from "./getReportLoadingState.js";
+import getreportLoadingStatechema from "./getReportLoadingState.js";
 import setOtherExpensesToSkuSchema from "./setOtherExpensesToSku.js";
 import resumeAbandonedReportsLoadingSchema from "./resumeAbandonedReportsLoading.js";
 import changeFinancialAccountingStatusSchema from "./changeFinancialAccountingStatus.js";
@@ -22,7 +22,7 @@ export {
   setCostPriceToSkusSchema,
   downloadReportsAsZipSchema,
   downloadReportAsXLSXSchema,
-  getReportLoadingStateSchema,
+  getreportLoadingStatechema,
   setOtherExpensesToSkuSchema,
   resumeAbandonedReportsLoadingSchema,
   changeFinancialAccountingStatusSchema,

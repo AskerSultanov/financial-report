@@ -1,9 +1,9 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import collectImagesAsBase64 from "../services/different/collectImagesAsBase64.js";
 import filterCostsForReportSkus from "../services/different/filterCostsForReportSkus.js";
 
-var { getReportById } = dbUtils.reportCollectionServices;
-var { getListGoodsFromDb } = dbUtils.goodsCollectionServices;
+var { getReportById } = dbUtils.reportModelUtils;
+var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 
 var selectedFields = { "listGoods.skuName": 1, "listGoods.lastCostPrice": 1 };
 

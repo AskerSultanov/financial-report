@@ -1,12 +1,12 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getTaxParamKeyName from "../services/getTaxParamKeyName.js";
 import defaultTaxParams from "../../../database/defaultTaxParams.js";
 import recalculateReportsWithNewTaxRate from "../services/recalculateReportsWithNewTaxRate.js";
 import recalculateReportsWithNewMandatoryInsuranceRate from "../services/recalculateReportsWithNewMandatoryInsuranceRate.js";
 
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
-var { getReportsByUserId, saveUpdatedReports, saveUpdatedReport } = dbUtils.reportCollectionServices;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getReportsByUserId, saveUpdatedReports, saveUpdatedReport } = dbUtils.reportModelUtils;
 
 var changeTaxParams = async (req, res, next) => {
   var { userId, year, reportsNeedRecalculation, data } = req.body;
@@ -51,7 +51,7 @@ var changeTaxParams = async (req, res, next) => {
           var newMandatoryInsuranceFeeRate = data[taxParamKeyName];
 
           if (reports.length) {
-            var { mandatoryInsuranceFee } = oldTaxParams;
+            var { mandatoryInsuranceFee } = taxParams;
             var { updatedReports, finalProfit, paidInsuranceFee, mandatoryInsuranceFeeIsPaid } = recalculateReportsWithNewMandatoryInsuranceRate(
               year,
               reports,

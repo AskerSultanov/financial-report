@@ -1,10 +1,11 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import recalculateTaxParamsAfterReportDeletion from "../services/different/recalculateTaxParamsAfterReportDeletion.js";
 
-var { deleteReportFromDb } = dbUtils.reportCollectionServices;
-var { deleteReportFromReportTree } = dbUtils.reportsTreeCollectionServices;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
+var { deleteReportFromDb } = dbUtils.reportModelUtils;
+var { deleteReportFromReportTree } = dbUtils.reportsTreeModelUtils;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var deleteReport = async (req, res, next) => {
   var { userId, reportId, skuNames } = req.body;
@@ -36,6 +37,7 @@ var deleteReport = async (req, res, next) => {
         await changeTaxParamsToDb(userId, session, updatedTaxParams);
       }
 
+      await removeReportFromAccounted(userId, reportId);
       await deleteReportFromReportTree(userId, year, month, reportId, session);
     });
 

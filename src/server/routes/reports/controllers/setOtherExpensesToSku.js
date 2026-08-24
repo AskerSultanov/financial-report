@@ -1,13 +1,12 @@
 import calc from "../services/calcServices/index.js";
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
-import truncateNum from "../services/reportParsing/truncateNum.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "../services/different/getPrevSkuData.js";
 import excludeEqualParams from "../services/different/excludeEqualParams.js";
 import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
 
-var { saveUpdatedReport, getSkuFromReport } = dbUtils.reportCollectionServices;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsCollectionServices;
+var { saveUpdatedReport, getSkuFromReport } = dbUtils.reportModelUtils;
+var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setOtherExpensesToSku = async (req, res, next) => {
   var { userId, reportId, skuName, year, otherExpenses } = req.body;
@@ -22,9 +21,13 @@ var setOtherExpensesToSku = async (req, res, next) => {
         return res.sendStatus(404);
       }
 
-      var { skus } = report;
+      var sku;
 
-      var sku = skus[0];
+      if (report.skus.length > 1) {
+        sku = report.skus.find((sku) => sku.year === year);
+      } else {
+        sku = report.skus[0];
+      }
 
       if (sku.otherExpenses === otherExpenses) {
         return res.sendStatus(409);

@@ -37,46 +37,22 @@ var skuSchema = new Schema(
 );
 var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: { type: String, required: true } }, { _id: false });
 
-var reportSchema = new Schema(
-  {
-    userId: { type: String, required: true },
-    reportId: { type: Number, required: true, unique: true },
-    dateFrom: { type: String, required: true },
-    dateTo: { type: String, required: true },
-    taxRate: { type: Number, default: 6 },
-    isCrossYearPeriod: { type: Boolean, default: false },
-    recordedTo: { type: recordedToSchema, requred: true },
-    buybackReportIsExist: { type: Boolean, default: false },
-    isFinancesAccounted: { type: Boolean, default: false },
-    reportIsEmpty: { type: Boolean, default: false },
-    skus: [{ type: skuSchema, required: true }],
-  },
-  { _id: false },
-);
-
-var reportsWithAccountedFinancesSchema = new Schema(
-  {
-    userId: { type: String, required: true },
-    dateFrom: { type: String, required: true },
-    dateTo: { type: String, required: true },
-    reportId: { type: Number, required: true },
-    tax: { type: Number, required: true, default: 0 },
-    financesAccountedAt: { type: Date, required: true },
-    profit: { type: Number, required: true, default: 0 },
-    margin: { type: Number, required: true, default: 0 },
-    productCosts: { type: Number, required: true, default: 0 },
-    insuranceFee: { type: Number, required: true, default: 0 },
-    additionalInsuranceFee: { type: Number, required: true, default: 0 },
-  },
-  { _id: false },
-);
-
-var reportsSchema = new Schema({
-  userId: { type: String, required: true, unique: true },
-  reports: { type: [reportSchema], required: false },
-  reportsWithAccountedFinances: { type: [reportsWithAccountedFinancesSchema], required: false },
+var reportSchema = new Schema({
+  userId: { type: String, required: true },
+  reportId: { type: Number, required: true },
+  dateFrom: { type: String, required: true },
+  dateTo: { type: String, required: true },
+  taxRate: { type: Number, default: 6 },
+  isCrossYearPeriod: { type: Boolean, default: false },
+  recordedTo: { type: recordedToSchema, required: true },
+  buybackReportIsExist: { type: Boolean, default: false },
+  isFinancesAccounted: { type: Boolean, default: false },
+  reportIsEmpty: { type: Boolean, default: false },
+  skus: [{ type: skuSchema, required: true }],
 });
 
-reportsSchema.index({ userId: 1, "reports.reportId": 1 }, { unique: true });
+reportSchema.index({ userId: 1 });
+reportSchema.index({ userId: 1, reportId: 1 }, { unique: true });
+reportSchema.index({ userId: 1, dateFrom: 1, dateTo: 1 }, { unique: true });
 
-export default reportsSchema;
+export default reportSchema;

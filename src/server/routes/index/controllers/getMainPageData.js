@@ -1,13 +1,10 @@
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import getReportTreeDto from "../services/getReportTreeDto.js";
 import sortReportsByAccountingDate from "../services/sortReportsByAccountingDate.js";
 
 var getLastNonEmptyReportIds = (lastYear) => lastYear?.months.find((item) => item?.reportIds.length)?.reportIds.map(({ reportId }) => reportId);
 
-var projectonFields = [
-  "reports.reportId",
-  "reports.isFinancesAccounted",
-];
+var projectonFields = ["reports.reportId", "reports.isFinancesAccounted"];
 
 var session = null;
 
@@ -27,8 +24,8 @@ var getMainPageData = async (req, res, next) => {
 
   var reportLoadingStateUrl = "/report/loading-state/" + userId + "/";
 
-  var { reportTree } = await dbUtils.reportsTreeCollectionServices.getReportTree(userId, session);
-  var reportLoadingState = await dbUtils.reportLoadingStatesCollectionServices.getReportLoadingState(userId, session, selectedFieldsToLoadingState);
+  var { reportTree } = await dbUtils.reportsTreeModelUtils.getReportTree(userId, session);
+  var reportLoadingState = await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(userId, session, selectedFieldsToLoadingState);
 
   if (!reportTree.length) {
     return res.json({
@@ -55,12 +52,9 @@ var getMainPageData = async (req, res, next) => {
     });
   }
 
-  var { reports, reportsWithAccountedFinances } = await dbUtils.reportCollectionServices.getReportsByUserId(
-    userId,
-    session,
-    projectonFields,
-    lastReportIds,
-  );
+  var { reports } = await dbUtils.reportModelUtils.getReportsByUserId(userId, session, projectonFields, lastReportIds);
+
+  var { reportsWithAccountedFinances } = await dbUtils.reportsWithAccountedFinancesModelUtils.getReportsWithAccountedFinances(userId);
 
   return res.json({
     reportLoadingState,

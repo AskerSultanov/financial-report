@@ -1,7 +1,7 @@
-import dbUtils from '../../../database/collections/index.js'
+import dbUtils from "../../../database/modelsUtil/index.js";
 
 var getReportYears = async (req, res, next) => {
-  var { getReportTree } = dbUtils.reportsTreeCollectionServices;
+  var { getReportTree } = dbUtils.reportsTreeModelUtils;
 
   var userId = req.app.locals.userId;
 

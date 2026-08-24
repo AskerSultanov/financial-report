@@ -3,12 +3,12 @@ import { randomBytes } from "node:crypto";
 import checkLogin from "../services/checkLogin.js";
 import checkPasswd from "../services/checkPasswd.js";
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 
 var alg = "RS256";
 var oneDayMs = 24 * 3600 * 1000;
 
-var { createUserToDb, getUserByLogin } = dbUtils.userCollectionServices;
+var { createUserToDb, getUserByLogin } = dbUtils.userModelUtils;
 
 var createUser = async (req, res, next) => {
   var candidate = req.body;

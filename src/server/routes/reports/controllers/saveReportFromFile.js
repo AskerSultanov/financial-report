@@ -1,5 +1,5 @@
 import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/collections/index.js";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import reportsProcessing from "../services/different/reportsProcessing.js";
 import checkReportExistsInTree from "../services/different/checkReportExistsInTree.js";
 import removeDublicateFiles from "../services/reportsFileParser/removeDublicateFiles.js";
@@ -7,8 +7,8 @@ import extractWorkSheetFromFile from "../services/reportsFileParser/extractWorkS
 import extractReportsFileBufferFromZip from "../services/reportsFileParser/extractReportsFileBufferFromZip.js";
 import extractReportDataFromWorkSheets from "../services/reportsFileParser/extractReportDataFromWorkSheets.js";
 
-var { getReportTree } = dbUtils.reportsTreeCollectionServices;
-var { getEmptyReportPeriods, addReportToEmptyReportPeriods } = dbUtils.reportLoadingStatesCollectionServices;
+var { getReportTree } = dbUtils.reportsTreeModelUtils;
+var { getEmptyReportPeriods, addReportToEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
 
 var isReportFromFile = true;
 
