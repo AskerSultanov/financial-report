@@ -77,7 +77,7 @@ var reportsWithAccountedFinancesSchema = new Schema(
 );
 
 var reportsSchema = new Schema({
-  userId: stringOptions,
+  userId: { type: String, required: true, unique: true },
   reports: { type: [reportSchema], required: false },
   reportsWithAccountedFinances: { type: [reportsWithAccountedFinancesSchema], required: false },
 });

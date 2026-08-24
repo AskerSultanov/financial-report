@@ -26,7 +26,7 @@ var yearsPeriodSchema = new Schema(
 );
 
 var reportsTreeSchema = new Schema({
-  userId: { type: String, required: true },
+  userId: { type: String, required: true, unique: true },
   years: [{ type: yearsPeriodSchema, required: false }],
 });
 

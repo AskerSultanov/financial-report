@@ -27,7 +27,7 @@ var taxYear = new Schema(
 );
 
 var taxParamsSchema = new Schema({
-  userId: { type: String, required: true },
+  userId: { type: String, required: true, unique: true },
   years: [{ type: taxYear, required: false }],
 });
 

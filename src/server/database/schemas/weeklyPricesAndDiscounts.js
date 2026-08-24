@@ -25,7 +25,7 @@ var skuSchema = new Schema(
 );
 
 var weeklyPricesAndDiscountsSchema = new Schema({
-  userId: { type: String, required: true },
+  userId: { type: String, required: true, unique: true },
   uploadId: { type: Number, required: false },
   weeklyPricesAndDiscounts: [{ type: [skuSchema], required: false }],
 });

@@ -33,7 +33,7 @@ var emptyReportPeriodItemSchema = new Schema(
 );
 
 var reportLoadingStatesSchema = new Schema({
-  userId: { type: String, required: true },
+  userId: { type: String, required: true, unique: true },
   queueLength: { type: Number, default: 0 },
   queueCapacity: { type: Number, default: 0 },
   reportsQueue: { type: [queueItemSchema], required: false },
