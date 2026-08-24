@@ -4,8 +4,19 @@ var splitListGoodsByExistence = (listGoodsFromDb, listGoodsFromWBAPI) => {
 
   for (var skuFromWBAPI of listGoodsFromWBAPI) {
     var existSku = listGoodsFromDb.find((item) => item.skuName === skuFromWBAPI.skuName && item.id === skuFromWBAPI.id);
+
     if (existSku) {
-      updatedSkus.push(skuFromWBAPI);
+      var updatedSku = {
+        skuName: existSku.skuName,
+        data: {
+          price: skuFromWBAPI.price,
+          discount: skuFromWBAPI.discount,
+          discountedPrice: skuFromWBAPI.discountedPrice,
+          clubDiscountedPrice: skuFromWBAPI.clubDiscountedPrice,
+        },
+      };
+
+      updatedSkus.push(updatedSku);
     } else {
       newSkus.push(skuFromWBAPI);
     }

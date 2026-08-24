@@ -5,13 +5,15 @@ var createQuery = (updatedSkus) => {
   var count = 0;
 
   for (var updatedSku of updatedSkus) {
-    for (var key in updatedSku) {
+    var { skuName, data } = updatedSku;
+
+    for (var key in data) {
       var queryKey = `listGoods.$[sku${count}].${key}`;
-      query[queryKey] = updatedSku[key];
+      query[queryKey] = data[key];
     }
 
     var arrayFiltersKey = `sku${count}.skuName`;
-    arrayFilters.push({ [arrayFiltersKey]: updatedSku.skuName });
+    arrayFilters.push({ [arrayFiltersKey]: skuName });
 
     count++;
   }

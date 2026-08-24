@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import setupDbEvents from "./setupDbEvents.js";
-import { serverEmitter, databaseEmitter } from "../customEvent/index.js";
 import { MongoClient, ClientEncryption } from "mongodb";
+import { databaseEmitter } from "../customEvent/index.js";
 import getEncryptionFieldsSchemaMap from "./encryptedFieldsSchemaMap.js";
 
 var dataKeyId;
