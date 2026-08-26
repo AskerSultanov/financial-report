@@ -10,13 +10,15 @@ var addReportToAccounted = async (userId, reportId, dateFrom, dateTo) => {
     await reportModel.updateOne({ userId, reportId }, { isFinancesAccounted: true }, { session: session });
 
     await reportsWithAccountedFinancesModel.create(
-      {
-        userId,
-        reportId,
-        dateFrom,
-        dateTo,
-        financesAccountedAt: Date.now() + mskTimeOffsetInMs,
-      },
+      [
+        {
+          userId,
+          reportId,
+          dateFrom,
+          dateTo,
+          financesAccountedAt: Date.now() + mskTimeOffsetInMs,
+        },
+      ],
       { session: session },
     );
   });
