@@ -1,6 +1,6 @@
 import parseJwt from "../services/parseJwt.js";
 import getTokenDetails from "../services/getTokenDetails.js";
-import { getWBTokenByUserId } from "../../..//database/modelsUtil/tokens/index.js";
+import { getWBTokenByUserId } from "../../../database/modelsUtil/tokens/index.js";
 
 var getTokenData = async (req, res, next) => {
   var userId = req.params.userId;

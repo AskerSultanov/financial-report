@@ -11,20 +11,15 @@ var { saveReportToDb } = dbutils.reportModelUtils;
 var { getWBTokenByUserId } = dbutils.tokenModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
 var { getReportTree, updateReportTree } = dbutils.reportsTreeModelUtils;
-var { addNewTaxYearToDb, changeTaxParamsToDb } = dbutils.taxParamsModelUtils;
+var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStateModelUtils;
 
 var mskTimeOffsetInMs = 10_800_000;
 var invalidTokenErrorMsg = "Invalid Token";
 var updateWBTokenLastUsedTimestampNow = true;
 var selectedFields = ["listGoods.id", "listGoods.skuName"];
-import weekly from "./reportPeriods.js";
 
 var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
-  if (dateFrom === "2025-12-29") {
-    reports.weeklyFinancialReport = weekly;
-  }
-
   if (!isReportFromFile) {
     var currentTimestamp = Date.now() + mskTimeOffsetInMs;
 
@@ -40,11 +35,12 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   }
 
   var report = {};
-  var reportPeriodIsEmpty = false;
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
   var { reportId } = reports.weeklyFinancialReport[0];
+
+  var updatedTaxParams = [];
 
   if (isCrossYearPeriod) {
     var startYearTaxParams = await addNewTaxYearToDb(userId, startYear, session);
@@ -54,26 +50,14 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     var { skus, skuNamesAndIds, recalculatedTaxParams } = await parseReports(reports, taxParams, isCrossYearPeriod);
 
     report.skus = skus;
-    reportPeriodIsEmpty = !skus.length;
-
-    if (!reportPeriodIsEmpty) {
-      await changeTaxParamsToDb(userId, session, recalculatedTaxParams.startYearTaxParams, recalculatedTaxParams.endYearTaxParams);
-    }
+    updatedTaxParams.push({ year: startYear, data: recalculatedTaxParams.startYearTaxParams });
+    updatedTaxParams.push({ year: endYear, data: recalculatedTaxParams.endYearTaxParams });
   } else {
     var taxParams = await addNewTaxYearToDb(userId, startYear, session);
     var { skus, skuNamesAndIds, recalculatedTaxParams } = await parseReports(reports, taxParams);
 
     report.skus = skus;
-    reportPeriodIsEmpty = !skus.length;
-
-    if (!reportPeriodIsEmpty) {
-      await changeTaxParamsToDb(userId, session, recalculatedTaxParams);
-    }
-  }
-
-  if (reportPeriodIsEmpty) {
-    await addReportToEmptyReportPeriods(userId, dateFrom, dateTo, session);
-    return { reportPeriodIsEmpty, reportData: {} };
+    updatedTaxParams.push({ year: startYear, data: recalculatedTaxParams });
   }
 
   var { reportTree } = await getReportTree(userId, session);
@@ -86,7 +70,7 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.dateFrom = dateFrom;
   report.reportId = reportId;
   report.recordedTo = { year, month };
-  report.reportIsEmpty = !skus.length;
+  report.reportIsEmpty = !report.skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
 
   await saveReportToDb(report, session);
@@ -96,17 +80,24 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     await setLastReportRequestTimestamp(userId, session);
   }
 
-  var skuNames = report.skus.map((sku) => sku.skuName);
+  if (report.skus.length) {
+    await updateTaxParamsToDb(userId, updatedTaxParams, session);
 
-  var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields, session);
+    var skuNames = report.skus.map((sku) => sku.skuName);
 
-  var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
+    var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields, session);
 
-  if (newSkus.length) {
-    await saveNewSkusToDb(userId, newSkus, session);
+    var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
+
+    if (newSkus.length) {
+      await saveNewSkusToDb(userId, newSkus, session);
+    }
+  } else {
+    await addReportToEmptyReportPeriods(userId, dateFrom, dateTo, session);
+    return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: {} };
   }
 
-  return { reportPeriodIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo } };
+  return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo } };
 };
 
 export default reportsProcessing;

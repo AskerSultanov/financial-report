@@ -76,7 +76,7 @@ var main = async () => {
   reportInfo(report);
   injectBase64IntoImgTags(skuImages);
   downloadReportAsXLSXButtonHandler(report, urlToDownloadReportAsXLSX);
-  deleteReportHandler(userId, reportId, skus);
+  deleteReportHandler(userId, reportId);
   financialAccountingStatusButtonHander(userId, reportId, dateFrom, dateTo);
   setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
 };

@@ -29,7 +29,6 @@ var skuSchema = new Schema(
     year: { type: Number, required: true },
     isInsuranceFeeIncluded: { type: Boolean, required: true, default: false },
     averageProfit: { type: Number, required: true, default: 0 },
-    averageRetailPrice: { type: Number, required: true, default: 0 },
     averageStorageCost: { type: Number, required: true, default: 0 },
     averageAdvertisingCost: { type: Number, required: true, default: 0 },
   },

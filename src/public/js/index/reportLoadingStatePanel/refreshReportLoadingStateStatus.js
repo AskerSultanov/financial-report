@@ -11,6 +11,8 @@ var NEXT_REQUEST_DELAY_MS = 30_000;
 var nextRequestDelay = async (isFirstRequest) =>
   new Promise((res) => (isFirstRequest ? setTimeout(res, FIRST_REQUEST_DELAY_MS) : setTimeout(res, NEXT_REQUEST_DELAY_MS)));
 
+var delayToAbandonedReportsLoading = async () => new Promise((res) => setTimeout(res, FIRST_REQUEST_DELAY_MS));
+
 var reportsQueueTbodyId = "reports-queue-tbody";
 var abandonedReportsTbodyId = "abandoned-reports-tbody";
 var retryAbandonedReportsLoadingMsg = "Повторить загрузку отчётов, которые не удалось загрузить";
@@ -39,9 +41,6 @@ var refreshReportLoadingStateStatus = async (userId) => {
     }
 
     if (lastLoadedReport?.reportId) {
-      console.log({ report: lastLoadedReport.dateFrom });
-      console.log({ checkReportInTree: checkReportInTree(lastLoadedReport.reportId) });
-
       var reportIsNotInTree = checkReportInTree(lastLoadedReport.reportId);
 
       if (reportIsNotInTree) {
@@ -53,19 +52,21 @@ var refreshReportLoadingStateStatus = async (userId) => {
       if (hasAbandonedReports()) {
         var needToResumeLoading = confirm(retryAbandonedReportsLoadingMsg);
 
-        console.log({ abandonedReports });
+        var success = await sendAbandonedReports(userId, needToResumeLoading);
 
-        var success = await sendAbandonedReports(userId, abandonedReports, needToResumeLoading);
-        console.log({ success, needToResumeLoading });
         if (success) {
-          if (!needToResumeLoading) {
+          if (needToResumeLoading) {
+            await delayToAbandonedReportsLoading(
+              
+            );
+
+            await resetAbandonedReportsTable();
+            insertDataToTable(abandonedReports, reportsQueueTbodyId);
+          } else {
             await resetReportsQueueTable();
             await resetAbandonedReportsTable();
             disableParentReportLoadingStatePanel();
             break;
-          } else {
-            await resetAbandonedReportsTable();
-            insertDataToTable(abandonedReports, reportsQueueTbodyId);
           }
         } else {
           var errMsg;

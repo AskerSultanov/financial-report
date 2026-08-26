@@ -1,4 +1,5 @@
 import createDiv from "../utils/createDiv.js";
+import allYearsIsEqual from "./allYearsIsEqual.js";
 import createYearSelector from "./createYearSelector.js";
 import createCostPricesListItem from "./createCostPricesListItem.js";
 import getSkuNamesFromSelectedYearSkusTable from "./getSkuNamesFromSelectedYearSkusTable.js";
@@ -10,7 +11,7 @@ var createSkusCostPriceContainer = (skusCostPrice, years) => {
   var list = createDiv("last-cost-prices-modal__list");
   list.id = "last-cost-price-list";
 
-  if (years[0] !== years[1]) {
+  if (!allYearsIsEqual(years)) {
     var firstYear = years[0];
 
     var { skusNameFromSelectedSkusTable } = getSkuNamesFromSelectedYearSkusTable(firstYear);
@@ -23,17 +24,17 @@ var createSkusCostPriceContainer = (skusCostPrice, years) => {
         list.append(item);
       }
     }
-
-    var yearSelector = createYearSelector(years, skusCostPrice);
-
-    container.append(yearSelector);
   } else {
     skusCostPrice.forEach((sku) => {
       var { item } = createCostPricesListItem(sku);
+
       list.append(item);
     });
   }
 
+  var yearSelector = createYearSelector(years, skusCostPrice);
+
+  container.append(yearSelector);
   container.append(list);
 
   return container;

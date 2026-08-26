@@ -1,5 +1,7 @@
 import getReportPeriodText from "./getReportPeriodText.js";
 
+var mskTimeOffsetInSec = 10_800_000;
+
 var insertLastAccountedFinancesReportDataToPanel = (lastAccountedFinances) => {
   var { dateFrom, dateTo, reportId, financesAccountedAt } = lastAccountedFinances;
 
@@ -10,7 +12,7 @@ var insertLastAccountedFinancesReportDataToPanel = (lastAccountedFinances) => {
 
   var financesAccountedAtElem = document.getElementById("finances-accounted-at");
 
-  financesAccountedAtElem.textContent += new Date(financesAccountedAt - 3 * 60 * 60 * 1000).toLocaleString();
+  financesAccountedAtElem.textContent += new Date(financesAccountedAt - mskTimeOffsetInSec).toLocaleString();
 
   var linkToReportElem = document.getElementById("link-to-report");
   linkToReportElem.href = "/report/" + reportId;

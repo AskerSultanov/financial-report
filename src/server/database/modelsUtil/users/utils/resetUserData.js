@@ -12,6 +12,7 @@ var defaultReportLoadingState = {
   reportsQueue: [],
   abandonedReports: [],
   emptyReportPeriods: [],
+  lastLoadedReport: {},
 };
 
 var resetUserData = async (userId) => {
@@ -20,17 +21,18 @@ var resetUserData = async (userId) => {
 
   try {
     await session.withTransaction(async () => {
-      await models.reportModel.updateOne({ userId }, { $set: { reports: [] } }, { session });
+      await models.reportModel.deleteMany({ userId });
       await models.goodsModel.updateOne({ userId }, { $set: { listGoods: [] } }, { session });
       await models.taxParamModel.updateOne({ userId }, { $set: { years: [] } }, { session });
       await models.reportTreeModel.updateOne({ userId }, { $set: { years: [] } }, { session });
       await models.weeklyPricesAndDiscountsModel.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts: [] } });
-      await models.reportLoadingStateModel.updateOne({ userId }, { $set: { ...defaultReportLoadingState } }, { session });
+      await models.reportLoadingStateModel.updateOne({ userId }, { $set: defaultReportLoadingState }, { session });
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     success = false;
   } finally {
-    if (session.inTransaction()) {
+    if (session?.inTransaction()) {
       await session.endSession();
     }
   }

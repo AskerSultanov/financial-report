@@ -25,7 +25,9 @@ var skusLastCostPriceModal = (years, skusLastCostPrice) => {
     var { selectedYear } = getSelectedYear();
 
     var { selectedLastCostPrices } = getSelectedLastCostPrices(selectedYear);
-    console.log({ selectedLastCostPrices });
+
+    console.log({ selectedYear });
+
     if (!selectedLastCostPrices.length) {
       alert("Для выбранного периода нет последних себестоимостей.");
       return;

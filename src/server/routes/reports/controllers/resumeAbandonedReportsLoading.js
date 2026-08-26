@@ -1,20 +1,21 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
 import sendResumeAbandonedReportsLoadingRequest from "../services/different/sendResumeAbandonedReportsLoadingRequest.js";
 
-var session = null;
-var needToResetAbandonedReports = true;
+var { reportLoadingStateModelUtils } = dbUtils;
 
 var resumeAbandonedReportsLoading = async (req, res) => {
-  var { userId, abandonedReports, needToResumeLoading } = req.body;
+  var { userId, needToResumeLoading } = req.body;
 
-  var success;
+  var success = true;
 
-  if (needToResumeLoading) {
-    await dbUtils.reportLoadingStateModelUtils.pushToReportsQueue(userId, abandonedReports, session, needToResetAbandonedReports);
-
-    success = await sendResumeAbandonedReportsLoadingRequest(userId);
-  } else {
-    success = (await dbUtils.reportLoadingStateModelUtils.resetAbandonedReports(userId)).modifiedCount;
+  try {
+    if (needToResumeLoading) {
+      success = await sendResumeAbandonedReportsLoadingRequest(userId);
+    } else {
+      await reportLoadingStateModelUtils.resetAbandonedReports(userId);
+    }
+  } catch (e) {
+    success = false;
   }
 
   return success ? res.sendStatus(200) : res.sendStatus(304);

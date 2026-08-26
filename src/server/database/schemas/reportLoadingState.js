@@ -8,7 +8,6 @@ var lastLoadedReportSchema = new Schema(
     dateTo: { type: String, required: true },
     dateFrom: { type: String, required: true },
     reportId: { type: Number, required: true },
-    totalTaxAmount: { type: Number, default: 0, required: true },
   },
   { _id: false },
 );
@@ -34,16 +33,16 @@ var emptyReportPeriodItemSchema = new Schema(
 
 var reportLoadingStateSchema = new Schema({
   userId: { type: String, required: true, unique: true },
-  queueLength: { type: Number, default: 0 },
-  queueCapacity: { type: Number, default: 0 },
+  queueLength: { type: Number, default: 0, min: 0 },
+  queueCapacity: { type: Number, default: 0, min: 0 },
   reportsQueue: { type: [queueItemSchema], required: false },
   abandonedReports: { type: [queueItemSchema], required: false },
   loadingInProgress: { type: Boolean, default: false },
   lastReportRequestTimestamp: { type: Number, default: 0 },
   freshReportPeriodIndex: { type: Number, required: false },
   lastLoadedReport: { type: lastLoadedReportSchema, required: false },
-  isReportLoadingDelayed: { type: Boolean, requred: true, default: false },
-  isReportLoadingIsStopped: { type: Boolean, requred: true, default: false },
+  isReportLoadingDelayed: { type: Boolean, required: true, default: false },
+  isReportLoadingIsStopped: { type: Boolean, required: true, default: false },
   loadingStopReason: { type: String, default: "", required: false },
   emptyReportPeriods: { type: [emptyReportPeriodItemSchema], required: false },
 });

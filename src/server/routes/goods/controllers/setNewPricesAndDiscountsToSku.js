@@ -1,4 +1,5 @@
 import { dbClient } from "../../../database/index.js";
+import parseJwt from '../../WBToken/services/parseJwt.js'
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
@@ -25,7 +26,8 @@ var setNewPricesAndDiscountsToSku = async (req, res, next) => {
         return res.status(401).json({ msg: "Отсутствует токен личного кабинета WB" });
       }
 
-      var tokenIsExpired = checkTokenExpiry(token);
+      var tokenPayload = parseJwt(token)
+      var tokenIsExpired = checkTokenExpiry(tokenPayload);
 
       if (tokenIsExpired) {
         var loadingStopReason = "tokenIsExpired";

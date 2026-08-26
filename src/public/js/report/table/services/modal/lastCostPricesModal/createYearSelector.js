@@ -1,9 +1,14 @@
 import createDiv from "../utils/createDiv.js";
+import allYearsIsEqual from "./allYearsIsEqual.js";
 import getSelectedYear from "./getSelectedYear.js";
 import createCostPricesListItem from "./createCostPricesListItem.js";
 import getSkuNamesFromSelectedYearSkusTable from "./getSkuNamesFromSelectedYearSkusTable.js";
 
 var createYearSelector = (years, costPrices) => {
+  if (allYearsIsEqual(years)) {
+    years.splice(1);
+  }
+
   var yearSelector = document.createElement("select");
   yearSelector.id = "year-selector";
 

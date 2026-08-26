@@ -1,50 +1,50 @@
 import truncateNum from "../reportParsing/truncateNum.js";
 
 var recalculateTaxParamsAfterReportDeletion = (taxParams, skus) => {
-  var updatedTaxParams = {};
+  var recalculatedTaxParams = {};
 
   for (var sku of skus) {
     if (sku.year === taxParams.year) {
       var recalculatedFinalProfit = taxParams.finalProfit - sku.finalProfit;
-      updatedTaxParams.finalProfit = truncateNum(recalculatedFinalProfit);
+      recalculatedTaxParams.finalProfit = truncateNum(recalculatedFinalProfit);
 
       var recalculatedTaxAmount = taxParams.paidTaxAmount - sku.tax;
-      updatedTaxParams.paidTaxAmount = truncateNum(recalculatedTaxAmount);
+      recalculatedTaxParams.paidTaxAmount = truncateNum(recalculatedTaxAmount);
 
       var recalculatedRetailAmount = taxParams.retailAmount - sku.retailAmount;
-      updatedTaxParams.retailAmount = truncateNum(recalculatedRetailAmount);
+      recalculatedTaxParams.retailAmount = truncateNum(recalculatedRetailAmount);
 
       var recalculatedTaxableAmount = taxParams.taxableAmount - sku.taxableAmount;
-      updatedTaxParams.taxableAmount = truncateNum(recalculatedTaxableAmount);
+      recalculatedTaxParams.taxableAmount = truncateNum(recalculatedTaxableAmount);
 
       var recalculatedInsuranceFee = taxParams.paidInsuranceFee - sku.insuranceFee;
-      updatedTaxParams.paidInsuranceFee = truncateNum(recalculatedInsuranceFee);
+      recalculatedTaxParams.paidInsuranceFee = truncateNum(recalculatedInsuranceFee);
 
       var recalculatedOtherExpenses = taxParams.otherExpenses - sku.otherExpenses;
-      updatedTaxParams.otherExpenses = truncateNum(recalculatedOtherExpenses);
+      recalculatedTaxParams.otherExpenses = truncateNum(recalculatedOtherExpenses);
 
-      if (updatedTaxParams.paidInsuranceFee < taxParams.mandarotyInsuranceFee) {
-        updatedTaxParams.mandatoryInsuranceFeeRate = 10;
-        updatedTaxParams.mandatoryInsuranceFeeIsPaid = false;
+      if (recalculatedTaxParams.paidInsuranceFee < taxParams.mandarotyInsuranceFee) {
+        recalculatedTaxParams.mandatoryInsuranceFeeRate = 10;
+        recalculatedTaxParams.mandatoryInsuranceFeeIsPaid = false;
       }
 
       var recalculatedAdditionalInsuranceFee = taxParams.additionalInsuranceFee - sku.additionalInsuranceFee;
-      updatedTaxParams.additionalInsuranceFee = truncateNum(recalculatedAdditionalInsuranceFee);
+      recalculatedTaxParams.additionalInsuranceFee = truncateNum(recalculatedAdditionalInsuranceFee);
 
-      var totalInsuranceFee = updatedTaxParams.paidInsuranceFee + updatedTaxParams.additionalInsuranceFee;
+      var totalInsuranceFee = recalculatedTaxParams.paidInsuranceFee + recalculatedTaxParams.additionalInsuranceFee;
 
       if (totalInsuranceFee < taxParams.maxInsuranceFee) {
-        updatedTaxParams.excessInsuranceRate = 1;
-        updatedTaxParams.insuranceFeeIsPaid = false;
-        updatedTaxParams.mandatoryInsuranceFeeRate = 10;
-        updatedTaxParams.mandatoryInsuranceFeeIsPaid = false;
-        updatedTaxParams.additionalInsuranceFeeIsPaid = false;
-        updatedTaxParams.requiresAdditionalInsuranceFee = true;
+        recalculatedTaxParams.excessInsuranceRate = 1;
+        recalculatedTaxParams.insuranceFeeIsPaid = false;
+        recalculatedTaxParams.mandatoryInsuranceFeeRate = 10;
+        recalculatedTaxParams.mandatoryInsuranceFeeIsPaid = false;
+        recalculatedTaxParams.additionalInsuranceFeeIsPaid = false;
+        recalculatedTaxParams.requiresAdditionalInsuranceFee = true;
       }
     }
   }
 
-  return { updatedTaxParams };
+  return { recalculatedTaxParams };
 };
 
 export default recalculateTaxParamsAfterReportDeletion;

@@ -1,4 +1,5 @@
 import { dbClient } from "../../../database/index.js";
+import parseJwt from '../../WBToken/services/parseJwt.js'
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import getCurrentDayMSK from "../services/getCurrentDayMSK.js";
@@ -28,7 +29,8 @@ var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
             var loadingStopReason = "isTokenMissing";
             await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
           } else {
-            var tokenIsExpired = checkTokenExpiry(token);
+            var tokenPayload = parseJwt(token)
+            var tokenIsExpired = checkTokenExpiry(tokenPayload);
 
             if (tokenIsExpired) {
               var loadingStopReason = "tokenIsExpired";

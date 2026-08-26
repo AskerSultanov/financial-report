@@ -1,4 +1,4 @@
-var addNewSkusToListGoods = (listGoods, skusFromFinancialReports) => {
+var getNewSkusToListGoods = (listGoods, skusFromFinancialReports) => {
   var newSkus = [];
 
   for (var { name, id } of skusFromFinancialReports) {
@@ -14,4 +14,4 @@ var addNewSkusToListGoods = (listGoods, skusFromFinancialReports) => {
   return { newSkus };
 };
 
-export default addNewSkusToListGoods;
+export default getNewSkusToListGoods;

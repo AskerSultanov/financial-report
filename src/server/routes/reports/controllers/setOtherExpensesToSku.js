@@ -6,7 +6,7 @@ import excludeEqualParams from "../services/different/excludeEqualParams.js";
 import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
 
 var { saveUpdatedReport, getSkuFromReport } = dbUtils.reportModelUtils;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setOtherExpensesToSku = async (req, res, next) => {
   var { userId, reportId, skuName, year, otherExpenses } = req.body;
@@ -42,9 +42,10 @@ var setOtherExpensesToSku = async (req, res, next) => {
       var updatedSkus = [{ skuName, data: updatedSkuFields }];
 
       var { updatedTaxParamsField } = recalculateTaxParams(updatedTaxParamsFieldsBySku, prevSkuData, updatedSkuFields);
-      updatedTaxParamsField.year = year;
 
-      await changeTaxParamsToDb(userId, session, updatedTaxParamsField);
+      var updatedTaxParams = [{ year, data: updatedTaxParamsField }];
+
+      await updateTaxParamsToDb(userId, updatedTaxParams, session);
       await saveUpdatedReport(userId, reportId, updatedSkus, session);
 
       var years = [];

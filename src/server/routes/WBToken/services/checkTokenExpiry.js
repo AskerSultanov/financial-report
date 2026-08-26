@@ -1,10 +1,14 @@
-import parseJwt from "./parseJwt.js";
+var msInSec = 1000;
+var mskTimeOffsetInSec = 10_800;
 
-var checkTokenExpiry = (token) => {
-  var payload = parseJwt(token);
-  var currentTimestamp = Date.now() + 3 * 60 * 60;
+var checkTokenExpiry = (tokenPayload) => {
+  var currentTimestamp = Date.now() + mskTimeOffsetInSec;
 
-  return !payload?.exp || payload.exp * 1000 <= currentTimestamp;
+  if (!tokenPayload?.exp) {
+    return;
+  }
+
+  return tokenPayload.exp * msInSec <= currentTimestamp;
 };
 
 export default checkTokenExpiry;

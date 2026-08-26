@@ -8,7 +8,7 @@ import verifyAllSkusExistInReport from "../services/different/verifyAllSkusExist
 
 var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
 var { saveUpdatedReport, getSkusFromReport } = dbUtils.reportModelUtils;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setCostPriceToSkus = async (req, res, next) => {
   if (!req.body.costPrices.length) {
@@ -76,8 +76,9 @@ var setCostPriceToSkus = async (req, res, next) => {
       }
 
       var years = [year];
+      var updatedTaxParams = [{ year, data: taxParams }];
 
-      await changeTaxParamsToDb(userId, session, taxParams);
+      await updateTaxParamsToDb(userId, updatedTaxParams, session);
       await saveUpdatedReport(userId, reportId, updatedSkus, session);
       await updateSkusInListGoods(userId, updatedSkusToListGoods, session);
 

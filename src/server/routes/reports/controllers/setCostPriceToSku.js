@@ -6,11 +6,12 @@ import excludeEqualParams from "../services/different/excludeEqualParams.js";
 import recalculateTaxParams from "../services/different/recalculateTaxParams.js";
 
 var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
-var { getTaxParamsFromDb, changeTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 var { saveUpdatedReport, getSkuFromReport, getReportById } = dbUtils.reportModelUtils;
 
 var setCostPriceToSku = async (req, res, next) => {
   var { userId, reportId, skuName, year, costPrice } = req.body;
+
   var session = await dbClient.startSession();
 
   try {
@@ -44,9 +45,10 @@ var setCostPriceToSku = async (req, res, next) => {
       var updatedSkus = [{ skuName, data: updatedSkuFields }];
 
       var { updatedTaxParamsField } = recalculateTaxParams(updatedTaxParamsFieldsBySku, prevSkuData, updatedSkuFields);
-      updatedTaxParamsField.year = year;
 
-      await changeTaxParamsToDb(userId, session, updatedTaxParamsField);
+      var updatedTaxParams = [{ year, data: updatedTaxParamsField }];
+
+      await updateTaxParamsToDb(userId, updatedTaxParams, session);
       await saveUpdatedReport(userId, reportId, updatedSkus, session);
       await updateSkuInListGoods(userId, skuName, { lastCostPrice: costPrice }, session);
 

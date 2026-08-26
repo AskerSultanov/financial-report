@@ -1,5 +1,6 @@
 import parseJwt from "../services/parseJwt.js";
 import isTestToken from "../services/isTestToken.js";
+import checkTokenExpiry from "../services/checkTokenExpiry.js";
 import isPresumablyJwtToken from "../services/isPresumablyJwtToken.js";
 
 var mskTimeOffsetInMs = 10_800_000;
@@ -21,7 +22,12 @@ var tokenValidator = async (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  var currentTimestamp = Date.now() + mskTimeOffsetInMs;
+  var tokenIsExpired = checkTokenExpiry(tokenPayload);
+
+  if (tokenIsExpired) {
+    return res.sendStatus(400);
+  }
+
   var options = { method: "GET", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token } };
 
   var responses = await Promise.all([
@@ -42,9 +48,7 @@ var tokenValidator = async (req, res, next) => {
     }
   }
 
-  var tokenIsExpired = tokenPayload?.exp * 1000 <= currentTimestamp;
-
-  if (tokenAuthFailed || tokenIsExpired) {
+  if (tokenAuthFailed) {
     return res.sendStatus(401);
   }
 
