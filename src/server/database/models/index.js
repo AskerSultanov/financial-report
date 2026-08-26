@@ -17,7 +17,7 @@ var taxParamModel = dbClient.model("Tax_Param", taxParamsSchema);
 var reportTreeModel = dbClient.model("Reports_Tree", reportsTreeSchema);
 var reportLoadingStateModel = dbClient.model("Report_Loading_State", reportLoadingStateSchema);
 var weeklyPricesAndDiscountsModel = dbClient.model("Weekly_prices_and_discounts", weeklyPricesAndDiscountsSchema);
-var reportsWithAccountedFinancesModel = dbClient.model("reports-with-accounted-finances", reportsWithAccountedFinancesSchema);
+var reportsWithAccountedFinancesModel = dbClient.model("reports_with_accounted_finances", reportsWithAccountedFinancesSchema);
 
 export {
   userModel,
