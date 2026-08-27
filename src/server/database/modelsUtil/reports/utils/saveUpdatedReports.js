@@ -24,10 +24,10 @@ var createBulkQuery = (userId, updatedReports) => {
         count++;
       }
     }
-  }
 
-  if (arrayFilters.length) {
-    bulkOptions.push({ updateOne: { filter: { userId, reportId }, update: { $set: query }, arrayFilters } });
+    if (arrayFilters.length) {
+      bulkOptions.push({ updateOne: { filter: { userId, reportId }, update: { $set: query }, arrayFilters } });
+    }
   }
 
   return { bulkOptions };
