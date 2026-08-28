@@ -1,70 +1,87 @@
 import calc from "../calcServices/index.js";
 
-var parseSku = async (name, skuQty, skuFilteredReport, storageData, taxRate, totals) => {
+var costPrice = 0;
+var otherExpenses = 0;
+var insuranceFee = 0;
+var preTaxProfit = 0;
+var finalProfit = 0;
+var profitMargin = 0;
+var averageProfit = 0;
+var isCostPriceSet = false;
+var additionalInsuranceFee = 0;
+var isInsuranceFeeIncluded = false;
+
+var parseSku = async (skuName, skuQty, skuFilteredReport, storageCost, taxRate, totals) => {
   var { totalSold, totalStorageCost, totalAdvertisingCosts } = totals;
 
   if (!skuFilteredReport.length) {
-    return {};
+    return null;
   }
 
   var id = skuFilteredReport[0].nmId;
-  var sku = initSku(id, name);
 
-  var saleYear = +skuFilteredReport[0].saleDt.split("-")[0];
-  sku.year = saleYear;
+  var year = +skuFilteredReport[0].saleDt.split("-")[0];
 
-  sku.qty = calc.quantity(skuFilteredReport);
-  sku.taxableAmount = calc.taxableAmount(skuFilteredReport);
-  sku.fines = calc.sum(skuFilteredReport, "penalty", "truncate-on");
-  sku.acceptance = calc.sum(skuFilteredReport, "paidAcceptance", "truncate-on");
-  sku.retailAmount = calc.retailAmount(skuFilteredReport);
-  sku.tax = calc.taxAmount(sku.taxableAmount, taxRate);
-  sku.returnAmount = calc.returnAmount(skuFilteredReport);
-  sku.deliveryCost = calc.sum(skuFilteredReport, "deliveryService", "truncate-on");
-  sku.deductionOrPayment = calc.sum(skuFilteredReport, "deduction", "truncate-on");
-  sku.additionalPayment = calc.sum(skuFilteredReport, "additionalPayment", "truncate-on");
-  sku.sellerPayoutAmount = calc.sellerPayoutAmount(skuFilteredReport);
-  sku.storageCost = calc.storageCost(name, storageData);
-  sku.averageStorageCost = calc.averageStorageCost(totalStorageCost, totalSold, sku.qty);
-  sku.averageAdvertisingCost = calc.averageAdvertisingCost(skuQty, totalAdvertisingCosts);
-  sku.profit = calc.profit(sku);
+  var qty = calc.quantity(skuFilteredReport);
+
+  var taxableAmount = calc.taxableAmount(skuFilteredReport);
+
+  var fines = calc.sum(skuFilteredReport, "penalty", "truncate-on");
+
+  var acceptance = calc.sum(skuFilteredReport, "paidAcceptance", "truncate-on");
+
+  var retailAmount = calc.retailAmount(skuFilteredReport);
+
+  var tax = calc.taxAmount(taxableAmount, taxRate);
+
+  var returnAmount = calc.returnAmount(skuFilteredReport);
+
+  var deliveryCost = calc.sum(skuFilteredReport, "deliveryService", "truncate-on");
+
+  var deductionOrPayment = calc.sum(skuFilteredReport, "deduction", "truncate-on");
+
+  var additionalPayment = calc.sum(skuFilteredReport, "additionalPayment", "truncate-on");
+
+  var sellerPayoutAmount = calc.sellerPayoutAmount(skuFilteredReport);
+
+  var averageStorageCost = calc.averageStorageCost(totalStorageCost, totalSold, qty);
+
+  var averageAdvertisingCost = calc.averageAdvertisingCost(skuQty, totalAdvertisingCosts);
+
+  var profit = sellerPayoutAmount - fines - acceptance - additionalPayment - averageAdvertisingCost - storageCost - deliveryCost;
+
+  var sku = {
+    id,
+    skuName,
+    qty,
+    tax,
+    year,
+    fines,
+    costPrice,
+    retailAmount,
+    returnAmount,
+    taxableAmount,
+    deductionOrPayment,
+    averageStorageCost,
+    profit,
+    insuranceFee,
+    acceptance,
+    additionalPayment,
+    storageCost,
+    deliveryCost,
+    otherExpenses,
+    isCostPriceSet,
+    averageAdvertisingCost,
+    sellerPayoutAmount,
+    additionalInsuranceFee,
+    isInsuranceFeeIncluded,
+    preTaxProfit,
+    finalProfit,
+    profitMargin,
+    averageProfit,
+  };
 
   return sku;
 };
 
 export default parseSku;
-
-var initSku = function (id, name) {
-  var sku = {};
-
-  sku.id = id;
-  sku.skuName = name;
-
-  sku.qty = 0;
-  sku.tax = 0;
-  sku.fines = 0;
-  sku.profit = 0;
-  sku.costPrice = 0;
-  sku.acceptance = 0;
-  sku.storageCost = 0;
-  sku.finalProfit = 0;
-  sku.insuranceFee = 0;
-  sku.returnAmount = 0;
-  sku.profitMargin = 0;
-  sku.deliveryCost = 0;
-  sku.retailAmount = 0;
-  sku.taxableAmount = 0;
-  sku.averageProfit = 0;
-  sku.otherExpenses = 0;
-  sku.preTaxProfit = 0;
-  sku.isCostPriceSet = false;
-  sku.additionalPayment = 0;
-  sku.deductionOrPayment = 0;
-  sku.sellerPayoutAmount = 0;
-  sku.averageStorageCost = 0;
-  sku.averageAdvertisingCost = 0;
-  sku.additionalInsuranceFee = 0;
-  sku.isInsuranceFeeIncluded = false;
-
-  return sku;
-};

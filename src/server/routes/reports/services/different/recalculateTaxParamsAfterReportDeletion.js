@@ -35,7 +35,7 @@ var recalculateTaxParamsAfterReportDeletion = (taxParams, skus) => {
 
       if (totalInsuranceFee < taxParams.maxInsuranceFee) {
         recalculatedTaxParams.excessInsuranceRate = 1;
-        recalculatedTaxParams.insuranceFeeIsPaid = false;
+        recalculatedTaxParams.isInsuranceFeePaid = false;
         recalculatedTaxParams.mandatoryInsuranceFeeRate = 10;
         recalculatedTaxParams.mandatoryInsuranceFeeIsPaid = false;
         recalculatedTaxParams.additionalInsuranceFeeIsPaid = false;

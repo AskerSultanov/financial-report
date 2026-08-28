@@ -13,24 +13,19 @@ import splitWeeklyFinancialReportByYear from "./splitWeeklyFinancialReportByYear
 var calculateTotalAdvertisingCosts = async (data) => data.reduce((acc, i) => acc + i.updSum, 0);
 
 var processCrossReportSkus = async (reports, taxParams) => {
-  var recalculatedTaxParams = {};
-  recalculatedTaxParams.startYearTaxParams = Object.assign({}, taxParams.startYearTaxParams);
-  recalculatedTaxParams.endYearTaxParams = Object.assign({}, taxParams.endYearTaxParams);
-
-  var { endYearTaxParams, startYearTaxParams } = recalculatedTaxParams;
+  var startYearTaxParams = { ...taxParams.startYearTaxParams };
+  var endYearTaxParams = { ...taxParams.endYearTaxParams };
 
   var { weeklyFinancialReport, paidStorageReport, advertisingReport } = reports;
 
   var { startYearAd, endYearAd } = await splitAdvertisingReportByYear(advertisingReport, startYearTaxParams.year);
   var { startYearStorageData, endYearStorageData } = await splitPaidStorageReportByYear(paidStorageReport, startYearTaxParams.year);
+
   startYearStorageData = await parsePaidStorageReport(startYearStorageData);
   endYearStorageData = await parsePaidStorageReport(endYearStorageData);
   paidStorageReport = await parsePaidStorageReport(paidStorageReport);
 
-  var { startYearWeeklyFinancialReport, endYearWeeklyFinancialReport } = await splitWeeklyFinancialReportByYear(
-    weeklyFinancialReport,
-    startYearTaxParams.year,
-  );
+  var { startYearWeeklyFinancialReport, endYearWeeklyFinancialReport } = await splitWeeklyFinancialReportByYear(weeklyFinancialReport, startYearTaxParams.year);
 
   var startYearTotals = {};
   startYearTotals.totalSold = await calc.total.sold(startYearWeeklyFinancialReport);
@@ -42,53 +37,42 @@ var processCrossReportSkus = async (reports, taxParams) => {
   endYearTotals.totalStorageCost = await calc.total.storageCost(endYearWeeklyFinancialReport);
   endYearTotals.totalAdvertisingCosts = await calculateTotalAdvertisingCosts(endYearAd);
 
-  var totalSold = startYearTotals.totalSold + endYearTotals.totalSold;
-  var totalStorageCost = truncateNum(startYearTotals.totalStorageCost + endYearTotals.totalStorageCost);
-  var totalAdvertisingCosts = truncateNum(startYearTotals.totalAdvertisingCosts + endYearTotals.totalAdvertisingCosts);
-
   var skus = [];
   var skuNamesAndIds = getSkuNamesAndIds(weeklyFinancialReport);
   var skuNamesAndIdsInCurrentYear = getSkuNamesAndIds(startYearWeeklyFinancialReport);
   var skuNamesAndIdsInNextYear = getSkuNamesAndIds(endYearWeeklyFinancialReport);
 
-  for (var { id, name } of skuNamesAndIds) {
+  for (var { name } of skuNamesAndIds) {
     var skuFilteredReport = weeklyFinancialReport.filter((sku) => sku.vendorCode === name);
+    var startYearSkuStorageCost = startYearStorageData.find((item) => item.name === name)?.skuStorageCost || 0;
+    var endYearSkuStorageCost = endYearStorageData.find((item) => item.name === name)?.skuStorageCost || 0;
+
     var { startYearSku, endYearSku } = splitSkuByYear(skuFilteredReport, startYearTaxParams.year);
 
-    var startYearSkuData = await parseSku(
-      name,
-      skuNamesAndIdsInCurrentYear.length,
-      startYearSku,
-      startYearStorageData,
-      startYearTaxParams.taxRate,
-      startYearTotals,
-    );
+    var startYearSkuData = await parseSku(name, skuNamesAndIdsInCurrentYear.length, startYearSku, startYearSkuStorageCost, startYearTaxParams.taxRate, startYearTotals);
 
-    if (startYearSkuData?.id) {
+    if (startYearSkuData) {
+      var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(startYearSkuData, startYearTaxParams);
+
+      startYearTaxParams = Object.assign(startYearTaxParams, updatedTaxParams);
+      startYearSkuData.additionalInsuranceFee = skuAdditionalInsuranceFee;
+
       skus.push(startYearSkuData);
-
-      var resultOfStartYearRecalculation = recalculateSkuAndTaxParams(startYearSkuData, recalculatedTaxParams.startYearTaxParams);
-      recalculatedTaxParams.startYearTaxParams = resultOfStartYearRecalculation.recalculatedTaxParams;
     }
 
-    var endYearSkuData = await parseSku(
-      name,
-      skuNamesAndIdsInNextYear.length,
-      endYearSku,
-      endYearStorageData,
-      endYearTaxParams.taxRate,
-      endYearTotals,
-    );
+    var endYearSkuData = await parseSku(name, skuNamesAndIdsInNextYear.length, endYearSku, endYearSkuStorageCost, endYearTaxParams.taxRate, endYearTotals);
 
-    if (endYearSkuData?.id) {
+    if (endYearSkuData) {
+      var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(endYearSkuData, endYearTaxParams);
+
+      endYearTaxParams = Object.assign(endYearTaxParams, updatedTaxParams);
+      endYearSkuData.additionalInsuranceFee = skuAdditionalInsuranceFee;
+
       skus.push(endYearSkuData);
-
-      var resultOfEndYearRecalculation = recalculateSkuAndTaxParams(endYearSkuData, recalculatedTaxParams.endYearTaxParams);
-      recalculatedTaxParams.endYearTaxParams = resultOfEndYearRecalculation.recalculatedTaxParams;
     }
   }
 
-  return { skus, skuNamesAndIds, totalSold, totalStorageCost, totalAdvertisingCosts, recalculatedTaxParams };
+  return { skus, skuNamesAndIds, recalculatedTaxParams: { startYearTaxParams, endYearTaxParams } };
 };
 
 export default processCrossReportSkus;

@@ -27,7 +27,6 @@ calc.sku = sku;
 calc.total = total;
 
 import sum from "./utils/sum.js";
-import profit from "./utils/profit.js";
 import quantity from "./utils/quantity.js";
 import taxAmount from "./utils/taxAmount.js";
 import storageCost from "./utils/storageCost.js";
@@ -43,7 +42,6 @@ import returnAmount from "./utils/returnAmount.js";
 import taxableAmountOfReport from "./utils/taxableAmountOfReport.js";
 
 calc.sum = sum;
-calc.profit = profit;
 calc.quantity = quantity;
 calc.taxAmount = taxAmount;
 calc.finalProfit = finalProfit;

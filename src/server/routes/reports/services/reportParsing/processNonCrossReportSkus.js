@@ -7,7 +7,9 @@ import recalculateSkuAndTaxParams from "./recalculateSkuAndTaxParams.js";
 
 var processNonCrossReportSkus = async (reports, taxParams) => {
   var skus = [];
+
   var recalculatedTaxParams = Object.assign({}, taxParams);
+
   var { weeklyFinancialReport, paidStorageReport, advertisingReport } = reports;
 
   var totalSold = await calc.total.sold(weeklyFinancialReport);
@@ -21,21 +23,23 @@ var processNonCrossReportSkus = async (reports, taxParams) => {
 
   for (var { id, name } of skuNamesAndIds) {
     var skuFilteredReport = weeklyFinancialReport.filter((sku) => sku.vendorCode === name);
-
-    var sku = await parseSku(name, skuNamesAndIds.length, skuFilteredReport, storageDataFromPaidStorageReport, taxParams.taxRate, totals);
+    var skuStorageCost = storageDataFromPaidStorageReport.find((item) => item.name === name)?.skuStorageCost || 0;
+    var sku = await parseSku(name, skuNamesAndIds.length, skuFilteredReport, skuStorageCost, taxParams.taxRate, totals);
 
     sku.id = id;
     sku.skuName = name;
 
-    var result = recalculateSkuAndTaxParams(sku, recalculatedTaxParams);
+    var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(sku, recalculatedTaxParams);
 
-    recalculatedTaxParams = result.recalculatedTaxParams;
-    skus.push(result.updatedSku);
+    sku.additionalInsuranceFee = skuAdditionalInsuranceFee;
+    recalculatedTaxParams = Object.assign(recalculatedTaxParams, updatedTaxParams);
+
+    skus.push(sku);
   }
 
   skus = await truncateSkuNums(skus);
 
-  return { skus, recalculatedTaxParams, skuNamesAndIds, ...totals };
+  return { skus, recalculatedTaxParams, skuNamesAndIds };
 };
 
 export default processNonCrossReportSkus;

@@ -12,7 +12,7 @@ var parsePaidStorageReport = async (report) => {
 
     data.push({ name, skuStorageCost });
   }
-  ("");
+
   return data;
 };
 

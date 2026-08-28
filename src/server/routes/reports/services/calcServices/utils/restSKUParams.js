@@ -71,7 +71,7 @@ var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, t
 
   if (totalInsuranceFee >= taxParams.maxInsuranceFee) {
     updatedTaxParamsFields.excessInsuranceRate = 0;
-    updatedTaxParamsFields.insuranceFeeIsPaid = true;
+    updatedTaxParamsFields.isInsuranceFeePaid = true;
     updatedTaxParamsFields.mandatoryInsuranceFeeRate = 0;
     updatedTaxParamsFields.mandatoryInsuranceFeeIsPaid = true;
     updatedTaxParamsFields.additionalInsuranceFeeIsPaid = true;
