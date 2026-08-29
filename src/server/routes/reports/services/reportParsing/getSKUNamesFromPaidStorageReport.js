@@ -1,13 +1,17 @@
-var getSKUNamesFromPaidStorageReport = async (paidStorageReport) => {
-  var data = [];
+var getSkuNamesFromPaidStorageReport = (paidStorageReport) => {
+  var skuNamesFromPaidStorageReport = [];
+
+  if (!paidStorageReport.length) {
+    return { skuNamesFromPaidStorageReport };
+  }
 
   for (var elem of paidStorageReport) {
-    if (!data.includes(elem.vendorCode)) {
-      data.push(elem.vendorCode);
+    if (!skuNamesFromPaidStorageReport.includes(elem.vendorCode)) {
+      skuNamesFromPaidStorageReport.push(elem.vendorCode);
     }
   }
 
-  return data;
+  return { skuNamesFromPaidStorageReport };
 };
 
-export default getSKUNamesFromPaidStorageReport;
+export default getSkuNamesFromPaidStorageReport;

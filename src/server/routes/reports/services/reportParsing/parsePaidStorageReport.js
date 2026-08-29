@@ -1,19 +1,23 @@
 import calc from "../calcServices/index.js";
 
-import getSKUNamesFromPaidStorageReport from "./getSKUNamesFromPaidStorageReport.js";
+import getSkuNamesFromPaidStorageReport from "./getSkuNamesFromPaidStorageReport.js";
 
-var parsePaidStorageReport = async (report) => {
-  var skuNames = await getSKUNamesFromPaidStorageReport(report);
+var parsePaidStorageReport = (paidStorageReport) => {
+  var parsedPaidStorageReport = [];
 
-  var data = [];
-
-  for (var name of skuNames) {
-    var skuStorageCost = await calc.sku.storageCostFromPaidStorageReport(report, name);
-
-    data.push({ name, skuStorageCost });
+  if (!paidStorageReport.length) {
+    return { parsedPaidStorageReport };
   }
 
-  return data;
+  var { skuNamesFromPaidStorageReport } = getSkuNamesFromPaidStorageReport(paidStorageReport);
+
+  for (var name of skuNamesFromPaidStorageReport) {
+    var { skuStorageCost } = calc.sku.storageCostFromPaidStorageReport(paidStorageReport, name);
+
+    parsedPaidStorageReport.push({ name, skuStorageCost });
+  }
+
+  return { parsedPaidStorageReport };
 };
 
 export default parsePaidStorageReport;

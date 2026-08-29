@@ -41,7 +41,6 @@ var reportSchema = new Schema({
   reportId: { type: Number, required: true },
   dateFrom: { type: String, required: true },
   dateTo: { type: String, required: true },
-  taxRate: { type: Number, default: 6 },
   isCrossYearPeriod: { type: Boolean, default: false },
   recordedTo: { type: recordedToSchema, required: true },
   buybackReportIsExist: { type: Boolean, default: false },

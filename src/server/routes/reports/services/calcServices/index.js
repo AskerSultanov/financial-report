@@ -7,7 +7,7 @@ import finalProfit from "./utils/finalProfit.js";
 import restSkuParams from "./utils/restSkuParams.js";
 import skuProfitMargin from "./utils/profitMargin.js";
 import insuranceFee from "./utils/insuranceFee.js";
-import storageCostFromPaidStorageReport from "./utils/SKUStorageCostFromPaidStorageReport.js";
+import storageCostFromPaidStorageReport from "./utils/skuStorageCostFromPaidStorageReport.js";
 
 sku.finalProfit = finalProfit;
 sku.restParams = restSkuParams;
@@ -17,11 +17,11 @@ sku.storageCostFromPaidStorageReport = storageCostFromPaidStorageReport;
 
 import totalSold from "./utils/totalSold.js";
 import totalStorageCost from "./utils/totalStorageCost.js";
-import totalProfitMargin from "./utils/totalProfitMargin.js";
+import totalAdvertisingCosts from "./utils/totalAdvertisingCosts.js";
 
 total.sold = totalSold;
 total.storageCost = totalStorageCost;
-total.profitMargin = totalProfitMargin;
+total.advertisingCosts = totalAdvertisingCosts;
 
 calc.sku = sku;
 calc.total = total;

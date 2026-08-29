@@ -60,7 +60,6 @@ var getReportFromWBAPI = async (req, res, next) => {
 
   report.userId = userId;
   report.dateTo = dateTo;
-  report.taxRate = taxRate;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
   report.isCrossYearPeriod = isCrossYearPeriod;

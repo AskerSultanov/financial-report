@@ -57,7 +57,6 @@ var getReportFromFiles = async (req, res) => {
   report.userId = userId;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
-  report.taxRate = taxParamsStub.taxRate;
   report.isCrossYearPeriod = isCrossYearPeriod;
 
   if (isCrossYearPeriod) {
