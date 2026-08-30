@@ -25,7 +25,7 @@ var resetUserData = async (userId) => {
       await models.reportsWithAccountedFinancesModel.deleteMany({ userId }, { session: session });
       await models.taxParamModel.updateOne({ userId }, { $set: { years: [] } }, { session: session });
       await models.goodsModel.updateOne({ userId }, { $set: { listGoods: [] } }, { session: session });
-      await models.reportTreeModel.updateOne({ userId }, { $set: { years: [] } }, { session: session });
+      await models.reportPeriodModel.updateOne({ userId }, { $set: { reportPeriods: [] } }, { session: session });
       await models.weeklyPricesAndDiscountsModel.updateOne({ userId }, { $set: { weeklyPricesAndDiscounts: [] } });
       await models.reportLoadingStateModel.updateOne({ userId }, { $set: defaultReportLoadingState }, { session: session });
     });

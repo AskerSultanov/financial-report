@@ -1,25 +1,26 @@
-import sortYearsTree from "./sortYearTree.js";
 import processReportSkus from "../reportParsing/index.js";
 import getNewSkusToListGoods from "./getNewSkusToListGoods.js";
 import dbutils from "../../../../database/modelsUtil/index.js";
-import insertReportToReportTree from "../reportTreeBuilder/index.js";
+import getReportTargetYearAndMonth from "./getReportTargetYearAndMonth.js";
 
 var { saveReportToDb } = dbutils.reportModelUtils;
+var { addReportToReportPeriods } = dbutils.reportPeriodsModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
-var { getReportTree, updateReportTree } = dbutils.reportsTreeModelUtils;
 var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStateModelUtils;
 
 var selectedFields = ["listGoods.id", "listGoods.skuName"];
+var monthList = ["январь", "февраль", "марта", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
 
 var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
-  var { reportId } = reports.weeklyFinancialReport[0];
 
   var reportSkus = [];
   var updatedTaxParams = [];
+  var { reportId } = reports.weeklyFinancialReport[0];
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(dateFrom, dateTo);
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
     var taxParams = await addNewTaxYearToDb(userId, currentYear, session);
@@ -32,21 +33,18 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   var report = {};
   report.skus = reportSkus;
 
-  var { reportTree } = await getReportTree(userId, session);
-
-  var { years, year, month } = insertReportToReportTree(dateFrom, dateTo, reportId, reportTree);
-  var sortedYears = sortYearsTree(years);
-
   report.dateTo = dateTo;
   report.userId = userId;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
-  report.recordedTo = { year, month };
   report.reportIsEmpty = !report.skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
+  report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
+
+  var newReportPeriod = { reportId, dateFrom, dateTo, year: targetYear, monthIndex: targetMonthIndex, monthName: monthList[targetMonthIndex] };
 
   await saveReportToDb(report, session);
-  await updateReportTree(userId, sortedYears, session);
+  await addReportToReportPeriods(userId, newReportPeriod, session);
 
   if (!isReportFromFile) {
     await setLastReportRequestTimestamp(userId, session);
@@ -73,7 +71,10 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: {} };
   }
 
-  return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo } };
+  return {
+    reportPeriodIsEmpty: report.reportIsEmpty,
+    reportData: { reportId, dateFrom, dateTo, month: monthList[targetMonthIndex], year: targetYear },
+  };
 };
 
 export default reportsProcessing;

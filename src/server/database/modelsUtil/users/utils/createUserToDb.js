@@ -13,7 +13,7 @@ var createUserToDb = async (user, session) => {
   await models.taxParamModel.create([{ userId }], { session: session });
   await models.reportLoadingStateModel.create([{ userId }], { session: session });
   await models.goodsModel.create([{ userId, listGoods: [] }], { session: session });
-  await models.reportTreeModel.create([{ userId, years: [] }], { session: session });
+  await models.reportPeriodModel.create([{ userId, reportPeriods: [] }], { session: session });
   await models.weeklyPricesAndDiscountsModel.create([{ userId }], { session: session });
   await models.userModel.create([{ login, userId, role, registeredAt, passwd: hashedPasswd }], { session: session });
 };

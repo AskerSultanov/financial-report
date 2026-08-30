@@ -4,7 +4,7 @@ import * as adminModelUtils from "./admins/index.js";
 import * as tokenModelUtils from "./tokens/index.js";
 import * as reportModelUtils from "./reports/index.js";
 import * as taxParamsModelUtils from "./taxParams/index.js";
-import * as reportsTreeModelUtils from "./reportTree/index.js";
+import * as reportPeriodsModelUtils from "./reportPeriods/index.js";
 import * as reportLoadingStateModelUtils from "./reportLoadingState/index.js";
 import * as weeklyPricesAndDiscountsModelUtils from "./weeklyPricesAndDiscounts/index.js";
 import * as reportsWithAccountedFinancesModelUtils from "./reportsWithAccountedFinances/index.js";
@@ -16,7 +16,7 @@ export default {
   adminModelUtils,
   tokenModelUtils,
   taxParamsModelUtils,
-  reportsTreeModelUtils,
+  reportPeriodsModelUtils,
   reportLoadingStateModelUtils,
   weeklyPricesAndDiscountsModelUtils,
   reportsWithAccountedFinancesModelUtils,
