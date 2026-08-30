@@ -16,10 +16,11 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
-  var { reportId } = reports.weeklyFinancialReport[0];
 
   var reportSkus = [];
   var updatedTaxParams = [];
+  var { reportId } = reports.weeklyFinancialReport[0];
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(dateFrom, dateTo);
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
     var taxParams = await addNewTaxYearToDb(userId, currentYear, session);
@@ -36,13 +37,11 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.userId = userId;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
-  report.recordedTo = { year, month };
   report.reportIsEmpty = !report.skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
+  report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
 
-
-  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(dateFrom, dateTo);
-  var newReportPeriod = { year, reportId, dateFrom, dateTo, targetYear, monthIndex: targetMonthIndex, monthName: monthList[targetMonthIndex] };
+  var newReportPeriod = { reportId, dateFrom, dateTo, year: targetYear, monthIndex: targetMonthIndex, monthName: monthList[targetMonthIndex] };
 
   await saveReportToDb(report, session);
   await addReportToReportPeriods(userId, newReportPeriod, session);
@@ -72,7 +71,10 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
     return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: {} };
   }
 
-  return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: { reportId, year, month, dateFrom, dateTo } };
+  return {
+    reportPeriodIsEmpty: report.reportIsEmpty,
+    reportData: { reportId, dateFrom, dateTo, month: monthList[targetMonthIndex], year: targetYear },
+  };
 };
 
 export default reportsProcessing;
