@@ -1,11 +1,10 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
-import checkReportExistsInTree from "../services/different/checkReportExistsInTree.js";
 
-var { getReportTree } = dbUtils.reportsTreeModelUtils;
+var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
 var { getEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
 
 var checkReportExists = async (req, res, next) => {
-  var { dateFrom, userId } = req.body;
+  var { dateFrom, dateTo, userId } = req.body;
 
   var { emptyReportPeriods } = await getEmptyReportPeriods(userId);
 
@@ -15,10 +14,9 @@ var checkReportExists = async (req, res, next) => {
     return res.sendStatus(204);
   }
 
-  var { reportTree } = await getReportTree(userId);
-  var { reportIsExist } = checkReportExistsInTree(dateFrom, reportTree);
+  var report = checkReportExistByDate(userId, dateFrom);
 
-  if (reportIsExist) {
+  if (report) {
     return res.status(409).json({ msg: "Отчет за данный период уже существует.\nЧтобы загрузить отчет еще раз, необходимо его удалить." });
   }
 

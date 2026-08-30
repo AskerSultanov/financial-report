@@ -4,7 +4,7 @@ import goodsSchema from "../schemas/goods.js";
 import tokenSchema from "../schemas/token.js";
 import reportsSchema from "../schemas/reports.js";
 import taxParamsSchema from "../schemas/taxParams.js";
-import reportsTreeSchema from "../schemas/reportsTree.js";
+import reportPeriodSchema from "../schemas/reportPeriods.js";
 import reportLoadingStateSchema from "../schemas/reportLoadingState.js";
 import weeklyPricesAndDiscountsSchema from "../schemas/weeklyPricesAndDiscounts.js";
 import reportsWithAccountedFinancesSchema from "../schemas/reportsWithAccountedFinances.js";
@@ -14,7 +14,7 @@ var goodsModel = dbClient.model("Goods", goodsSchema);
 var tokenModel = dbClient.model("Token", tokenSchema);
 var reportModel = dbClient.model("Report", reportsSchema);
 var taxParamModel = dbClient.model("Tax_Param", taxParamsSchema);
-var reportTreeModel = dbClient.model("Reports_Tree", reportsTreeSchema);
+var reportPeriodModel = dbClient.model("Report_Period", reportPeriodSchema);
 var reportLoadingStateModel = dbClient.model("Report_Loading_State", reportLoadingStateSchema);
 var weeklyPricesAndDiscountsModel = dbClient.model("Weekly_prices_and_discounts", weeklyPricesAndDiscountsSchema);
 var reportsWithAccountedFinancesModel = dbClient.model("reports_with_accounted_finances", reportsWithAccountedFinancesSchema);
@@ -25,7 +25,7 @@ export {
   reportModel,
   tokenModel,
   taxParamModel,
-  reportTreeModel,
+  reportPeriodModel,
   reportLoadingStateModel,
   weeklyPricesAndDiscountsModel,
   reportsWithAccountedFinancesModel,

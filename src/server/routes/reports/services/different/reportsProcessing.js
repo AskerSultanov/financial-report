@@ -1,16 +1,16 @@
-import sortYearsTree from "./sortYearTree.js";
 import processReportSkus from "../reportParsing/index.js";
 import getNewSkusToListGoods from "./getNewSkusToListGoods.js";
 import dbutils from "../../../../database/modelsUtil/index.js";
-import insertReportToReportTree from "../reportTreeBuilder/index.js";
+import getReportTargetYearAndMonth from "./getReportTargetYearAndMonth.js";
 
 var { saveReportToDb } = dbutils.reportModelUtils;
+var { addReportToReportPeriods } = dbutils.reportPeriodsModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
-var { getReportTree, updateReportTree } = dbutils.reportsTreeModelUtils;
 var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStateModelUtils;
 
 var selectedFields = ["listGoods.id", "listGoods.skuName"];
+var monthList = ["январь", "февраль", "марта", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
 
 var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
   var startYear = +dateFrom.split("-")[0];
@@ -32,11 +32,6 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   var report = {};
   report.skus = reportSkus;
 
-  var { reportTree } = await getReportTree(userId, session);
-
-  var { years, year, month } = insertReportToReportTree(dateFrom, dateTo, reportId, reportTree);
-  var sortedYears = sortYearsTree(years);
-
   report.dateTo = dateTo;
   report.userId = userId;
   report.dateFrom = dateFrom;
@@ -45,8 +40,12 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.reportIsEmpty = !report.skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
 
+
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(dateFrom, dateTo);
+  var newReportPeriod = { year, reportId, dateFrom, dateTo, targetYear, monthIndex: targetMonthIndex, monthName: monthList[targetMonthIndex] };
+
   await saveReportToDb(report, session);
-  await updateReportTree(userId, sortedYears, session);
+  await addReportToReportPeriods(userId, newReportPeriod, session);
 
   if (!isReportFromFile) {
     await setLastReportRequestTimestamp(userId, session);

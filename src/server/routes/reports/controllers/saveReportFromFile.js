@@ -1,13 +1,12 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import reportsProcessing from "../services/different/reportsProcessing.js";
-import checkReportExistsInTree from "../services/different/checkReportExistsInTree.js";
 import removeDublicateFiles from "../services/reportsFileParser/removeDublicateFiles.js";
 import extractWorkSheetFromFile from "../services/reportsFileParser/extractWorkSheetFromFile.js";
 import extractReportsFileBufferFromZip from "../services/reportsFileParser/extractReportsFileBufferFromZip.js";
 import extractReportDataFromWorkSheets from "../services/reportsFileParser/extractReportDataFromWorkSheets.js";
 
-var { getReportTree } = dbUtils.reportsTreeModelUtils;
+var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
 var { getEmptyReportPeriods, addReportToEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
 
 var isReportFromFile = true;
@@ -26,16 +25,15 @@ var saveReportFromFile = async (req, res, next) => {
 
   try {
     await session.withTransaction(async () => {
-      var { reportTree } = await getReportTree(userId, session);
       var { emptyReportPeriods } = await getEmptyReportPeriods(userId, session);
 
       for (var { dateFrom, dateTo, onePeriodReports } of workSheets) {
         var reportExistInEmptyReportPeriods = emptyReportPeriods.find((item) => item.dateFrom === dateFrom);
 
         if (!reportExistInEmptyReportPeriods) {
-          var { reportIsExist } = checkReportExistsInTree(dateFrom, reportTree);
+          var report = checkReportExistByDate(userId, dateFrom, session);
 
-          if (!reportIsExist) {
+          if (!report) {
             var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(userId, onePeriodReports);
 
             if (!reportPeriodIsEmpty) {

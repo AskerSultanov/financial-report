@@ -3,7 +3,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import recalculateTaxParamsAfterReportDeletion from "../services/different/recalculateTaxParamsAfterReportDeletion.js";
 
 var { deleteReportFromDb } = dbUtils.reportModelUtils;
-var { deleteReportFromReportTree } = dbUtils.reportsTreeModelUtils;
+var { removeReportFromReportPeriods } = dbUtils.reportPeriodsModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 var { removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
 
@@ -17,7 +17,9 @@ var deleteReport = async (req, res, next) => {
 
       var { reportBeforeDeletion } = await deleteReportFromDb(userId, reportId, session);
       var { dateFrom, dateTo, skus, isCrossYearPeriod, recordedTo } = reportBeforeDeletion;
-      var { year, month } = recordedTo;
+
+      var { year } = recordedTo;
+
       var startYear = +dateFrom.split("-")[0];
       var endYear = +dateTo.split("-")[0];
 
@@ -41,8 +43,8 @@ var deleteReport = async (req, res, next) => {
         updatedTaxParams.push({ year, data: recalculatedTaxParams });
       }
 
-      await removeReportFromAccounted(userId, reportId);
-      await deleteReportFromReportTree(userId, year, month, reportId, session);
+      await removeReportFromAccounted(userId, reportId, session);
+      await removeReportFromReportPeriods(userId, dateFrom, dateTo, session);
 
       await updateTaxParamsToDb(userId, updatedTaxParams, session);
     });
