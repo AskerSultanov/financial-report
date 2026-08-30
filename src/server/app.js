@@ -3,9 +3,9 @@ import { join } from "node:path";
 import cookieParser from "cookie-parser";
 import checkRoles from "./middleware/checkRoles.js";
 import errorHandler from "./middleware/errorHandler/index.js";
-import pageNotFoundHandler from "./middleware/pageNotFoundHandler/index.js";
 import verifyAuthorization from "./middleware/verifyAuthorization.js";
 import verifyAuthentication from "./middleware/verifyAuthentication.js";
+import pageNotFoundHandler from "./middleware/pageNotFoundHandler/index.js";
 
 import { serverEmitter } from "./customEvent/index.js";
 
