@@ -9,7 +9,8 @@ var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText
   for (var key in report) {
     var elemId = year ? key + "-" + year : key + "-";
 
-    var tdElement = createTdElement(report[key], elemId);
+    var value = report[key].toFixed(2);
+    var tdElement = createTdElement(value, elemId);
     tableRow.append(tdElement);
   }
 

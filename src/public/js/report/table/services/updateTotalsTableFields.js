@@ -1,7 +1,6 @@
 import calcProfitMargin from "../calcProfitMargin.js";
 
 var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
-  console.log({ years });
   var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
 
   for (var skuKey of skuKeys) {

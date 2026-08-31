@@ -6,7 +6,7 @@ var updateSkusTableFields = (sku) => {
     var skuField = document.getElementById(elemId);
 
     if (skuField) {
-      skuField.textContent = data[key];
+      skuField.textContent = data[key].toFixed(2);
 
       if (data[key] < 0) {
         skuField.style.color = "red";
