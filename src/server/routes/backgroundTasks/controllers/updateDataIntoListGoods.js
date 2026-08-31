@@ -1,5 +1,5 @@
 import { dbClient } from "../../../database/index.js";
-import parseJwt from '../../WBToken/services/parseJwt.js'
+import parseJwt from "../../WBToken/services/parseJwt.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
@@ -26,10 +26,10 @@ var updateDataIntoListGoods = async (req, res, next) => {
           var loadingStopReason = "isTokenMissing";
           await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
         } else {
-          var tokenPayload = parseJwt(token)
-          var tokenIsExpired = checkTokenExpiry(tokenPayload);
+          var tokenPayload = parseJwt(token);
+          var { isExpired } = checkTokenExpiry(tokenPayload);
 
-          if (tokenIsExpired) {
+          if (isExpired) {
             var loadingStopReason = "tokenIsExpired";
             await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
           } else {
