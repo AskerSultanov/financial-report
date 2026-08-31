@@ -1,4 +1,4 @@
 import getTaxParamsSchema from "./getTaxParams.js";
-import changeTaxParamsSchema from "./changeTaxParams.schema.js";
+import changeTaxParamsSchema from "./updateTaxParams.js";
 
 export { getTaxParamsSchema, changeTaxParamsSchema };

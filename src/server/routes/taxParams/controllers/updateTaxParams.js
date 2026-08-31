@@ -7,7 +7,7 @@ import recalculateReportsWithNewMandatoryInsuranceRate from "../services/recalcu
 var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
-var changeTaxParams = async (req, res, next) => {
+var updateTaxParams = async (req, res, next) => {
   var { userId, year, reportsNeedRecalculation, data } = req.body;
 
   var { taxParamKeyName } = getTaxParamKeyName(data);
@@ -104,4 +104,4 @@ var changeTaxParams = async (req, res, next) => {
   }
 };
 
-export default changeTaxParams;
+export default updateTaxParams;
