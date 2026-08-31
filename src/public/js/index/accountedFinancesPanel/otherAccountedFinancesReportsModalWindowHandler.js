@@ -32,7 +32,7 @@ var createTableToOtherAccountedFinancesReports = (otherAccountedFinancesReports)
     var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
     var reportPeriodTdElement = createTdElement(reportPeriodText);
 
-    var financesAccountedAtTdElem = createTdElement(new Date(financesAccountedAt - 3 * 6 * 60 * 1000).toLocaleString());
+    var financesAccountedAtTdElem = createTdElement(financesAccountedAt);
 
     var a = document.createElement("a");
     a.target = "_blank";

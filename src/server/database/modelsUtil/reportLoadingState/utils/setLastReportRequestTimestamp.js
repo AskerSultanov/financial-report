@@ -1,8 +1,6 @@
 import { reportLoadingStateModel } from "../../../models/index.js";
 
-var mskTimeOffsetInMs = 10_800_000;
-
 var setLastReportRequestTimestamp = async (userId, session) =>
-  await reportLoadingStateModel.updateOne({ userId }, { $set: { lastReportRequestTimestamp: Date.now() + mskTimeOffsetInMs } }, { session: session });
+  await reportLoadingStateModel.updateOne({ userId }, { $set: { lastReportRequestTimestamp: new Date() } }, { session: session });
 
 export default setLastReportRequestTimestamp;

@@ -18,12 +18,13 @@ var parseLastUsedData = (lastUsedDate) => {
   var currentYear = date.getFullYear();
   var currentMonth = date.getMonth() + 1;
 
-  var splitedDate = lastUsedDate.split("T");
-  var [year, month, day] = splitedDate[0].split("-");
-  var hourAndMinAndSec = splitedDate[1].split(".")[0];
+  var splitedDate = lastUsedDate.split(", ");
+
+  var hourAndMinAndSec = splitedDate[1];
+  var [day, month, year] = splitedDate[0].split(".");
 
   if (year == currentYear && month == currentMonth && day == currentDay) {
-    return hourAndMinAndSec + " " + "сегодня";
+    return "сегодня в " + hourAndMinAndSec;
   } else {
     return hourAndMinAndSec + " " + day + "." + month + "." + year;
   }

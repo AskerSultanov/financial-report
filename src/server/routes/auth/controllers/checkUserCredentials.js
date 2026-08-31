@@ -4,8 +4,7 @@ import checkCredentials from "../services/checkCredentials.js";
 
 var alg = "RS256";
 var oneDayMs = 86_400_000;
-var mskTimeOffsetInMs = 10_800_000;
-var exp = Date.now() + oneDayMs + mskTimeOffsetInMs;
+var exp = Date.now() + oneDayMs;
 
 var { getUserByLogin } = dbUtils.userModelUtils;
 

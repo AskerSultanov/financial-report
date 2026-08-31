@@ -1,9 +1,5 @@
 import { goodsModel } from "../../../models/index.js";
 
-var mskTimeOffsetInMs = 10_800_000;
-
-var getLastModifiedDate = () => Date.now() + mskTimeOffsetInMs;
-
 var createQuery = (priceData) => {
   var query = {};
   var arrayFilters = [];
@@ -20,7 +16,7 @@ var createQuery = (priceData) => {
     var priceStatusKey = `listGoods.$[elem${count}].isPriceUpdated`;
     query[priceStatusKey] = isPriceUpdated;
 
-    var lastUpdated = getLastModifiedDate();
+    var lastUpdated = new Date();
     var lastUpdatedKey = `listGoods.$[elem${count}].lastUpdated`;
     query[lastUpdatedKey] = lastUpdated;
 

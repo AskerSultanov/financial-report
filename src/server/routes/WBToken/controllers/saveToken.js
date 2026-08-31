@@ -1,14 +1,11 @@
-import Joi from "joi";
 import { dbClient } from "../../../database/index.js";
-import getTokenDetails from "../services/getTokenDetails.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
+import getTokenDetails from "../services/getTokenDetails.js";
 import listGoodsLoader from "../../goods/services/listGoodsLoader.js";
 import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFromLIstGoods.js";
 
 var skuNamesStub = null;
 var selectedFieldsStub = null;
-var mskTimeOffsetInMs = 10_800_000;
-var updateWBTokenLastUsedTimestampNow = true;
 
 var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenModelUtils;
 var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsModelUtils;
@@ -20,7 +17,7 @@ var saveToken = async (req, res, next) => {
 
   try {
     await session.withTransaction(async () => {
-      var currentToken = (await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow)).token;
+      var currentToken = (await getWBTokenByUserId(userId, session)).token;
 
       if (currentToken === token) {
         return res.sendStatus(409);
@@ -39,7 +36,7 @@ var saveToken = async (req, res, next) => {
       }
 
       var tokenData = getTokenDetails(tokenPayload);
-      tokenData.lastUsed = new Date(Date.now() + mskTimeOffsetInMs);
+      tokenData.lastUsed = new Date();
 
       res.json(tokenData);
     });

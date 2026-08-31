@@ -1,5 +1,4 @@
 var oneMinuteMs = 60_000;
-var mskTimeOffsetInMs = 10_800_000;
 
 var shouldWaitBeforeNextRequest = (lastReportRequestTimestamp) => {
   var nextRequestDelayMs = 0;
@@ -8,7 +7,7 @@ var shouldWaitBeforeNextRequest = (lastReportRequestTimestamp) => {
     return { nextRequestDelayMs };
   }
 
-  var currentTimeMs = Date.now() + mskTimeOffsetInMs;
+  var currentTimeMs = Date.now();
   var difference = currentTimeMs - lastReportRequestTimestamp;
   var hasMinutePassed = difference > oneMinuteMs;
 

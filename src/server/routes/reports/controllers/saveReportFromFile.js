@@ -31,10 +31,10 @@ var saveReportFromFile = async (req, res, next) => {
         var reportExistInEmptyReportPeriods = emptyReportPeriods.find((item) => item.dateFrom === dateFrom);
 
         if (!reportExistInEmptyReportPeriods) {
-          var report = checkReportExistByDate(userId, dateFrom, session);
+          var report = await checkReportExistByDate(userId, dateFrom, session);
 
           if (!report) {
-            var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(userId, onePeriodReports);
+            var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(onePeriodReports);
 
             if (!reportPeriodIsEmpty) {
               var resultOfReportProcessing = await reportsProcessing(userId, dateFrom, dateTo, session, reports, isReportFromFile);

@@ -1,12 +1,10 @@
 import argon2 from "argon2";
 import * as models from "../../../models/index.js";
 
-var mskTimeOffsetInMs = 10_800_000;
-
 var createUserToDb = async (user, session) => {
   var { userId, role, login, passwd } = user;
 
-  var registeredAt = new Date(Date.now() + mskTimeOffsetInMs);
+  var registeredAt = new Date();
   var hashedPasswd = await argon2.hash(passwd + "", process.env.SECRET_KEY);
 
   await models.tokenModel.create([{ userId }], { session: session });

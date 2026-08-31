@@ -1,7 +1,5 @@
 import { Schema } from "mongoose";
 
-var mskTimeOffsetInMs = 10_800_000;
-
 var skuSchema = new Schema(
   {
     id: { type: Number, required: true },
@@ -11,7 +9,7 @@ var skuSchema = new Schema(
     discountedPrice: { type: Number, required: false },
     clubDiscountedPrice: { type: Number, required: false },
     disabled: { type: Boolean, default: false },
-    lastFetch: { type: Date, default: () => Date.now() + mskTimeOffsetInMs },
+    lastFetch: { type: Date, default: () => new Date() },
     lastUpdated: { type: Date, required: false },
     lastCostPrice: { type: Number, required: false },
     isPriceUpdated: { type: Boolean, required: false },

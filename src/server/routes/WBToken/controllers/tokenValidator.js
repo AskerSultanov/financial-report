@@ -3,8 +3,6 @@ import isTestToken from "../services/isTestToken.js";
 import checkTokenExpiry from "../services/checkTokenExpiry.js";
 import isPresumablyJwtToken from "../services/isPresumablyJwtToken.js";
 
-var mskTimeOffsetInMs = 10_800_000;
-
 var tokenValidator = async (req, res, next) => {
   var token = req.body.token;
 

@@ -1,6 +1,5 @@
 import JSZip from "jszip";
 import getReportIdFromFileName from "./getReportIdFromFileName.js";
-import extractWorkSheetFromFile from "./extractWorkSheetFromFile.js";
 
 var zipFileMimeTypes = ["application/zip", "application/x-zip-compressed"];
 var xlsxFileMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
