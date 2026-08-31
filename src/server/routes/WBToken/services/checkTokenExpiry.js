@@ -1,14 +1,15 @@
 var msInSec = 1000;
-var mskTimeOffsetInSec = 10_800;
 
 var checkTokenExpiry = (tokenPayload) => {
-  var currentTimestamp = Date.now() + mskTimeOffsetInSec;
-
   if (!tokenPayload?.exp) {
-    return;
+    throw new Error("Invalid WBTOKEN: payload is missing");
   }
 
-  return tokenPayload.exp * msInSec <= currentTimestamp;
+  var currentTimestamp = Date.now();
+
+  var isExpired = tokenPayload.exp * msInSec <= currentTimestamp;
+
+  return { isExpired };
 };
 
 export default checkTokenExpiry;

@@ -1,15 +1,17 @@
-var msInOneSec = 1000;
+import checkTokenExpiry from "./checkTokenExpiry.js";
+
+var msInSec = 1000;
 var msInDay = 86_400_000;
 var tokenIsExist = true;
-var mskTimeOffsetInMs = 10_800_000;
 var monthList = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
-var getTokenDetails = (token) => {
-  var { exp, id } = token;
+var getTokenDetails = (tokenPayload) => {
+  var { exp, id } = tokenPayload;
 
-  var expInMs = exp * msInOneSec;
-  var currentTimestamp = Date.now() + mskTimeOffsetInMs;
-  var isExpired = currentTimestamp > expInMs;
+  var expInMs = exp * msInSec;
+  var currentTimestamp = Date.now();
+
+  var { isExpired } = checkTokenExpiry(tokenPayload);
 
   var daysLeft;
 
@@ -17,7 +19,7 @@ var getTokenDetails = (token) => {
     daysLeft = "-";
   } else {
     var difference = expInMs - currentTimestamp;
-    var daysLeft = (difference / msInDay).toString().split(".")[0];
+    daysLeft = (difference / msInDay).toString().split(".")[0];
   }
 
   var currentDate = new Date(currentTimestamp).toISOString();
@@ -27,7 +29,7 @@ var getTokenDetails = (token) => {
   var dateFromExpWithoutHour = dateFromExp.split("T")[0];
 
   var [year, monthNum, day] = dateFromExpWithoutHour.split("-");
-  var monthIndex = monthNum - 1;
+  var monthIndex = +monthNum - 1;
 
   var validUntil = `${day} ${monthList[monthIndex]} ${year}`;
 

@@ -24,9 +24,9 @@ var saveReports = async (req, res) => {
       var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
 
       var tokenPayload = parseJwt(token);
-      var tokenIsExpired = checkTokenExpiry(tokenPayload);
+      var { isExpired } = checkTokenExpiry(tokenPayload);
 
-      if (tokenIsExpired) {
+      if (isExpired) {
         throw new WBAPIError(userId, 401, invalidTokenErrorMsg);
       }
 

@@ -22,9 +22,9 @@ var tokenValidator = async (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  var tokenIsExpired = checkTokenExpiry(tokenPayload);
+  var { isExpired } = checkTokenExpiry(tokenPayload);
 
-  if (tokenIsExpired) {
+  if (isExpired) {
     return res.sendStatus(400);
   }
 
