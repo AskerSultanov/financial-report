@@ -13,7 +13,6 @@ var selectedFieldsToLoadingState = [
   "abandonedReports",
   "loadingInProgress",
   "loadingStopReason",
-  "isReportLoadingDelayed",
   "isReportLoadingIsStopped",
 ];
 

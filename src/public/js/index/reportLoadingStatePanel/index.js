@@ -15,9 +15,9 @@ var reportLoadingStatePanelBuilder = async (userId, reportLoadingState, isMainPa
       reportLoadingState = await getReportLoadingState(userId);
     }
 
-    var { reportsQueue, abandonedReports, loadingInProgress, isReportLoadingDelayed } = reportLoadingState;
+    var { reportsQueue, abandonedReports, loadingInProgress } = reportLoadingState;
 
-    if (loadingInProgress || isReportLoadingDelayed) {
+    if (loadingInProgress) {
       enableParentReportLoadingStatePanel();
       await showReportLoadingStatePanel();
       await updateLoadingProgressText(reportLoadingState);

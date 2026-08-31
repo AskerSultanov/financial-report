@@ -6,7 +6,6 @@ var defaultReportLoadingState = {
   queueCapacity: 0,
   loadingInProgress: false,
   lastReportRequestTimestamp: 0,
-  isReportLoadingDelayed: false,
   isReportLoadingIsStopped: false,
   loadingStopReason: "",
   reportsQueue: [],

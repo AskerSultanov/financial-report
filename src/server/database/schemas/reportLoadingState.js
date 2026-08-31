@@ -41,7 +41,6 @@ var reportLoadingStateSchema = new Schema({
   lastReportRequestTimestamp: { type: Number, default: 0 },
   freshReportPeriodIndex: { type: Number, required: false },
   lastLoadedReport: { type: lastLoadedReportSchema, required: false },
-  isReportLoadingDelayed: { type: Boolean, required: true, default: false },
   isReportLoadingIsStopped: { type: Boolean, required: true, default: false },
   loadingStopReason: { type: String, default: "", required: false },
   emptyReportPeriods: { type: [emptyReportPeriodItemSchema], required: false },
