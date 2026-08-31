@@ -3,6 +3,7 @@ import createTitle from "../utils/createTitle.js";
 import createInput from "../utils/createInput.js";
 import createButton from "../utils/createButton.js";
 import sendChangedData from "../../sendChangedData.js";
+import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFields.js";
 import getReportDataFromLocalStorage from "../getReportDataFromLocalStorage.js";
@@ -39,9 +40,12 @@ var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess) =
 
     otherExpensesDisplayElement.otherExpensesnt = otherExpensesInput.value;
 
-    var { years, sku, totals } = data;
+    var { years, sku, isCrossYearPeriod } = data;
+
+    var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
+
     updateSkusTableFields(sku, years);
-    updateTotalsTableFields(totals, years);
+    updateTotalsTableFields(sku.data, years, prevSkuFieldsValue, isCrossYearPeriod);
 
     if (isGuestAccess) {
       updateReportFromLocalStorage(data);

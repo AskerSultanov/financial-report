@@ -81,8 +81,7 @@ var setCostPriceToSkus = async (req, res, next) => {
       await updateTaxParamsToDb(userId, updatedTaxParams, session);
       await saveUpdatedReport(userId, reportId, updatedSkus, session);
       await updateSkusInListGoods(userId, updatedSkusToListGoods, session);
-
-      return res.json({ years, skusDataToClient });
+      return res.json({ years, skusDataToClient, isCrossYearPeriod: report.isCrossYearPeriod });
     });
   } catch (e) {
     console.log(e);

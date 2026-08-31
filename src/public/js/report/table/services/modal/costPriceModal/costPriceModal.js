@@ -37,10 +37,10 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess) => {
 
     costPriceDisplayElement.textContent = costPriceInput.value;
 
-    var { sku, years } = data;
+    var { sku, years, isCrossYearPeriod } = data;
     var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
     updateSkusTableFields(sku);
-    updateTotalsTableFields(sku.data, years, prevSkuFieldsValue);
+    updateTotalsTableFields(sku.data, years, prevSkuFieldsValue, isCrossYearPeriod);
 
     if (isGuestAccess) {
       updateReportFromLocalStorage(data);

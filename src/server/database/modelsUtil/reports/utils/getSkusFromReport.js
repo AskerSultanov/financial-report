@@ -6,17 +6,19 @@ var getSkusFromReport = async (userId, reportId, skuNames, session) => {
       { $match: { userId, reportId } },
       {
         $project: {
+          _id: 0,
           userId: 1,
-          report: {
-            skus: { $filter: { input: "$skus", as: "sku", cond: { $in: ["$$sku.skuName", skuNames] } } },
-          },
+          dateFrom: 1,
+          dateTo: 1,
+          isCrossYearPeriod: 1,
+          skus: { $filter: { input: "$skus", as: "sku", cond: { $in: ["$$sku.skuName", skuNames] } } },
         },
       },
     ],
     { session },
   );
 
-  return { report: data[0]?.report };
+  return { report: data[0] };
 };
 
 export default getSkusFromReport;

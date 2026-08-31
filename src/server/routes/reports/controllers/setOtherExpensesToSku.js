@@ -52,13 +52,16 @@ var setOtherExpensesToSku = async (req, res, next) => {
       var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
 
       if (report.isCrossYearPeriod) {
+        var startYear = +report.dateFrom.split("-")[0];
+        var endYear = +report.dateTo.split("-")[0];
         var requiredYear = year === startYear ? startYear : endYear;
         years = [requiredYear];
       }
 
       return res.status(200).json({
         years,
-        sku: { year, data: skuDataToClient },
+        sku: { year, skuName, data: skuDataToClient },
+        isCrossYearPeriod: report.isCrossYearPeriod,
       });
     });
   } catch (e) {

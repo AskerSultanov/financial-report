@@ -65,6 +65,7 @@ var setCostPriceToSku = async (req, res, next) => {
       return res.json({
         years,
         sku: { year, skuName, data: skuDataToClient },
+        isCrossYearPeriod: report.isCrossYearPeriod,
       });
     });
   } catch (err) {

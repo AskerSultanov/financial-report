@@ -14,9 +14,9 @@ var sendCostPrices = async (year, costPrices) => {
     return;
   }
 
-  var { skusDataToClient, years } = await res.json();
+  var data = await res.json();
 
-  return { skusDataToClient, years };
+  return data;
 };
 
 export default sendCostPrices;

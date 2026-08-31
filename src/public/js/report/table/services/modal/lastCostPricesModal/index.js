@@ -3,6 +3,7 @@ import sendCostPrices from "./sendCostPrices.js";
 import createTitle from "../utils/createTitle.js";
 import getSelectedYear from "./getSelectedYear.js";
 import createButton from "../utils/createButton.js";
+import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFields.js";
 import getSelectedLastCostPrices from "./getSelectedLastCostPrices.js";
@@ -33,11 +34,13 @@ var skusLastCostPriceModal = (years, skusLastCostPrice) => {
       return;
     }
 
-    var { skusDataToClient, years } = await sendCostPrices(selectedYear, skusLastCostPrice);
-
+    var { skusDataToClient, years, isCrossYearPeriod } = await sendCostPrices(selectedYear, skusLastCostPrice);
+    console.log({ isCrossYearPeriod });
     skusDataToClient.forEach((sku) => {
+      var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
+
       updateSkusTableFields(sku, years);
-      updateTotalsTableFields(sku, years);
+      updateTotalsTableFields(sku.data, years, prevSkuFieldsValue, isCrossYearPeriod);
     });
 
     document.body.removeChild(modal);

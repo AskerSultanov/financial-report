@@ -1,6 +1,6 @@
 import calcProfitMargin from "../calcProfitMargin.js";
 
-var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
+var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue, isCrossYearPeriod) => {
   var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
 
   for (var skuKey of skuKeys) {
@@ -8,8 +8,9 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
 
     var totalField = document.getElementById(totalFieldId);
 
-    if (totalField) {
+    if (totalField && typeof prevSkuFieldsValue[skuKey] === "number" && !isNaN(prevSkuFieldsValue[skuKey])) {
       var prevTotalFieldValue = +totalField.textContent;
+
       var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
 
       totalField.textContent = newTotalFieldValue.toFixed(2);
@@ -39,7 +40,7 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
     profitMarginElem.style.color = "#04ff00";
   }
 
-  if (years.length > 1) {
+  if (isCrossYearPeriod) {
     for (var year of years) {
       var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
 
@@ -48,8 +49,9 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue) => {
 
         var totalField = document.getElementById(totalFieldId);
 
-        if (totalField) {
+        if (totalField && typeof prevSkuFieldsValue[skuKey] === "number" && !isNaN(prevSkuFieldsValue[skuKey])) {
           var prevTotalFieldValue = +totalField.textContent;
+
           var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
 
           totalField.textContent = newTotalFieldValue.toFixed(2);
