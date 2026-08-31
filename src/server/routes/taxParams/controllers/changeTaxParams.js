@@ -4,8 +4,8 @@ import getTaxParamKeyName from "../services/getTaxParamKeyName.js";
 import recalculateReportsWithNewTaxRate from "../services/recalculateReportsWithNewTaxRate.js";
 import recalculateReportsWithNewMandatoryInsuranceRate from "../services/recalculateReportsWithNewMandatoryInsuranceRate.js";
 
+var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
-var { getReportsByUserId, saveUpdatedReports, saveUpdatedReport } = dbUtils.reportModelUtils;
 
 var changeTaxParams = async (req, res, next) => {
   var { userId, year, reportsNeedRecalculation, data } = req.body;
