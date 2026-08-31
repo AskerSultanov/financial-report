@@ -65,7 +65,7 @@ var setupDbEvents = async (dbInstance, dbClientToEncryption) => {
 
         dbReconnectionAttempts++;
 
-        await dbInstance.connect();
+        await dbInstance.connect(process.env.MONGO_URI, options);
       }, NEXT_CONNECTION_MS);
     }
   });
@@ -118,7 +118,7 @@ var setupDbEvents = async (dbInstance, dbClientToEncryption) => {
 
       await dbClientToEncryption.close();
 
-      await dbInstance.connect();
+      await dbInstance.connect(process.env.MONGO_URI, options);
       serverEmitter.emit("start");
       console.log({ dataKeyId });
     } catch (e) {
