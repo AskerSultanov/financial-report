@@ -1,7 +1,5 @@
-import Joi from "joi";
 import calc from "../../reports/services/calcServices/index.js";
 import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
-import excludeEqualParams from "../../reports/services/different/excludeEqualParams.js";
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -47,6 +45,7 @@ var setCostPrice = async (req, res, next) => {
   return res.json({
     userId,
     years,
+    isCrossYearPeriod,
     sku: {
       year,
       skuName,

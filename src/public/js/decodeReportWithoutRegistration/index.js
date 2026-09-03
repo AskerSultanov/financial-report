@@ -32,9 +32,9 @@ var main = async () => {
           return;
         }
 
-        var { validDateFrom } = await checkDateFrom(dateFrom);
-        var { validDateTo } = await checkDateTo(dateTo, validDateFrom);
-        var { taxRate } = await checkTaxRate(taxRate);
+        var { validDateFrom } = checkDateFrom(dateFrom);
+        var { validDateTo } = checkDateTo(dateTo, validDateFrom);
+        var { taxRate } = checkTaxRate(taxRate);
 
         document.getElementById("dialog").close();
 

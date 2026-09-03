@@ -1,4 +1,4 @@
-var checkTaxRate = async (taxRate) => {
+var checkTaxRate = (taxRate) => {
   if (typeof taxRate === "number" && !isNaN(taxRate) && taxRate >= 0 && taxRate <= 100) {
     return { taxRate };
   }

@@ -23,7 +23,7 @@ router.get("/report/:id", getReportPage);
 
 router.post("/xlsx/", downloadReportAsXLSX);
 
-router.post("/", getReportFromWBAPI);
+router.post("/", joiSchemaValidator(schemas.reportsFromWBAPI), getReportFromWBAPI);
 
 router.patch("/report/cost-price", joiSchemaValidator(schemas.setCostPrice), setCostPrice);
 

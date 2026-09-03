@@ -6,7 +6,7 @@ var isGuestAccess = true;
 
 var createSKUsTable = (report, skus, year) => {
   var tableBody = document.createElement("tbody");
-  var { userId, reportId, taxRate, dateFrom, dateTo } = report;
+  var { userId, taxRate, dateFrom, dateTo } = report;
 
   for (var sku of skus) {
     var tableRow = document.createElement("tr");
@@ -22,6 +22,7 @@ var createSKUsTable = (report, skus, year) => {
       dateTo,
       skuName: sku.skuName,
       costPrice: sku.costPrice,
+      otherExpenses: sku.otherExpenses,
       isCrossYearPeriod: report.isCrossYearPeriod,
       sku: {
         tax: sku.tax,

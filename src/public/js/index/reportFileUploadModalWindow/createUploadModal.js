@@ -140,7 +140,7 @@ function handleFiles(files) {
     }
   } else {
     for (var file of files) {
-      if (fileIsValid(file)) {
+      if (fileIsValid(file) && count <= maxFilesCount) {
         validFiles.push(file);
 
         count++;
@@ -256,6 +256,9 @@ var createUploadBtn = () => {
     if (res.status === 200) {
       if (isDecodeReportWithoutRegistrationPage()) {
         var { report, reportPeriodIsEmpty } = await res.json();
+
+        console.log({ reportPeriodIsEmpty });
+
         if (reportPeriodIsEmpty) {
           alert("Отчётный период пуст");
         } else {

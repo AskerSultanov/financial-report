@@ -1,9 +1,5 @@
-import Joi from "joi";
 import calc from "../../reports/services/calcServices/index.js";
 import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
-import excludeEqualParams from "../../reports/services/different/excludeEqualParams.js";
-
-var skuFromListGoodsStub = [];
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -23,15 +19,21 @@ var taxParamsStub = {
   requiresAdditionalInsuranceFee: false,
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
+
 var setOtherExpensesToSku = async (req, res, next) => {
-  var { dateFrom, dateTo, userId, reportId, skuIndex, sku, totals, taxRate, year } = req.body;
-
-  var { isCrossYearPeriod } = totals;
-
-  var years = [];
+  var { dateFrom, dateTo, userId, skuName, sku, taxRate, year, isCrossYearPeriod } = req.body;
 
   if (sku.otherExpenses === req.body.otherExpenses) {
     return res.sendStatus(409);
+  }
+
+  var years = [];
+
+  if (isCrossYearPeriod) {
+    var startYear = +dateFrom.split("-")[0];
+    var endYear = +dateTo.split("-")[0];
+    var requiredYear = year === startYear ? startYear : endYear;
+    years = [requiredYear];
   }
 
   var prevSkuData = getPrevSkuData(sku);
@@ -40,15 +42,14 @@ var setOtherExpensesToSku = async (req, res, next) => {
 
   var { updatedSkuFields } = calc.sku.restParams(sku, prevSkuData, { taxRate, ...taxParamsStub }, prevSkuData);
 
-  var skuDataToClient = excludeEqualParams(prevSkuData, updatedSku);
-
   return res.json({
     userId,
     years,
+    isCrossYearPeriod,
     sku: {
       year,
-      skuIndex,
-      data: skuDataToClient,
+      skuName,
+      data: updatedSkuFields,
     },
   });
 };

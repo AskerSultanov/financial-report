@@ -1,7 +1,7 @@
 import createButton from "../utils/createButton.js";
 import otherExpensesModal from "./otherExpensesModal.js";
 
-var openOtherExpensesModal = (skuData, isGuestAccess, potfix) => {
+var openOtherExpensesModal = (skuData, isGuestAccess) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 

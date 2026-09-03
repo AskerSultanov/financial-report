@@ -7,7 +7,6 @@ import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFields.js";
 import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
-import getReportDataFromLocalStorage from "../getReportDataFromLocalStorage.js";
 
 var event = "click";
 

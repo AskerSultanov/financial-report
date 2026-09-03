@@ -6,7 +6,6 @@ import sendChangedData from "../../sendChangedData.js";
 import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFields.js";
-import getReportDataFromLocalStorage from "../getReportDataFromLocalStorage.js";
 import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
 
 var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess) => {
@@ -27,11 +26,6 @@ var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess) =
 
     skuData.otherExpenses = +otherExpensesInput.value;
 
-    if (isGuestAccess) {
-      var reportData = getReportDataFromLocalStorage(skuData);
-      skuData = Object.assign(skuData, reportData);
-    }
-
     var data = await sendChangedData(skuData, isGuestAccess, "setotherexpenses");
 
     if (!data) {
@@ -40,8 +34,7 @@ var otherExpensesModal = (skuData, otherExpensesDisplayElement, isGuestAccess) =
 
     otherExpensesDisplayElement.otherExpensesnt = otherExpensesInput.value;
 
-    var { years, sku, isCrossYearPeriod } = data;
-
+    var { sku, years, isCrossYearPeriod } = data;
     var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
     updateSkusTableFields(sku, years);

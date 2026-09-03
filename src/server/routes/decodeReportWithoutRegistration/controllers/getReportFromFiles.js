@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import parseReports from "../../reports/services/reportParsing/index.js";
+import processReportSkus from "../../reports/services/reportParsing/index.js";
 import removeDublicateFiles from "../../reports/services/reportsFileParser/removeDublicateFiles.js";
 import extractWorkSheetFromFile from "../../reports/services/reportsFileParser/extractWorkSheetFromFile.js";
 import extractReportsFileBufferFromZip from "../../reports/services/reportsFileParser/extractReportsFileBufferFromZip.js";
@@ -41,36 +41,28 @@ var getReportFromFiles = async (req, res) => {
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
 
-  var userId = randomBytes(15).toString("hex");
-
-  var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(userId, onePeriodReports);
+  var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(onePeriodReports);
 
   if (reportPeriodIsEmpty) {
     return res.json({ reports, reportPeriodIsEmpty });
   }
 
-  var { reportId } = reports.weeklyFinancialReport[0];
+  var reportSkus = [];
+
+  for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
+    var { skus } = await processReportSkus(reports, { year: currentYear, ...taxParamsStub }, isCrossYearPeriod);
+    reportSkus.push(...skus);
+  }
 
   var report = {};
 
   report.dateTo = dateTo;
-  report.userId = userId;
+  report.skus = reportSkus;
   report.dateFrom = dateFrom;
-  report.reportId = reportId;
+  report.taxRate = taxParamsStub.taxRate;
   report.isCrossYearPeriod = isCrossYearPeriod;
-
-  if (isCrossYearPeriod) {
-    var startYearTaxParamsStub = Object.assign({}, { year: startYear, ...taxParamsStub });
-    var endYearTaxParamsStub = Object.assign({}, { year: endYear, ...taxParamsStub });
-
-    var taxParams = { startYearTaxParams: startYearTaxParamsStub, endYearTaxParams: endYearTaxParamsStub };
-
-    var { skus } = await parseReports(reports, taxParams, isCrossYearPeriod);
-    report.skus = skus;
-  } else {
-    var { skus } = await parseReports(reports, { year: startYear, ...taxParamsStub });
-    report.skus = skus;
-  }
+  report.userId = randomBytes(15).toString("hex");
+  report.reportId = reports.weeklyFinancialReport[0];
 
   return res.json({ report, reportPeriodIsEmpty });
 };
