@@ -1,12 +1,17 @@
 import { channel } from "../index.js";
 
-var queueName = "long.range.report.loading";
+var routingKey = "longrange";
+var exchangeName = "report-loader";
 
-export var longRangeReportProducer = async (data) => {
+export var longRangeReportProducer = async ({ userId, dateFrom, dateTo, needToLoadAllReports }) => {
+  var success = true;
+
   try {
-    var json = JSON.stringify(data);
-    var buffer = Buffer.from(json);
+    await channel.publish(exchangeName, routingKey, { userId, dateFrom, dateTo, needToLoadAllReports }, { persistent: true });
+  } catch (e) {
+    console.log({ e });
+    success = false;
+  }
 
-    channel.sendToQueue(queueName, buffer);
-  } catch (e) {}
+  return { success };
 };
