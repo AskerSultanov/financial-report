@@ -14,7 +14,7 @@ var router = Router({ caseSensitive: true, strict: true });
 router.get("/", getWbTokenPageController);
 router.get("/:userId", getTokenDataController);
 router.post("/", joiSchemaValidator(schema.saveToken), tokenValidatorController, saveTokenController, checkForStoppedReportLoadingController);
-router.get("/check-exist/:userId", checkTokenExistsController);
+router.post("/check-exist/", joiSchemaValidator(schema.checkTokenExist), checkTokenExistsController);
 router.delete("/", joiSchemaValidator(schema.removeToken), removeTokenController);
 
 export default router;

@@ -1,16 +1,18 @@
-var checkWBTokenExists = async (userId) => {
-  var url = "/wbtoken/check-exist/" + userId;
-  try {
-    var res = await fetch(url);
+var url = "/wbtoken/check-exist/";
 
-    if (res.status === 200) {
-      var { tokenIsExist } = await res.json();
-      return { tokenIsExist };
-    } else {
-      return { tokenIsExist: false };
+var checkWBTokenExists = async (userId) => {
+  try {
+    var res = await fetch(url, { method: "POST", body: JSON.stringify({ userId }), headers: { "Content-Type": "application/json" } });
+
+    var { errorText } = await res.json();
+
+    if (errorText) {
+      alert(errorText);
+      return;
     }
+    return true;
   } catch {
-    return { tokenIsExist: false, error: true, errorMsg: "Произошла ошибка при получении информации о наличии токена..." };
+    return;
   }
 };
 

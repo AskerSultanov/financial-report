@@ -1,13 +1,30 @@
+import parseJwt from "../services/parseJwt.js";
+import checkTokenExpiry from "../services/checkTokenExpiry.js";
 import { getWBTokenByUserId } from "../../../database/modelsUtil/tokens/index.js";
 
+var tokenMissingMsg = "Отсутствует токен личного кабинета WB";
+var tokenExpiryMsg = "Истек срок действия токена личного кабинета WB";
+
 var checkTokenExistsController = async (req, res, next) => {
-  var { userId } = req.params;
+  var { userId } = req.body;
 
   var { token } = await getWBTokenByUserId(userId);
 
-  var tokenIsExist = false;
+  if (!token) {
+    return res.json({ errorText: tokenMissingMsg });
+  }
 
-  return token.length ? res.json({ tokenIsExist: true }) : res.json({ tokenIsExist });
+  var tokenPayload = parseJwt(token);
+
+  var { isExpired } = checkTokenExpiry(tokenPayload);
+
+  if (isExpired) {
+    return res.json({ errorText: tokenExpiryMsg });
+  }
+
+  res.json({ errorText: "" });
+
+  next();
 };
 
 export default checkTokenExistsController;
