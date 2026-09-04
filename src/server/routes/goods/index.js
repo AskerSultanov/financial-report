@@ -22,10 +22,10 @@ var upload = multer({ storage, fileFilter });
 var router = Router({ caseSensitive: true, strict: true });
 
 router.get("/", getListGoodsPageController);
-router.get("/listgoodsonly/:userId", getListGoodsController);
-router.get("/metrics/download/:userId", getSkusMetricsFileController);
-router.get("/api/:userId", getListGoodsAndWeeklyPricesController);
-router.get("/prices-discounts/file/:userId", getWeeklyPricesFileController);
+router.get("/listgoodsonly/:userId", joiSchemaValidator(schemas.getlistGoods), getListGoodsController);
+router.get("/metrics/download/:userId", joiSchemaValidator(schemas.getSkusMetricsFile), getSkusMetricsFileController);
+router.get("/api/:userId", joiSchemaValidator(schemas.getListGoodsAndWeeklyPrices), getListGoodsAndWeeklyPricesController);
+router.get("/prices-discounts/file/:userId", joiSchemaValidator(schemas.getWeeklyPricesFile), getWeeklyPricesFileController);
 
 router.post("/", joiSchemaValidator(schemas.loadListGoods), loadListGoodsController);
 router.post("/sku-disable-status", joiSchemaValidator(schemas.changeSkuDisableStatus), changeSkuDisableStatusController);

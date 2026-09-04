@@ -1,6 +1,6 @@
-var sendUploadFile = async (file) => {
-  var url = "/goods/prices-discounts/upload/";
+var url = "/goods/prices-discounts/upload/";
 
+var sendUploadFile = async (file) => {
   var res = await fetch(url, {
     method: "POST",
     body: file,
@@ -22,8 +22,7 @@ var button = document.getElementById("upload-weekly-prices-and-discounts-file");
 
 var fileUploadHandler = (userId) => {
   button.onclick = (e) => {
-    alert("Пока недоступно");
-    return;
+    // alert("Пока недоступно");
 
     e.preventDefault();
     input.click();

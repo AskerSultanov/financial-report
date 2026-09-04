@@ -3,13 +3,13 @@ import { generageWeeklyPricesFile } from "../services/weeklyPrices/index.js";
 import mergeListGoodsWithWeeklyPricesAndDiscounts from "../services/mergeListGoodsWithWeeklyPricesAndDiscounts.js";
 
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
+var { getWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var getWeeklyPricesFileController = async (req, res, next) => {
   var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);
-  var { weeklyPricesAndDiscounts } = await getWeeklyPricesAndDiscountsFromDb(userId);
+  var { weeklyPricesAndDiscounts } = await getWeeklyPricesAndDiscounts(userId);
 
   var { mergedData } = mergeListGoodsWithWeeklyPricesAndDiscounts(listGoods, weeklyPricesAndDiscounts);
   var { buffer } = await generageWeeklyPricesFile(mergedData);
