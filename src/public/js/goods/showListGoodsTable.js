@@ -21,7 +21,7 @@ var showListGoodsTable = async () => {
   var { enabledSku, disabledSku } = listGoods;
 
   if (!enabledSku.length && !disabledSku.length) {
-    await handleEmptySkus();
+    handleEmptySkus();
     return;
   }
 
@@ -40,9 +40,9 @@ var showListGoodsTable = async () => {
 
 export default showListGoodsTable;
 
-var handleEmptySkus = async function () {
+var handleEmptySkus = function () {
   toggleUploadListGoodsButtonVisibility("enable");
-  await loadListGoodsButtonHandler();
+  loadListGoodsButtonHandler();
 };
 
 var handleEmptyEnabledSkus = async function (disabledSku) {
@@ -74,7 +74,7 @@ var handleNonEmptyWeeklyPricesAndDiscounts = async function ({ enabledSku, disab
   toggleSkuTableVisibillity("enabled-skus-table", "enable");
   setWeekDaySelectorToCurrentDay(currentDayName);
   toggleSkusMetricsFileUploadButtonVisibility("enable");
-  addTableHeadRowToCheckboxForParticipationInPromo()
+  addTableHeadRowToCheckboxForParticipationInPromo();
   toggleWeeklyPricesAndDiscountsFileUploadButtonVisibility("enable");
   toggleDownloadWeeklyPricesAndDiscountsFileButtonVisibility("enable");
 
