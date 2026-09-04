@@ -12,7 +12,7 @@ var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
 var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
-var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
+var checkProcessingOfPricesAndDiscountsController = async (req, res, next) => {
   var data = await getAllUserWeeklyPricesAndDiscounts();
 
   for (var { userId, uploadId } of data) {
@@ -54,4 +54,4 @@ var checkProcessingOfPricesAndDiscounts = async (req, res, next) => {
   return res.sendStatus(200);
 };
 
-export default checkProcessingOfPricesAndDiscounts;
+export default checkProcessingOfPricesAndDiscountsController;

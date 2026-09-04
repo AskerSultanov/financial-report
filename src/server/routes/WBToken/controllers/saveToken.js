@@ -10,7 +10,7 @@ var selectedFieldsStub = null;
 var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenModelUtils;
 var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsModelUtils;
 
-var saveToken = async (req, res, next) => {
+var saveTokenController = async (req, res, next) => {
   var { userId, token, tokenPayload } = req.body;
 
   var session = await dbClient.startSession();
@@ -52,4 +52,4 @@ var saveToken = async (req, res, next) => {
   next();
 };
 
-export default saveToken;
+export default saveTokenController;

@@ -1,4 +1,4 @@
-var checkAuth = async (req, res, next) => {
+var checkAuthController = async (req, res, next) => {
   var authHeader = req.headers?.authorization;
 
   if (!authHeader) {
@@ -14,4 +14,4 @@ var checkAuth = async (req, res, next) => {
   next();
 };
 
-export default checkAuth;
+export default checkAuthController;

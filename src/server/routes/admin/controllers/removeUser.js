@@ -1,7 +1,7 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 
-var removeUser = async (req, res, next) => {
+var removeUserController = async (req, res, next) => {
   var session = await dbClient.startSession();
 
   try {
@@ -18,4 +18,4 @@ var removeUser = async (req, res, next) => {
   }
 };
 
-export default removeUser;
+export default removeUserController;

@@ -5,7 +5,7 @@ import { readWeeklyPricesFile } from "../services/weeklyPrices/index.js";
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 var { setWeeklyPricesAndDiscountsToDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
-var uploadPricesAndDiscountsFile = async (req, res, next) => {
+var uploadPricesAndDiscountsFileController = async (req, res, next) => {
   var userId = req.body.userId;
 
   if (!userId) {
@@ -35,4 +35,4 @@ var uploadPricesAndDiscountsFile = async (req, res, next) => {
   }
 };
 
-export default uploadPricesAndDiscountsFile;
+export default uploadPricesAndDiscountsFileController;

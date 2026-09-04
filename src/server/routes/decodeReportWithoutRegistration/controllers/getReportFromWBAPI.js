@@ -21,7 +21,7 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
-var getReportFromWBAPI = async (req, res, next) => {
+var getReportFromWBAPIController = async (req, res, next) => {
   var { dateFrom, dateTo, token, taxRate } = req.body;
 
   var startYear = +dateFrom.split("-")[0];
@@ -50,4 +50,4 @@ var getReportFromWBAPI = async (req, res, next) => {
   return res.json({ report });
 };
 
-export default getReportFromWBAPI;
+export default getReportFromWBAPIController;

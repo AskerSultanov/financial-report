@@ -10,7 +10,7 @@ var oneDayMs = 24 * 3600 * 1000;
 
 var { createUserToDb, getUserByLogin } = dbUtils.userModelUtils;
 
-var createUser = async (req, res, next) => {
+var createUserController = async (req, res, next) => {
   var candidate = req.body;
 
   var { loginIsValid, msg } = checkLogin(candidate.login);
@@ -64,4 +64,4 @@ var createUser = async (req, res, next) => {
   }
 };
 
-export default createUser;
+export default createUserController;

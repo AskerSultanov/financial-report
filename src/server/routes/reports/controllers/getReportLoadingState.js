@@ -12,12 +12,12 @@ var selectedFieldsToLoadingState = [
   "isReportLoadingIsStopped",
 ];
 
-var getReportLoadingState = async (req, res, next) => {
+var getReportLoadingStateController = async (req, res, next) => {
   var { userId } = req.params;
 
-  var reportLoadingState = await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(userId, session, selectedFieldsToLoadingState);
+  var reportLoadingState = await dbUtils.reportLoadingStateModelUtils.getReportLoadingStateController(userId, session, selectedFieldsToLoadingState);
 
   return res.json(reportLoadingState);
 };
 
-export default getReportLoadingState;
+export default getReportLoadingStateController;

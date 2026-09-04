@@ -1,6 +1,6 @@
 import s3 from "../services/s3/index.js";
 
-var skuPhotoUpload = async (req, res, next) => {
+var skuPhotoUploadController = async (req, res, next) => {
   var { skuName } = req.body;
 
   var buffer = req.file.buffer;
@@ -10,4 +10,4 @@ var skuPhotoUpload = async (req, res, next) => {
   return res.sendStatus(httpStatusCode);
 };
 
-export default skuPhotoUpload;
+export default skuPhotoUploadController;

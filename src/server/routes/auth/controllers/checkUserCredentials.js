@@ -8,7 +8,7 @@ var exp = Date.now() + oneDayMs;
 
 var { getUserByLogin } = dbUtils.userModelUtils;
 
-var checkUserCredentials = async (req, res, next) => {
+var checkUserCredentialsController = async (req, res, next) => {
   var existUser = await getUserByLogin(req.body.login);
 
   if (!existUser) {
@@ -34,4 +34,4 @@ var checkUserCredentials = async (req, res, next) => {
     .json({ redirectUrl: "/" });
 };
 
-export default checkUserCredentials;
+export default checkUserCredentialsController;

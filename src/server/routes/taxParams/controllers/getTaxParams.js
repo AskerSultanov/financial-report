@@ -3,7 +3,7 @@ import excludeFutureTaxParams from "../services/excludeFutureTaxParams.js";
 
 var { getTaxParamsFromDb } = dbUtils.taxParamsModelUtils;
 
-var getTaxParams = async (req, res, next) => {
+var getTaxParamsController = async (req, res, next) => {
   var { userId } = req.params;
 
   var taxParams = await getTaxParamsFromDb(userId);
@@ -12,4 +12,4 @@ var getTaxParams = async (req, res, next) => {
   return res.json({ taxParams: filteredTaxParams });
 };
 
-export default getTaxParams;
+export default getTaxParamsController;

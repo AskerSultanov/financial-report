@@ -25,7 +25,7 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
-var getReportFromFiles = async (req, res) => {
+var getReportFromFilesController = async (req, res) => {
   var { deduplicatedFiles } = removeDublicateFiles(req.files);
 
   var { weeklyFinancialReportsBuffer, paidStorageReportsBuffer } = await extractReportsFileBufferFromZip(deduplicatedFiles);
@@ -67,4 +67,4 @@ var getReportFromFiles = async (req, res) => {
   return res.json({ report, reportPeriodIsEmpty });
 };
 
-export default getReportFromFiles;
+export default getReportFromFilesController;

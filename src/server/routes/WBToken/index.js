@@ -1,20 +1,20 @@
 import { Router } from "express";
 import schema from "./joiSchemas/index.js";
-import saveToken from "./controllers/saveToken.js";
-import removeToken from "./controllers/removeToken.js";
-import getTokenData from "./controllers/getTokenData.js";
-import tokenValidator from "./controllers/tokenValidator.js";
-import getWbTokenPage from "./controllers/getWbTokenPage.js";
-import checkTokenExists from "./controllers/checkTokenExists.js";
+import saveTokenController from "./controllers/saveToken.js";
+import removeTokenController from "./controllers/removeToken.js";
+import getTokenDataController from "./controllers/getTokenData.js";
+import tokenValidatorController from "./controllers/tokenValidator.js";
+import getWbTokenPageController from "./controllers/getWbTokenPage.js";
+import checkTokenExistsController from "./controllers/checkTokenExists.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
-import checkForStoppedReportLoading from "./controllers/checkForStoppedReportLoading.js";
+import checkForStoppedReportLoadingController from "./controllers/checkForStoppedReportLoading.js";
 
 var router = Router({ caseSensitive: true, strict: true });
 
-router.get("/", getWbTokenPage);
-router.get("/:userId", getTokenData);
-router.post("/", joiSchemaValidator(schema.saveToken), tokenValidator, saveToken, checkForStoppedReportLoading);
-router.get("/check-exist/:userId", checkTokenExists);
-router.delete("/", joiSchemaValidator(schema.removeToken), removeToken);
+router.get("/", getWbTokenPageController);
+router.get("/:userId", getTokenDataController);
+router.post("/", joiSchemaValidator(schema.saveToken), tokenValidatorController, saveTokenController, checkForStoppedReportLoadingController);
+router.get("/check-exist/:userId", checkTokenExistsController);
+router.delete("/", joiSchemaValidator(schema.removeToken), removeTokenController);
 
 export default router;

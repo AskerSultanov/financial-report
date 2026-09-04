@@ -1,6 +1,6 @@
 import { removeTokenFromDb } from "../../../database/modelsUtil/tokens/index.js";
 
-var removeToken = async (req, res) => {
+var removeTokenController = async (req, res) => {
   var { userId } = req.body;
 
   var { removedToken } = await removeTokenFromDb(userId);
@@ -8,4 +8,4 @@ var removeToken = async (req, res) => {
   return removedToken ? res.sendStatus(200) : res.sendStatus(404);
 };
 
-export default removeToken;
+export default removeTokenController;

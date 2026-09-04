@@ -8,7 +8,7 @@ import recalculateTaxParams from "../services/different/recalculateTaxParams.js"
 var { saveUpdatedReport, getSkuFromReport } = dbUtils.reportModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
-var setOtherExpensesToSku = async (req, res, next) => {
+var setOtherExpensesToSkuController = async (req, res, next) => {
   var { userId, reportId, skuName, year, otherExpenses } = req.body;
 
   var session = await dbClient.startSession();
@@ -74,4 +74,4 @@ var setOtherExpensesToSku = async (req, res, next) => {
   }
 };
 
-export default setOtherExpensesToSku;
+export default setOtherExpensesToSkuController;

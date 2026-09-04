@@ -4,7 +4,7 @@ import splitSkuByDisabledStatus from "../services/splitSkuByDisabledStatus.js";
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 var { getWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
-var getListGoodsAndWeeklyPrices = async (req, res, next) => {
+var getListGoodsAndWeeklyPricesController = async (req, res, next) => {
   var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);
@@ -15,4 +15,4 @@ var getListGoodsAndWeeklyPrices = async (req, res, next) => {
   return res.json({ listGoods, weeklyPricesAndDiscounts });
 };
 
-export default getListGoodsAndWeeklyPrices;
+export default getListGoodsAndWeeklyPricesController;

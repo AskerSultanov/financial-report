@@ -2,7 +2,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 
 var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
 
-var changeSkuDisableStatus = async (req, res, next) => {
+var changeSkuDisableStatusController = async (req, res, next) => {
   var { userId, skuName, disableStatus } = req.body;
 
   var success = await updateSkuInListGoods(userId, skuName, { disabled: disableStatus });
@@ -14,4 +14,4 @@ var changeSkuDisableStatus = async (req, res, next) => {
   return res.sendStatus(200);
 };
 
-export default changeSkuDisableStatus;
+export default changeSkuDisableStatusController;

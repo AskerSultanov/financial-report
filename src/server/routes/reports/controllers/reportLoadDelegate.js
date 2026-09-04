@@ -2,7 +2,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import isLastRequestTooRecent from "../services/different/isLastRequestTooRecent.js";
 import sendReportPeriodsToReportLoader from "../services/different/sendReportPeriodsToReportLoader.js";
 
-var reportLoadDelegate = async (req, res, next) => {
+var reportLoadDelegateController = async (req, res, next) => {
   var { needToLoadAllReports, isPeriodWithinSameWeek } = req.body;
 
   if (!isPeriodWithinSameWeek || needToLoadAllReports) {
@@ -36,4 +36,4 @@ var reportLoadDelegate = async (req, res, next) => {
   next();
 };
 
-export default reportLoadDelegate;
+export default reportLoadDelegateController;

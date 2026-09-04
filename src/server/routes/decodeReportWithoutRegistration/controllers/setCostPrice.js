@@ -20,7 +20,7 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
-var setCostPrice = async (req, res, next) => {
+var setCostPriceController = async (req, res, next) => {
   var { dateFrom, dateTo, userId, skuName, sku, taxRate, year, isCrossYearPeriod } = req.body;
 
   var years = [];
@@ -54,4 +54,4 @@ var setCostPrice = async (req, res, next) => {
   });
 };
 
-export default setCostPrice;
+export default setCostPriceController;

@@ -11,7 +11,7 @@ var { getWBTokenByUserId } = dbUtils.tokenModelUtils;
 var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
 
-var setNewPricesAndDiscountsToSku = async (req, res, next) => {
+var setNewPricesAndDiscountsToSkuController = async (req, res, next) => {
   var { userId, skuName, skuDataToUpdate, setNewPriceNow, expectedPriceExists } = req.body;
   var session = await dbClient.startSession();
 
@@ -56,4 +56,4 @@ var setNewPricesAndDiscountsToSku = async (req, res, next) => {
   next();
 };
 
-export default setNewPricesAndDiscountsToSku;
+export default setNewPricesAndDiscountsToSkuController;

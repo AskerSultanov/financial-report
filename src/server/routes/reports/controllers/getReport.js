@@ -7,7 +7,7 @@ var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 
 var selectedFields = { "listGoods.skuName": 1, "listGoods.lastCostPrice": 1 };
 
-var getReport = async (req, res, next) => {
+var getReportController = async (req, res, next) => {
   var { userId, reportId } = req.params;
 
   var { report } = await getReportById(userId, reportId);
@@ -27,4 +27,4 @@ var getReport = async (req, res, next) => {
   return res.json({ report, skuImages, skusWithLastCostPrices: filteredSkusWithLastCostPrices });
 };
 
-export default getReport;
+export default getReportController;

@@ -16,7 +16,7 @@ var selectedFieldsToLoadingState = [
   "isReportLoadingIsStopped",
 ];
 
-var getMainPageData = async (req, res, next) => {
+var getMainPageDataController = async (req, res, next) => {
   var userId = req.params.userId;
 
   var reportLoadingStateUrl = "/report/loading-state/" + userId + "/";
@@ -61,4 +61,4 @@ var getMainPageData = async (req, res, next) => {
   });
 };
 
-export default getMainPageData;
+export default getMainPageDataController;

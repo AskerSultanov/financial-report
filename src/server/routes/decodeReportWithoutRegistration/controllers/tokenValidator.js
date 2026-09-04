@@ -2,7 +2,7 @@ import parseJwt from "../../WBToken/services/parseJwt.js";
 import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 import isPresumablyJwtToken from "../../WBToken/services/isPresumablyJwtToken.js";
 
-var tokenValidator = async (req, res) => {
+var tokenValidatorController = async (req, res) => {
   var token = req.body.token;
 
   if (!token) {
@@ -47,4 +47,4 @@ var tokenValidator = async (req, res) => {
 
   return res.sendStatus(200);
 };
-export default tokenValidator;
+export default tokenValidatorController;

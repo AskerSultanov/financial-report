@@ -9,7 +9,7 @@ var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 var { saveUpdatedReport, getSkuFromReport, getReportById } = dbUtils.reportModelUtils;
 
-var setCostPriceToSku = async (req, res, next) => {
+var setCostPriceToSkuController = async (req, res, next) => {
   var { userId, reportId, skuName, year, costPrice } = req.body;
 
   var session = await dbClient.startSession();
@@ -79,4 +79,4 @@ var setCostPriceToSku = async (req, res, next) => {
   }
 };
 
-export default setCostPriceToSku;
+export default setCostPriceToSkuController;

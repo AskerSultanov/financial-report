@@ -1,3 +1,3 @@
-var logout = (req, res, next) => res.clearCookie("token").redirect("/");
+var logoutController = (req, res, next) => res.clearCookie("token").redirect("/");
 
-export default logout;
+export default logoutController;

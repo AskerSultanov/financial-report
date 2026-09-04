@@ -3,7 +3,7 @@ import isTestToken from "../services/isTestToken.js";
 import checkTokenExpiry from "../services/checkTokenExpiry.js";
 import isPresumablyJwtToken from "../services/isPresumablyJwtToken.js";
 
-var tokenValidator = async (req, res, next) => {
+var tokenValidatorController = async (req, res, next) => {
   var token = req.body.token;
 
   if (!token) {
@@ -55,4 +55,4 @@ var tokenValidator = async (req, res, next) => {
   next();
 };
 
-export default tokenValidator;
+export default tokenValidatorController;

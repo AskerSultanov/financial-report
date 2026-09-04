@@ -9,7 +9,7 @@ var selectedFields = ["reports.reportId", "reports.skus", "reports.dateFrom", "r
 
 var { getReportsByUserId } = dbUtils.reportModelUtils;
 
-var downloadReportsAsZip = async (req, res, next) => {
+var downloadReportsAsZipController = async (req, res, next) => {
   var { userId, reportIds } = req.body;
 
   var { reports } = await getReportsByUserId(userId, session, selectedFields, reportIds);
@@ -40,4 +40,4 @@ var downloadReportsAsZip = async (req, res, next) => {
   return res.send(zipBuffer);
 };
 
-export default downloadReportsAsZip;
+export default downloadReportsAsZipController;

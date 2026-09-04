@@ -20,7 +20,7 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
-var setOtherExpensesToSku = async (req, res, next) => {
+var setOtherExpensesToSkuController = async (req, res, next) => {
   var { dateFrom, dateTo, userId, skuName, sku, taxRate, year, isCrossYearPeriod } = req.body;
 
   if (sku.otherExpenses === req.body.otherExpenses) {
@@ -54,4 +54,4 @@ var setOtherExpensesToSku = async (req, res, next) => {
   });
 };
 
-export default setOtherExpensesToSku;
+export default setOtherExpensesToSkuController;

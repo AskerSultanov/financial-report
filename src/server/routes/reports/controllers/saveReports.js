@@ -14,7 +14,7 @@ var sessionOptions = { maxTimeMs: fiveMinInMs };
 
 var { getWBTokenByUserId } = dbUtils.tokenModelUtils;
 
-var saveReports = async (req, res) => {
+var saveReportsController = async (req, res) => {
   var { dateTo, dateFrom, userId } = req.body;
 
   try {
@@ -42,4 +42,4 @@ var saveReports = async (req, res) => {
   }
 };
 
-export default saveReports;
+export default saveReportsController;

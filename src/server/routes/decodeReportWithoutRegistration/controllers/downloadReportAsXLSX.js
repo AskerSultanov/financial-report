@@ -1,6 +1,6 @@
 import { getReportAsXLSXBuffer } from "../../reports/services/reportAsXLSXBuffer/index.js";
 
-var downloadReportAsXLSX = async (req, res, next) => {
+var downloadReportAsXLSXController = async (req, res, next) => {
   var { report } = req.body;
 
   if (!report) {
@@ -17,4 +17,4 @@ var downloadReportAsXLSX = async (req, res, next) => {
   return res.send(buffer);
 };
 
-export default downloadReportAsXLSX;
+export default downloadReportAsXLSXController;

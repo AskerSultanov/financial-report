@@ -5,7 +5,7 @@ import mergeListGoodsWithWeeklyPricesAndDiscounts from "../services/mergeListGoo
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 var { getWeeklyPricesAndDiscountsFromDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
-var getWeeklyPricesFile = async (req, res, next) => {
+var getWeeklyPricesFileController = async (req, res, next) => {
   var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);
@@ -22,4 +22,4 @@ var getWeeklyPricesFile = async (req, res, next) => {
   return res.send(buffer);
 };
 
-export default getWeeklyPricesFile;
+export default getWeeklyPricesFileController;

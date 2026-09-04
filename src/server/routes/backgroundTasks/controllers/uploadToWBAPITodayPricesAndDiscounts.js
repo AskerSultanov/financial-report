@@ -11,7 +11,7 @@ var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
 var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 var { getTodayPricesAndDiscountsByDayIndex, setUploadId } = dbUtils.weeklyPricesAndDiscountsModelUtils;
 
-var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
+var uploadToWBAPITodayPricesAndDiscountsController = async (req, res, next) => {
   var { currentDayIndex } = getCurrentDayMSK();
   var data = await getTodayPricesAndDiscountsByDayIndex(currentDayIndex);
 
@@ -58,4 +58,4 @@ var uploadToWBAPITodayPricesAndDiscounts = async (req, res, next) => {
   return res.sendStatus(200);
 };
 
-export default uploadToWBAPITodayPricesAndDiscounts;
+export default uploadToWBAPITodayPricesAndDiscountsController;

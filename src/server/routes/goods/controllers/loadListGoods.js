@@ -10,7 +10,7 @@ var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYea
 var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsModelUtils;
 var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 
-var loadListGoods = async (req, res, next) => {
+var loadListGoodsController = async (req, res, next) => {
   var { userId } = req.body;
 
   var session = await dbClient.startSession();
@@ -43,4 +43,4 @@ var loadListGoods = async (req, res, next) => {
   }
 };
 
-export default loadListGoods;
+export default loadListGoodsController;

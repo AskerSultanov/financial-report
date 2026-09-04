@@ -2,8 +2,8 @@ import Joi from "joi";
 
 var schema = Joi.object({ login: Joi.string().required(), passwd: Joi.any().required() });
 
-var checkAuthAdminData = async (req, res, next) => {
+var checkAuthAdminDataController = async (req, res, next) => {
   var { login, passwd } = req.body;
 };
 
-export default checkAuthAdminData;
+export default checkAuthAdminDataController;

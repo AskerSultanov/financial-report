@@ -3,7 +3,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 
 var { deleteUserFromDb } = dbUtils.userModelUtils;
 
-var deleteUser = async (req, res, next) => {
+var deleteUserController = async (req, res, next) => {
   var { userId } = req.body;
   var session = await dbClient.startSession();
 
@@ -22,4 +22,4 @@ var deleteUser = async (req, res, next) => {
   }
 };
 
-export default deleteUser;
+export default deleteUserController;

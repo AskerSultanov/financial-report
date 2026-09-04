@@ -2,7 +2,7 @@ import parseJwt from "../services/parseJwt.js";
 import getTokenDetails from "../services/getTokenDetails.js";
 import { getWBTokenByUserId } from "../../../database/modelsUtil/tokens/index.js";
 
-var getTokenData = async (req, res, next) => {
+var getTokenDataController = async (req, res, next) => {
   var userId = req.params.userId;
 
   if (!userId) {
@@ -23,4 +23,4 @@ var getTokenData = async (req, res, next) => {
   return res.json(tokenDetails);
 };
 
-export default getTokenData;
+export default getTokenDataController;

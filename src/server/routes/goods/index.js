@@ -1,17 +1,17 @@
 import multer from "multer";
 import { Router } from "express";
 import fileFilter from "./services/fileFilter/index.js";
-import getListGoods from "./controllers/getListGoods.js";
-import loadListGoods from "./controllers/loadListGoods.js";
-import getListGoodsPage from "./controllers/getListGoodsPage.js";
-import getSkusMetricsFile from "./controllers/getSkusMetricsFile.js";
-import getWeeklyPricesFile from "./controllers/getWeeklyPricesFile.js";
-import changeSkuDisableStatus from "./controllers/changeSkuDisableStatus.js";
-import getListGoodsAndWeeklyPrices from "./controllers/getListGoodsAndWeeklyPrices.js";
-import uploadPricesAndDiscountsFile from "./controllers/uploadPricesAndDiscountsFile.js";
-import changeWeeklyPricesOrDiscounts from "./controllers/changeWeeklyPricesOrDiscounts.js";
-import setNewPricesAndDiscountsToSku from "./controllers/setNewPricesAndDiscountsToSku.js";
-import changeStatusOfParticipationInPromo from "./controllers/changeStatusOfParticipationInPromo.js";
+import getListGoodsController from "./controllers/getListGoods.js";
+import loadListGoodsController from "./controllers/loadListGoods.js";
+import getListGoodsPageController from "./controllers/getListGoodsPage.js";
+import getSkusMetricsFileController from "./controllers/getSkusMetricsFile.js";
+import getWeeklyPricesFileController from "./controllers/getWeeklyPricesFile.js";
+import changeSkuDisableStatusController from "./controllers/changeSkuDisableStatus.js";
+import getListGoodsAndWeeklyPricesController from "./controllers/getListGoodsAndWeeklyPrices.js";
+import uploadPricesAndDiscountsFileController from "./controllers/uploadPricesAndDiscountsFile.js";
+import changeWeeklyPricesOrDiscountsController from "./controllers/changeWeeklyPricesOrDiscounts.js";
+import setNewPricesAndDiscountsToSkuController from "./controllers/setNewPricesAndDiscountsToSku.js";
+import changeStatusOfParticipationInPromoController from "./controllers/changeStatusOfParticipationInPromo.js";
 
 import schemas from "./JoiSchemas/index.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
@@ -21,28 +21,28 @@ var upload = multer({ storage, fileFilter });
 
 var router = Router({ caseSensitive: true, strict: true });
 
-router.get("/", getListGoodsPage);
-router.get("/listgoodsonly/:userId", getListGoods);
-router.get("/metrics/download/:userId", getSkusMetricsFile);
-router.get("/api/:userId", getListGoodsAndWeeklyPrices);
-router.get("/prices-discounts/file/:userId", getWeeklyPricesFile);
+router.get("/", getListGoodsPageController);
+router.get("/listgoodsonly/:userId", getListGoodsController);
+router.get("/metrics/download/:userId", getSkusMetricsFileController);
+router.get("/api/:userId", getListGoodsAndWeeklyPricesController);
+router.get("/prices-discounts/file/:userId", getWeeklyPricesFileController);
 
-router.post("/", joiSchemaValidator(schemas.loadListGoods), loadListGoods);
-router.post("/sku-disable-status", joiSchemaValidator(schemas.changeSkuDisableStatus), changeSkuDisableStatus);
+router.post("/", joiSchemaValidator(schemas.loadListGoods), loadListGoodsController);
+router.post("/sku-disable-status", joiSchemaValidator(schemas.changeSkuDisableStatus), changeSkuDisableStatusController);
 
-router.post("/prices-discounts/upload/", upload.single("file"), uploadPricesAndDiscountsFile);
+router.post("/prices-discounts/upload/", upload.single("file"), uploadPricesAndDiscountsFileController);
 
 router.patch(
   "/status-of-participation-in-promo/",
   joiSchemaValidator(schemas.changeStatusOfParticipationInPromo),
-  changeStatusOfParticipationInPromo,
+  changeStatusOfParticipationInPromoController,
 );
 
 router.patch(
   "/prices-discounts/",
   joiSchemaValidator(schemas.setNewPricesAndDiscountsToSku),
-  setNewPricesAndDiscountsToSku,
-  changeWeeklyPricesOrDiscounts,
+  setNewPricesAndDiscountsToSkuController,
+  changeWeeklyPricesOrDiscountsController,
 );
 
 export default router;

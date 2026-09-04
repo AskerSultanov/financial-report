@@ -1,11 +1,11 @@
 import { Router } from "express";
-import createUser from "./controller/createUser.js";
-import getRegistrationFormPage from "./controller/getRegistrationFormPage.js";
+import createUserController from "./controller/createUser.js";
+import getRegistrationFormPageController from "./controller/getRegistrationFormPage.js";
 
 var router = Router({ caseSensitive: true, strict: true });
 
-router.get("/", getRegistrationFormPage);
+router.get("/", getRegistrationFormPageController);
 
-router.post("/new", createUser);
+router.post("/new", createUserController);
 
 export default router;

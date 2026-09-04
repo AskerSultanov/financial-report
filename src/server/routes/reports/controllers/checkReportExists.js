@@ -3,7 +3,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
 var { getEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
 
-var checkReportExists = async (req, res, next) => {
+var checkReportExistsController = async (req, res, next) => {
   var { dateFrom, dateTo, userId } = req.body;
 
   var { emptyReportPeriods } = await getEmptyReportPeriods(userId);
@@ -23,4 +23,4 @@ var checkReportExists = async (req, res, next) => {
   next();
 };
 
-export default checkReportExists;
+export default checkReportExistsController;

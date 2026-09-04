@@ -11,7 +11,7 @@ var { getEmptyReportPeriods, addReportToEmptyReportPeriods } = dbUtils.reportLoa
 
 var isReportFromFile = true;
 
-var saveReportFromFile = async (req, res, next) => {
+var saveReportFromFileController = async (req, res, next) => {
   var { userId } = req.body;
 
   var { deduplicatedFiles } = removeDublicateFiles(req.files);
@@ -63,4 +63,4 @@ var saveReportFromFile = async (req, res, next) => {
   }
 };
 
-export default saveReportFromFile;
+export default saveReportFromFileController;

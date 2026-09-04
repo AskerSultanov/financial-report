@@ -1,5 +1,5 @@
 import { join } from "node:path";
 
-var getAuthFormPage = async (req, res, next) => res.sendFile(join(import.meta.dirname, "../../../../public/html/auth/index.html"));
+var getAuthFormPageController = async (req, res, next) => res.sendFile(join(import.meta.dirname, "../../../../public/html/auth/index.html"));
 
-export default getAuthFormPage;
+export default getAuthFormPageController;

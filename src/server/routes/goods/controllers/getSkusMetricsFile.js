@@ -6,7 +6,7 @@ import mergeSkuDataBySkuNameAndYear from "../services/skusMetrics/mergeSkuDataBy
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
 var { getReportsByUserId } = dbUtils.reportModelUtils;
 
-var getSkusMetricsFile = async (req, res, next) => {
+var getSkusMetricsFileController = async (req, res, next) => {
   var { userId } = req.params;
 
   var { reports } = await getReportsByUserId(userId);
@@ -25,4 +25,4 @@ var getSkusMetricsFile = async (req, res, next) => {
   res.send(skusMetricsFileBuffer);
 };
 
-export default getSkusMetricsFile;
+export default getSkusMetricsFileController;

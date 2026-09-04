@@ -3,7 +3,7 @@ import sendResumeAbandonedReportsLoadingRequest from "../services/different/send
 
 var { reportLoadingStateModelUtils } = dbUtils;
 
-var resumeAbandonedReportsLoading = async (req, res) => {
+var resumeAbandonedReportsLoadingController = async (req, res) => {
   var { userId, needToResumeLoading } = req.body;
 
   var success = true;
@@ -21,4 +21,4 @@ var resumeAbandonedReportsLoading = async (req, res) => {
   return success ? res.sendStatus(200) : res.sendStatus(304);
 };
 
-export default resumeAbandonedReportsLoading;
+export default resumeAbandonedReportsLoadingController;

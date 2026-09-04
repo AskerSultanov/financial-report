@@ -5,7 +5,7 @@ var selectedFields = ["loadingInProgress"];
 
 var { getReportLoadingState, prependToReportsQueue } = dbUtils.reportLoadingStateModelUtils;
 
-var checkReportsLoadingProgress = async (req, res, next) => {
+var checkReportsLoadingProgressController = async (req, res, next) => {
   var { userId, dateFrom, dateTo } = req.body;
 
   var { loadingInProgress } = await getReportLoadingState(userId, session, selectedFields);
@@ -18,4 +18,4 @@ var checkReportsLoadingProgress = async (req, res, next) => {
   next();
 };
 
-export default checkReportsLoadingProgress;
+export default checkReportsLoadingProgressController;

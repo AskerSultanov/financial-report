@@ -1,36 +1,36 @@
 import multer from "multer";
 import { Router } from "express";
 import schemas from "./JoiSchemas/index.js";
-import setCostPrice from "./controllers/setCostPrice.js";
-import getReportPage from "./controllers/getReportPage.js";
-import tokenValidator from "./controllers/tokenValidator.js";
+import setCostPriceController from "./controllers/setCostPrice.js";
+import getReportPageController from "./controllers/getReportPage.js";
+import tokenValidatorController from "./controllers/tokenValidator.js";
 import fileFilter from "../reports/services/fileFilter/index.js";
-import setOtherExpenses from "./controllers/setOtherExpenses.js";
-import getReportFromWBAPI from "./controllers/getReportFromWBAPI.js";
-import getReportFromFiles from "./controllers/getReportFromFiles.js";
+import setOtherExpensesController from "./controllers/setOtherExpenses.js";
+import getReportFromWBAPIController from "./controllers/getReportFromWBAPI.js";
+import getReportFromFilesController from "./controllers/getReportFromFiles.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
-import downloadReportAsXLSX from "./controllers/downloadReportAsXLSX.js";
-import getDecodeReportWithoutRegistrationPage from "./controllers/getDecodeReportWithoutRegistrationPage.js";
+import downloadReportAsXLSXController from "./controllers/downloadReportAsXLSX.js";
+import getDecodeReportWithoutRegistrationPageController from "./controllers/getDecodeReportWithoutRegistrationPage.js";
 
 var storage = multer.memoryStorage();
 var upload = multer({ storage, fileFilter });
 
 var router = Router({ caseSensitive: true, strict: true });
 
-router.get("/", getDecodeReportWithoutRegistrationPage);
+router.get("/", getDecodeReportWithoutRegistrationPageController);
 
-router.get("/report/:id", getReportPage);
+router.get("/report/:id", getReportPageController);
 
-router.post("/xlsx/", downloadReportAsXLSX);
+router.post("/xlsx/", downloadReportAsXLSXController);
 
-router.post("/", joiSchemaValidator(schemas.reportsFromWBAPI), getReportFromWBAPI);
+router.post("/", joiSchemaValidator(schemas.reportsFromWBAPI), getReportFromWBAPIController);
 
-router.patch("/report/cost-price", joiSchemaValidator(schemas.setCostPrice), setCostPrice);
+router.patch("/report/cost-price", joiSchemaValidator(schemas.setCostPrice), setCostPriceController);
 
-router.patch("/report/other-expenses", joiSchemaValidator(schemas.setCostPrice), setOtherExpenses);
+router.patch("/report/other-expenses", joiSchemaValidator(schemas.setCostPrice), setOtherExpensesController);
 
-router.post("/token/", tokenValidator);
+router.post("/token/", tokenValidatorController);
 
-router.post("/files", upload.array("file"), getReportFromFiles);
+router.post("/files", upload.array("file"), getReportFromFilesController);
 
 export default router;

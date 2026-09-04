@@ -7,7 +7,7 @@ var { removeReportFromReportPeriods } = dbUtils.reportPeriodsModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 var { removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
 
-var deleteReport = async (req, res, next) => {
+var deleteReportController = async (req, res, next) => {
   var { userId, reportId } = req.body;
 
   var session = await dbClient.startSession();
@@ -58,4 +58,4 @@ var deleteReport = async (req, res, next) => {
   }
 };
 
-export default deleteReport;
+export default deleteReportController;

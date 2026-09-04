@@ -10,7 +10,7 @@ var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
 var { saveUpdatedReport, getSkusFromReport } = dbUtils.reportModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
-var setCostPriceToSkus = async (req, res, next) => {
+var setCostPriceToSkusController = async (req, res, next) => {
   if (!req.body.costPrices.length) {
     return res.sendStatus(400);
   }
@@ -93,4 +93,4 @@ var setCostPriceToSkus = async (req, res, next) => {
   }
 };
 
-export default setCostPriceToSkus;
+export default setCostPriceToSkusController;

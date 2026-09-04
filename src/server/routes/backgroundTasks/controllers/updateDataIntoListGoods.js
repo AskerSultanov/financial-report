@@ -12,7 +12,7 @@ var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
 var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 var { getAllUserListGoodsIds, saveNewSkusToDb, updateSkusInListGoods } = dbUtils.goodsModelUtils;
 
-var updateDataIntoListGoods = async (req, res, next) => {
+var updateDataIntoListGoodsController = async (req, res, next) => {
   var data = await getAllUserListGoodsIds();
 
   for (var { userId, listGoodsIds, listGoodsSkuNamesAndIds } of data) {
@@ -61,4 +61,4 @@ var updateDataIntoListGoods = async (req, res, next) => {
   return res.sendStatus(200);
 };
 
-export default updateDataIntoListGoods;
+export default updateDataIntoListGoodsController;

@@ -3,7 +3,7 @@ import { getReportAsXLSXBuffer } from "../services/reportAsXLSXBuffer/index.js";
 
 var { getReportById } = dbUtils.reportModelUtils;
 
-var downloadReportAsXLSX = async (req, res, next) => {
+var downloadReportAsXLSXController = async (req, res, next) => {
   var { userId, reportId } = req.body;
 
   var { report } = await getReportById(userId, reportId);
@@ -18,4 +18,4 @@ var downloadReportAsXLSX = async (req, res, next) => {
   return res.send(buffer);
 };
 
-export default downloadReportAsXLSX;
+export default downloadReportAsXLSXController;
