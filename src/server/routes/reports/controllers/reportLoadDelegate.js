@@ -32,9 +32,9 @@ var reportLoadDelegateController = async (req, res, next) => {
       req.body.userId,
     );
 
-  var { needToDalay } = isLastRequestTooRecent(lastReportRequestTimestamp);
+  var { needToDelay } = isLastRequestTooRecent(lastReportRequestTimestamp);
 
-  if (needToDalay) {
+  if (needToDelay) {
     try {
       await sendReportPeriodsToReportLoader(req.body);
 

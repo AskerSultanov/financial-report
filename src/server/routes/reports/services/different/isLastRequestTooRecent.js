@@ -1,17 +1,20 @@
-var isLastRequestTooRecent = (lastReportRequestTimestamp, nestReportDelayMs = 65_000) => {
+var isLastRequestTooRecent = (
+  lastReportRequestTimestamp,
+  nestReportDelayMs = 65_000,
+) => {
   var delayInMs = 0;
 
   var currentTimestamp = Date.now();
 
   var difference = currentTimestamp - lastReportRequestTimestamp;
 
-  var needToDalay = difference < nestReportDelayMs;
+  var needToDelay = difference < nestReportDelayMs;
 
-  if (needToDalay) {
+  if (needToDelay) {
     delayInMs = nestReportDelayMs - difference;
   }
 
-  return { needToDalay, delayInMs };
+  return { needToDelay, delayInMs };
 };
 
 export default isLastRequestTooRecent;
