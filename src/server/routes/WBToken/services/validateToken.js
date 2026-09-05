@@ -1,24 +1,25 @@
-import parseJwt from "../../WBToken/services/utils/parseJwt.js";
-import checkTokenExpiry from "../../WBToken/services/utils/checkTokenExpiry.js";
-import isPresumablyJwtToken from "../../WBToken/services/utils/isPresumablyJwtToken.js";
+import parseJwt from "./utils/parseJwt.js";
+import isTestToken from "./utils/isTestToken.js";
+import checkTokenExpiry from "./utils/checkTokenExpiry.js";
+import isPresumablyJwtToken from "./utils/isPresumablyJwtToken.js";
 
-var tokenValidatorController = async (req, res) => {
-  var token = req.body.token;
-
-  if (!token) {
-    return res.sendStatus(400);
-  }
+var validateTokenService = async (token) => {
+  var tokenIsValid = false;
 
   if (!isPresumablyJwtToken(token)) {
-    return res.sendStatus(400);
+    return { tokenIsValid, tokenPayload: {} };
   }
 
   var tokenPayload = parseJwt(token);
 
+  if (isTestToken(tokenPayload)) {
+    return { tokenIsValid, tokenPayload: {} };
+  }
+
   var { isExpired } = checkTokenExpiry(tokenPayload);
 
   if (isExpired) {
-    return res.sendStatus(400);
+    return { tokenIsValid, tokenPayload: {} };
   }
 
   var options = {
@@ -48,9 +49,10 @@ var tokenValidatorController = async (req, res) => {
   }
 
   if (tokenAuthFailed) {
-    return res.sendStatus(401);
+    return { tokenIsValid, tokenPayload: {} };
   }
 
-  return res.sendStatus(200);
+  return { tokenIsValid: true, tokenPayload };
 };
-export default tokenValidatorController;
+
+export default validateTokenService;

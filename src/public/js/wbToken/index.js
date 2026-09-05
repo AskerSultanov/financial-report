@@ -9,13 +9,13 @@ import { enableRemoveTokenButton } from "./toggleVisibilityOfRemoveTokenButton.j
 var userId = document.cookie.split("=")[1];
 
 var main = async () => {
-  var { tokenData } = await getTokenData(userId);
+  var { tokenDetails, tokenIsExist } = await getTokenData(userId);
 
-  if (tokenData.tokenIsExist) {
+  if (tokenIsExist) {
     renameSaveButton();
     enableTokenDataTable();
     enableRemoveTokenButton();
-    insertDataToTokenDataTable(tokenData);
+    insertDataToTokenDataTable(tokenDetails);
 
     removeTokenButtonHandler(userId);
   }

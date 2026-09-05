@@ -1,4 +1,4 @@
-import sendResumeLoadingRequest from "../services/sendResumeLoadingRequest.js";
+import sendResumeLoadingRequest from "../services/utils/sendResumeLoadingRequest.js";
 import { getReportLoadingState } from "../../../database/modelsUtil/reportLoadingState/index.js";
 
 var checkForStoppedReportLoadingController = async (req, res, next) => {

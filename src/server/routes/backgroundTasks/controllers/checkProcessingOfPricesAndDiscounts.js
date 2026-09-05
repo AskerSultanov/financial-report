@@ -1,16 +1,18 @@
 import { dbClient } from "../../../database/index.js";
-import parseJwt from "../../WBToken/services/parseJwt.js";
+import parseJwt from "../../WBToken/services/utils/parseJwt.js";
 import wbapi from "../../reports/services/WBAPI/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
-import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
+import checkTokenExpiry from "../../WBToken/services/utils/checkTokenExpiry.js";
 
 var statusOfReportLoadingStop = true;
 var updateWBTokenLastUsedTimestampNow = true;
 
 var { setPriceUpdateTimestampAndUpdateStatus } = dbUtils.goodsModelUtils;
 var { updateReportLoadingStoppedStatus } = dbUtils.reportLoadingStateModelUtils;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
-var { getAllUserWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
+var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } =
+  dbUtils.tokenModelUtils;
+var { getAllUserWeeklyPricesAndDiscounts } =
+  dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var checkProcessingOfPricesAndDiscountsController = async (req, res, next) => {
   var data = await getAllUserWeeklyPricesAndDiscounts();
@@ -21,24 +23,46 @@ var checkProcessingOfPricesAndDiscountsController = async (req, res, next) => {
     try {
       await session.withTransaction(async () => {
         if (uploadId) {
-          var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
+          var { token } = await getWBTokenByUserId(
+            userId,
+            session,
+            updateWBTokenLastUsedTimestampNow,
+          );
 
           if (!token) {
             var loadingStopReason = "isTokenMissing";
-            await updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+            await updateReportLoadingStoppedStatus(
+              userId,
+              statusOfReportLoadingStop,
+              loadingStopReason,
+              session,
+            );
           } else {
             var tokenPayload = parseJwt(token);
             var { isExpired } = checkTokenExpiry(tokenPayload);
 
             if (isExpired) {
               var loadingStopReason = "tokenIsExpired";
-              await dbUtils.updateReportLoadingStoppedStatus(userId, statusOfReportLoadingStop, loadingStopReason, session);
+              await dbUtils.updateReportLoadingStoppedStatus(
+                userId,
+                statusOfReportLoadingStop,
+                loadingStopReason,
+                session,
+              );
             } else {
               await updateWBTokenLastUsedTimestamp(userId, session);
 
-              var { historyGoods } = await wbapi.getPriceUploadDetails(userId, uploadId, token);
+              var { historyGoods } = await wbapi.getPriceUploadDetails(
+                userId,
+                uploadId,
+                token,
+              );
 
-              await setPriceUpdateTimestampAndUpdateStatus(userId, historyGoods, session);
+              await setPriceUpdateTimestampAndUpdateStatus(
+                userId,
+                historyGoods,
+                session,
+              );
             }
           }
         }

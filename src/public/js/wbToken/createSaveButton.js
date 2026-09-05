@@ -33,9 +33,9 @@ var createSaveButton = (userId, input, modal) => {
         enableRemoveTokenButton();
         setTimeout(() => alert("Токен успешно сохранен"));
 
-        var data = await res.json();
+        var { tokenDetails } = await res.json();
         enableTokenDataTable();
-        insertDataToTokenDataTable(data);
+        insertDataToTokenDataTable(tokenDetails);
       } else if (res.status === 409) {
         alert("Токен совпадает с предыдущим");
         input.value = "";
