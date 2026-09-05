@@ -45,7 +45,10 @@ var saveTokenController = async (req, res, next) => {
       }
 
       var tokenData = getTokenDetails(tokenPayload);
-      tokenData.lastUsed = new Date();
+
+      tokenData.lastUsed = new Date().toLocaleString("ru-RU", {
+        timeZone: "Europe/Moscow",
+      });
 
       res.json(tokenData);
     });

@@ -36,24 +36,18 @@ var createSaveButton = (userId, input, modal) => {
         var data = await res.json();
         enableTokenDataTable();
         insertDataToTokenDataTable(data);
-
-        return;
       } else if (res.status === 409) {
         alert("Токен совпадает с предыдущим");
         input.value = "";
-        return;
       } else if (res.status === 400) {
         alert("Неправильный запрос");
         input.value = "";
-        return;
       } else if (res.status === 401) {
         alert("Токен не валиден");
         input.value = "";
-        return;
       } else {
         alert("Произошла ошибка при попытке сохранить токен ...");
         input.value = "";
-        return;
       }
     } catch {
       alert("Что-то пошло не так ...");
