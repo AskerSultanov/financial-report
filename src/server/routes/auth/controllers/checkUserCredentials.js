@@ -1,32 +1,27 @@
 import * as jose from "jose";
-import dbUtils from "../../../database/modelsUtil/index.js";
-import checkCredentials from "../services/checkCredentials.js";
+import validateUser from "../services/validateUser.js";
 
 var alg = "RS256";
 var oneDayMs = 86_400_000;
 var exp = Date.now() + oneDayMs;
 
-var { getUserByLogin } = dbUtils.userModelUtils;
+var checkUserCredentialsController = async (req, res) => {
+  var { login, passwd } = req.body;
+  var { credentialInvalid, userId } = await validateUser(login, passwd);
 
-var checkUserCredentialsController = async (req, res, next) => {
-  var existUser = await getUserByLogin(req.body.login);
-
-  if (!existUser) {
-    return res.sendStatus(404);
-  }
-
-  var success = await checkCredentials(req.body, existUser);
-
-  if (!success) {
+  if (credentialInvalid) {
     return res.sendStatus(401);
   }
 
-  var role = existUser.login === process.env.adminName ? "admin" : "user";
+  var role = login === process.env.adminName ? "admin" : "user";
 
-  var payload = { role, userId: existUser.userId };
+  var payload = { role, userId };
+
   var privateKey = await jose.importPKCS8(process.env.pkcs8, alg);
-  var token = await new jose.SignJWT(payload).setExpirationTime(exp).setProtectedHeader({ alg }).sign(privateKey, {});
-  var userId = existUser.userId;
+  var token = await new jose.SignJWT(payload)
+    .setExpirationTime(exp)
+    .setProtectedHeader({ alg })
+    .sign(privateKey, {});
 
   return res
     .cookie("token", token, { httpOnly: true, maxAge: oneDayMs })
