@@ -5,7 +5,8 @@ import recalculateTaxParamsAfterReportDeletion from "../services/different/recal
 var { deleteReportFromDb } = dbUtils.reportModelUtils;
 var { removeReportFromReportPeriods } = dbUtils.reportPeriodsModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
-var { removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
+var { removeReportFromAccounted } =
+  dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var deleteReportController = async (req, res, next) => {
   var { userId, reportId } = req.body;
@@ -15,30 +16,26 @@ var deleteReportController = async (req, res, next) => {
     await session.withTransaction(async () => {
       var taxParams = await getTaxParamsFromDb(userId, null, session);
 
-      var { reportBeforeDeletion } = await deleteReportFromDb(userId, reportId, session);
-      var { dateFrom, dateTo, skus, isCrossYearPeriod, recordedTo } = reportBeforeDeletion;
+      var { reportBeforeDeletion } = await deleteReportFromDb(
+        userId,
+        reportId,
+        session,
+      );
 
-      var { year } = recordedTo;
+      var { dateFrom, dateTo, skus } = reportBeforeDeletion;
 
       var startYear = +dateFrom.split("-")[0];
       var endYear = +dateTo.split("-")[0];
 
       var updatedTaxParams = [];
 
-      if (isCrossYearPeriod) {
-        var startYearTaxParams = taxParams.find((params) => params.year === startYear);
-        var endYearTaxParams = taxParams.find((params) => params.year === endYear);
+      for (var year = startYear; year <= endYear; year++) {
+        var taxParamsOfYear = taxParams.find((item) => item.year === year);
 
-        startYearTaxParams = recalculateTaxParamsAfterReportDeletion(startYearTaxParams, skus).recalculatedTaxParams;
-
-        endYearTaxParams = recalculateTaxParamsAfterReportDeletion(endYearTaxParams, skus).recalculatedTaxParams;
-
-        updatedTaxParams.push({ year: startYear, data: startYearTaxParams });
-        updatedTaxParams.push({ year: endYear, data: endYearTaxParams });
-      } else {
-        var taxParamsOfYear = taxParams.find((params) => params.year === year);
-
-        var { recalculatedTaxParams } = recalculateTaxParamsAfterReportDeletion(taxParamsOfYear, skus);
+        var { recalculatedTaxParams } = recalculateTaxParamsAfterReportDeletion(
+          taxParamsOfYear,
+          skus,
+        );
 
         updatedTaxParams.push({ year, data: recalculatedTaxParams });
       }
