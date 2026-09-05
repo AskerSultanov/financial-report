@@ -1,13 +1,17 @@
 var msInSec = 1000;
 
 var checkTokenExpiry = (tokenPayload) => {
-  if (!tokenPayload?.exp) {
-    throw new Error("Invalid WBTOKEN: payload is missing");
+  var tokenExp = tokenPayload?.exp;
+
+  if (!tokenExp || typeof tokenExp !== "number" || isNaN(tokenExp)) {
+    throw new Error(
+      "Invalid WBTOKEN payload: exp property is missing or invalid",
+    );
   }
 
   var currentTimestamp = Date.now();
 
-  var isExpired = tokenPayload.exp * msInSec <= currentTimestamp;
+  var isExpired = tokenExp * msInSec <= currentTimestamp;
 
   return { isExpired };
 };
