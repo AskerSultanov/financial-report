@@ -25,7 +25,7 @@ var loadListGoodsButtonHandler = () => {
       return;
     }
 
-    var { listGoods } = await res.json();
+    var { listGoods } = data;
 
     toggleUploadListGoodsButtonVisibility("disable");
     toggleSkuTableVisibillity("enabled-skus-table", "enable");

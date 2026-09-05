@@ -3,7 +3,8 @@ import listGoodsLoader from "../services/listGoodsLoader.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import removeDublicates from "../services/removeDublicates.js";
 
-var skuNamesStub = null;
+var skuNamesStub = [];
+var selectedFields = { id: 1, skuName: 1 };
 
 var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsModelUtils;
 
@@ -17,6 +18,7 @@ var loadListGoodsController = async (req, res, next) => {
       var { listGoods } = await getListGoodsFromDb(
         userId,
         skuNamesStub,
+        selectedFields,
         session,
       );
 
