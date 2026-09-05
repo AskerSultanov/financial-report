@@ -1,7 +1,12 @@
 import calc from "../../reports/services/calcServices/index.js";
 import truncateNum from "../../reports/services/reportParsing/truncateNum.js";
 
-var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxYear) => {
+var recalculateReportsWithNewTaxRate = (
+  reports,
+  paidTaxAmount,
+  newTaxRate,
+  taxYear,
+) => {
   var finalProfit = 0;
 
   var updatedReports = [];
@@ -16,7 +21,7 @@ var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxY
         var newSkuTax = calc.taxAmount(sku.taxableAmount, newTaxRate);
 
         paidTaxAmount += newSkuTax;
-        updatedSkuFields.tax = newSkuTax;
+        updatedSkuFields.tax = truncateNum(newSkuTax);
 
         if (sku.isCostPriceSet) {
           sku.tax = newSkuTax;
@@ -24,7 +29,7 @@ var recalculateReportsWithNewTaxRate = (reports, paidTaxAmount, newTaxRate, taxY
           var newSkuFinalProfit = calc.sku.finalProfit(sku);
 
           finalProfit += newSkuFinalProfit;
-          updatedSkuFields.finalProfit = newSkuFinalProfit;
+          updatedSkuFields.finalProfit = truncateNum(newSkuFinalProfit);
         }
 
         updatedSkus.push({ skuName: sku.skuName, data: updatedSkuFields });

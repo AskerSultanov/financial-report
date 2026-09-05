@@ -1,7 +1,12 @@
 import calc from "../../reports/services/calcServices/index.js";
 import truncateNum from "../../reports/services/reportParsing/truncateNum.js";
 
-var recalculateReportsWithNewMandatoryInsuranceRate = (taxYear, reports, mandatoryInsuranceFee, mandatoryInsuranceRate) => {
+var recalculateReportsWithNewMandatoryInsuranceRate = (
+  taxYear,
+  reports,
+  mandatoryInsuranceFee,
+  mandatoryInsuranceRate,
+) => {
   var updatedReports = [];
 
   var finalProfit = 0;
@@ -19,7 +24,10 @@ var recalculateReportsWithNewMandatoryInsuranceRate = (taxYear, reports, mandato
 
         if (sku.isCostPriceSet) {
           if (!mandatoryInsuranceFeeIsPaid) {
-            newSkuInsuranceFee = calc.insuranceFee(sku.preTaxProfit, mandatoryInsuranceRate);
+            newSkuInsuranceFee = calc.insuranceFee(
+              sku.preTaxProfit,
+              mandatoryInsuranceRate,
+            );
           }
 
           paidInsuranceFee += newSkuInsuranceFee;
@@ -34,8 +42,8 @@ var recalculateReportsWithNewMandatoryInsuranceRate = (taxYear, reports, mandato
           var newSkuFinalProfit = calc.sku.finalProfit(sku);
 
           finalProfit += newSkuFinalProfit;
-          updatedSkuFields.finalProfit = newSkuFinalProfit;
-          updatedSkuFields.insuranceFee = newSkuInsuranceFee;
+          updatedSkuFields.finalProfit = truncateNum(newSkuFinalProfit);
+          updatedSkuFields.insuranceFee = truncateNum(newSkuInsuranceFee);
         }
 
         if (Object.keys(updatedSkuFields).length) {
@@ -48,10 +56,10 @@ var recalculateReportsWithNewMandatoryInsuranceRate = (taxYear, reports, mandato
   }
 
   return {
-    finalProfit,
     updatedReports,
-    paidInsuranceFee,
     mandatoryInsuranceFeeIsPaid,
+    finalProfit: truncateNum(finalProfit),
+    paidInsuranceFee: truncateNum(paidInsuranceFee),
   };
 };
 
