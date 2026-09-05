@@ -6,10 +6,6 @@ import isPresumablyJwtToken from "../services/isPresumablyJwtToken.js";
 var tokenValidatorController = async (req, res, next) => {
   var token = req.body.token;
 
-  if (!token) {
-    return res.sendStatus(400);
-  }
-
   if (!isPresumablyJwtToken(token)) {
     return res.sendStatus(401);
   }
@@ -26,7 +22,13 @@ var tokenValidatorController = async (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  var options = { method: "GET", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token } };
+  var options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
 
   var responses = await Promise.all([
     fetch("https://advert-api.wildberries.ru/ping", options),
