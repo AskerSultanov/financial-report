@@ -6,8 +6,8 @@ var sendRegistationData = async (login, passwd) => {
   });
 
   if (res.status === 400) {
-    var { msg } = await res.json();
-    alert(msg);
+    var { errorText } = await res.json();
+    alert(errorText);
     return;
   } else if (res.status == 409) {
     alert(`Пользователь с ником ${login} уже существует`);
