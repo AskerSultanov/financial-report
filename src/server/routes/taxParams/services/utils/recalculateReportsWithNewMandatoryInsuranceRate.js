@@ -1,5 +1,5 @@
-import calc from "../../reports/services/calcServices/index.js";
-import truncateNum from "../../reports/services/reportParsing/truncateNum.js";
+import calc from "../../../reports/services/calcServices/index.js";
+import truncateNum from "../../../reports/services/reportParsing/truncateNum.js";
 
 var recalculateReportsWithNewMandatoryInsuranceRate = (
   taxYear,
