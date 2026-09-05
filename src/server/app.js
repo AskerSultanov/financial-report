@@ -50,9 +50,17 @@ var runErrorServer = async () => {
   }
 
   var errorApp = createServer();
-  errorApp.get("/", (_, res) => res.set({ "Content-Type": "text/html" }).send("<p>Сервер временно недоступен</p>"));
+  errorApp.get("/", (_, res) =>
+    res
+      .set({ "Content-Type": "text/html" })
+      .send("<p>Сервер временно недоступен</p>"),
+  );
   errorServerIsListen = true;
-  errorServerInstance = errorApp.listen(process.env.PORT, process.env.HOST, () => console.log("Сервер временно недоступен."));
+  errorServerInstance = errorApp.listen(
+    process.env.PORT,
+    process.env.HOST,
+    () => console.log("Сервер временно недоступен."),
+  );
 };
 
 var runServer = async () => {
@@ -80,7 +88,10 @@ var runServer = async () => {
   app.use("/auth", authRouter);
   app.use("/reg", registrationRouter);
   app.use("/background-tasks", backgroundTasksRouter);
-  app.use("/decode-report-without-registration/", decodeReportWithoutRegistrationRouter);
+  app.use(
+    "/decode-report-without-registration/",
+    decodeReportWithoutRegistrationRouter,
+  );
 
   app.use(cookieParser());
   app.use(verifyAuthentication, verifyAuthorization);
@@ -90,7 +101,11 @@ var runServer = async () => {
   app.use("/tax-params", checkRoles(["admin", "user"]), taxParamsRouter);
   app.use("/report", checkRoles(["admin", "user"]), reportsRouter);
   app.use("/goods", checkRoles(["admin", "user"]), goodsRouter);
-  app.use("/personal-account", checkRoles(["admin", "user"]), personalAccountRouter);
+  app.use(
+    "/personal-account",
+    checkRoles(["admin", "user"]),
+    personalAccountRouter,
+  );
   app.use("/delete", userDeleteRouter);
 
   app.all(/.*/, pageNotFoundHandler);
@@ -98,7 +113,11 @@ var runServer = async () => {
   app.use(errorHandler);
 
   mainServerIsListen = true;
-  mainServerInstance = app.listen(process.env.PORT, process.env.HOST, async () => console.log("server running"));
+  mainServerInstance = app.listen(
+    process.env.PORT,
+    process.env.HOST,
+    async () => console.log("server running"),
+  );
 };
 
 var startApp = async () => {
@@ -107,7 +126,10 @@ var startApp = async () => {
     await runServer();
   } catch (e) {
     console.log(e);
-    if (e.name !== "MongooseServerSelectionError" || e.name !== "MongoServerSelectionError") {
+    if (
+      e.name !== "MongooseServerSelectionError" ||
+      e.name !== "MongoServerSelectionError"
+    ) {
       await runErrorServer();
     }
   }

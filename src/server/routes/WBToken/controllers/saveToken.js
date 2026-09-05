@@ -8,7 +8,8 @@ var skuNamesStub = null;
 var selectedFieldsStub = null;
 
 var { getWBTokenByUserId, saveWBTokenToDb } = dbUtils.tokenModelUtils;
-var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } = dbUtils.goodsModelUtils;
+var { saveListGoodsToDb, getListGoodsFromDb, saveNewSkusToDb } =
+  dbUtils.goodsModelUtils;
 
 var saveTokenController = async (req, res, next) => {
   var { userId, token, tokenPayload } = req.body;
@@ -25,13 +26,21 @@ var saveTokenController = async (req, res, next) => {
 
       await saveWBTokenToDb(userId, token, session);
 
-      var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, selectedFieldsStub, session);
+      var { listGoods } = await getListGoodsFromDb(
+        userId,
+        skuNamesStub,
+        selectedFieldsStub,
+        session,
+      );
       var { listGoodsFromWBAPI } = await listGoodsLoader(userId, token);
 
       if (!listGoods.length) {
         await saveListGoodsToDb(userId, listGoodsFromWBAPI, session);
       } else {
-        var { newSkus } = extractNewSkusFromLIstGoods(listGoodsFromWBAPI, listGoods);
+        var { newSkus } = extractNewSkusFromLIstGoods(
+          listGoodsFromWBAPI,
+          listGoods,
+        );
         await saveNewSkusToDb(userId, newSkus, session);
       }
 

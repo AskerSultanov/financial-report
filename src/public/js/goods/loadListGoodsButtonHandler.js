@@ -18,9 +18,10 @@ var loadListGoodsButtonHandler = () => {
       headers: { "content-type": "application/json" },
     });
 
-    if (!res.ok) {
-      var { msg } = await res.json();
-      alert(msg);
+    var data = await res.json();
+
+    if (data?.errorText) {
+      alert(data.errorText);
       return;
     }
 

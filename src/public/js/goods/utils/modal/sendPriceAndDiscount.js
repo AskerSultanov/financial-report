@@ -1,7 +1,14 @@
-var sendPriceAndDiscount = async (skuId, skuName, skuDataToUpdate, checkedWeekDays, setNewPriceNow, expectedPriceExists = false) => {
-  var userId = document.cookie.split("=")[1];
-  var url = "/goods/prices-discounts/";
+var url = "/goods/prices-discounts/";
+var userId = document.cookie.split("=")[1];
 
+var sendPriceAndDiscount = async (
+  skuId,
+  skuName,
+  skuDataToUpdate,
+  checkedWeekDays,
+  setNewPriceNow,
+  expectedPriceExists = false,
+) => {
   var res = await fetch(url, {
     method: "PATCH",
     headers: { "content-type": "application/json" },
@@ -16,12 +23,10 @@ var sendPriceAndDiscount = async (skuId, skuName, skuDataToUpdate, checkedWeekDa
     }),
   });
 
-  if (res.status === 401) {
-    var { msg } = await res.json();
-    alert(msg);
-    return;
-  } else if (!res.ok) {
-    alert("Не удалось сохранить...");
+  var data = await res.json();
+
+  if (data?.errorText) {
+    alert(data.errorText);
     return;
   }
 

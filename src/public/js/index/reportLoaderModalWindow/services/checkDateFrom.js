@@ -3,10 +3,14 @@ import standardizeDate from "./standardizeDate.js";
 import { isMonday } from "../../utils/dateUtils/services/getMondaysOrSundaysOfMonth.js";
 
 var checkDateFrom = (dateFrom) => {
+  if (!dateFrom) {
+    return { validDateFrom: "", errorText: "Неккоректный период" };
+  }
+
   var dateIncludesDot = dateFrom.split("").includes(".");
 
   if (!dateIncludesDot) {
-    throw new Error("Неккоректный период");
+    return { validDateFrom: "", errorText: "Неккоректный период" };
   }
 
   var everyIsNum = dateFrom
@@ -15,24 +19,24 @@ var checkDateFrom = (dateFrom) => {
     .every((num) => typeof num === "number" && !isNaN(num));
 
   if (!everyIsNum) {
-    throw new Error("Неккоректный период");
+    return { validDateFrom: "", errorText: "Неккоректный период" };
   }
 
   var standardizedDateFrom = standardizeDate(dateFrom);
 
   if (!standardizedDateFrom) {
-    throw new Error("Начало периода введено некорректно");
+    return { validDateFrom: "", errorText: "Начало периода введено некорректно" };
   }
 
   if (isFutureDate(standardizedDateFrom)) {
-    throw new Error("Период введен некорректно");
+    return { validDateFrom: "", errorText: "Отчетный период еще не наступил" };
   }
 
   if (!isMonday(standardizedDateFrom)) {
-    throw new Error("Начало периода не является понедельником");
+    return { validDateFrom: "", errorText: "Начало периода не является понедельником" };
   }
 
-  return { validDateFrom: standardizedDateFrom };
+  return { validDateFrom: standardizedDateFrom, errorText: "" };
 };
 
 export default checkDateFrom;

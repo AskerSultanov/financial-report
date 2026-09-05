@@ -1,39 +1,40 @@
 import wbapi from "../services/WBAPI/index.js";
 import { dbClient } from "../../../database/index.js";
-import parseJwt from "../../WBToken/services/parseJwt.js";
-import { WBAPIError } from "../../../customError/index.js";
-import dbUtils from "../../../database/modelsUtil/index.js";
-import checkTokenExpiry from "../../WBToken/services/checkTokenExpiry.js";
 import reportsProcessing from "../services/different/reportsProcessing.js";
 
 var fiveMinInMs = 300_000;
 var isReportFromFile = false;
-var invalidTokenErrorMsg = "Invalid Token";
-var updateWBTokenLastUsedTimestampNow = true;
 var sessionOptions = { maxTimeMs: fiveMinInMs };
 
-var { getWBTokenByUserId } = dbUtils.tokenModelUtils;
-
 var saveReportsController = async (req, res) => {
-  var { dateTo, dateFrom, userId } = req.body;
+  var { dateTo, dateFrom, userId, wbtoken } = req.body;
 
   try {
     var session = await dbClient.startSession(sessionOptions);
 
     await session.withTransaction(async () => {
-      var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
+      var reports = await wbapi.getReports(userId, dateFrom, dateTo, wbtoken);
 
-      var tokenPayload = parseJwt(token);
-      var { isExpired } = checkTokenExpiry(tokenPayload);
+      var { reportData, reportPeriodIsEmpty } = await reportsProcessing(
+        userId,
+        dateFrom,
+        dateTo,
+        session,
+        reports,
+        isReportFromFile,
+      );
 
-      if (isExpired) {
-        throw new WBAPIError(userId, 401, invalidTokenErrorMsg);
+      var infoText = "";
+
+      if (reportPeriodIsEmpty) {
+        infoText = "Нет данных за отчетный период";
       }
 
-      var reports = await wbapi.getReports(userId, dateFrom, dateTo, token);
-      var { reportData, reportPeriodIsEmpty } = await reportsProcessing(userId, dateFrom, dateTo, session, reports, isReportFromFile);
-
-      return reportPeriodIsEmpty ? res.sendStatus(204) : res.json({ reportData });
+      return res.json({
+        reportData,
+        infoText,
+        errorText: "",
+      });
     });
   } catch (e) {
     throw e;

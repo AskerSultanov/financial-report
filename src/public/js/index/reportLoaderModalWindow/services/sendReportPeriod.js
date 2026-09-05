@@ -1,21 +1,39 @@
-var emptyReportPeriodMsg = "Нет данных за выбранный отчетный период";
+var url = "/report/";
 
-var sendReportPeriod = async (userId, dateFrom, dateTo, isPeriodWithinSameWeek = false, needToLoadAllReports = false) => {
-  var res = await fetch("/report/", {
+var sendReportPeriod = async (
+  userId,
+  dateFrom,
+  dateTo,
+  isPeriodWithinSameWeek = false,
+  needToLoadAllReports = false,
+) => {
+  var res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, dateFrom, dateTo, isPeriodWithinSameWeek, needToLoadAllReports }),
+    body: JSON.stringify({
+      userId,
+      dateFrom,
+      dateTo,
+      isPeriodWithinSameWeek,
+      needToLoadAllReports,
+    }),
   });
 
-  if (res.status === 204) {
-    return { reportData: {}, msg: emptyReportPeriodMsg };
-  } else if (res.status !== 200) {
-    var data = await res.json();
-    return { reportData: {}, msg: data?.msg };
-  } else {
-    var data = await res.json();
-    return { reportData: data?.reportData, msg: "" };
+  var data = await res.json();
+
+  if (data.errorText) {
+    alert(data.errorText);
+    return;
   }
+
+  if (data.infoText) {
+    alert(data.infoText);
+    return;
+  }
+
+  var { reportData } = data;
+
+  return { reportData };
 };
 
 export default sendReportPeriod;

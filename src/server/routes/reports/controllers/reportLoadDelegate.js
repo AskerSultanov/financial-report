@@ -7,27 +7,50 @@ var reportLoadDelegateController = async (req, res, next) => {
 
   if (!isPeriodWithinSameWeek || needToLoadAllReports) {
     try {
-      var { status } = await sendReportPeriodsToReportLoader(req.body);
-
-      res.status(status).json({ msg: "Загрузка отчётов началась. Они будут отображаться по мере их добавления" });
+      await sendReportPeriodsToReportLoader(req.body);
+      res.json({
+        infoText:
+          "Загрузка отчётов началась. Они будут отображаться по мере их добавления",
+        errorText: "",
+        reportData: {},
+      });
     } catch (e) {
-      res.status(503).json({ msg: "Не удалось загрузить отчёты за выбранный период.\nВременно доступна загрузка отчётов по одному" });
+      console.log(e);
+      res.json({
+        errorText:
+          "Не удалось загрузить отчёты за выбранный период.\nВременно доступна загрузка отчётов по одному",
+        intoText: "",
+        reportData: {},
+      });
     }
 
     return;
   }
 
-  var { lastReportRequestTimestamp } = await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(req.body.userId);
+  var { lastReportRequestTimestamp } =
+    await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(
+      req.body.userId,
+    );
 
   var { needToDalay } = isLastRequestTooRecent(lastReportRequestTimestamp);
 
   if (needToDalay) {
     try {
-      var { status } = await sendReportPeriodsToReportLoader(req.body);
+      await sendReportPeriodsToReportLoader(req.body);
 
-      res.status(status).json({ msg: "Отчет скоро будет добавлен." });
+      res.json({
+        infoText: "Отчет скоро будет добавлен.",
+        errorText: "",
+        reportData: {},
+      });
     } catch (e) {
-      res.status(500).json({ msg: "Не удалось загрузить отчёт за выбранный период.\nПопробуйте повторить еще раз." });
+      console.log(e);
+      res.json({
+        errorText:
+          "Не удалось загрузить отчёт за выбранный период.\nПопробуйте повторить еще раз.",
+        intoText: "",
+        reportData: {},
+      });
     }
 
     return;

@@ -7,12 +7,33 @@ var { saveReportToDb } = dbutils.reportModelUtils;
 var { addReportToReportPeriods } = dbutils.reportPeriodsModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
 var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
-var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } = dbutils.reportLoadingStateModelUtils;
+var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } =
+  dbutils.reportLoadingStateModelUtils;
 
 var selectedFields = ["listGoods.id", "listGoods.skuName"];
-var monthList = ["январь", "февраль", "марта", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
+var monthList = [
+  "январь",
+  "февраль",
+  "марта",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
 
-var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isReportFromFile = false) => {
+var reportsProcessing = async (
+  userId,
+  dateFrom,
+  dateTo,
+  session,
+  reports,
+  isReportFromFile = false,
+) => {
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
@@ -20,11 +41,18 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   var reportSkus = [];
   var updatedTaxParams = [];
   var { reportId } = reports.weeklyFinancialReport[0];
-  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(dateFrom, dateTo);
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(
+    dateFrom,
+    dateTo,
+  );
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
     var taxParams = await addNewTaxYearToDb(userId, currentYear, session);
-    var { skus, recalculatedTaxParams } = await processReportSkus(reports, taxParams, isCrossYearPeriod);
+    var { skus, recalculatedTaxParams } = await processReportSkus(
+      reports,
+      taxParams,
+      isCrossYearPeriod,
+    );
 
     reportSkus.push(...skus);
     updatedTaxParams.push({ year: currentYear, data: recalculatedTaxParams });
@@ -41,7 +69,14 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
   report.isCrossYearPeriod = isCrossYearPeriod;
   report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
 
-  var newReportPeriod = { reportId, dateFrom, dateTo, year: targetYear, monthIndex: targetMonthIndex, monthName: monthList[targetMonthIndex] };
+  var newReportPeriod = {
+    reportId,
+    dateFrom,
+    dateTo,
+    year: targetYear,
+    monthIndex: targetMonthIndex,
+    monthName: monthList[targetMonthIndex],
+  };
 
   await saveReportToDb(report, session);
   await addReportToReportPeriods(userId, newReportPeriod, session);
@@ -55,7 +90,12 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
 
     var skuNames = report.skus.map((sku) => sku.skuName);
 
-    var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields, session);
+    var { listGoods } = await getListGoodsFromDb(
+      userId,
+      skuNames,
+      selectedFields,
+      session,
+    );
 
     var skuNamesAndIds = reportSkus.map((sku) => {
       return { name: sku.skuName, id: sku.id };
@@ -73,7 +113,13 @@ var reportsProcessing = async (userId, dateFrom, dateTo, session, reports, isRep
 
   return {
     reportPeriodIsEmpty: report.reportIsEmpty,
-    reportData: { reportId, dateFrom, dateTo, month: monthList[targetMonthIndex], year: targetYear },
+    reportData: {
+      reportId,
+      dateFrom,
+      dateTo,
+      month: monthList[targetMonthIndex],
+      year: targetYear,
+    },
   };
 };
 

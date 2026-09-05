@@ -23,6 +23,8 @@ import checkReportsLoadingProgressController from "./controllers/checkReportsLoa
 import resumeAbandonedReportsLoadingController from "./controllers/resumeAbandonedReportsLoading.js";
 import changeFinancialAccountingStatusController from "./controllers/changeFinancialAccountingStatus.js";
 
+import checkTokenExists from "../WBToken/controllers/checkTokenExists.js";
+
 var maxReportFilesCount = 15;
 var needToValidateReqParams = true;
 
@@ -31,25 +33,93 @@ var upload = multer({ storage, fileFilter });
 
 var router = Router({ caseSensitive: true, strict: true });
 
+export default router;
+
 router.get("/:id", getReportPageController);
-router.get("/:userId/:reportId", joiSchemaValidator(joiSchemas.getReportSchema, needToValidateReqParams), getReportController);
-router.post("/", joiSchemaValidator(joiSchemas.saveReportsSchema), reportLoadDelegateController, checkReportExistsController, checkReportsLoadingProgressController, saveReportsController);
-router.delete("/", joiSchemaValidator(joiSchemas.deleteReportSchema), deleteReportController);
 
-router.post("/as-zip/", joiSchemaValidator(joiSchemas.downloadReportsAsZipSchema), downloadReportsAsZipController);
-router.post("/as-xlsx/", joiSchemaValidator(joiSchemas.downloadReportAsXLSXSchema), downloadReportAsXLSXController);
+router.get(
+  "/:userId/:reportId",
+  joiSchemaValidator(joiSchemas.getReportSchema, needToValidateReqParams),
+  getReportController,
+);
 
-router.get("/loading-state/:userId/", joiSchemaValidator(joiSchemas.getreportLoadingStatechema, needToValidateReqParams), getReportLoadingStateController);
-router.post("/loading-state/abandoned/", joiSchemaValidator(joiSchemas.resumeAbandonedReportsLoadingSchema), resumeAbandonedReportsLoadingController);
-router.post("/files", upload.array("file", maxReportFilesCount), saveReportFromFileController);
+router.post(
+  "/",
+  joiSchemaValidator(joiSchemas.saveReportsSchema),
+  checkTokenExists,
+  reportLoadDelegateController,
+  checkReportExistsController,
+  checkReportsLoadingProgressController,
+  saveReportsController,
+);
 
-router.patch("/skus/cost-price", joiSchemaValidator(joiSchemas.setCostPriceToSkuSchema), setCostPriceToSkuController);
-router.patch("/skus/cost-prices", joiSchemaValidator(joiSchemas.setCostPriceToSkusSchema), setCostPriceToSkusController);
-router.patch("/skus/other-expenses", joiSchemaValidator(joiSchemas.setOtherExpensesToSkuSchema), setOtherExpensesToSkuController);
+router.delete(
+  "/",
+  joiSchemaValidator(joiSchemas.deleteReportSchema),
+  deleteReportController,
+);
 
-router.patch("/financial-accounting-status/", joiSchemaValidator(joiSchemas.changeFinancialAccountingStatusSchema), changeFinancialAccountingStatusController);
+router.post(
+  "/as-zip/",
+  joiSchemaValidator(joiSchemas.downloadReportsAsZipSchema),
+  downloadReportsAsZipController,
+);
+
+router.post(
+  "/as-xlsx/",
+  joiSchemaValidator(joiSchemas.downloadReportAsXLSXSchema),
+  downloadReportAsXLSXController,
+);
+
+router.get(
+  "/loading-state/:userId/",
+  joiSchemaValidator(
+    joiSchemas.getreportLoadingStatechema,
+    needToValidateReqParams,
+  ),
+  getReportLoadingStateController,
+);
+
+router.post(
+  "/loading-state/abandoned/",
+  joiSchemaValidator(joiSchemas.resumeAbandonedReportsLoadingSchema),
+  resumeAbandonedReportsLoadingController,
+);
+
+router.post(
+  "/files",
+  upload.array("file", maxReportFilesCount),
+  saveReportFromFileController,
+);
+
+router.patch(
+  "/skus/cost-price",
+  joiSchemaValidator(joiSchemas.setCostPriceToSkuSchema),
+  setCostPriceToSkuController,
+);
+
+router.patch(
+  "/skus/cost-prices",
+  joiSchemaValidator(joiSchemas.setCostPriceToSkusSchema),
+  setCostPriceToSkusController,
+);
+
+router.patch(
+  "/skus/other-expenses",
+  joiSchemaValidator(joiSchemas.setOtherExpensesToSkuSchema),
+  setOtherExpensesToSkuController,
+);
+
+router.patch(
+  "/financial-accounting-status/",
+  joiSchemaValidator(joiSchemas.changeFinancialAccountingStatusSchema),
+  changeFinancialAccountingStatusController,
+);
 
 router.post("/image/", upload.single("sku-photo"), skuPhotoUploadController);
-router.delete("/image/", joiSchemaValidator(joiSchemas.deleteImageSchema), deleteImageController);
 
-export default router;
+router.delete(
+  "/image/",
+  joiSchemaValidator(joiSchemas.deleteImageSchema),
+  deleteImageController,
+);

@@ -22,7 +22,7 @@ var checkTokenExistsController = async (req, res, next) => {
     return res.json({ errorText: tokenExpiryMsg });
   }
 
-  res.json({ errorText: "" });
+  req.body.wbtoken = token;
 
   next();
 };

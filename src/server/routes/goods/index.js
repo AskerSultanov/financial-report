@@ -13,6 +13,8 @@ import changeWeeklyPricesOrDiscountsController from "./controllers/changeWeeklyP
 import setNewPricesAndDiscountsToSkuController from "./controllers/setNewPricesAndDiscountsToSku.js";
 import changeStatusOfParticipationInPromoController from "./controllers/changeStatusOfParticipationInPromo.js";
 
+import checkTokenExists from "../WBToken/controllers/checkTokenExists.js";
+
 import schemas from "./JoiSchemas/index.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
 
@@ -23,16 +25,55 @@ var needToValidateReqParams = true;
 
 var router = Router({ caseSensitive: true, strict: true });
 
+export default router;
+
 router.get("/", getListGoodsPageController);
-router.get("/listgoodsonly/:userId", joiSchemaValidator(schemas.getlistGoods, needToValidateReqParams), getListGoodsController);
-router.get("/metrics/download/:userId", joiSchemaValidator(schemas.getSkusMetricsFile, needToValidateReqParams), getSkusMetricsFileController);
-router.get("/api/:userId", joiSchemaValidator(schemas.getListGoodsAndWeeklyPrices, needToValidateReqParams), getListGoodsAndWeeklyPricesController);
-router.get("/prices-discounts/file/:userId", joiSchemaValidator(schemas.getWeeklyPricesFile, needToValidateReqParams), getWeeklyPricesFileController);
 
-router.post("/", joiSchemaValidator(schemas.loadListGoods), loadListGoodsController);
-router.post("/sku-disable-status", joiSchemaValidator(schemas.changeSkuDisableStatus), changeSkuDisableStatusController);
+router.get(
+  "/listgoodsonly/:userId",
+  joiSchemaValidator(schemas.getlistGoods, needToValidateReqParams),
+  getListGoodsController,
+);
 
-router.post("/prices-discounts/upload/", upload.single("file"), uploadPricesAndDiscountsFileController);
+router.get(
+  "/metrics/download/:userId",
+  joiSchemaValidator(schemas.getSkusMetricsFile, needToValidateReqParams),
+  getSkusMetricsFileController,
+);
+
+router.get(
+  "/api/:userId",
+  joiSchemaValidator(
+    schemas.getListGoodsAndWeeklyPrices,
+    needToValidateReqParams,
+  ),
+  getListGoodsAndWeeklyPricesController,
+);
+
+router.get(
+  "/prices-discounts/file/:userId",
+  joiSchemaValidator(schemas.getWeeklyPricesFile, needToValidateReqParams),
+  getWeeklyPricesFileController,
+);
+
+router.post(
+  "/",
+  joiSchemaValidator(schemas.loadListGoods),
+  checkTokenExists,
+  loadListGoodsController,
+);
+
+router.post(
+  "/sku-disable-status",
+  joiSchemaValidator(schemas.changeSkuDisableStatus),
+  changeSkuDisableStatusController,
+);
+
+router.post(
+  "/prices-discounts/upload/",
+  upload.single("file"),
+  uploadPricesAndDiscountsFileController,
+);
 
 router.patch(
   "/status-of-participation-in-promo/",
@@ -43,8 +84,7 @@ router.patch(
 router.patch(
   "/prices-discounts/",
   joiSchemaValidator(schemas.setNewPricesAndDiscountsToSku),
+  checkTokenExists,
   setNewPricesAndDiscountsToSkuController,
   changeWeeklyPricesOrDiscountsController,
 );
-
-export default router;

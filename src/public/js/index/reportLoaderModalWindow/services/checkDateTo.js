@@ -7,16 +7,16 @@ var checkDateTo = (dateTo, dateFrom) => {
 
   if (!dateTo) {
     if (isFutureDate(expectedDateTo)) {
-      throw new Error("Отчет еще не готов...");
+      return { validDateFrom: "", isPeriodWithinSameWeek: false, errorText: "Отчетный период еще не наступил" };
     }
 
-    return { validDateTo: expectedDateTo, isPeriodWithinSameWeek: true };
+    return { validDateTo: expectedDateTo, isPeriodWithinSameWeek: true, errorText: "" };
   }
 
   var dateIncludesDot = dateTo.split("").includes(".");
 
   if (!dateIncludesDot) {
-    throw new Error("Неккоректный период");
+    return { validDateTo: "", isPeriodWithinSameWeek: true, errorText: "Неккоректный период" };
   }
 
   var everyIsNum = dateTo
@@ -25,24 +25,20 @@ var checkDateTo = (dateTo, dateFrom) => {
     .every((num) => typeof num === "number" && !isNaN(num));
 
   if (!everyIsNum) {
-    throw new Error("Неккоректный период");
+    return { validDateTo: "", isPeriodWithinSameWeek: true, errorText: "Неккоректный период" };
   }
 
   dateTo = standardizeDate(dateTo);
 
   if (isFutureDate(dateTo)) {
-    throw new Error("Отчет еще не готов...");
-  }
-
-  if (!dateTo) {
-    throw new Error("Конец периода введен некорректно");
+    return { validDateFrom: "", isPeriodWithinSameWeek: false, errorText: "Отчетный период еще не наступил" };
   }
 
   if (dateTo === expectedDateTo) {
-    return { validDateTo: expectedDateTo, isPeriodWithinSameWeek: true };
+    return { validDateTo: expectedDateTo, isPeriodWithinSameWeek: true, errorText: "" };
   }
 
-  return { validDateTo: dateTo, isPeriodWithinSameWeek: false };
+  return { validDateTo: dateTo, isPeriodWithinSameWeek: false, errorText: "" };
 };
 
 export default checkDateTo;

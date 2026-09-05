@@ -7,9 +7,14 @@ import reportLoadingStatePanelBuilder from "../../reportLoadingStatePanel/index.
 
 var isMainPageLoad = false;
 var reportLoadState = null;
-var reportComingSoonMsg = "Отчет скоро будет добавлен.";
 
-var createSaveButton = (userId, modal, dateFromInputElem, dateToInputElem, uploadAllReportsCheckbox) => {
+var createSaveButton = (
+  userId,
+  modal,
+  dateFromInputElem,
+  dateToInputElem,
+  uploadAllReportsCheckbox,
+) => {
   var button = document.createElement("button");
   button.className = "modal-button modal-button-save";
   button.textContent = "Отправить";
@@ -18,58 +23,38 @@ var createSaveButton = (userId, modal, dateFromInputElem, dateToInputElem, uploa
     document.body.removeChild(modal);
 
     var needToLoadAllReports = uploadAllReportsCheckbox.checked;
-
+    console.log({ needToLoadAllReports });
     try {
       if (needToLoadAllReports) {
-        var dateFrom = "";
-        var dateTo = "";
-        var isPeriodWithinSameWeek = false;
-        await sendReportPeriod(userId, dateFrom, dateTo, isPeriodWithinSameWeek, needToLoadAllReports);
-
-        setTimeout(() => reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad), 3000);
+        await handleAllReportsLoading(userId);
       } else {
-        var dateFrom = dateFromInputElem.value;
-        var dateTo = dateToInputElem?.value;
+        var dateFrom = dateFromInputElem?.value;
+        var { validDateFrom, errorText } = checkDateFrom(dateFrom);
 
-        var { validDateFrom } = checkDateFrom(dateFrom);
-        var { validDateTo, isPeriodWithinSameWeek } = checkDateTo(dateTo, validDateFrom);
+        if (errorText) {
+          alert(errorText);
+          return;
+        }
+
+        var dateTo = dateToInputElem?.value;
+        var { validDateTo, isPeriodWithinSameWeek, errorText } = checkDateTo(
+          dateTo,
+          validDateFrom,
+        );
+
+        if (errorText) {
+          alert(errorText);
+          return;
+        }
 
         if (isPeriodWithinSameWeek) {
-          showSpinner();
-
-          var { reportData, msg } = await sendReportPeriod(userId, validDateFrom, validDateTo, isPeriodWithinSameWeek);
-
-          await hideSpinner();
-
-          if (msg) {
-            alert(msg);
-
-            if (msg === reportComingSoonMsg) {
-              setTimeout(() => reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad), 3000);
-            }
-          } else {
-            if (!reportData) {
-              return;
-            }
-
-            insertNewReportToTree(reportData);
-            console.log("loader removed");
-
-            var confirmed = confirm("Отчет успешно сохранен.\nПерейти к отчету?");
-
-            if (confirmed) {
-              window.location.href = "/report/" + reportData.reportId;
-            }
-          }
+          handleSameWeekPeriod(userId, validDateFrom, validDateTo);
         } else {
-          await sendReportPeriod(userId, validDateFrom, validDateTo, isPeriodWithinSameWeek);
-
-          setTimeout(() => reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad), 3000);
+          handleNonSameWeekPeriod(userId, validDateFrom, validDateTo);
         }
       }
     } catch (e) {
       await hideSpinner();
-      console.log(e);
       alert("Произошла ошибка...");
     }
   };
@@ -78,3 +63,55 @@ var createSaveButton = (userId, modal, dateFromInputElem, dateToInputElem, uploa
 };
 
 export default createSaveButton;
+
+async function handleAllReportsLoading(userId) {
+  var dateFrom = "";
+  var dateTo = "";
+  var isPeriodWithinSameWeek = false;
+
+  await sendReportPeriod(
+    userId,
+    dateFrom,
+    dateTo,
+    isPeriodWithinSameWeek,
+    true,
+  );
+
+  setTimeout(
+    () =>
+      reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad),
+    3000,
+  );
+}
+
+async function handleSameWeekPeriod(userId, dateFrom, dateTo) {
+  showSpinner();
+
+  var result = await sendReportPeriod(userId, dateFrom, dateTo, true);
+
+  await hideSpinner();
+
+  if (!result) {
+    return;
+  }
+
+  var { reportData } = result;
+
+  insertNewReportToTree(reportData);
+
+  var confirmed = confirm("Отчет успешно сохранен.\nПерейти к отчету?");
+
+  if (confirmed) {
+    window.location.href = "/report/" + reportData.reportId;
+  }
+}
+
+async function handleNonSameWeekPeriod(userId, dateFrom, dateTo) {
+  await sendReportPeriod(userId, dateFrom, dateTo, false);
+
+  setTimeout(
+    () =>
+      reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad),
+    3000,
+  );
+}

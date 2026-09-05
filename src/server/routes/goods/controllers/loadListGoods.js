@@ -4,34 +4,32 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import removeDublicates from "../services/removeDublicates.js";
 
 var skuNamesStub = null;
-var updateWBTokenLastUsedTimestampNow = true;
-var projectedFields = ["reports.skus", "reports.recordedTo", "reports.isCrossYearPeriod"];
 
 var { saveListGoodsToDb, getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { getWBTokenByUserId, updateWBTokenLastUsedTimestamp } = dbUtils.tokenModelUtils;
 
 var loadListGoodsController = async (req, res, next) => {
-  var { userId } = req.body;
+  var { userId, wbtoken } = req.body;
 
   var session = await dbClient.startSession();
 
   try {
     await session.withTransaction(async () => {
-      var { token } = await getWBTokenByUserId(userId, session, updateWBTokenLastUsedTimestampNow);
+      var { listGoods } = await getListGoodsFromDb(
+        userId,
+        skuNamesStub,
+        session,
+      );
 
-      if (!token) {
-        return res.status(400).json({ msg: "В первую очередь нужно загрузить токен личного кабинета WB" });
-      } else {
-        var { listGoods } = await getListGoodsFromDb(userId, skuNamesStub, session);
+      var { listGoodsFromWBAPI } = await listGoodsLoader(userId, wbtoken);
 
-        var { listGoodsFromWBAPI } = await listGoodsLoader(userId, token);
+      var { dedublicatedListGoods } = removeDublicates(
+        listGoods,
+        listGoodsFromWBAPI,
+      );
 
-        var { dedublicatedListGoods } = removeDublicates(listGoods, listGoodsFromWBAPI);
+      await saveListGoodsToDb(userId, dedublicatedListGoods, session);
 
-        await saveListGoodsToDb(userId, dedublicatedListGoods, session);
-
-        return res.json({ listGoods: dedublicatedListGoods });
-      }
+      return res.json({ listGoods: dedublicatedListGoods, errorText: "" });
     });
   } catch (e) {
     console.log(e);

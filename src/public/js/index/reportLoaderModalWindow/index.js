@@ -5,13 +5,11 @@ var reportLoaderModalWindowHandler = (userId) =>
   (document.getElementById("period-button").onclick = async (e) => {
     e.preventDefault();
 
-    var tokenIsExist = await checkWBTokenExists(userId);
+    // var tokenIsExist = await checkWBTokenExists(userId);
 
-    if (!tokenIsExist) {
-      return;
-    }
-
+    // if (tokenIsExist) {
     openReportPeriodModalWindow(userId);
+    // }
   });
 
 export default reportLoaderModalWindowHandler;
