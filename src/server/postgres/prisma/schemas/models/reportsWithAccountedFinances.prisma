@@ -1,0 +1,10 @@
+model ReportsWithAccountedFinances {
+  userId                    String                      
+  dateFrom                  String              @db.VarChar(10)
+  dateTo                    String              @db.VarChar(10)
+  reportId                  Int                 
+  financesAccountedAt       DateTime            
+
+  @@index([userId, reportId])
+  @@unique([ userId, reportId])
+}

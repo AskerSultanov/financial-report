@@ -3,3 +3,4 @@
 src/server/routes/reports/services/WBAPI/reports/reports.js
 /coverage
 .env
+/src/generated/prisma

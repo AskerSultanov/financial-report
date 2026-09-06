@@ -1,0 +1,28 @@
+model ReportPeriods {
+  id                Int                 @default(autoincrement())
+  userId            String              
+  reportId          Int                 
+  monthName         MonthsList          @db.VarChar(8)    
+  monthIndex        SmallInt            
+  dateFrom          String              @db.VarChar(10)
+  dateTo            String              @db.VarChar(10)
+
+
+  @@unique([userId, dateFrom, dateTo])
+  @@index([userId, dateFrom, dateTo])
+}
+
+enum MonthsList {
+    январь
+    февраль
+    март
+    апрель
+    май
+    июнь
+    июль
+    август
+    сентябрь
+    октябрь
+    ноябрь
+    декабрь
+}

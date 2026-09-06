@@ -5,12 +5,12 @@ model Sku {
   reportId                                      Int           
   dateFrom                                      String        @db.VarChar(10)
   dateTo                                        String        @db.VarChar(10)          
-  taxRate                                       Int           @default(6) @db.SmallInt
   reportIsEmpty                                 Boolean       @default(false)
   isCrossYearPeriod                             Boolean       @default(false)   
   buybackReportIsExist                          Boolean       @default(false)
   isFinancesAccounted                           Boolean       @default(false)
   financesAccountedAt                           DateTime?     
+  year                                          Int           @db.SmallInt
   recordedToYear                                Int           @db.SmallInt
   recordedToMonth                               String        @db.VarChar(8) 
   qty                                           Int           @default(0)
@@ -37,7 +37,6 @@ model Sku {
   profitMargin                                  Decimal       @default(0)
   isCostPriceSet                                Boolean       @default(false)
   averageProfit                                 Decimal       @default(0)
-  averageRetailPrice                            Decimal       @default(0)
   averageStorageCost                            Decimal       @default(0)
   averageAdvertisingCost                        Decimal       @default(0)
   schemaVersion                                 Int?
@@ -45,7 +44,7 @@ model Sku {
 
 
 
-  @@unique([userId, dateFrom, dateTo, skuName])
+  @@unique([userId, dateFrom, dateTo, skuName, year])
   @@index([userId])
   @@index([reportId])
   @@index([dateFrom, dateTo])

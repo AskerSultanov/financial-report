@@ -2,11 +2,11 @@
   userId            String          @unique
   login             String          @unique
   passwd            String          
-  role              Role            @default(USER)
+  role              Role            @default(user)
   registeredAt      DateTime        @default(now())
 }
 
 enum Role {
-  USER
-  ADMIN
+  user
+  admin
 }
