@@ -1,6 +1,4 @@
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
-
-var getLastModifiedDate = () => Date.now() + mskTimeOffsetInMs;
+var getLastModifiedDate = () => Date.now();
 
 var createQuery = (priceData) => {
   var query = {};
@@ -33,10 +31,19 @@ var createQuery = (priceData) => {
   return { query, arrayFilters };
 };
 
-var setPriceUpdateTimestampAndUpdateStatus = async (collection, userId, priceData, session) => {
+var setPriceUpdateTimestampAndUpdateStatus = async (
+  collection,
+  userId,
+  priceData,
+  session,
+) => {
   var sessionOpt = session ? { session: session } : {};
   var { query, arrayFilters } = createQuery(priceData);
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
+  var result = await collection.updateOne(
+    { userId },
+    { $set: query },
+    { arrayFilters, ...sessionOpt },
+  );
   return result;
 };
 

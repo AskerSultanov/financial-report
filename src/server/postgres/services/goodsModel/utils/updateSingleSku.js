@@ -1,11 +1,9 @@
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
-
 var updateSingleSku = async (collection, userId, sku, session) => {
   var { nmID, price, discount } = sku;
 
   var sessionOption = session ? { session } : {};
 
-  var lastUpdatedDate = Date.now() + mskTimeOffsetInMs;
+  var lastUpdatedDate = Date.now();
   var discountedPrice = price - (price * discount) / 100;
 
   var query = {
@@ -18,7 +16,11 @@ var updateSingleSku = async (collection, userId, sku, session) => {
 
   var arrayFilters = [{ "sku.id": nmID }];
 
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOption });
+  var result = await collection.updateOne(
+    { userId },
+    { $set: query },
+    { arrayFilters, ...sessionOption },
+  );
   return result;
 };
 

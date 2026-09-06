@@ -159,7 +159,6 @@ export const SkuScalarFieldEnum = {
   isCrossYearPeriod: 'isCrossYearPeriod',
   buybackReportIsExist: 'buybackReportIsExist',
   isFinancesAccounted: 'isFinancesAccounted',
-  financesAccountedAt: 'financesAccountedAt',
   year: 'year',
   recordedToYear: 'recordedToYear',
   recordedToMonth: 'recordedToMonth',

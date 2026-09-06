@@ -101,7 +101,6 @@ export type SkuMinAggregateOutputType = {
   isCrossYearPeriod: boolean | null
   buybackReportIsExist: boolean | null
   isFinancesAccounted: boolean | null
-  financesAccountedAt: Date | null
   year: number | null
   recordedToYear: number | null
   recordedToMonth: string | null
@@ -145,7 +144,6 @@ export type SkuMaxAggregateOutputType = {
   isCrossYearPeriod: boolean | null
   buybackReportIsExist: boolean | null
   isFinancesAccounted: boolean | null
-  financesAccountedAt: Date | null
   year: number | null
   recordedToYear: number | null
   recordedToMonth: string | null
@@ -189,7 +187,6 @@ export type SkuCountAggregateOutputType = {
   isCrossYearPeriod: number
   buybackReportIsExist: number
   isFinancesAccounted: number
-  financesAccountedAt: number
   year: number
   recordedToYear: number
   recordedToMonth: number
@@ -299,7 +296,6 @@ export type SkuMinAggregateInputType = {
   isCrossYearPeriod?: true
   buybackReportIsExist?: true
   isFinancesAccounted?: true
-  financesAccountedAt?: true
   year?: true
   recordedToYear?: true
   recordedToMonth?: true
@@ -343,7 +339,6 @@ export type SkuMaxAggregateInputType = {
   isCrossYearPeriod?: true
   buybackReportIsExist?: true
   isFinancesAccounted?: true
-  financesAccountedAt?: true
   year?: true
   recordedToYear?: true
   recordedToMonth?: true
@@ -387,7 +382,6 @@ export type SkuCountAggregateInputType = {
   isCrossYearPeriod?: true
   buybackReportIsExist?: true
   isFinancesAccounted?: true
-  financesAccountedAt?: true
   year?: true
   recordedToYear?: true
   recordedToMonth?: true
@@ -518,7 +512,6 @@ export type SkuGroupByOutputType = {
   isCrossYearPeriod: boolean
   buybackReportIsExist: boolean
   isFinancesAccounted: boolean
-  financesAccountedAt: Date | null
   year: number
   recordedToYear: number
   recordedToMonth: string
@@ -585,7 +578,6 @@ export type SkuWhereInput = {
   isCrossYearPeriod?: Prisma.BoolFilter<"Sku"> | boolean
   buybackReportIsExist?: Prisma.BoolFilter<"Sku"> | boolean
   isFinancesAccounted?: Prisma.BoolFilter<"Sku"> | boolean
-  financesAccountedAt?: Prisma.DateTimeNullableFilter<"Sku"> | Date | string | null
   year?: Prisma.IntFilter<"Sku"> | number
   recordedToYear?: Prisma.IntFilter<"Sku"> | number
   recordedToMonth?: Prisma.StringFilter<"Sku"> | string
@@ -629,7 +621,6 @@ export type SkuOrderByWithRelationInput = {
   isCrossYearPeriod?: Prisma.SortOrder
   buybackReportIsExist?: Prisma.SortOrder
   isFinancesAccounted?: Prisma.SortOrder
-  financesAccountedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   year?: Prisma.SortOrder
   recordedToYear?: Prisma.SortOrder
   recordedToMonth?: Prisma.SortOrder
@@ -677,7 +668,6 @@ export type SkuWhereUniqueInput = Prisma.AtLeast<{
   isCrossYearPeriod?: Prisma.BoolFilter<"Sku"> | boolean
   buybackReportIsExist?: Prisma.BoolFilter<"Sku"> | boolean
   isFinancesAccounted?: Prisma.BoolFilter<"Sku"> | boolean
-  financesAccountedAt?: Prisma.DateTimeNullableFilter<"Sku"> | Date | string | null
   year?: Prisma.IntFilter<"Sku"> | number
   recordedToYear?: Prisma.IntFilter<"Sku"> | number
   recordedToMonth?: Prisma.StringFilter<"Sku"> | string
@@ -721,7 +711,6 @@ export type SkuOrderByWithAggregationInput = {
   isCrossYearPeriod?: Prisma.SortOrder
   buybackReportIsExist?: Prisma.SortOrder
   isFinancesAccounted?: Prisma.SortOrder
-  financesAccountedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   year?: Prisma.SortOrder
   recordedToYear?: Prisma.SortOrder
   recordedToMonth?: Prisma.SortOrder
@@ -773,7 +762,6 @@ export type SkuScalarWhereWithAggregatesInput = {
   isCrossYearPeriod?: Prisma.BoolWithAggregatesFilter<"Sku"> | boolean
   buybackReportIsExist?: Prisma.BoolWithAggregatesFilter<"Sku"> | boolean
   isFinancesAccounted?: Prisma.BoolWithAggregatesFilter<"Sku"> | boolean
-  financesAccountedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Sku"> | Date | string | null
   year?: Prisma.IntWithAggregatesFilter<"Sku"> | number
   recordedToYear?: Prisma.IntWithAggregatesFilter<"Sku"> | number
   recordedToMonth?: Prisma.StringWithAggregatesFilter<"Sku"> | string
@@ -817,7 +805,6 @@ export type SkuCreateInput = {
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: Date | string | null
   year: number
   recordedToYear: number
   recordedToMonth: string
@@ -861,7 +848,6 @@ export type SkuUncheckedCreateInput = {
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: Date | string | null
   year: number
   recordedToYear: number
   recordedToMonth: string
@@ -905,7 +891,6 @@ export type SkuUpdateInput = {
   isCrossYearPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
   buybackReportIsExist?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinancesAccounted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  financesAccountedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToYear?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToMonth?: Prisma.StringFieldUpdateOperationsInput | string
@@ -949,7 +934,6 @@ export type SkuUncheckedUpdateInput = {
   isCrossYearPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
   buybackReportIsExist?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinancesAccounted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  financesAccountedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToYear?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToMonth?: Prisma.StringFieldUpdateOperationsInput | string
@@ -993,7 +977,6 @@ export type SkuCreateManyInput = {
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: Date | string | null
   year: number
   recordedToYear: number
   recordedToMonth: string
@@ -1037,7 +1020,6 @@ export type SkuUpdateManyMutationInput = {
   isCrossYearPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
   buybackReportIsExist?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinancesAccounted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  financesAccountedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToYear?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToMonth?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1081,7 +1063,6 @@ export type SkuUncheckedUpdateManyInput = {
   isCrossYearPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
   buybackReportIsExist?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinancesAccounted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  financesAccountedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToYear?: Prisma.IntFieldUpdateOperationsInput | number
   recordedToMonth?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1133,7 +1114,6 @@ export type SkuCountOrderByAggregateInput = {
   isCrossYearPeriod?: Prisma.SortOrder
   buybackReportIsExist?: Prisma.SortOrder
   isFinancesAccounted?: Prisma.SortOrder
-  financesAccountedAt?: Prisma.SortOrder
   year?: Prisma.SortOrder
   recordedToYear?: Prisma.SortOrder
   recordedToMonth?: Prisma.SortOrder
@@ -1209,7 +1189,6 @@ export type SkuMaxOrderByAggregateInput = {
   isCrossYearPeriod?: Prisma.SortOrder
   buybackReportIsExist?: Prisma.SortOrder
   isFinancesAccounted?: Prisma.SortOrder
-  financesAccountedAt?: Prisma.SortOrder
   year?: Prisma.SortOrder
   recordedToYear?: Prisma.SortOrder
   recordedToMonth?: Prisma.SortOrder
@@ -1253,7 +1232,6 @@ export type SkuMinOrderByAggregateInput = {
   isCrossYearPeriod?: Prisma.SortOrder
   buybackReportIsExist?: Prisma.SortOrder
   isFinancesAccounted?: Prisma.SortOrder
-  financesAccountedAt?: Prisma.SortOrder
   year?: Prisma.SortOrder
   recordedToYear?: Prisma.SortOrder
   recordedToMonth?: Prisma.SortOrder
@@ -1318,10 +1296,6 @@ export type SkuSumOrderByAggregateInput = {
   schemaVersion?: Prisma.SortOrder
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type NullableDecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1351,7 +1325,6 @@ export type SkuSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: boolean
   year?: boolean
   recordedToYear?: boolean
   recordedToMonth?: boolean
@@ -1395,7 +1368,6 @@ export type SkuSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: boolean
   year?: boolean
   recordedToYear?: boolean
   recordedToMonth?: boolean
@@ -1439,7 +1411,6 @@ export type SkuSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: boolean
   year?: boolean
   recordedToYear?: boolean
   recordedToMonth?: boolean
@@ -1483,7 +1454,6 @@ export type SkuSelectScalar = {
   isCrossYearPeriod?: boolean
   buybackReportIsExist?: boolean
   isFinancesAccounted?: boolean
-  financesAccountedAt?: boolean
   year?: boolean
   recordedToYear?: boolean
   recordedToMonth?: boolean
@@ -1516,7 +1486,7 @@ export type SkuSelectScalar = {
   schemaVersion?: boolean
 }
 
-export type SkuOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"skuId" | "userId" | "skuName" | "reportId" | "dateFrom" | "dateTo" | "reportIsEmpty" | "isCrossYearPeriod" | "buybackReportIsExist" | "isFinancesAccounted" | "financesAccountedAt" | "year" | "recordedToYear" | "recordedToMonth" | "qty" | "tax" | "fines" | "revenue" | "costPrice" | "acceptance" | "storageCost" | "retailAmount" | "returnAmount" | "deliveryCost" | "taxableAmount" | "otherExpenses" | "sellerPayoutAmount" | "deductionOrPayment" | "additionalPayment" | "insuranceFee" | "additionalInsuranceFee" | "isInsuranceFeeIncluded" | "profit" | "preTaxProfit" | "finalProfit" | "profitMargin" | "isCostPriceSet" | "averageProfit" | "averageStorageCost" | "averageAdvertisingCost" | "schemaVersion", ExtArgs["result"]["sku"]>
+export type SkuOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"skuId" | "userId" | "skuName" | "reportId" | "dateFrom" | "dateTo" | "reportIsEmpty" | "isCrossYearPeriod" | "buybackReportIsExist" | "isFinancesAccounted" | "year" | "recordedToYear" | "recordedToMonth" | "qty" | "tax" | "fines" | "revenue" | "costPrice" | "acceptance" | "storageCost" | "retailAmount" | "returnAmount" | "deliveryCost" | "taxableAmount" | "otherExpenses" | "sellerPayoutAmount" | "deductionOrPayment" | "additionalPayment" | "insuranceFee" | "additionalInsuranceFee" | "isInsuranceFeeIncluded" | "profit" | "preTaxProfit" | "finalProfit" | "profitMargin" | "isCostPriceSet" | "averageProfit" | "averageStorageCost" | "averageAdvertisingCost" | "schemaVersion", ExtArgs["result"]["sku"]>
 
 export type $SkuPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Sku"
@@ -1532,7 +1502,6 @@ export type $SkuPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     isCrossYearPeriod: boolean
     buybackReportIsExist: boolean
     isFinancesAccounted: boolean
-    financesAccountedAt: Date | null
     year: number
     recordedToYear: number
     recordedToMonth: string
@@ -1996,7 +1965,6 @@ export interface SkuFieldRefs {
   readonly isCrossYearPeriod: Prisma.FieldRef<"Sku", 'Boolean'>
   readonly buybackReportIsExist: Prisma.FieldRef<"Sku", 'Boolean'>
   readonly isFinancesAccounted: Prisma.FieldRef<"Sku", 'Boolean'>
-  readonly financesAccountedAt: Prisma.FieldRef<"Sku", 'DateTime'>
   readonly year: Prisma.FieldRef<"Sku", 'Int'>
   readonly recordedToYear: Prisma.FieldRef<"Sku", 'Int'>
   readonly recordedToMonth: Prisma.FieldRef<"Sku", 'String'>

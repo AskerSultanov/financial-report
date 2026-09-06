@@ -9,7 +9,6 @@ model Sku {
   isCrossYearPeriod                             Boolean       @default(false)   
   buybackReportIsExist                          Boolean       @default(false)
   isFinancesAccounted                           Boolean       @default(false)
-  financesAccountedAt                           DateTime?     
   year                                          Int           @db.SmallInt
   recordedToYear                                Int           @db.SmallInt
   recordedToMonth                               String        @db.VarChar(8) 

@@ -1,8 +1,6 @@
 import { prisma } from "../../../index.js";
 
-var mskTimeOffsetInMs = 3 * 60 * 60 * 1000;
-
-var getCurrentTimestamp = () => Date.now() + mskTimeOffsetInMs;
+var getCurrentTimestamp = () => Date.now();
 
 var createQuery = (skus) => {
   var query = {};
@@ -38,7 +36,11 @@ var createQuery = (skus) => {
 export async function updateSkusFields(userId, updatedSkus, client = prisma) {
   var sessionOpt = session ? { session: session } : {};
   var { query, arrayFilters } = createQuery(updatedSkus);
-  var result = await collection.updateOne({ userId }, { $set: query }, { arrayFilters, ...sessionOpt });
+  var result = await collection.updateOne(
+    { userId },
+    { $set: query },
+    { arrayFilters, ...sessionOpt },
+  );
 
   return result;
 }
