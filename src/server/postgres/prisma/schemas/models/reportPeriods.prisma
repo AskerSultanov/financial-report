@@ -8,8 +8,12 @@ model ReportPeriods {
   dateTo            String              @db.VarChar(10)
 
 
+
   @@unique([userId, dateFrom, dateTo])
+
+  @@index([userId])
   @@index([userId, dateFrom, dateTo])
+
 }
 
 enum MonthsList {
