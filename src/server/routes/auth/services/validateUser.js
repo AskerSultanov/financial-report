@@ -12,7 +12,7 @@ var validateUser = async (login, pwd) => {
     return { credentialInvalid, userId: null };
   }
 
-  credentialInvalid = await argon2.verify(user.passwd, pwd);
+  credentialInvalid = !(await argon2.verify(user.passwd, pwd));
 
   return { credentialInvalid, userId: user.userId };
 };
