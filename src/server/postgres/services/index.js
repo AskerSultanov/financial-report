@@ -5,6 +5,7 @@ import * as reportModelServices from "./reportsModel/index.js";
 import * as taxParamsModelServices from "./taxParamsModel/index.js";
 import * as reportPeriodsModelServices from "./reportPeriodsModel/index.js";
 import * as emptyReportPeriodsModelServices from "./emptyReportPeriods/index.js";
+import * as reportLoadingStateModelServices from "./reportLoadingStateModel/index.js";
 import * as reportsWithAccountedFinancesModelServices from "./repotsWithAccountedFinancesModel/index.js";
 
 export {
@@ -15,5 +16,6 @@ export {
   taxParamsModelServices,
   reportPeriodsModelServices,
   emptyReportPeriodsModelServices,
+  reportLoadingStateModelServices,
   reportsWithAccountedFinancesModelServices,
 };
