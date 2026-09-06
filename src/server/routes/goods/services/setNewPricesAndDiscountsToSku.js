@@ -12,18 +12,14 @@ var setNewPricesAndDiscountsToSkuService = async (data) => {
   } = data;
 
   if (setNewPriceNow) {
-    var data = [skuDataToUpdate];
-    await wbapi.setPricesAndDiscounts(userId, wbtoken, data);
+    var { changePriceIfInPromo, data } = skuDataToUpdate;
 
-    await dbUtils.goodsModelUtils.updateSkuInListGoods(
-      userId,
-      skuName,
-      {
-        price: skuDataToUpdate.data.price,
-        discount: skuDataToUpdate.data.discount,
-      },
-      session,
-    );
+    await wbapi.setPricesAndDiscounts(userId, wbtoken, [data]);
+
+    await dbUtils.goodsModelUtils.updateSkuInListGoods(userId, skuName, {
+      price: skuDataToUpdate.data.price,
+      discount: skuDataToUpdate.data.discount,
+    });
   }
 
   if (!expectedPriceExists) {
