@@ -5,7 +5,6 @@ model ReportsQueue {
   dateFrom                  String                  @db.VarChar(10)
   dateTo                    String                  @db.VarChar(10)
   failedCount               Int                     @db.SmallInt  @default(0)
-  isEmptyPeriod             Boolean                 @default(false)
 
   reportLoadingState        ReportLoadingState      @relation(fields: [userId], references: [userId], onDelete: Cascade)
 

@@ -397,6 +397,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  EmptyReportPeriods: 'EmptyReportPeriods',
   ListGoods: 'ListGoods',
   ReportLoadingState: 'ReportLoadingState',
   ReportPeriods: 'ReportPeriods',
@@ -421,10 +422,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "listGoods" | "reportLoadingState" | "reportPeriods" | "reportsQueue" | "reportsWithAccountedFinances" | "sku" | "taxParams" | "token" | "user"
+    modelProps: "emptyReportPeriods" | "listGoods" | "reportLoadingState" | "reportPeriods" | "reportsQueue" | "reportsWithAccountedFinances" | "sku" | "taxParams" | "token" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    EmptyReportPeriods: {
+      payload: Prisma.$EmptyReportPeriodsPayload<ExtArgs>
+      fields: Prisma.EmptyReportPeriodsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmptyReportPeriodsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmptyReportPeriodsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        findFirst: {
+          args: Prisma.EmptyReportPeriodsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmptyReportPeriodsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        findMany: {
+          args: Prisma.EmptyReportPeriodsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>[]
+        }
+        create: {
+          args: Prisma.EmptyReportPeriodsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        createMany: {
+          args: Prisma.EmptyReportPeriodsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmptyReportPeriodsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>[]
+        }
+        delete: {
+          args: Prisma.EmptyReportPeriodsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        update: {
+          args: Prisma.EmptyReportPeriodsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmptyReportPeriodsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmptyReportPeriodsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmptyReportPeriodsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmptyReportPeriodsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmptyReportPeriodsPayload>
+        }
+        aggregate: {
+          args: Prisma.EmptyReportPeriodsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmptyReportPeriods>
+        }
+        groupBy: {
+          args: Prisma.EmptyReportPeriodsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmptyReportPeriodsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmptyReportPeriodsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmptyReportPeriodsCountAggregateOutputType> | number
+        }
+      }
+    }
     ListGoods: {
       payload: Prisma.$ListGoodsPayload<ExtArgs>
       fields: Prisma.ListGoodsFieldRefs
@@ -1130,6 +1205,16 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const EmptyReportPeriodsScalarFieldEnum = {
+  userId: 'userId',
+  reportId: 'reportId',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo'
+} as const
+
+export type EmptyReportPeriodsScalarFieldEnum = (typeof EmptyReportPeriodsScalarFieldEnum)[keyof typeof EmptyReportPeriodsScalarFieldEnum]
+
+
 export const ListGoodsScalarFieldEnum = {
   userId: 'userId',
   skuId: 'skuId',
@@ -1182,8 +1267,7 @@ export const ReportsQueueScalarFieldEnum = {
   userId: 'userId',
   dateFrom: 'dateFrom',
   dateTo: 'dateTo',
-  failedCount: 'failedCount',
-  isEmptyPeriod: 'isEmptyPeriod'
+  failedCount: 'failedCount'
 } as const
 
 export type ReportsQueueScalarFieldEnum = (typeof ReportsQueueScalarFieldEnum)[keyof typeof ReportsQueueScalarFieldEnum]
@@ -1577,6 +1661,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
  */
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
+  emptyReportPeriods?: Prisma.EmptyReportPeriodsOmit
   listGoods?: Prisma.ListGoodsOmit
   reportLoadingState?: Prisma.ReportLoadingStateOmit
   reportPeriods?: Prisma.ReportPeriodsOmit

@@ -1,0 +1,9 @@
+model EmptyReportPeriods {
+  userId            String  
+  reportId          Int
+  dateFrom          String             @db.VarChar(10)
+  dateTo            String             @db.VarChar(10)
+
+  @@unique([userId, dateFrom, dateTo])
+  @@index([userId, dateFrom, dateTo])
+}

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  EmptyReportPeriods: 'EmptyReportPeriods',
   ListGoods: 'ListGoods',
   ReportLoadingState: 'ReportLoadingState',
   ReportPeriods: 'ReportPeriods',
@@ -76,6 +77,16 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const EmptyReportPeriodsScalarFieldEnum = {
+  userId: 'userId',
+  reportId: 'reportId',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo'
+} as const
+
+export type EmptyReportPeriodsScalarFieldEnum = (typeof EmptyReportPeriodsScalarFieldEnum)[keyof typeof EmptyReportPeriodsScalarFieldEnum]
 
 
 export const ListGoodsScalarFieldEnum = {
@@ -130,8 +141,7 @@ export const ReportsQueueScalarFieldEnum = {
   userId: 'userId',
   dateFrom: 'dateFrom',
   dateTo: 'dateTo',
-  failedCount: 'failedCount',
-  isEmptyPeriod: 'isEmptyPeriod'
+  failedCount: 'failedCount'
 } as const
 
 export type ReportsQueueScalarFieldEnum = (typeof ReportsQueueScalarFieldEnum)[keyof typeof ReportsQueueScalarFieldEnum]

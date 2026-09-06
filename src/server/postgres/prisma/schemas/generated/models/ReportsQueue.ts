@@ -45,7 +45,6 @@ export type ReportsQueueMinAggregateOutputType = {
   dateFrom: string | null
   dateTo: string | null
   failedCount: number | null
-  isEmptyPeriod: boolean | null
 }
 
 export type ReportsQueueMaxAggregateOutputType = {
@@ -55,7 +54,6 @@ export type ReportsQueueMaxAggregateOutputType = {
   dateFrom: string | null
   dateTo: string | null
   failedCount: number | null
-  isEmptyPeriod: boolean | null
 }
 
 export type ReportsQueueCountAggregateOutputType = {
@@ -65,7 +63,6 @@ export type ReportsQueueCountAggregateOutputType = {
   dateFrom: number
   dateTo: number
   failedCount: number
-  isEmptyPeriod: number
   _all: number
 }
 
@@ -89,7 +86,6 @@ export type ReportsQueueMinAggregateInputType = {
   dateFrom?: true
   dateTo?: true
   failedCount?: true
-  isEmptyPeriod?: true
 }
 
 export type ReportsQueueMaxAggregateInputType = {
@@ -99,7 +95,6 @@ export type ReportsQueueMaxAggregateInputType = {
   dateFrom?: true
   dateTo?: true
   failedCount?: true
-  isEmptyPeriod?: true
 }
 
 export type ReportsQueueCountAggregateInputType = {
@@ -109,7 +104,6 @@ export type ReportsQueueCountAggregateInputType = {
   dateFrom?: true
   dateTo?: true
   failedCount?: true
-  isEmptyPeriod?: true
   _all?: true
 }
 
@@ -206,7 +200,6 @@ export type ReportsQueueGroupByOutputType = {
   dateFrom: string
   dateTo: string
   failedCount: number
-  isEmptyPeriod: boolean
   _count: ReportsQueueCountAggregateOutputType | null
   _avg: ReportsQueueAvgAggregateOutputType | null
   _sum: ReportsQueueSumAggregateOutputType | null
@@ -239,7 +232,6 @@ export type ReportsQueueWhereInput = {
   dateFrom?: Prisma.StringFilter<"ReportsQueue"> | string
   dateTo?: Prisma.StringFilter<"ReportsQueue"> | string
   failedCount?: Prisma.IntFilter<"ReportsQueue"> | number
-  isEmptyPeriod?: Prisma.BoolFilter<"ReportsQueue"> | boolean
   reportLoadingState?: Prisma.XOR<Prisma.ReportLoadingStateScalarRelationFilter, Prisma.ReportLoadingStateWhereInput>
 }
 
@@ -250,7 +242,6 @@ export type ReportsQueueOrderByWithRelationInput = {
   dateFrom?: Prisma.SortOrder
   dateTo?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
-  isEmptyPeriod?: Prisma.SortOrder
   reportLoadingState?: Prisma.ReportLoadingStateOrderByWithRelationInput
 }
 
@@ -265,7 +256,6 @@ export type ReportsQueueWhereUniqueInput = Prisma.AtLeast<{
   dateFrom?: Prisma.StringFilter<"ReportsQueue"> | string
   dateTo?: Prisma.StringFilter<"ReportsQueue"> | string
   failedCount?: Prisma.IntFilter<"ReportsQueue"> | number
-  isEmptyPeriod?: Prisma.BoolFilter<"ReportsQueue"> | boolean
   reportLoadingState?: Prisma.XOR<Prisma.ReportLoadingStateScalarRelationFilter, Prisma.ReportLoadingStateWhereInput>
 }, "queueItemId" | "userId_dateFrom_dateTo">
 
@@ -276,7 +266,6 @@ export type ReportsQueueOrderByWithAggregationInput = {
   dateFrom?: Prisma.SortOrder
   dateTo?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
-  isEmptyPeriod?: Prisma.SortOrder
   _count?: Prisma.ReportsQueueCountOrderByAggregateInput
   _avg?: Prisma.ReportsQueueAvgOrderByAggregateInput
   _max?: Prisma.ReportsQueueMaxOrderByAggregateInput
@@ -294,7 +283,6 @@ export type ReportsQueueScalarWhereWithAggregatesInput = {
   dateFrom?: Prisma.StringWithAggregatesFilter<"ReportsQueue"> | string
   dateTo?: Prisma.StringWithAggregatesFilter<"ReportsQueue"> | string
   failedCount?: Prisma.IntWithAggregatesFilter<"ReportsQueue"> | number
-  isEmptyPeriod?: Prisma.BoolWithAggregatesFilter<"ReportsQueue"> | boolean
 }
 
 export type ReportsQueueCreateInput = {
@@ -302,7 +290,6 @@ export type ReportsQueueCreateInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
   reportLoadingState: Prisma.ReportLoadingStateCreateNestedOneWithoutReportsQueueInput
 }
 
@@ -313,7 +300,6 @@ export type ReportsQueueUncheckedCreateInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
 }
 
 export type ReportsQueueUpdateInput = {
@@ -321,7 +307,6 @@ export type ReportsQueueUpdateInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reportLoadingState?: Prisma.ReportLoadingStateUpdateOneRequiredWithoutReportsQueueNestedInput
 }
 
@@ -332,7 +317,6 @@ export type ReportsQueueUncheckedUpdateInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ReportsQueueCreateManyInput = {
@@ -342,7 +326,6 @@ export type ReportsQueueCreateManyInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
 }
 
 export type ReportsQueueUpdateManyMutationInput = {
@@ -350,7 +333,6 @@ export type ReportsQueueUpdateManyMutationInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ReportsQueueUncheckedUpdateManyInput = {
@@ -360,7 +342,6 @@ export type ReportsQueueUncheckedUpdateManyInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ReportsQueueListRelationFilter = {
@@ -386,7 +367,6 @@ export type ReportsQueueCountOrderByAggregateInput = {
   dateFrom?: Prisma.SortOrder
   dateTo?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
-  isEmptyPeriod?: Prisma.SortOrder
 }
 
 export type ReportsQueueAvgOrderByAggregateInput = {
@@ -402,7 +382,6 @@ export type ReportsQueueMaxOrderByAggregateInput = {
   dateFrom?: Prisma.SortOrder
   dateTo?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
-  isEmptyPeriod?: Prisma.SortOrder
 }
 
 export type ReportsQueueMinOrderByAggregateInput = {
@@ -412,7 +391,6 @@ export type ReportsQueueMinOrderByAggregateInput = {
   dateFrom?: Prisma.SortOrder
   dateTo?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
-  isEmptyPeriod?: Prisma.SortOrder
 }
 
 export type ReportsQueueSumOrderByAggregateInput = {
@@ -468,7 +446,6 @@ export type ReportsQueueCreateWithoutReportLoadingStateInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
 }
 
 export type ReportsQueueUncheckedCreateWithoutReportLoadingStateInput = {
@@ -477,7 +454,6 @@ export type ReportsQueueUncheckedCreateWithoutReportLoadingStateInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
 }
 
 export type ReportsQueueCreateOrConnectWithoutReportLoadingStateInput = {
@@ -516,7 +492,6 @@ export type ReportsQueueScalarWhereInput = {
   dateFrom?: Prisma.StringFilter<"ReportsQueue"> | string
   dateTo?: Prisma.StringFilter<"ReportsQueue"> | string
   failedCount?: Prisma.IntFilter<"ReportsQueue"> | number
-  isEmptyPeriod?: Prisma.BoolFilter<"ReportsQueue"> | boolean
 }
 
 export type ReportsQueueCreateManyReportLoadingStateInput = {
@@ -525,7 +500,6 @@ export type ReportsQueueCreateManyReportLoadingStateInput = {
   dateFrom: string
   dateTo: string
   failedCount?: number
-  isEmptyPeriod?: boolean
 }
 
 export type ReportsQueueUpdateWithoutReportLoadingStateInput = {
@@ -533,7 +507,6 @@ export type ReportsQueueUpdateWithoutReportLoadingStateInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ReportsQueueUncheckedUpdateWithoutReportLoadingStateInput = {
@@ -542,7 +515,6 @@ export type ReportsQueueUncheckedUpdateWithoutReportLoadingStateInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ReportsQueueUncheckedUpdateManyWithoutReportLoadingStateInput = {
@@ -551,7 +523,6 @@ export type ReportsQueueUncheckedUpdateManyWithoutReportLoadingStateInput = {
   dateFrom?: Prisma.StringFieldUpdateOperationsInput | string
   dateTo?: Prisma.StringFieldUpdateOperationsInput | string
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isEmptyPeriod?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -563,7 +534,6 @@ export type ReportsQueueSelect<ExtArgs extends runtime.Types.Extensions.Internal
   dateFrom?: boolean
   dateTo?: boolean
   failedCount?: boolean
-  isEmptyPeriod?: boolean
   reportLoadingState?: boolean | Prisma.ReportLoadingStateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reportsQueue"]>
 
@@ -574,7 +544,6 @@ export type ReportsQueueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   dateFrom?: boolean
   dateTo?: boolean
   failedCount?: boolean
-  isEmptyPeriod?: boolean
   reportLoadingState?: boolean | Prisma.ReportLoadingStateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reportsQueue"]>
 
@@ -585,7 +554,6 @@ export type ReportsQueueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   dateFrom?: boolean
   dateTo?: boolean
   failedCount?: boolean
-  isEmptyPeriod?: boolean
   reportLoadingState?: boolean | Prisma.ReportLoadingStateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reportsQueue"]>
 
@@ -596,10 +564,9 @@ export type ReportsQueueSelectScalar = {
   dateFrom?: boolean
   dateTo?: boolean
   failedCount?: boolean
-  isEmptyPeriod?: boolean
 }
 
-export type ReportsQueueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"queuePosition" | "queueItemId" | "userId" | "dateFrom" | "dateTo" | "failedCount" | "isEmptyPeriod", ExtArgs["result"]["reportsQueue"]>
+export type ReportsQueueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"queuePosition" | "queueItemId" | "userId" | "dateFrom" | "dateTo" | "failedCount", ExtArgs["result"]["reportsQueue"]>
 export type ReportsQueueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reportLoadingState?: boolean | Prisma.ReportLoadingStateDefaultArgs<ExtArgs>
 }
@@ -622,7 +589,6 @@ export type $ReportsQueuePayload<ExtArgs extends runtime.Types.Extensions.Intern
     dateFrom: string
     dateTo: string
     failedCount: number
-    isEmptyPeriod: boolean
   }, ExtArgs["result"]["reportsQueue"]>
   composites: {}
 }
@@ -1053,7 +1019,6 @@ export interface ReportsQueueFieldRefs {
   readonly dateFrom: Prisma.FieldRef<"ReportsQueue", 'String'>
   readonly dateTo: Prisma.FieldRef<"ReportsQueue", 'String'>
   readonly failedCount: Prisma.FieldRef<"ReportsQueue", 'Int'>
-  readonly isEmptyPeriod: Prisma.FieldRef<"ReportsQueue", 'Boolean'>
 }
     
 
