@@ -1,0 +1,6 @@
+model Token {
+  userId                    String          @unique
+  lastUsed                  DateTime        @default(now())
+  token                     String          @default("")
+  tokenHasBeenRemoved       Boolean         @default(false)
+}

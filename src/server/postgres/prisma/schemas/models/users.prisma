@@ -1,0 +1,12 @@
+ model User {
+  userId            String          @unique
+  login             String          @unique
+  passwd            String          
+  role              Role            @default(USER)
+  registeredAt      DateTime        @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}

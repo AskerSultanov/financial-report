@@ -1,0 +1,57 @@
+model ReportTree {
+  userId            String        @id
+  years             Year[]
+}
+
+model Year {
+  id                Int         @id  @default(autoincrement())
+  year              Int         @db.SmallInt
+  months            Month[]
+  reportsTreeId     String  
+  reportsTree       ReportTree  @relation(fields: [reportsTreeId], references: [userId], onDelete: Cascade)
+
+  @@unique([reportsTreeId, year])
+  @@index([reportsTreeId])
+}
+
+model Month {
+  id                Int         @id  @default(autoincrement())
+  month             MonthName   
+  yearId            Int         
+  year              Year        @relation(fields: [yearId], references: [id], onDelete: Cascade)
+  reports           ReportOfMonth[]
+
+
+
+  @@unique([yearId, month])
+  @@index([yearId])
+}
+
+model ReportOfMonth {
+  id                Int        @id  @default(autoincrement())
+  reportId          Int        
+  dateFrom          String     @db.VarChar(10)
+  dateTo            String     @db.VarChar(10)
+
+  monthId           Int      
+  month             Month       @relation(fields: [monthId], references: [id], onDelete: Cascade)
+
+  @@unique([monthId, reportId])
+  @@index([monthId])
+}
+
+
+enum MonthName {
+  январь
+  февраль
+  март
+  апрель
+  май
+  июнь
+  июль
+  август
+  сентябрь
+  октябрь
+  ноябрь
+  декабрь
+}

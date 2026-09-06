@@ -1,0 +1,27 @@
+model TaxParams {
+  userId                                        String      
+  year                                          Int
+  taxRate                                       Int         @default(6)         @db.SmallInt
+  finalProfit                                   Int         @default(0)
+  paidTaxAmount                                 Int         @default(0)
+  retailAmount                                  Int         @default(0)
+  otherExpenses                                 Int         @default(0)
+  taxableAmount                                 Int         @default(0)
+  maxInsuranceFee                               Int         
+  isInsuranceFeePaid                            Boolean     @default(false)
+  excessInsuranceRate                           Int         @default(1)         @db.SmallInt          
+  mandatoryInsuranceFee                         Int         @default(0)
+  additionalInsuranceFee                        Int         @default(0)
+  insuranceFeePercentage                        Int         @default(10)        @db.SmallInt
+  mandatoryInsuranceFeeRate                     Int         @default(10)        @db.SmallInt        
+  hasExcessIncomeForInsurance                   Boolean     @default(false)
+  mandatoryInsuranceFeeIsPaid                   Boolean     @default(false)
+  additionalInsuranceFeeIsPaid                  Boolean     @default(false)
+  requiresAdditionalInsuranceFee                Boolean     @default(false)
+  excessIncomeForAdditionalInsuranceFee         Int         @default(0)
+
+
+  @@unique([userId, year])
+  @@index([userId, year])
+}
+

@@ -1,0 +1,52 @@
+model Sku {
+  skuId                                         Int
+  userId                                        String
+  skuName                                       String
+  reportId                                      Int           
+  dateFrom                                      String        @db.VarChar(10)
+  dateTo                                        String        @db.VarChar(10)          
+  taxRate                                       Int           @default(6) @db.SmallInt
+  reportIsEmpty                                 Boolean       @default(false)
+  isCrossYearPeriod                             Boolean       @default(false)   
+  buybackReportIsExist                          Boolean       @default(false)
+  isFinancesAccounted                           Boolean       @default(false)
+  financesAccountedAt                           DateTime?     
+  recordedToYear                                Int           @db.SmallInt
+  recordedToMonth                               String        @db.VarChar(8) 
+  qty                                           Int           @default(0)
+  tax                                           Decimal       @default(0)
+  fines                                         Decimal       @default(0)
+  revenue                                       Decimal       @default(0)
+  costPrice                                     Decimal       @default(0)
+  acceptance                                    Decimal       @default(0)
+  storageCost                                   Decimal       @default(0)
+  retailAmount                                  Decimal      @default(0)
+  returnAmount                                  Decimal       @default(0)
+  deliveryCost                                  Decimal      @default(0)
+  taxableAmount                                 Decimal?      @default(0)
+  otherExpenses                                 Decimal       @default(0)
+  sellerPayoutAmount                            Decimal       @default(0)
+  deductionOrPayment                            Decimal       @default(0)
+  additionalPayment                             Decimal       @default(0)
+  insuranceFee                                  Decimal       @default(0)
+  additionalInsuranceFee                        Decimal       @default(0)
+  isInsuranceFeeIncluded                        Boolean       @default(false)
+  profit                                        Decimal       @default(0)
+  preTaxProfit                                  Decimal       @default(0)
+  finalProfit                                   Decimal       @default(0)
+  profitMargin                                  Decimal       @default(0)
+  isCostPriceSet                                Boolean       @default(false)
+  averageProfit                                 Decimal       @default(0)
+  averageRetailPrice                            Decimal       @default(0)
+  averageStorageCost                            Decimal       @default(0)
+  averageAdvertisingCost                        Decimal       @default(0)
+  schemaVersion                                 Int?
+  
+
+
+
+  @@unique([userId, dateFrom, dateTo, skuName])
+  @@index([userId])
+  @@index([reportId])
+  @@index([dateFrom, dateTo])
+}

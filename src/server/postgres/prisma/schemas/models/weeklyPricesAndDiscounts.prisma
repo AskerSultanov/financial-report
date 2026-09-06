@@ -1,0 +1,38 @@
+// model PriceAndDiscount {
+//   nmID                              Int                 
+//   price                             Int
+//   discount                          Int
+//   skuName                           String              
+//   dayIndex                          Int                                         @db.SmallInt
+//   skuPriceAndDiscountId             String                                      @id  
+//   sku                               WeeklyPricesAndDiscountsSku                 @relation(fields: [skuPriceAndDiscountId], references: [skuName])
+  
+//   @@unique([skuPriceAndDiscountId])
+//   @@index([skuPriceAndDiscountId])
+// }
+
+// model WeeklyPricesAndDiscountsSku {
+//   skuName                           String              @id
+//   nmID                              Int
+//   dayIndex                          Int                 @db.SmallInt
+//   needToUpdate                      Boolean             @default(true)
+//   lastUpdatedTimestamp              Int                 @default(0)
+//   data                              PriceAndDiscount
+//   updateInterval                    String              @default("5m")
+//   changePriceIfInPromo              Boolean             @default(false)
+//   updateIntervalInMs                Int                 @default(300000)
+//   updateOption                      UpdateOption        @default(interval)
+// }
+
+// // // // model WeeklyPricesAndDiscounts {
+// // // //   userId                            String              @unique
+// // // //   uploadId                          Int?        
+// // // //   weeklyPricesAndDiscounts          Sku[] 
+// // // // }
+
+
+// enum UpdateOption {
+//     interval
+//     oncePerDay
+// }
+

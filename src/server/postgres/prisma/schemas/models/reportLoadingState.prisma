@@ -1,0 +1,14 @@
+model ReportLoadingState {
+  id                                Int                     @id @default(autoincrement())
+  userId                            String                    
+  loadingInProgress                 Boolean                 @default(false)
+  lastReportRequestTimestamp        DateTime            
+  freshReportPeriodIndex            Int                     @db.SmallInt
+  isReportLoadingDelayed            Boolean                 @default(false)
+  isReportLoadingIsStopped          Boolean                 @default(false)
+  loadingStopReason                 String                  @default("")
+
+  reportsQueue                      ReportsQueue[]
+  @@unique([userId])
+  @@index([userId])
+}

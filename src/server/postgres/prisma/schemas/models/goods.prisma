@@ -1,0 +1,19 @@
+model ListGoods {
+  userId                        String
+  skuId                         Int
+  skuName                       String      @id  
+  price                         Decimal     @default(0)
+  discount                      Decimal     @default(0)
+  discountedPrice               Decimal     @default(0)
+  clubDiscountedPrice           Decimal     @default(0)
+  disabled                      Boolean     @default(false)
+  lastFetch                     DateTime    @default(now())
+  lastUpdated                   DateTime
+  isPriceUpdated                Boolean     @default(false)
+  errorText                     String?
+  deleted                       Boolean     @default(false)
+
+  @@unique([userId, skuName])
+  @@index([skuName])
+}
+
