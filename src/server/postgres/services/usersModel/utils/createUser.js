@@ -1,9 +1,16 @@
+import argon2 from "argon2";
 import { prisma } from "../../../index.js";
 
 export async function createUser(newUser) {
-  console.log(newUser);
+  var registeredAt = new Date();
+  var hashedPasswd = await argon2.hash(
+    newUser.passwd + "",
+    process.env.SECRET_KEY,
+  );
 
   return await prisma.$transaction(async (tx) => {
-    await tx.user.create({ data: newUser });
+    await tx.user.create({
+      data: { passwd: hashedPasswd, registeredAt, ...newUser },
+    });
   });
 }
