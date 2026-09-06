@@ -1,5 +1,6 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
+import * as prismaServices from "../../../postgres/services/index.js";
 
 var { deleteUserFromDb } = dbUtils.userModelUtils;
 
@@ -10,6 +11,7 @@ var deleteUserController = async (req, res, next) => {
   try {
     await session.withTransaction(async () => {
       await deleteUserFromDb(userId, session);
+      await prismaServices.userModelServices.deleteUserFromDb(userId);
       return res.sendStatus(200);
     });
   } catch (e) {

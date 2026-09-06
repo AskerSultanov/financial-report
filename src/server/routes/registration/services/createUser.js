@@ -3,6 +3,7 @@ import checkLogin from "./utils/checkLogin.js";
 import checkPasswd from "./utils/checkPasswd.js";
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
+import * as prismaServices from "../../../postgres/services/index.js";
 
 var { createUserToDb, getUserByLogin } = dbUtils.userModelUtils;
 
@@ -23,8 +24,11 @@ var createUserService = async (candidate) => {
 
   return await session.withTransaction(async () => {
     var userExist = await getUserByLogin(candidate.login, session);
+    var userFromPg = await prismaServices.userModelServices.getUserByLogin(
+      candidate.login,
+    );
 
-    if (userExist) {
+    if (userExist && userFromPg) {
       return { userIsExist: true, mgs: "", userId: null, role: "" };
     }
 
@@ -35,7 +39,7 @@ var createUserService = async (candidate) => {
       candidate.login === process.env.adminName ? "admin" : "user";
 
     await createUserToDb(candidate, session);
-
+    await prismaServices.userModelServices.createUser(candidate);
     return { userId, userIsExist: false, errorText: "", role: candidate.role };
   });
 };
