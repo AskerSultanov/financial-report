@@ -1,5 +1,5 @@
-import calc from "../../reports/services/calcServices/index.js";
-import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
+import calc from "../../reports/services/utils/calcServices/index.js";
+import getPrevSkuData from "../../reports/services/utils/different/getPrevSkuData.js";
 
 var taxParamsStub = {
   finalProfit: 0,

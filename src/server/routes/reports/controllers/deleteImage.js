@@ -1,4 +1,4 @@
-import s3 from "../services/s3/index.js";
+import s3 from "../services/utils/s3/index.js";
 
 var deleteImageController = async (req, res, next) => {
   var { userId, skuName } = req.body;

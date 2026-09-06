@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
-import wbapi from "../../reports/services/WBAPI/index.js";
-import processReportSkus from "../../reports/services/reportParsing/index.js";
+import wbapi from "../../reports/services/utils/WBAPI/index.js";
+import processReportSkus from "../../reports/services/utils/reportParsing/index.js";
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -28,12 +28,21 @@ var getReportFromWBAPIController = async (req, res, next) => {
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
 
-  var reports = await wbapi.getReports("decode-without-auth", dateFrom, dateTo, token);
+  var reports = await wbapi.getReports(
+    "decode-without-auth",
+    dateFrom,
+    dateTo,
+    token,
+  );
 
   var reportSkus = [];
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
-    var { skus } = await processReportSkus(reports, { year: currentYear, ...taxParamsStub, taxRate }, isCrossYearPeriod);
+    var { skus } = await processReportSkus(
+      reports,
+      { year: currentYear, ...taxParamsStub, taxRate },
+      isCrossYearPeriod,
+    );
     reportSkus.push(...skus);
   }
 

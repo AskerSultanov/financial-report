@@ -1,23 +1,11 @@
-import dbUtils from "../../../database/modelsUtil/index.js";
-
-var session = null;
-var selectedFields = ["loadingInProgress"];
-
-var { getReportLoadingState, prependToReportsQueue } =
-  dbUtils.reportLoadingStateModelUtils;
+import checkReportsLoadingProgressService from "../services/checkReportsLoadingProgress.js";
 
 var checkReportsLoadingProgressController = async (req, res, next) => {
-  var { userId, dateFrom, dateTo } = req.body;
-
-  var { loadingInProgress } = await getReportLoadingState(
-    userId,
-    session,
-    selectedFields,
+  var { loadingInProgress } = await checkReportsLoadingProgressService(
+    req.body,
   );
 
   if (loadingInProgress) {
-    await prependToReportsQueue(userId, dateFrom, dateTo);
-
     return res.json({
       infoText: "Отчет скоро будет добавлен.",
       errorText: "",

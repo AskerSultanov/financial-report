@@ -1,8 +1,9 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
-import splitSkuByDisabledStatus from "../services/splitSkuByDisabledStatus.js";
+import splitSkuByDisabledStatus from "../services/utils/splitSkuByDisabledStatus.js";
 
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { getWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
+var { getWeeklyPricesAndDiscounts } =
+  dbUtils.weeklyPricesAndDiscountsModelUtils;
 
 var getListGoodsAndWeeklyPricesController = async (req, res, next) => {
   var { userId } = req.params;

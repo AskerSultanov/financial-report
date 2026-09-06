@@ -1,15 +1,7 @@
-import dbUtils from "../../../database/modelsUtil/index.js";
-
-var { addReportToAccounted, removeReportFromAccounted } = dbUtils.reportsWithAccountedFinancesModelUtils;
+import changeFinancialAccountingStatusService from "../services/changeFinancialAccountingStatus.js";
 
 var changeFinancialAccountingStatusController = async (req, res) => {
-  var { userId, reportId, dateFrom, dateTo, newStatus } = req.body;
-
-  if (newStatus) {
-    await addReportToAccounted(userId, reportId, dateFrom, dateTo);
-  } else {
-    await removeReportFromAccounted(userId, reportId);
-  }
+  await changeFinancialAccountingStatusService(req.body);
 
   return res.sendStatus(200);
 };

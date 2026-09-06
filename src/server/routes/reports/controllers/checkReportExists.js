@@ -1,18 +1,11 @@
-import dbUtils from "../../../database/modelsUtil/index.js";
-
-var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
-var { getEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
+import checkReportExistsService from "../services/checkReportExists.js";
 
 var checkReportExistsController = async (req, res, next) => {
-  var { userId, dateFrom } = req.body;
-
-  var { emptyReportPeriods } = await getEmptyReportPeriods(userId);
-
-  var reportPeriodExistInEmptyPeriods = emptyReportPeriods.find(
-    (item) => item.dateFrom === dateFrom,
+  var { reportIsExist, reportIsEmpty } = await checkReportExistsService(
+    req.body,
   );
 
-  if (reportPeriodExistInEmptyPeriods) {
+  if (reportIsEmpty) {
     return res.json({
       infoText: "Нет данных за отчетный период",
       errorText: "",
@@ -20,9 +13,7 @@ var checkReportExistsController = async (req, res, next) => {
     });
   }
 
-  var report = await checkReportExistByDate(userId, dateFrom);
-
-  if (report) {
+  if (reportIsExist) {
     return res.json({
       infoText: "Отчет за данный период уже существует.",
       errorText: "",

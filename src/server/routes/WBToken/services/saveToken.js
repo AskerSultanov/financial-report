@@ -1,8 +1,8 @@
 import { dbClient } from "../../../database/index.js";
 import getTokenDetails from "./utils/getTokenDetails.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
-import listGoodsLoader from "../../goods/services/listGoodsLoader.js";
-import extractNewSkusFromLIstGoods from "../../goods/services/extractNewSkusFromLIstGoods.js";
+import listGoodsLoader from "../../goods/services/utils/listGoodsLoader.js";
+import extractNewSkusFromLIstGoods from "../../goods/services/utils/extractNewSkusFromLIstGoods.js";
 
 var skuNamesStub = [];
 var selectedFieldsStub = null;

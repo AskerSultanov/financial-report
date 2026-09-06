@@ -1,4 +1,4 @@
-import { getReportAsXLSXBuffer } from "../../reports/services/reportAsXLSXBuffer/index.js";
+import { getReportAsXLSXBuffer } from "../../reports/services/utils/reportAsXLSXBuffer/index.js";
 
 var downloadReportAsXLSXController = async (req, res, next) => {
   var { report } = req.body;

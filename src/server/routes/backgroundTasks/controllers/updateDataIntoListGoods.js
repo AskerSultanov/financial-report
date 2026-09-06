@@ -1,10 +1,10 @@
 import { dbClient } from "../../../database/index.js";
 import parseJwt from "../../WBToken/services/utils/parseJwt.js";
-import wbapi from "../../reports/services/WBAPI/index.js";
+import wbapi from "../../reports/services/utils/WBAPI/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import checkTokenExpiry from "../../WBToken/services/utils/checkTokenExpiry.js";
 import splitListGoodsByExistence from "../services/splitListGoodsByExistence.js";
-import extractRequiredListGoodsData from "../../goods/services/extractRequiredListGoodsData.js";
+import extractRequiredListGoodsData from "../../goods/services/utils/extractRequiredListGoodsData.js";
 
 var statusOfReportLoadingStop = true;
 

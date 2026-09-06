@@ -1,5 +1,5 @@
-import calc from "../../reports/services/calcServices/index.js";
-import getPrevSkuData from "../../reports/services/different/getPrevSkuData.js";
+import calc from "../../reports/services/utils/calcServices/index.js";
+import getPrevSkuData from "../../reports/services/utils/different/getPrevSkuData.js";
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -21,7 +21,16 @@ var taxParamsStub = {
 };
 
 var setCostPriceController = async (req, res, next) => {
-  var { dateFrom, dateTo, userId, skuName, sku, taxRate, year, isCrossYearPeriod } = req.body;
+  var {
+    dateFrom,
+    dateTo,
+    userId,
+    skuName,
+    sku,
+    taxRate,
+    year,
+    isCrossYearPeriod,
+  } = req.body;
 
   var years = [];
 
@@ -40,7 +49,10 @@ var setCostPriceController = async (req, res, next) => {
 
   sku.costPrice = req.body.costPrice;
 
-  var { updatedSkuFields } = calc.sku.restParams(sku, prevSkuData, { taxRate, ...taxParamsStub });
+  var { updatedSkuFields } = calc.sku.restParams(sku, prevSkuData, {
+    taxRate,
+    ...taxParamsStub,
+  });
 
   return res.json({
     userId,

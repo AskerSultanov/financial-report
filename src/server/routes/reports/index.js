@@ -1,7 +1,7 @@
 import multer from "multer";
 import { Router } from "express";
 import * as joiSchemas from "./JoiSchemas/index.js";
-import fileFilter from "./services/fileFilter/index.js";
+import fileFilter from "./services/utils/fileFilter/index.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
 
 import getReportController from "./controllers/getReport.js";

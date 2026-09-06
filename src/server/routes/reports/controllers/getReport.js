@@ -1,30 +1,18 @@
-import dbUtils from "../../../database/modelsUtil/index.js";
-import collectImagesAsBase64 from "../services/different/collectImagesAsBase64.js";
-import filterCostsForReportSkus from "../services/different/filterCostsForReportSkus.js";
-
-var { getReportById } = dbUtils.reportModelUtils;
-var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-
-var selectedFields = { "listGoods.skuName": 1, "listGoods.lastCostPrice": 1 };
+import getReportService from "../services/getReport.js";
 
 var getReportController = async (req, res, next) => {
-  var { userId, reportId } = req.params;
+  var { report, reportNotFound, skuImages, skusWithLastCostPrices } =
+    await getReportService(req.params);
 
-  var { report } = await getReportById(userId, reportId);
-
-  if (!report) {
+  if (reportNotFound) {
     return res.sendStatus(404);
   }
 
-  var { skuImages } = await collectImagesAsBase64(userId, report.skus);
-
-  var skuNames = report.skus.map((sku) => sku.skuName);
-
-  var { listGoods } = await getListGoodsFromDb(userId, skuNames, selectedFields);
-
-  var { filteredSkusWithLastCostPrices } = filterCostsForReportSkus(report.skus, listGoods);
-
-  return res.json({ report, skuImages, skusWithLastCostPrices: filteredSkusWithLastCostPrices });
+  return res.json({
+    report,
+    skuImages,
+    skusWithLastCostPrices,
+  });
 };
 
 export default getReportController;

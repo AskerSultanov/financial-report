@@ -4,7 +4,7 @@ import schemas from "./JoiSchemas/index.js";
 import setCostPriceController from "./controllers/setCostPrice.js";
 import getReportPageController from "./controllers/getReportPage.js";
 import tokenValidatorController from "./controllers/tokenValidator.js";
-import fileFilter from "../reports/services/fileFilter/index.js";
+import fileFilter from "../reports/services/utils/fileFilter/index.js";
 import setOtherExpensesController from "./controllers/setOtherExpenses.js";
 import getReportFromWBAPIController from "./controllers/getReportFromWBAPI.js";
 import getReportFromFilesController from "./controllers/getReportFromFiles.js";
@@ -23,11 +23,23 @@ router.get("/report/:id", getReportPageController);
 
 router.post("/xlsx/", downloadReportAsXLSXController);
 
-router.post("/", joiSchemaValidator(schemas.reportsFromWBAPI), getReportFromWBAPIController);
+router.post(
+  "/",
+  joiSchemaValidator(schemas.reportsFromWBAPI),
+  getReportFromWBAPIController,
+);
 
-router.patch("/report/cost-price", joiSchemaValidator(schemas.setCostPrice), setCostPriceController);
+router.patch(
+  "/report/cost-price",
+  joiSchemaValidator(schemas.setCostPrice),
+  setCostPriceController,
+);
 
-router.patch("/report/other-expenses", joiSchemaValidator(schemas.setCostPrice), setOtherExpensesController);
+router.patch(
+  "/report/other-expenses",
+  joiSchemaValidator(schemas.setCostPrice),
+  setOtherExpensesController,
+);
 
 router.post("/token/", tokenValidatorController);
 

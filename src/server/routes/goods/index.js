@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Router } from "express";
-import fileFilter from "./services/fileFilter/index.js";
+import fileFilter from "./services/utils/fileFilter/index.js";
 import getListGoodsController from "./controllers/getListGoods.js";
 import loadListGoodsController from "./controllers/loadListGoods.js";
 import getListGoodsPageController from "./controllers/getListGoodsPage.js";

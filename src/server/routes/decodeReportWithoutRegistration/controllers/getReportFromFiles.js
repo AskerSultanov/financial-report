@@ -1,9 +1,9 @@
 import { randomBytes } from "node:crypto";
-import processReportSkus from "../../reports/services/reportParsing/index.js";
-import removeDublicateFiles from "../../reports/services/reportsFileParser/removeDublicateFiles.js";
-import extractWorkSheetFromFile from "../../reports/services/reportsFileParser/extractWorkSheetFromFile.js";
-import extractReportsFileBufferFromZip from "../../reports/services/reportsFileParser/extractReportsFileBufferFromZip.js";
-import extractReportDataFromWorkSheets from "../../reports/services/reportsFileParser/extractReportDataFromWorkSheets.js";
+import processReportSkus from "../../reports/services/utils/reportParsing/index.js";
+import removeDublicateFiles from "../../reports/services/utils/reportsFileParser/removeDublicateFiles.js";
+import extractWorkSheetFromFile from "../../reports/services/utils/reportsFileParser/extractWorkSheetFromFile.js";
+import extractReportsFileBufferFromZip from "../../reports/services/utils/reportsFileParser/extractReportsFileBufferFromZip.js";
+import extractReportDataFromWorkSheets from "../../reports/services/utils/reportsFileParser/extractReportDataFromWorkSheets.js";
 
 var taxParamsStub = {
   taxRate: 6,
@@ -28,8 +28,12 @@ var taxParamsStub = {
 var getReportFromFilesController = async (req, res) => {
   var { deduplicatedFiles } = removeDublicateFiles(req.files);
 
-  var { weeklyFinancialReportsBuffer, paidStorageReportsBuffer } = await extractReportsFileBufferFromZip(deduplicatedFiles);
-  var { workSheets } = await extractWorkSheetFromFile(weeklyFinancialReportsBuffer, paidStorageReportsBuffer);
+  var { weeklyFinancialReportsBuffer, paidStorageReportsBuffer } =
+    await extractReportsFileBufferFromZip(deduplicatedFiles);
+  var { workSheets } = await extractWorkSheetFromFile(
+    weeklyFinancialReportsBuffer,
+    paidStorageReportsBuffer,
+  );
 
   if (!workSheets.length) {
     return res.json({ report: {}, reportPeriodIsEmpty: true });
@@ -41,7 +45,8 @@ var getReportFromFilesController = async (req, res) => {
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
 
-  var { reports, reportPeriodIsEmpty } = await extractReportDataFromWorkSheets(onePeriodReports);
+  var { reports, reportPeriodIsEmpty } =
+    await extractReportDataFromWorkSheets(onePeriodReports);
 
   if (reportPeriodIsEmpty) {
     return res.json({ reports, reportPeriodIsEmpty });
@@ -50,7 +55,11 @@ var getReportFromFilesController = async (req, res) => {
   var reportSkus = [];
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
-    var { skus } = await processReportSkus(reports, { year: currentYear, ...taxParamsStub }, isCrossYearPeriod);
+    var { skus } = await processReportSkus(
+      reports,
+      { year: currentYear, ...taxParamsStub },
+      isCrossYearPeriod,
+    );
     reportSkus.push(...skus);
   }
 

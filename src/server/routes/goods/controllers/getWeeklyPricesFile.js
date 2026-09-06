@@ -1,22 +1,14 @@
-import dbUtils from "../../../database/modelsUtil/index.js";
-import { generageWeeklyPricesFile } from "../services/weeklyPrices/index.js";
-import mergeListGoodsWithWeeklyPricesAndDiscounts from "../services/mergeListGoodsWithWeeklyPricesAndDiscounts.js";
-
-var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { getWeeklyPricesAndDiscounts } = dbUtils.weeklyPricesAndDiscountsModelUtils;
+import getWeeklyPricesFileService from "../services/getWeeklyPricesFile.js";
 
 var getWeeklyPricesFileController = async (req, res, next) => {
   var { userId } = req.params;
 
-  var { listGoods } = await getListGoodsFromDb(userId);
-  var { weeklyPricesAndDiscounts } = await getWeeklyPricesAndDiscounts(userId);
-
-  var { mergedData } = mergeListGoodsWithWeeklyPricesAndDiscounts(listGoods, weeklyPricesAndDiscounts);
-  var { buffer } = await generageWeeklyPricesFile(mergedData);
+  var { buffer } = await getWeeklyPricesFileService(userId);
 
   res.set({
     "Content-Disposition": 'attachment; filename="weeklyPrices.xlsx"',
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Type":
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
 
   return res.send(buffer);

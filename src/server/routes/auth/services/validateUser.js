@@ -14,7 +14,7 @@ var validateUser = async (login, pwd) => {
 
   credentialInvalid = await argon2.verify(user.passwd, pwd);
 
-  return { credentialInvalid: false, userId: user.userId };
+  return { credentialInvalid, userId: user.userId };
 };
 
 export default validateUser;

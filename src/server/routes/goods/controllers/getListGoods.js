@@ -5,7 +5,8 @@ var getListGoodsController = async (req, res) => {
   var { userId } = req.params;
 
   var { listGoods } = await getListGoodsFromDb(userId);
-  res.json({ listGoodsLength: listGoods.length, listGoods });
+
+  return res.json({ listGoodsLength: listGoods.length, listGoods });
 };
 
 export default getListGoodsController;

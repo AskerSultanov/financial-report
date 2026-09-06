@@ -1,38 +1,21 @@
-import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/modelsUtil/index.js";
-import { readWeeklyPricesFile } from "../services/weeklyPrices/index.js";
-
-var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { setWeeklyPricesAndDiscountsToDb } = dbUtils.weeklyPricesAndDiscountsModelUtils;
+import uploadPricesAndDiscountsFileService from "../services/uploadPricesAndDiscountsFile.js";
 
 var uploadPricesAndDiscountsFileController = async (req, res, next) => {
   var userId = req.body.userId;
+  var fileBuffer = req.file.buffer;
 
-  if (!userId) {
+  var { userNotFound, listGoodsIsEmpty, weeklyPricesAndDiscounts } =
+    await uploadPricesAndDiscountsFileService(userId, fileBuffer);
+
+  if (userNotFound) {
+    return res.sendStatus(404);
+  }
+
+  if (listGoodsIsEmpty) {
     return res.sendStatus(400);
   }
 
-  var session = await dbClient.startSession();
-
-  try {
-    await session.withTransaction(async () => {
-      var { listGoods } = await getListGoodsFromDb(userId, session);
-
-      if (!listGoods.length) {
-        return res.sendStatus(400);
-      }
-      var fileBuffer = req.file.buffer;
-
-      var { weeklyPricesAndDiscounts } = await readWeeklyPricesFile(fileBuffer, listGoods);
-      await setWeeklyPricesAndDiscountsToDb(userId, weeklyPricesAndDiscounts, session);
-
-      return res.json({ weeklyPricesAndDiscounts });
-    });
-  } catch (e) {
-    throw e;
-  } finally {
-    await session.endSession();
-  }
+  return res.json({ weeklyPricesAndDiscounts });
 };
 
 export default uploadPricesAndDiscountsFileController;
