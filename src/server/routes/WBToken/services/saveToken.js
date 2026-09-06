@@ -4,6 +4,8 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import listGoodsLoader from "../../goods/services/utils/listGoodsLoader.js";
 import extractNewSkusFromLIstGoods from "../../goods/services/utils/extractNewSkusFromLIstGoods.js";
 
+import * as prismaServices from "../../../postgres/services/index.js";
+
 var skuNamesStub = [];
 var selectedFieldsStub = null;
 
@@ -20,12 +22,16 @@ var saveTokenService = async (userId, newToken, tokenPayload) => {
 
     var { token } = await getWBTokenByUserId(userId, session);
 
-    if (newToken === token) {
+    var tokenFromPg =
+      await prismaServices.tokenModelServices.getWBTokenByUserId(userId);
+
+    if (newToken === token && newToken === tokenFromPg.token) {
       isEqualToken = true;
       return { isEqualToken, tokenDetails };
     }
 
     await saveWBTokenToDb(userId, newToken, session);
+    await prismaServices.tokenModelServices.saveWBTokenToDb(userId, newToken);
 
     var { listGoods } = await getListGoodsFromDb(
       userId,

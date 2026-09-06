@@ -5,7 +5,7 @@ export async function getWBTokenByUserId(
   updateLastUsedNow = false,
   client = prisma,
 ) {
-  var { token, lastUsed } = await client.token.findUnique({
+  var data = await client.token.findUnique({
     where: { userId },
   });
 
@@ -16,5 +16,5 @@ export async function getWBTokenByUserId(
     });
   }
 
-  return { token, lastUsed };
+  return { token: data?.token, lastUsed: data?.lastUsed };
 }

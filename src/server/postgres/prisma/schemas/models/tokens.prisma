@@ -1,6 +1,5 @@
 model Token {
   userId                    String          @unique
-  lastUsed                  DateTime        
+  lastUsed                  DateTime?        
   token                     String          @default("")
-  tokenHasBeenRemoved       Boolean         @default(false)
 }

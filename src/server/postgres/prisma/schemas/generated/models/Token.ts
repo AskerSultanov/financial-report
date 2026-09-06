@@ -28,21 +28,18 @@ export type TokenMinAggregateOutputType = {
   userId: string | null
   lastUsed: Date | null
   token: string | null
-  tokenHasBeenRemoved: boolean | null
 }
 
 export type TokenMaxAggregateOutputType = {
   userId: string | null
   lastUsed: Date | null
   token: string | null
-  tokenHasBeenRemoved: boolean | null
 }
 
 export type TokenCountAggregateOutputType = {
   userId: number
   lastUsed: number
   token: number
-  tokenHasBeenRemoved: number
   _all: number
 }
 
@@ -51,21 +48,18 @@ export type TokenMinAggregateInputType = {
   userId?: true
   lastUsed?: true
   token?: true
-  tokenHasBeenRemoved?: true
 }
 
 export type TokenMaxAggregateInputType = {
   userId?: true
   lastUsed?: true
   token?: true
-  tokenHasBeenRemoved?: true
 }
 
 export type TokenCountAggregateInputType = {
   userId?: true
   lastUsed?: true
   token?: true
-  tokenHasBeenRemoved?: true
   _all?: true
 }
 
@@ -143,9 +137,8 @@ export type TokenGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type TokenGroupByOutputType = {
   userId: string
-  lastUsed: Date
+  lastUsed: Date | null
   token: string
-  tokenHasBeenRemoved: boolean
   _count: TokenCountAggregateOutputType | null
   _min: TokenMinAggregateOutputType | null
   _max: TokenMaxAggregateOutputType | null
@@ -171,16 +164,14 @@ export type TokenWhereInput = {
   OR?: Prisma.TokenWhereInput[]
   NOT?: Prisma.TokenWhereInput | Prisma.TokenWhereInput[]
   userId?: Prisma.StringFilter<"Token"> | string
-  lastUsed?: Prisma.DateTimeFilter<"Token"> | Date | string
+  lastUsed?: Prisma.DateTimeNullableFilter<"Token"> | Date | string | null
   token?: Prisma.StringFilter<"Token"> | string
-  tokenHasBeenRemoved?: Prisma.BoolFilter<"Token"> | boolean
 }
 
 export type TokenOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
-  lastUsed?: Prisma.SortOrder
+  lastUsed?: Prisma.SortOrderInput | Prisma.SortOrder
   token?: Prisma.SortOrder
-  tokenHasBeenRemoved?: Prisma.SortOrder
 }
 
 export type TokenWhereUniqueInput = Prisma.AtLeast<{
@@ -188,16 +179,14 @@ export type TokenWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TokenWhereInput | Prisma.TokenWhereInput[]
   OR?: Prisma.TokenWhereInput[]
   NOT?: Prisma.TokenWhereInput | Prisma.TokenWhereInput[]
-  lastUsed?: Prisma.DateTimeFilter<"Token"> | Date | string
+  lastUsed?: Prisma.DateTimeNullableFilter<"Token"> | Date | string | null
   token?: Prisma.StringFilter<"Token"> | string
-  tokenHasBeenRemoved?: Prisma.BoolFilter<"Token"> | boolean
 }, "userId">
 
 export type TokenOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
-  lastUsed?: Prisma.SortOrder
+  lastUsed?: Prisma.SortOrderInput | Prisma.SortOrder
   token?: Prisma.SortOrder
-  tokenHasBeenRemoved?: Prisma.SortOrder
   _count?: Prisma.TokenCountOrderByAggregateInput
   _max?: Prisma.TokenMaxOrderByAggregateInput
   _min?: Prisma.TokenMinOrderByAggregateInput
@@ -208,79 +197,72 @@ export type TokenScalarWhereWithAggregatesInput = {
   OR?: Prisma.TokenScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TokenScalarWhereWithAggregatesInput | Prisma.TokenScalarWhereWithAggregatesInput[]
   userId?: Prisma.StringWithAggregatesFilter<"Token"> | string
-  lastUsed?: Prisma.DateTimeWithAggregatesFilter<"Token"> | Date | string
+  lastUsed?: Prisma.DateTimeNullableWithAggregatesFilter<"Token"> | Date | string | null
   token?: Prisma.StringWithAggregatesFilter<"Token"> | string
-  tokenHasBeenRemoved?: Prisma.BoolWithAggregatesFilter<"Token"> | boolean
 }
 
 export type TokenCreateInput = {
   userId: string
-  lastUsed: Date | string
+  lastUsed?: Date | string | null
   token?: string
-  tokenHasBeenRemoved?: boolean
 }
 
 export type TokenUncheckedCreateInput = {
   userId: string
-  lastUsed: Date | string
+  lastUsed?: Date | string | null
   token?: string
-  tokenHasBeenRemoved?: boolean
 }
 
 export type TokenUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  lastUsed?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastUsed?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenHasBeenRemoved?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TokenUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  lastUsed?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastUsed?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenHasBeenRemoved?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TokenCreateManyInput = {
   userId: string
-  lastUsed: Date | string
+  lastUsed?: Date | string | null
   token?: string
-  tokenHasBeenRemoved?: boolean
 }
 
 export type TokenUpdateManyMutationInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  lastUsed?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastUsed?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenHasBeenRemoved?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TokenUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  lastUsed?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastUsed?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenHasBeenRemoved?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type TokenCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   lastUsed?: Prisma.SortOrder
   token?: Prisma.SortOrder
-  tokenHasBeenRemoved?: Prisma.SortOrder
 }
 
 export type TokenMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   lastUsed?: Prisma.SortOrder
   token?: Prisma.SortOrder
-  tokenHasBeenRemoved?: Prisma.SortOrder
 }
 
 export type TokenMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   lastUsed?: Prisma.SortOrder
   token?: Prisma.SortOrder
-  tokenHasBeenRemoved?: Prisma.SortOrder
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 
@@ -289,40 +271,35 @@ export type TokenSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userId?: boolean
   lastUsed?: boolean
   token?: boolean
-  tokenHasBeenRemoved?: boolean
 }, ExtArgs["result"]["token"]>
 
 export type TokenSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   userId?: boolean
   lastUsed?: boolean
   token?: boolean
-  tokenHasBeenRemoved?: boolean
 }, ExtArgs["result"]["token"]>
 
 export type TokenSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   userId?: boolean
   lastUsed?: boolean
   token?: boolean
-  tokenHasBeenRemoved?: boolean
 }, ExtArgs["result"]["token"]>
 
 export type TokenSelectScalar = {
   userId?: boolean
   lastUsed?: boolean
   token?: boolean
-  tokenHasBeenRemoved?: boolean
 }
 
-export type TokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "lastUsed" | "token" | "tokenHasBeenRemoved", ExtArgs["result"]["token"]>
+export type TokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "lastUsed" | "token", ExtArgs["result"]["token"]>
 
 export type $TokenPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Token"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     userId: string
-    lastUsed: Date
+    lastUsed: Date | null
     token: string
-    tokenHasBeenRemoved: boolean
   }, ExtArgs["result"]["token"]>
   composites: {}
 }
@@ -749,7 +726,6 @@ export interface TokenFieldRefs {
   readonly userId: Prisma.FieldRef<"Token", 'String'>
   readonly lastUsed: Prisma.FieldRef<"Token", 'DateTime'>
   readonly token: Prisma.FieldRef<"Token", 'String'>
-  readonly tokenHasBeenRemoved: Prisma.FieldRef<"Token", 'Boolean'>
 }
     
 

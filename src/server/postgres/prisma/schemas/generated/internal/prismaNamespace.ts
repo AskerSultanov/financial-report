@@ -1275,8 +1275,7 @@ export type TaxParamsScalarFieldEnum = (typeof TaxParamsScalarFieldEnum)[keyof t
 export const TokenScalarFieldEnum = {
   userId: 'userId',
   lastUsed: 'lastUsed',
-  token: 'token',
-  tokenHasBeenRemoved: 'tokenHasBeenRemoved'
+  token: 'token'
 } as const
 
 export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof TokenScalarFieldEnum]
