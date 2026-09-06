@@ -11,66 +11,49 @@
  * Please import the `PrismaClient` class from the `client.ts` file instead.
  */
 
-import * as runtime from "@prisma/client/runtime/library"
+import * as runtime from "@prisma/client/runtime/client"
 import type * as Prisma from "./prismaNamespace.ts"
 
 
 const config: runtime.GetPrismaClientConfig = {
-  "generator": {
-    "name": "client",
-    "provider": {
-      "fromEnvVar": null,
-      "value": "prisma-client"
-    },
-    "output": {
-      "value": "C:\\Users\\Adm\\Desktop\\dir\\contributor\\financial-report\\src\\server\\postgres\\prisma\\schemas\\generated",
-      "fromEnvVar": null
-    },
-    "config": {
-      "engineType": "library"
-    },
-    "binaryTargets": [
-      {
-        "fromEnvVar": null,
-        "value": "windows",
-        "native": true
-      }
-    ],
-    "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Adm\\Desktop\\dir\\contributor\\financial-report\\src\\server\\postgres\\prisma\\schemas\\schema.prisma",
-    "isCustomOutput": true
-  },
-  "relativePath": "..",
-  "clientVersion": "6.19.3",
-  "engineVersion": "c2990dca591cba766e3b7ef5d9e8a84796e47ab7",
-  "datasourceNames": [
-    "db"
-  ],
+  "previewFeatures": [],
+  "clientVersion": "7.10.0",
+  "engineVersion": "0edf323efd1d98336f3f0a68684b56f689b900d3",
   "activeProvider": "postgresql",
-  "postinstall": false,
-  "inlineDatasources": {
-    "db": {
-      "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": null
-      }
-    }
-  },
-  "inlineSchema": "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n",
-  "inlineSchemaHash": "65e358c411c459709663be053dc10ffc9a1fcea9a0759f06c2038b7b59c7af46",
-  "copyEngine": true,
+  "inlineSchema": "model ListGoods {\n  userId              String\n  skuId               Int\n  skuName             String   @id\n  price               Decimal  @default(0)\n  discount            Decimal  @default(0)\n  discountedPrice     Decimal  @default(0)\n  clubDiscountedPrice Decimal  @default(0)\n  disabled            Boolean  @default(false)\n  lastFetch           DateTime @default(now())\n  lastUpdated         DateTime\n  isPriceUpdated      Boolean  @default(false)\n  errorText           String?\n  deleted             Boolean  @default(false)\n\n  @@unique([userId, skuName])\n  @@index([skuName])\n}\n\nmodel ReportLoadingState {\n  id                         Int      @id @default(autoincrement())\n  userId                     String\n  loadingInProgress          Boolean  @default(false)\n  lastReportRequestTimestamp DateTime\n  freshReportPeriodIndex     Int      @db.SmallInt\n  isReportLoadingIsStopped   Boolean  @default(false)\n  loadingStopReason          String   @default(\"\")\n  queueCapacity              Int      @db.SmallInt\n\n  reportsQueue ReportsQueue[]\n\n  @@unique([userId])\n  @@index([userId])\n}\n\nmodel ReportPeriods {\n  id         Int        @default(autoincrement())\n  userId     String\n  reportId   Int\n  monthName  MonthsList\n  monthIndex Int        @db.SmallInt\n  dateFrom   String     @db.VarChar(10)\n  dateTo     String     @db.VarChar(10)\n\n  @@unique([userId, dateFrom, dateTo])\n  @@index([userId, dateFrom, dateTo])\n}\n\nenum MonthsList {\n  январь\n  февраль\n  март\n  апрель\n  май\n  июнь\n  июль\n  август\n  сентябрь\n  октябрь\n  ноябрь\n  декабрь\n}\n\nmodel ReportsQueue {\n  queuePosition Int     @default(autoincrement())\n  queueItemId   Int     @id @default(autoincrement())\n  userId        String\n  dateFrom      String  @db.VarChar(10)\n  dateTo        String  @db.VarChar(10)\n  failedCount   Int     @default(0) @db.SmallInt\n  isEmptyPeriod Boolean @default(false)\n\n  reportLoadingState ReportLoadingState @relation(fields: [userId], references: [userId], onDelete: Cascade)\n\n  @@unique([userId, dateFrom, dateTo])\n  @@index([userId, dateFrom, dateTo])\n}\n\nmodel ReportsWithAccountedFinances {\n  userId              String\n  dateFrom            String   @db.VarChar(10)\n  dateTo              String   @db.VarChar(10)\n  reportId            Int\n  financesAccountedAt DateTime\n\n  @@unique([userId, reportId])\n  @@index([userId, reportId])\n}\n\nmodel Sku {\n  skuId                  Int\n  userId                 String\n  skuName                String\n  reportId               Int\n  dateFrom               String    @db.VarChar(10)\n  dateTo                 String    @db.VarChar(10)\n  reportIsEmpty          Boolean   @default(false)\n  isCrossYearPeriod      Boolean   @default(false)\n  buybackReportIsExist   Boolean   @default(false)\n  isFinancesAccounted    Boolean   @default(false)\n  financesAccountedAt    DateTime?\n  year                   Int       @db.SmallInt\n  recordedToYear         Int       @db.SmallInt\n  recordedToMonth        String    @db.VarChar(8)\n  qty                    Int       @default(0)\n  tax                    Decimal   @default(0)\n  fines                  Decimal   @default(0)\n  revenue                Decimal   @default(0)\n  costPrice              Decimal   @default(0)\n  acceptance             Decimal   @default(0)\n  storageCost            Decimal   @default(0)\n  retailAmount           Decimal   @default(0)\n  returnAmount           Decimal   @default(0)\n  deliveryCost           Decimal   @default(0)\n  taxableAmount          Decimal?  @default(0)\n  otherExpenses          Decimal   @default(0)\n  sellerPayoutAmount     Decimal   @default(0)\n  deductionOrPayment     Decimal   @default(0)\n  additionalPayment      Decimal   @default(0)\n  insuranceFee           Decimal   @default(0)\n  additionalInsuranceFee Decimal   @default(0)\n  isInsuranceFeeIncluded Boolean   @default(false)\n  profit                 Decimal   @default(0)\n  preTaxProfit           Decimal   @default(0)\n  finalProfit            Decimal   @default(0)\n  profitMargin           Decimal   @default(0)\n  isCostPriceSet         Boolean   @default(false)\n  averageProfit          Decimal   @default(0)\n  averageStorageCost     Decimal   @default(0)\n  averageAdvertisingCost Decimal   @default(0)\n  schemaVersion          Int?\n\n  @@unique([userId, dateFrom, dateTo, skuName, year])\n  @@index([userId])\n  @@index([reportId])\n  @@index([dateFrom, dateTo])\n}\n\nmodel TaxParams {\n  userId                                String\n  year                                  Int\n  taxRate                               Int     @default(6) @db.SmallInt\n  finalProfit                           Int     @default(0)\n  paidTaxAmount                         Int     @default(0)\n  retailAmount                          Int     @default(0)\n  otherExpenses                         Int     @default(0)\n  taxableAmount                         Int     @default(0)\n  maxInsuranceFee                       Int\n  isInsuranceFeePaid                    Boolean @default(false)\n  excessInsuranceRate                   Int     @default(1) @db.SmallInt\n  mandatoryInsuranceFee                 Int     @default(0)\n  additionalInsuranceFee                Int     @default(0)\n  insuranceFeePercentage                Int     @default(10) @db.SmallInt\n  mandatoryInsuranceFeeRate             Int     @default(10) @db.SmallInt\n  hasExcessIncomeForInsurance           Boolean @default(false)\n  mandatoryInsuranceFeeIsPaid           Boolean @default(false)\n  additionalInsuranceFeeIsPaid          Boolean @default(false)\n  requiresAdditionalInsuranceFee        Boolean @default(false)\n  excessIncomeForAdditionalInsuranceFee Int     @default(0)\n\n  @@unique([userId, year])\n  @@index([userId, year])\n}\n\nmodel Token {\n  userId              String   @unique\n  lastUsed            DateTime\n  token               String   @default(\"\")\n  tokenHasBeenRemoved Boolean  @default(false)\n}\n\nmodel User {\n  userId       String   @unique\n  login        String   @unique\n  passwd       String\n  role         Role     @default(user)\n  registeredAt DateTime @default(now())\n}\n\nenum Role {\n  user\n  admin\n}\n\n// model PriceAndDiscount {\n//   nmID                              Int                 \n//   price                             Int\n//   discount                          Int\n//   skuName                           String              \n//   dayIndex                          Int                                         @db.SmallInt\n//   skuPriceAndDiscountId             String                                      @id  \n//   sku                               WeeklyPricesAndDiscountsSku                 @relation(fields: [skuPriceAndDiscountId], references: [skuName])\n\n//   @@unique([skuPriceAndDiscountId])\n//   @@index([skuPriceAndDiscountId])\n// }\n\n// model WeeklyPricesAndDiscountsSku {\n//   skuName                           String              @id\n//   nmID                              Int\n//   dayIndex                          Int                 @db.SmallInt\n//   needToUpdate                      Boolean             @default(true)\n//   lastUpdatedTimestamp              Int                 @default(0)\n//   data                              PriceAndDiscount\n//   updateInterval                    String              @default(\"5m\")\n//   changePriceIfInPromo              Boolean             @default(false)\n//   updateIntervalInMs                Int                 @default(300000)\n//   updateOption                      UpdateOption        @default(interval)\n// }\n\n// // // // model WeeklyPricesAndDiscounts {\n// // // //   userId                            String              @unique\n// // // //   uploadId                          Int?        \n// // // //   weeklyPricesAndDiscounts          Sku[] \n// // // // }\n\n// enum UpdateOption {\n//     interval\n//     oncePerDay\n// }\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
     "types": {}
   },
-  "dirname": ""
+  "parameterizationSchema": {
+    "strings": [],
+    "graph": ""
+  }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
-config.engineWasm = undefined
-config.compilerWasm = undefined
+config.runtimeDataModel = JSON.parse("{\"models\":{\"ListGoods\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"skuId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"skuName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"discount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"discountedPrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"clubDiscountedPrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"disabled\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastFetch\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastUpdated\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"isPriceUpdated\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"errorText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deleted\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null,\"schema\":null},\"ReportLoadingState\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loadingInProgress\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastReportRequestTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"freshReportPeriodIndex\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isReportLoadingIsStopped\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"loadingStopReason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"queueCapacity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"reportsQueue\",\"kind\":\"object\",\"type\":\"ReportsQueue\",\"relationName\":\"ReportLoadingStateToReportsQueue\"}],\"dbName\":null,\"schema\":null},\"ReportPeriods\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reportId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"monthName\",\"kind\":\"enum\",\"type\":\"MonthsList\"},{\"name\":\"monthIndex\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dateFrom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateTo\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null,\"schema\":null},\"ReportsQueue\":{\"fields\":[{\"name\":\"queuePosition\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"queueItemId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateFrom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateTo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"failedCount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isEmptyPeriod\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"reportLoadingState\",\"kind\":\"object\",\"type\":\"ReportLoadingState\",\"relationName\":\"ReportLoadingStateToReportsQueue\"}],\"dbName\":null,\"schema\":null},\"ReportsWithAccountedFinances\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateFrom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateTo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reportId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"financesAccountedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null,\"schema\":null},\"Sku\":{\"fields\":[{\"name\":\"skuId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"skuName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reportId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dateFrom\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dateTo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reportIsEmpty\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isCrossYearPeriod\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"buybackReportIsExist\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isFinancesAccounted\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"financesAccountedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"recordedToYear\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"recordedToMonth\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"qty\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tax\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"fines\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"revenue\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"costPrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"acceptance\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"storageCost\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"retailAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"returnAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"deliveryCost\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"taxableAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"otherExpenses\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"sellerPayoutAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"deductionOrPayment\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"additionalPayment\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"insuranceFee\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"additionalInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"isInsuranceFeeIncluded\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"profit\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"preTaxProfit\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"finalProfit\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"profitMargin\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"isCostPriceSet\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"averageProfit\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"averageStorageCost\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"averageAdvertisingCost\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"schemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null,\"schema\":null},\"TaxParams\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"taxRate\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"finalProfit\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"paidTaxAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"retailAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"otherExpenses\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"taxableAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"maxInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isInsuranceFeePaid\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"excessInsuranceRate\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mandatoryInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"additionalInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"insuranceFeePercentage\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mandatoryInsuranceFeeRate\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"hasExcessIncomeForInsurance\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"mandatoryInsuranceFeeIsPaid\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"additionalInsuranceFeeIsPaid\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"requiresAdditionalInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"excessIncomeForAdditionalInsuranceFee\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null,\"schema\":null},\"Token\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastUsed\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenHasBeenRemoved\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null,\"schema\":null},\"User\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"login\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwd\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"registeredAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null,\"schema\":null}},\"enums\":{},\"types\":{}}")
+config.parameterizationSchema = {
+  strings: JSON.parse("[\"where\",\"ListGoods.findUnique\",\"ListGoods.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"ListGoods.findFirst\",\"ListGoods.findFirstOrThrow\",\"ListGoods.findMany\",\"data\",\"ListGoods.createOne\",\"ListGoods.createMany\",\"ListGoods.createManyAndReturn\",\"ListGoods.updateOne\",\"ListGoods.updateMany\",\"ListGoods.updateManyAndReturn\",\"create\",\"update\",\"ListGoods.upsertOne\",\"ListGoods.deleteOne\",\"ListGoods.deleteMany\",\"having\",\"_count\",\"_avg\",\"_sum\",\"_min\",\"_max\",\"ListGoods.groupBy\",\"ListGoods.aggregate\",\"reportLoadingState\",\"reportsQueue\",\"ReportLoadingState.findUnique\",\"ReportLoadingState.findUniqueOrThrow\",\"ReportLoadingState.findFirst\",\"ReportLoadingState.findFirstOrThrow\",\"ReportLoadingState.findMany\",\"ReportLoadingState.createOne\",\"ReportLoadingState.createMany\",\"ReportLoadingState.createManyAndReturn\",\"ReportLoadingState.updateOne\",\"ReportLoadingState.updateMany\",\"ReportLoadingState.updateManyAndReturn\",\"ReportLoadingState.upsertOne\",\"ReportLoadingState.deleteOne\",\"ReportLoadingState.deleteMany\",\"ReportLoadingState.groupBy\",\"ReportLoadingState.aggregate\",\"ReportPeriods.findUnique\",\"ReportPeriods.findUniqueOrThrow\",\"ReportPeriods.findFirst\",\"ReportPeriods.findFirstOrThrow\",\"ReportPeriods.findMany\",\"ReportPeriods.createOne\",\"ReportPeriods.createMany\",\"ReportPeriods.createManyAndReturn\",\"ReportPeriods.updateOne\",\"ReportPeriods.updateMany\",\"ReportPeriods.updateManyAndReturn\",\"ReportPeriods.upsertOne\",\"ReportPeriods.deleteOne\",\"ReportPeriods.deleteMany\",\"ReportPeriods.groupBy\",\"ReportPeriods.aggregate\",\"ReportsQueue.findUnique\",\"ReportsQueue.findUniqueOrThrow\",\"ReportsQueue.findFirst\",\"ReportsQueue.findFirstOrThrow\",\"ReportsQueue.findMany\",\"ReportsQueue.createOne\",\"ReportsQueue.createMany\",\"ReportsQueue.createManyAndReturn\",\"ReportsQueue.updateOne\",\"ReportsQueue.updateMany\",\"ReportsQueue.updateManyAndReturn\",\"ReportsQueue.upsertOne\",\"ReportsQueue.deleteOne\",\"ReportsQueue.deleteMany\",\"ReportsQueue.groupBy\",\"ReportsQueue.aggregate\",\"ReportsWithAccountedFinances.findUnique\",\"ReportsWithAccountedFinances.findUniqueOrThrow\",\"ReportsWithAccountedFinances.findFirst\",\"ReportsWithAccountedFinances.findFirstOrThrow\",\"ReportsWithAccountedFinances.findMany\",\"ReportsWithAccountedFinances.createOne\",\"ReportsWithAccountedFinances.createMany\",\"ReportsWithAccountedFinances.createManyAndReturn\",\"ReportsWithAccountedFinances.updateOne\",\"ReportsWithAccountedFinances.updateMany\",\"ReportsWithAccountedFinances.updateManyAndReturn\",\"ReportsWithAccountedFinances.upsertOne\",\"ReportsWithAccountedFinances.deleteOne\",\"ReportsWithAccountedFinances.deleteMany\",\"ReportsWithAccountedFinances.groupBy\",\"ReportsWithAccountedFinances.aggregate\",\"Sku.findUnique\",\"Sku.findUniqueOrThrow\",\"Sku.findFirst\",\"Sku.findFirstOrThrow\",\"Sku.findMany\",\"Sku.createOne\",\"Sku.createMany\",\"Sku.createManyAndReturn\",\"Sku.updateOne\",\"Sku.updateMany\",\"Sku.updateManyAndReturn\",\"Sku.upsertOne\",\"Sku.deleteOne\",\"Sku.deleteMany\",\"Sku.groupBy\",\"Sku.aggregate\",\"TaxParams.findUnique\",\"TaxParams.findUniqueOrThrow\",\"TaxParams.findFirst\",\"TaxParams.findFirstOrThrow\",\"TaxParams.findMany\",\"TaxParams.createOne\",\"TaxParams.createMany\",\"TaxParams.createManyAndReturn\",\"TaxParams.updateOne\",\"TaxParams.updateMany\",\"TaxParams.updateManyAndReturn\",\"TaxParams.upsertOne\",\"TaxParams.deleteOne\",\"TaxParams.deleteMany\",\"TaxParams.groupBy\",\"TaxParams.aggregate\",\"Token.findUnique\",\"Token.findUniqueOrThrow\",\"Token.findFirst\",\"Token.findFirstOrThrow\",\"Token.findMany\",\"Token.createOne\",\"Token.createMany\",\"Token.createManyAndReturn\",\"Token.updateOne\",\"Token.updateMany\",\"Token.updateManyAndReturn\",\"Token.upsertOne\",\"Token.deleteOne\",\"Token.deleteMany\",\"Token.groupBy\",\"Token.aggregate\",\"User.findUnique\",\"User.findUniqueOrThrow\",\"User.findFirst\",\"User.findFirstOrThrow\",\"User.findMany\",\"User.createOne\",\"User.createMany\",\"User.createManyAndReturn\",\"User.updateOne\",\"User.updateMany\",\"User.updateManyAndReturn\",\"User.upsertOne\",\"User.deleteOne\",\"User.deleteMany\",\"User.groupBy\",\"User.aggregate\",\"AND\",\"OR\",\"NOT\",\"userId\",\"login\",\"passwd\",\"Role\",\"role\",\"registeredAt\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"lastUsed\",\"token\",\"tokenHasBeenRemoved\",\"year\",\"taxRate\",\"finalProfit\",\"paidTaxAmount\",\"retailAmount\",\"otherExpenses\",\"taxableAmount\",\"maxInsuranceFee\",\"isInsuranceFeePaid\",\"excessInsuranceRate\",\"mandatoryInsuranceFee\",\"additionalInsuranceFee\",\"insuranceFeePercentage\",\"mandatoryInsuranceFeeRate\",\"hasExcessIncomeForInsurance\",\"mandatoryInsuranceFeeIsPaid\",\"additionalInsuranceFeeIsPaid\",\"requiresAdditionalInsuranceFee\",\"excessIncomeForAdditionalInsuranceFee\",\"userId_year\",\"skuId\",\"skuName\",\"reportId\",\"dateFrom\",\"dateTo\",\"reportIsEmpty\",\"isCrossYearPeriod\",\"buybackReportIsExist\",\"isFinancesAccounted\",\"financesAccountedAt\",\"recordedToYear\",\"recordedToMonth\",\"qty\",\"tax\",\"fines\",\"revenue\",\"costPrice\",\"acceptance\",\"storageCost\",\"returnAmount\",\"deliveryCost\",\"sellerPayoutAmount\",\"deductionOrPayment\",\"additionalPayment\",\"insuranceFee\",\"isInsuranceFeeIncluded\",\"profit\",\"preTaxProfit\",\"profitMargin\",\"isCostPriceSet\",\"averageProfit\",\"averageStorageCost\",\"averageAdvertisingCost\",\"schemaVersion\",\"userId_dateFrom_dateTo_skuName_year\",\"userId_reportId\",\"queuePosition\",\"queueItemId\",\"failedCount\",\"isEmptyPeriod\",\"id\",\"MonthsList\",\"monthName\",\"monthIndex\",\"userId_dateFrom_dateTo\",\"loadingInProgress\",\"lastReportRequestTimestamp\",\"freshReportPeriodIndex\",\"isReportLoadingIsStopped\",\"loadingStopReason\",\"queueCapacity\",\"every\",\"some\",\"none\",\"price\",\"discount\",\"discountedPrice\",\"clubDiscountedPrice\",\"disabled\",\"lastFetch\",\"lastUpdated\",\"isPriceUpdated\",\"errorText\",\"deleted\",\"userId_skuName\",\"is\",\"isNot\",\"connectOrCreate\",\"upsert\",\"createMany\",\"set\",\"disconnect\",\"delete\",\"connect\",\"updateMany\",\"deleteMany\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "-AJYkAERngEAAKkCADCfAQAABAAQoAEAAKkCADChAQEA8AEAIckBAgD-AQAhygEBAAAAAf8BEACQAgAhgAIQAJACACGBAhAAkAIAIYICEACQAgAhgwIgAPgBACGEAkAA8gEAIYUCQADyAQAhhgIgAPgBACGHAgEAqgIAIYgCIAD4AQAhiQIAAKsCACABAAAAAQAgAQAAAAEAIBCeAQAAqQIAMJ8BAAAEABCgAQAAqQIAMKEBAQDwAQAhyQECAP4BACHKAQEA8AEAIf8BEACQAgAhgAIQAJACACGBAhAAkAIAIYICEACQAgAhgwIgAPgBACGEAkAA8gEAIYUCQADyAQAhhgIgAPgBACGHAgEAqgIAIYgCIAD4AQAhAYcCAAC8AgAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACADAAAABAAgAwAABQAwBAAAAQAgDaEBAQAAAAHJAQIAAAABygEBAAAAAf8BEAAAAAGAAhAAAAABgQIQAAAAAYICEAAAAAGDAiAAAAABhAJAAAAAAYUCQAAAAAGGAiAAAAABhwIBAAAAAYgCIAAAAAEBCAAACQAgDaEBAQAAAAHJAQIAAAABygEBAAAAAf8BEAAAAAGAAhAAAAABgQIQAAAAAYICEAAAAAGDAiAAAAABhAJAAAAAAYUCQAAAAAGGAiAAAAABhwIBAAAAAYgCIAAAAAEBCAAACwAwAQgAAAsAMA2hAQEArwIAIckBAgC7AgAhygEBAK8CACH_ARAAwwIAIYACEADDAgAhgQIQAMMCACGCAhAAwwIAIYMCIAC1AgAhhAJAALECACGFAkAAsQIAIYYCIAC1AgAhhwIBAPICACGIAiAAtQIAIQIAAAABACAIAAAOACANoQEBAK8CACHJAQIAuwIAIcoBAQCvAgAh_wEQAMMCACGAAhAAwwIAIYECEADDAgAhggIQAMMCACGDAiAAtQIAIYQCQACxAgAhhQJAALECACGGAiAAtQIAIYcCAQDyAgAhiAIgALUCACECAAAABAAgCAAAEAAgAgAAAAQAIAgAABAAIAMAAAABACAPAAAJACAQAAAOACABAAAAAQAgAQAAAAQAIAYVAADtAgAgFgAA7gIAIBcAAPECACAYAADwAgAgGQAA7wIAIIcCAAC8AgAgEJ4BAAClAgAwnwEAABcAEKABAAClAgAwoQEBAOUBACHJAQIA-gEAIcoBAQDlAQAh_wEQAIICACGAAhAAggIAIYECEACCAgAhggIQAIICACGDAiAA9AEAIYQCQADnAQAhhQJAAOcBACGGAiAA9AEAIYcCAQCmAgAhiAIgAPQBACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAwdAAChAgAgngEAAKACADCfAQAAIgAQoAEAAKACADChAQEAAAAB8QECAAAAAfYBIAD4AQAh9wFAAPIBACH4AQIA_gEAIfkBIAD4AQAh-gEBAPABACH7AQIA_gEAIQEAAAAaACALHAAApAIAIJ4BAACjAgAwnwEAABwAEKABAACjAgAwoQEBAPABACHMAQEA8AEAIc0BAQDwAQAh7QECAP4BACHuAQIA_gEAIe8BAgD-AQAh8AEgAPgBACEBHAAA7AIAIAwcAACkAgAgngEAAKMCADCfAQAAHAAQoAEAAKMCADChAQEA8AEAIcwBAQDwAQAhzQEBAPABACHtAQIA_gEAIe4BAgAAAAHvAQIA_gEAIfABIAD4AQAh9QEAAKICACADAAAAHAAgAwAAHQAwBAAAHgAgAQAAABwAIAEAAAAaACAMHQAAoQIAIJ4BAACgAgAwnwEAACIAEKABAACgAgAwoQEBAPABACHxAQIA_gEAIfYBIAD4AQAh9wFAAPIBACH4AQIA_gEAIfkBIAD4AQAh-gEBAPABACH7AQIA_gEAIQEdAADrAgAgAwAAACIAIAMAACMAMAQAABoAIAMAAAAiACADAAAjADAEAAAaACADAAAAIgAgAwAAIwAwBAAAGgAgCR0AAOoCACChAQEAAAAB8QECAAAAAfYBIAAAAAH3AUAAAAAB-AECAAAAAfkBIAAAAAH6AQEAAAAB-wECAAAAAQEIAAAnACAIoQEBAAAAAfEBAgAAAAH2ASAAAAAB9wFAAAAAAfgBAgAAAAH5ASAAAAAB-gEBAAAAAfsBAgAAAAEBCAAAKQAwAQgAACkAMAkdAADdAgAgoQEBAK8CACHxAQIAuwIAIfYBIAC1AgAh9wFAALECACH4AQIAuwIAIfkBIAC1AgAh-gEBAK8CACH7AQIAuwIAIQIAAAAaACAIAAAsACAIoQEBAK8CACHxAQIAuwIAIfYBIAC1AgAh9wFAALECACH4AQIAuwIAIfkBIAC1AgAh-gEBAK8CACH7AQIAuwIAIQIAAAAiACAIAAAuACACAAAAIgAgCAAALgAgAwAAABoAIA8AACcAIBAAACwAIAEAAAAaACABAAAAIgAgBRUAANgCACAWAADZAgAgFwAA3AIAIBgAANsCACAZAADaAgAgC54BAACfAgAwnwEAADUAEKABAACfAgAwoQEBAOUBACHxAQIA-gEAIfYBIAD0AQAh9wFAAOcBACH4AQIA-gEAIfkBIAD0AQAh-gEBAOUBACH7AQIA-gEAIQMAAAAiACADAAA0ADAUAAA1ACADAAAAIgAgAwAAIwAwBAAAGgAgC54BAACcAgAwnwEAADsAEKABAACcAgAwoQEBAPABACHLAQIA_gEAIcwBAQDwAQAhzQEBAPABACHxAQIA_gEAIfMBAACdAvMBIvQBAgD-AQAh9QEAAJ4CACABAAAAOAAgAQAAADgAIAqeAQAAnAIAMJ8BAAA7ABCgAQAAnAIAMKEBAQDwAQAhywECAP4BACHMAQEA8AEAIc0BAQDwAQAh8QECAP4BACHzAQAAnQLzASL0AQIA_gEAIQADAAAAOwAgAwAAPAAwBAAAOAAgAwAAADsAIAMAADwAMAQAADgAIAMAAAA7ACADAAA8ADAEAAA4ACAHoQEBAAAAAcsBAgAAAAHMAQEAAAABzQEBAAAAAfEBAgAAAAHzAQAAAPMBAvQBAgAAAAEBCAAAQAAgB6EBAQAAAAHLAQIAAAABzAEBAAAAAc0BAQAAAAHxAQIAAAAB8wEAAADzAQL0AQIAAAABAQgAAEIAMAEIAABCADAHoQEBAK8CACHLAQIAuwIAIcwBAQCvAgAhzQEBAK8CACHxAQIAuwIAIfMBAADXAvMBIvQBAgC7AgAhAgAAADgAIAgAAEUAIAehAQEArwIAIcsBAgC7AgAhzAEBAK8CACHNAQEArwIAIfEBAgC7AgAh8wEAANcC8wEi9AECALsCACECAAAAOwAgCAAARwAgAgAAADsAIAgAAEcAIAMAAAA4ACAPAABAACAQAABFACABAAAAOAAgAQAAADsAIAUVAADSAgAgFgAA0wIAIBcAANYCACAYAADVAgAgGQAA1AIAIAqeAQAAmAIAMJ8BAABOABCgAQAAmAIAMKEBAQDlAQAhywECAPoBACHMAQEA5QEAIc0BAQDlAQAh8QECAPoBACHzAQAAmQLzASL0AQIA-gEAIQMAAAA7ACADAABNADAUAABOACADAAAAOwAgAwAAPAAwBAAAOAAgAQAAAB4AIAEAAAAeACADAAAAHAAgAwAAHQAwBAAAHgAgAwAAABwAIAMAAB0AMAQAAB4AIAMAAAAcACADAAAdADAEAAAeACAIHAAA0QIAIKEBAQAAAAHMAQEAAAABzQEBAAAAAe0BAgAAAAHuAQIAAAAB7wECAAAAAfABIAAAAAEBCAAAVgAgB6EBAQAAAAHMAQEAAAABzQEBAAAAAe0BAgAAAAHuAQIAAAAB7wECAAAAAfABIAAAAAEBCAAAWAAwAQgAAFgAMAgcAADQAgAgoQEBAK8CACHMAQEArwIAIc0BAQCvAgAh7QECALsCACHuAQIAuwIAIe8BAgC7AgAh8AEgALUCACECAAAAHgAgCAAAWwAgB6EBAQCvAgAhzAEBAK8CACHNAQEArwIAIe0BAgC7AgAh7gECALsCACHvAQIAuwIAIfABIAC1AgAhAgAAABwAIAgAAF0AIAIAAAAcACAIAABdACADAAAAHgAgDwAAVgAgEAAAWwAgAQAAAB4AIAEAAAAcACAFFQAAywIAIBYAAMwCACAXAADPAgAgGAAAzgIAIBkAAM0CACAKngEAAJcCADCfAQAAZAAQoAEAAJcCADChAQEA5QEAIcwBAQDlAQAhzQEBAOUBACHtAQIA-gEAIe4BAgD6AQAh7wECAPoBACHwASAA9AEAIQMAAAAcACADAABjADAUAABkACADAAAAHAAgAwAAHQAwBAAAHgAgCZ4BAACVAgAwnwEAAGoAEKABAACVAgAwoQEBAPABACHLAQIA_gEAIcwBAQDwAQAhzQEBAPABACHSAUAA8gEAIewBAACWAgAgAQAAAGcAIAEAAABnACAIngEAAJUCADCfAQAAagAQoAEAAJUCADChAQEA8AEAIcsBAgD-AQAhzAEBAPABACHNAQEA8AEAIdIBQADyAQAhAAMAAABqACADAABrADAEAABnACADAAAAagAgAwAAawAwBAAAZwAgAwAAAGoAIAMAAGsAMAQAAGcAIAWhAQEAAAABywECAAAAAcwBAQAAAAHNAQEAAAAB0gFAAAAAAQEIAABvACAFoQEBAAAAAcsBAgAAAAHMAQEAAAABzQEBAAAAAdIBQAAAAAEBCAAAcQAwAQgAAHEAMAWhAQEArwIAIcsBAgC7AgAhzAEBAK8CACHNAQEArwIAIdIBQACxAgAhAgAAAGcAIAgAAHQAIAWhAQEArwIAIcsBAgC7AgAhzAEBAK8CACHNAQEArwIAIdIBQACxAgAhAgAAAGoAIAgAAHYAIAIAAABqACAIAAB2ACADAAAAZwAgDwAAbwAgEAAAdAAgAQAAAGcAIAEAAABqACAFFQAAxgIAIBYAAMcCACAXAADKAgAgGAAAyQIAIBkAAMgCACAIngEAAJQCADCfAQAAfQAQoAEAAJQCADChAQEA5QEAIcsBAgD6AQAhzAEBAOUBACHNAQEA5QEAIdIBQADnAQAhAwAAAGoAIAMAAHwAMBQAAH0AIAMAAABqACADAABrADAEAABnACAtngEAAI4CADCfAQAAgwEAEKABAACOAgAwoQEBAPABACG1AQIA_gEAIbcBEACQAgAhuQEQAJACACG6ARAAkAIAIbsBEACRAgAhwAEQAJACACHJAQIA_gEAIcoBAQDwAQAhywECAP4BACHMAQEA8AEAIc0BAQDwAQAhzgEgAPgBACHPASAA-AEAIdABIAD4AQAh0QEgAPgBACHSAUAAjwIAIdMBAgD-AQAh1AEBAPABACHVAQIA_gEAIdYBEACQAgAh1wEQAJACACHYARAAkAIAIdkBEACQAgAh2gEQAJACACHbARAAkAIAIdwBEACQAgAh3QEQAJACACHeARAAkAIAId8BEACQAgAh4AEQAJACACHhARAAkAIAIeIBIAD4AQAh4wEQAJACACHkARAAkAIAIeUBEACQAgAh5gEgAPgBACHnARAAkAIAIegBEACQAgAh6QEQAJACACHqAQIAkgIAIesBAACTAgAgAQAAAIABACABAAAAgAEAICyeAQAAjgIAMJ8BAACDAQAQoAEAAI4CADChAQEA8AEAIbUBAgD-AQAhtwEQAJACACG5ARAAkAIAIboBEACQAgAhuwEQAJECACHAARAAkAIAIckBAgD-AQAhygEBAPABACHLAQIA_gEAIcwBAQDwAQAhzQEBAPABACHOASAA-AEAIc8BIAD4AQAh0AEgAPgBACHRASAA-AEAIdIBQACPAgAh0wECAP4BACHUAQEA8AEAIdUBAgD-AQAh1gEQAJACACHXARAAkAIAIdgBEACQAgAh2QEQAJACACHaARAAkAIAIdsBEACQAgAh3AEQAJACACHdARAAkAIAId4BEACQAgAh3wEQAJACACHgARAAkAIAIeEBEACQAgAh4gEgAPgBACHjARAAkAIAIeQBEACQAgAh5QEQAJACACHmASAA-AEAIecBEACQAgAh6AEQAJACACHpARAAkAIAIeoBAgCSAgAhA7sBAAC8AgAg0gEAALwCACDqAQAAvAIAIAMAAACDAQAgAwAAhAEAMAQAAIABACADAAAAgwEAIAMAAIQBADAEAACAAQAgAwAAAIMBACADAACEAQAwBAAAgAEAICmhAQEAAAABtQECAAAAAbcBEAAAAAG5ARAAAAABugEQAAAAAbsBEAAAAAHAARAAAAAByQECAAAAAcoBAQAAAAHLAQIAAAABzAEBAAAAAc0BAQAAAAHOASAAAAABzwEgAAAAAdABIAAAAAHRASAAAAAB0gFAAAAAAdMBAgAAAAHUAQEAAAAB1QECAAAAAdYBEAAAAAHXARAAAAAB2AEQAAAAAdkBEAAAAAHaARAAAAAB2wEQAAAAAdwBEAAAAAHdARAAAAAB3gEQAAAAAd8BEAAAAAHgARAAAAAB4QEQAAAAAeIBIAAAAAHjARAAAAAB5AEQAAAAAeUBEAAAAAHmASAAAAAB5wEQAAAAAegBEAAAAAHpARAAAAAB6gECAAAAAQEIAACIAQAgKaEBAQAAAAG1AQIAAAABtwEQAAAAAbkBEAAAAAG6ARAAAAABuwEQAAAAAcABEAAAAAHJAQIAAAABygEBAAAAAcsBAgAAAAHMAQEAAAABzQEBAAAAAc4BIAAAAAHPASAAAAAB0AEgAAAAAdEBIAAAAAHSAUAAAAAB0wECAAAAAdQBAQAAAAHVAQIAAAAB1gEQAAAAAdcBEAAAAAHYARAAAAAB2QEQAAAAAdoBEAAAAAHbARAAAAAB3AEQAAAAAd0BEAAAAAHeARAAAAAB3wEQAAAAAeABEAAAAAHhARAAAAAB4gEgAAAAAeMBEAAAAAHkARAAAAAB5QEQAAAAAeYBIAAAAAHnARAAAAAB6AEQAAAAAekBEAAAAAHqAQIAAAABAQgAAIoBADABCAAAigEAMCmhAQEArwIAIbUBAgC7AgAhtwEQAMMCACG5ARAAwwIAIboBEADDAgAhuwEQAMQCACHAARAAwwIAIckBAgC7AgAhygEBAK8CACHLAQIAuwIAIcwBAQCvAgAhzQEBAK8CACHOASAAtQIAIc8BIAC1AgAh0AEgALUCACHRASAAtQIAIdIBQADCAgAh0wECALsCACHUAQEArwIAIdUBAgC7AgAh1gEQAMMCACHXARAAwwIAIdgBEADDAgAh2QEQAMMCACHaARAAwwIAIdsBEADDAgAh3AEQAMMCACHdARAAwwIAId4BEADDAgAh3wEQAMMCACHgARAAwwIAIeEBEADDAgAh4gEgALUCACHjARAAwwIAIeQBEADDAgAh5QEQAMMCACHmASAAtQIAIecBEADDAgAh6AEQAMMCACHpARAAwwIAIeoBAgDFAgAhAgAAAIABACAIAACNAQAgKaEBAQCvAgAhtQECALsCACG3ARAAwwIAIbkBEADDAgAhugEQAMMCACG7ARAAxAIAIcABEADDAgAhyQECALsCACHKAQEArwIAIcsBAgC7AgAhzAEBAK8CACHNAQEArwIAIc4BIAC1AgAhzwEgALUCACHQASAAtQIAIdEBIAC1AgAh0gFAAMICACHTAQIAuwIAIdQBAQCvAgAh1QECALsCACHWARAAwwIAIdcBEADDAgAh2AEQAMMCACHZARAAwwIAIdoBEADDAgAh2wEQAMMCACHcARAAwwIAId0BEADDAgAh3gEQAMMCACHfARAAwwIAIeABEADDAgAh4QEQAMMCACHiASAAtQIAIeMBEADDAgAh5AEQAMMCACHlARAAwwIAIeYBIAC1AgAh5wEQAMMCACHoARAAwwIAIekBEADDAgAh6gECAMUCACECAAAAgwEAIAgAAI8BACACAAAAgwEAIAgAAI8BACADAAAAgAEAIA8AAIgBACAQAACNAQAgAQAAAIABACABAAAAgwEAIAgVAAC9AgAgFgAAvgIAIBcAAMECACAYAADAAgAgGQAAvwIAILsBAAC8AgAg0gEAALwCACDqAQAAvAIAICyeAQAAgAIAMJ8BAACWAQAQoAEAAIACADChAQEA5QEAIbUBAgD6AQAhtwEQAIICACG5ARAAggIAIboBEACCAgAhuwEQAIMCACHAARAAggIAIckBAgD6AQAhygEBAOUBACHLAQIA-gEAIcwBAQDlAQAhzQEBAOUBACHOASAA9AEAIc8BIAD0AQAh0AEgAPQBACHRASAA9AEAIdIBQACBAgAh0wECAPoBACHUAQEA5QEAIdUBAgD6AQAh1gEQAIICACHXARAAggIAIdgBEACCAgAh2QEQAIICACHaARAAggIAIdsBEACCAgAh3AEQAIICACHdARAAggIAId4BEACCAgAh3wEQAIICACHgARAAggIAIeEBEACCAgAh4gEgAPQBACHjARAAggIAIeQBEACCAgAh5QEQAIICACHmASAA9AEAIecBEACCAgAh6AEQAIICACHpARAAggIAIeoBAgCEAgAhAwAAAIMBACADAACVAQAwFAAAlgEAIAMAAACDAQAgAwAAhAEAMAQAAIABACAYngEAAP0BADCfAQAAnAEAEKABAAD9AQAwoQEBAPABACG1AQIA_gEAIbYBAgD-AQAhtwECAP4BACG4AQIA_gEAIbkBAgD-AQAhugECAP4BACG7AQIA_gEAIbwBAgD-AQAhvQEgAPgBACG-AQIA_gEAIb8BAgD-AQAhwAECAP4BACHBAQIA_gEAIcIBAgD-AQAhwwEgAPgBACHEASAA-AEAIcUBIAD4AQAhxgEgAPgBACHHAQIA_gEAIcgBAAD_AQAgAQAAAJkBACABAAAAmQEAIBeeAQAA_QEAMJ8BAACcAQAQoAEAAP0BADChAQEA8AEAIbUBAgD-AQAhtgECAP4BACG3AQIA_gEAIbgBAgD-AQAhuQECAP4BACG6AQIA_gEAIbsBAgD-AQAhvAECAP4BACG9ASAA-AEAIb4BAgD-AQAhvwECAP4BACHAAQIA_gEAIcEBAgD-AQAhwgECAP4BACHDASAA-AEAIcQBIAD4AQAhxQEgAPgBACHGASAA-AEAIccBAgD-AQAhAAMAAACcAQAgAwAAnQEAMAQAAJkBACADAAAAnAEAIAMAAJ0BADAEAACZAQAgAwAAAJwBACADAACdAQAwBAAAmQEAIBShAQEAAAABtQECAAAAAbYBAgAAAAG3AQIAAAABuAECAAAAAbkBAgAAAAG6AQIAAAABuwECAAAAAbwBAgAAAAG9ASAAAAABvgECAAAAAb8BAgAAAAHAAQIAAAABwQECAAAAAcIBAgAAAAHDASAAAAABxAEgAAAAAcUBIAAAAAHGASAAAAABxwECAAAAAQEIAAChAQAgFKEBAQAAAAG1AQIAAAABtgECAAAAAbcBAgAAAAG4AQIAAAABuQECAAAAAboBAgAAAAG7AQIAAAABvAECAAAAAb0BIAAAAAG-AQIAAAABvwECAAAAAcABAgAAAAHBAQIAAAABwgECAAAAAcMBIAAAAAHEASAAAAABxQEgAAAAAcYBIAAAAAHHAQIAAAABAQgAAKMBADABCAAAowEAMBShAQEArwIAIbUBAgC7AgAhtgECALsCACG3AQIAuwIAIbgBAgC7AgAhuQECALsCACG6AQIAuwIAIbsBAgC7AgAhvAECALsCACG9ASAAtQIAIb4BAgC7AgAhvwECALsCACHAAQIAuwIAIcEBAgC7AgAhwgECALsCACHDASAAtQIAIcQBIAC1AgAhxQEgALUCACHGASAAtQIAIccBAgC7AgAhAgAAAJkBACAIAACmAQAgFKEBAQCvAgAhtQECALsCACG2AQIAuwIAIbcBAgC7AgAhuAECALsCACG5AQIAuwIAIboBAgC7AgAhuwECALsCACG8AQIAuwIAIb0BIAC1AgAhvgECALsCACG_AQIAuwIAIcABAgC7AgAhwQECALsCACHCAQIAuwIAIcMBIAC1AgAhxAEgALUCACHFASAAtQIAIcYBIAC1AgAhxwECALsCACECAAAAnAEAIAgAAKgBACACAAAAnAEAIAgAAKgBACADAAAAmQEAIA8AAKEBACAQAACmAQAgAQAAAJkBACABAAAAnAEAIAUVAAC2AgAgFgAAtwIAIBcAALoCACAYAAC5AgAgGQAAuAIAIBeeAQAA-QEAMJ8BAACvAQAQoAEAAPkBADChAQEA5QEAIbUBAgD6AQAhtgECAPoBACG3AQIA-gEAIbgBAgD6AQAhuQECAPoBACG6AQIA-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-QEAMKEBAQDlAQAhtQECAPoBACG2AQIA-gEAIbcBAgD6AQAhuAECAPoBACG5AQIA-gEAIboBAgD6AQAhuwECAPoBACG8AQIA-gEAIb0BIAD0AQAhvgECAPoBACG_AQIA-gEAIcABAgD6AQAhwQECAPoBACHCAQIA-gEAIcMBIAD0AQAhxAEgAPQBACHFASAA9AEAIcYBIAD0AQAhxwECAPoBACENFQAA6QEAIBYAAPwBACAXAADpAQAgGAAA6QEAIBkAAOkBACCnAQIAAAABqAECAAAABKkBAgAAAASqAQIAAAABqwECAAAAAawBAgAAAAGtAQIAAAABrgECAPsBACENFQAA6QEAIBYAAPwBACAXAADpAQAgGAAA6QEAIBkAAOkBACCnAQIAAAABqAECAAAABKkBAgAAAASqAQIAAAABqwECAAAAAawBAgAAAAGtAQIAAAABrgECAPsBACEIpwEIAAAAAagBCAAAAASpAQgAAAAEqgEIAAAAAasBCAAAAAGsAQgAAAABrQEIAAAAAa4BCAD8AQAhF54BAAD9AQAwnwEAAJwBABCgAQAA_QEAMKEBAQDwAQAhtQECAP4BACG2AQIA_gEAIbcBAgD-AQAhuAECAP4BACG5AQIA_gEAIboBAgD-AQAhuwECAP4BACG8AQIA_gEAIb0BIAD4AQAhvgECAP4BACG_AQIA_gEAIcABAgD-AQAhwQECAP4BACHCAQIA_gEAIcMBIAD4AQAhxAEgAPgBACHFASAA-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-AEAIdEBIAD4AQAh0gFAAI8CACHTAQIA_gEAIdQBAQDwAQAh1QECAP4BACHWARAAkAIAIdcBEACQAgAh2AEQAJACACHZARAAkAIAIdoBEACQAgAh2wEQAJACACHcARAAkAIAId0BEACQAgAh3gEQAJACACHfARAAkAIAIeABEACQAgAh4QEQAJACACHiASAA-AEAIeMBEACQAgAh5AEQAJACACHlARAAkAIAIeYBIAD4AQAh5wEQAJACACHoARAAkAIAIekBEACQAgAh6gECAJICACEIpwFAAAAAAagBQAAAAAWpAUAAAAAFqgFAAAAAAasBQAAAAAGsAUAAAAABrQFAAAAAAa4BQACNAgAhCKcBEAAAAAGoARAAAAAEqQEQAAAABKoBEAAAAAGrARAAAAABrAEQAAAAAa0BEAAAAAGuARAAiwIAIQinARAAAAABqAEQAAAABakBEAAAAAWqARAAAAABqwEQAAAAAawBEAAAAAGtARAAAAABrgEQAIkCACEIpwECAAAAAagBAgAAAAWpAQIAAAAFqgECAAAAAasBAgAAAAGsAQIAAAABrQECAAAAAa4BAgCGAgAhBaEBAQAAAAG1AQIAAAABygEBAAAAAcwBAQAAAAHNAQEAAAABCJ4BAACUAgAwnwEAAH0AEKABAACUAgAwoQEBAOUBACHLAQIA-gEAIcwBAQDlAQAhzQEBAOUBACHSAUAA5wEAIQieAQAAlQIAMJ8BAABqABCgAQAAlQIAMKEBAQDwAQAhywECAP4BACHMAQEA8AEAIc0BAQDwAQAh0gFAAPIBACECoQEBAAAAAcsBAgAAAAEKngEAAJcCADCfAQAAZAAQoAEAAJcCADChAQEA5QEAIcwBAQDlAQAhzQEBAOUBACHtAQIA-gEAIe4BAgD6AQAh7wECAPoBACHwASAA9AEAIQqeAQAAmAIAMJ8BAABOABCgAQAAmAIAMKEBAQDlAQAhywECAPoBACHMAQEA5QEAIc0BAQDlAQAh8QECAPoBACHzAQAAmQLzASL0AQIA-gEAIQcVAADpAQAgGAAAmwIAIBkAAJsCACCnAQAAAPMBAqgBAAAA8wEIqQEAAADzAQiuAQAAmgLzASIHFQAA6QEAIBgAAJsCACAZAACbAgAgpwEAAADzAQKoAQAAAPMBCKkBAAAA8wEIrgEAAJoC8wEiBKcBAAAA8wECqAEAAADzAQipAQAAAPMBCK4BAACbAvMBIgqeAQAAnAIAMJ8BAAA7ABCgAQAAnAIAMKEBAQDwAQAhywECAP4BACHMAQEA8AEAIc0BAQDwAQAh8QECAP4BACHzAQAAnQLzASL0AQIA_gEAIQSnAQAAAPMBAqgBAAAA8wEIqQEAAADzAQiuAQAAmwLzASIDoQEBAAAAAcwBAQAAAAHNAQEAAAABC54BAACfAgAwnwEAADUAEKABAACfAgAwoQEBAOUBACHxAQIA-gEAIfYBIAD0AQAh9wFAAOcBACH4AQIA-gEAIfkBIAD0AQAh-gEBAOUBACH7AQIA-gEAIQwdAAChAgAgngEAAKACADCfAQAAIgAQoAEAAKACADChAQEA8AEAIfEBAgD-AQAh9gEgAPgBACH3AUAA8gEAIfgBAgD-AQAh-QEgAPgBACH6AQEA8AEAIfsBAgD-AQAhA_wBAAAcACD9AQAAHAAg_gEAABwAIAOhAQEAAAABzAEBAAAAAc0BAQAAAAELHAAApAIAIJ4BAACjAgAwnwEAABwAEKABAACjAgAwoQEBAPABACHMAQEA8AEAIc0BAQDwAQAh7QECAP4BACHuAQIA_gEAIe8BAgD-AQAh8AEgAPgBACEOHQAAoQIAIJ4BAACgAgAwnwEAACIAEKABAACgAgAwoQEBAPABACHxAQIA_gEAIfYBIAD4AQAh9wFAAPIBACH4AQIA_gEAIfkBIAD4AQAh-gEBAPABACH7AQIA_gEAIYoCAAAiACCLAgAAIgAgEJ4BAAClAgAwnwEAABcAEKABAAClAgAwoQEBAOUBACHJAQIA-gEAIcoBAQDlAQAh_wEQAIICACGAAhAAggIAIYECEACCAgAhggIQAIICACGDAiAA9AEAIYQCQADnAQAhhQJAAOcBACGGAiAA9AEAIYcCAQCmAgAhiAIgAPQBACEOFQAAhgIAIBgAAKgCACAZAACoAgAgpwEBAAAAAagBAQAAAAWpAQEAAAAFqgEBAAAAAasBAQAAAAGsAQEAAAABrQEBAAAAAa4BAQCnAgAhrwEBAAAAAbABAQAAAAGxAQEAAAABDhUAAIYCACAYAACoAgAgGQAAqAIAIKcBAQAAAAGoAQEAAAAFqQEBAAAABaoBAQAAAAGrAQEAAAABrAEBAAAAAa0BAQAAAAGuAQEApwIAIa8BAQAAAAGwAQEAAAABsQEBAAAAAQunAQEAAAABqAEBAAAABakBAQAAAAWqAQEAAAABqwEBAAAAAawBAQAAAAGtAQEAAAABrgEBAKgCACGvAQEAAAABsAEBAAAAAbEBAQAAAAEQngEAAKkCADCfAQAABAAQoAEAAKkCADChAQEA8AEAIckBAgD-AQAhygEBAPABACH_ARAAkAIAIYACEACQAgAhgQIQAJACACGCAhAAkAIAIYMCIAD4AQAhhAJAAPIBACGFAkAA8gEAIYYCIAD4AQAhhwIBAKoCACGIAiAA-AEAIQunAQEAAAABqAEBAAAABakBAQAAAAWqAQEAAAABqwEBAAAAAawBAQAAAAGtAQEAAAABrgEBAKgCACGvAQEAAAABsAEBAAAAAbEBAQAAAAECoQEBAAAAAcoBAQAAAAEAAAABjwIBAAAAAQGPAgAAAKUBAgGPAkAAAAABAAAAAY8CIAAAAAEAAAAAAAWPAgIAAAABlQICAAAAAZYCAgAAAAGXAgIAAAABmAICAAAAAQAAAAAAAAGPAkAAAAABBY8CEAAAAAGVAhAAAAABlgIQAAAAAZcCEAAAAAGYAhAAAAABBY8CEAAAAAGVAhAAAAABlgIQAAAAAZcCEAAAAAGYAhAAAAABBY8CAgAAAAGVAgIAAAABlgICAAAAAZcCAgAAAAGYAgIAAAABAAAAAAAAAAAAAAUPAAD0AgAgEAAA9wIAIIwCAAD1AgAgjQIAAPYCACCSAgAAGgAgAw8AAPQCACCMAgAA9QIAIJICAAAaACAAAAAAAAGPAgAAAPMBAgAAAAAACw8AAN4CADAQAADjAgAwjAIAAN8CADCNAgAA4AIAMI4CAADhAgAgjwIAAOICADCQAgAA4gIAMJECAADiAgAwkgIAAOICADCTAgAA5AIAMJQCAADlAgAwBswBAQAAAAHNAQEAAAAB7QECAAAAAe4BAgAAAAHvAQIAAAAB8AEgAAAAAQIAAAAeACAPAADpAgAgAwAAAB4AIA8AAOkCACAQAADoAgAgAQgAAPMCADAMHAAApAIAIJ4BAACjAgAwnwEAABwAEKABAACjAgAwoQEBAPABACHMAQEA8AEAIc0BAQDwAQAh7QECAP4BACHuAQIAAAAB7wECAP4BACHwASAA-AEAIfUBAACiAgAgAgAAAB4AIAgAAOgCACACAAAA5gIAIAgAAOcCACAKngEAAOUCADCfAQAA5gIAEKABAADlAgAwoQEBAPABACHMAQEA8AEAIc0BAQDwAQAh7QECAP4BACHuAQIA_gEAIe8BAgD-AQAh8AEgAPgBACEKngEAAOUCADCfAQAA5gIAEKABAADlAgAwoQEBAPABACHMAQEA8AEAIc0BAQDwAQAh7QECAP4BACHuAQIA_gEAIe8BAgD-AQAh8AEgAPgBACEGzAEBAK8CACHNAQEArwIAIe0BAgC7AgAh7gECALsCACHvAQIAuwIAIfABIAC1AgAhBswBAQCvAgAhzQEBAK8CACHtAQIAuwIAIe4BAgC7AgAh7wECALsCACHwASAAtQIAIQbMAQEAAAABzQEBAAAAAe0BAgAAAAHuAQIAAAAB7wECAAAAAfABIAAAAAEEDwAA3gIAMIwCAADfAgAwjgIAAOECACCSAgAA4gIAMAABHQAA6wIAIAAAAAAAAY8CAQAAAAEGzAEBAAAAAc0BAQAAAAHtAQIAAAAB7gECAAAAAe8BAgAAAAHwASAAAAABCKEBAQAAAAHxAQIAAAAB9gEgAAAAAfcBQAAAAAH4AQIAAAAB-QEgAAAAAfoBAQAAAAH7AQIAAAABAgAAABoAIA8AAPQCACADAAAAIgAgDwAA9AIAIBAAAPgCACAKAAAAIgAgCAAA-AIAIKEBAQCvAgAh8QECALsCACH2ASAAtQIAIfcBQACxAgAh-AECALsCACH5ASAAtQIAIfoBAQCvAgAh-wECALsCACEIoQEBAK8CACHxAQIAuwIAIfYBIAC1AgAh9wFAALECACH4AQIAuwIAIfkBIAC1AgAh-gEBAK8CACH7AQIAuwIAIQAAAAAFFQAGFgAHFwAIGAAJGQAKAAAAAAAFFQAGFgAHFwAIGAAJGQAKAhUADh0fDQEcAAwBHSAAAAAFFQASFgATFwAUGAAVGQAWAAAAAAAFFQASFgATFwAUGAAVGQAWAAAABRUAHBYAHRcAHhgAHxkAIAAAAAAABRUAHBYAHRcAHhgAHxkAIAEcAAwBHAAMBRUAJRYAJhcAJxgAKBkAKQAAAAAABRUAJRYAJhcAJxgAKBkAKQAAAAUVAC8WADAXADEYADIZADMAAAAAAAUVAC8WADAXADEYADIZADMAAAAFFQA5FgA6FwA7GAA8GQA9AAAAAAAFFQA5FgA6FwA7GAA8GQA9AAAABRUAQxYARBcARRgARhkARwAAAAAABRUAQxYARBcARRgARhkARwAAAAMVAE0YAE4ZAE8AAAADFQBNGABOGQBPAAAAAxUAVRgAVhkAVwAAAAMVAFUYAFYZAFcBAgECAwEFBgEGBwEHCAEJCgEKDAILDQMMDwENEQIOEgQREwESFAETFQIaGAUbGQseGwwfIQwgJAwhJQwiJgwjKAwkKgIlKw8mLQwnLwIoMBApMQwqMgwrMwIsNhEtNxcuORgvOhgwPRgxPhgyPxgzQRg0QwI1RBk2Rhg3SAI4SRo5Shg6Sxg7TAI8Txs9UCE-UQ0_Ug1AUw1BVA1CVQ1DVw1EWQJFWiJGXA1HXgJIXyNJYA1KYQ1LYgJMZSRNZipOaCtPaStQbCtRbStSbitTcCtUcgJVcyxWdStXdwJYeC1ZeStaeitbewJcfi5dfzRegQE1X4IBNWCFATVhhgE1YocBNWOJATVkiwECZYwBNmaOATVnkAECaJEBN2mSATVqkwE1a5QBAmyXAThtmAE-bpoBP2-bAT9wngE_cZ8BP3KgAT9zogE_dKQBAnWlAUB2pwE_d6kBAniqAUF5qwE_eqwBP3utAQJ8sAFCfbEBSH6zAUl_tAFJgAG3AUmBAbgBSYIBuQFJgwG7AUmEAb0BAoUBvgFKhgHAAUmHAcIBAogBwwFLiQHEAUmKAcUBSYsBxgECjAHJAUyNAcoBUI4BzAFRjwHNAVGQAdABUZEB0QFRkgHSAVGTAdQBUZQB1gEClQHXAVKWAdkBUZcB2wECmAHcAVOZAd0BUZoB3gFRmwHfAQKcAeIBVJ0B4wFY"
+}
 
+async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
+  const { Buffer } = await import('node:buffer')
+  const wasmArray = Buffer.from(wasmBase64, 'base64')
+  return new WebAssembly.Module(wasmArray)
+}
+
+config.compilerWasm = {
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs"),
+
+  getQueryCompilerWasmModule: async () => {
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs")
+    return await decodeBase64AsWasm(wasm)
+  },
+
+  importName: "./query_compiler_fast_bg.js"
+}
 
 
 
@@ -84,12 +67,14 @@ export interface PrismaClientConstructor {
    * Type-safe database client for TypeScript
    * @example
    * ```
-   * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
+   * // Fetch zero or more ListGoods
+   * const listGoods = await prisma.listGoods.findMany()
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+   * Read more in our [docs](https://pris.ly/d/client).
    */
 
   new <
@@ -97,7 +82,7 @@ export interface PrismaClientConstructor {
     LogOpts extends LogOptions<Options> = LogOptions<Options>,
     OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends { omit: infer U } ? U : Prisma.PrismaClientOptions['omit'],
     ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
-  >(options?: Prisma.Subset<Options, Prisma.PrismaClientOptions> ): PrismaClient<LogOpts, OmitOpts, ExtArgs>
+  >(options: Prisma.PrismaClientConstructorArgs<Options>): PrismaClient<LogOpts, OmitOpts, ExtArgs>
 }
 
 /**
@@ -106,12 +91,14 @@ export interface PrismaClientConstructor {
  * Type-safe database client for TypeScript
  * @example
  * ```
- * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
+ * // Fetch zero or more ListGoods
+ * const listGoods = await prisma.listGoods.findMany()
  * ```
  * 
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
 
 export interface PrismaClient<
@@ -140,7 +127,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -152,7 +139,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -163,7 +150,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -175,7 +162,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -191,21 +178,107 @@ export interface PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
    */
-  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
+  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => runtime.Types.Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<R>
-
 
   $extends: runtime.Types.Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<OmitOpts>, ExtArgs, runtime.Types.Utils.Call<Prisma.TypeMapCb<OmitOpts>, {
     extArgs: ExtArgs
   }>>
 
-    
+      /**
+   * `prisma.listGoods`: Exposes CRUD operations for the **ListGoods** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ListGoods
+    * const listGoods = await prisma.listGoods.findMany()
+    * ```
+    */
+  get listGoods(): Prisma.ListGoodsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reportLoadingState`: Exposes CRUD operations for the **ReportLoadingState** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportLoadingStates
+    * const reportLoadingStates = await prisma.reportLoadingState.findMany()
+    * ```
+    */
+  get reportLoadingState(): Prisma.ReportLoadingStateDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reportPeriods`: Exposes CRUD operations for the **ReportPeriods** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportPeriods
+    * const reportPeriods = await prisma.reportPeriods.findMany()
+    * ```
+    */
+  get reportPeriods(): Prisma.ReportPeriodsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reportsQueue`: Exposes CRUD operations for the **ReportsQueue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportsQueues
+    * const reportsQueues = await prisma.reportsQueue.findMany()
+    * ```
+    */
+  get reportsQueue(): Prisma.ReportsQueueDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.reportsWithAccountedFinances`: Exposes CRUD operations for the **ReportsWithAccountedFinances** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReportsWithAccountedFinances
+    * const reportsWithAccountedFinances = await prisma.reportsWithAccountedFinances.findMany()
+    * ```
+    */
+  get reportsWithAccountedFinances(): Prisma.ReportsWithAccountedFinancesDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.sku`: Exposes CRUD operations for the **Sku** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Skus
+    * const skus = await prisma.sku.findMany()
+    * ```
+    */
+  get sku(): Prisma.SkuDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.taxParams`: Exposes CRUD operations for the **TaxParams** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TaxParams
+    * const taxParams = await prisma.taxParams.findMany()
+    * ```
+    */
+  get taxParams(): Prisma.TaxParamsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.token`: Exposes CRUD operations for the **Token** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tokens
+    * const tokens = await prisma.token.findMany()
+    * ```
+    */
+  get token(): Prisma.TokenDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
+    * ```
+    */
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
-export function getPrismaClientClass(dirname: string): PrismaClientConstructor {
-  config.dirname = dirname
+export function getPrismaClientClass(): PrismaClientConstructor {
   return runtime.getPrismaClient(config) as unknown as PrismaClientConstructor
 }

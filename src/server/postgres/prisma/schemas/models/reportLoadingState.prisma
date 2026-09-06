@@ -6,6 +6,7 @@ model ReportLoadingState {
   freshReportPeriodIndex            Int                     @db.SmallInt
   isReportLoadingIsStopped          Boolean                 @default(false)
   loadingStopReason                 String                  @default("")
+  queueCapacity                     Int                     @db.SmallInt
 
   reportsQueue                      ReportsQueue[]
   @@unique([userId])

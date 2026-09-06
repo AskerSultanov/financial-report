@@ -24,32 +24,42 @@ export const Decimal = runtime.Decimal
 
 
 export const NullTypes = {
-  DbNull: runtime.objectEnumValues.classes.DbNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.DbNull),
-  JsonNull: runtime.objectEnumValues.classes.JsonNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.JsonNull),
-  AnyNull: runtime.objectEnumValues.classes.AnyNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.AnyNull),
+  DbNull: runtime.NullTypes.DbNull as (new (secret: never) => typeof runtime.DbNull),
+  JsonNull: runtime.NullTypes.JsonNull as (new (secret: never) => typeof runtime.JsonNull),
+  AnyNull: runtime.NullTypes.AnyNull as (new (secret: never) => typeof runtime.AnyNull),
 }
 /**
  * Helper for filtering JSON entries that have `null` on the database (empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const DbNull = runtime.objectEnumValues.instances.DbNull
+export const DbNull = runtime.DbNull
+
 /**
  * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const JsonNull = runtime.objectEnumValues.instances.JsonNull
+export const JsonNull = runtime.JsonNull
+
 /**
  * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const AnyNull = runtime.objectEnumValues.instances.AnyNull
+export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-
+  ListGoods: 'ListGoods',
+  ReportLoadingState: 'ReportLoadingState',
+  ReportPeriods: 'ReportPeriods',
+  ReportsQueue: 'ReportsQueue',
+  ReportsWithAccountedFinances: 'ReportsWithAccountedFinances',
+  Sku: 'Sku',
+  TaxParams: 'TaxParams',
+  Token: 'Token',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -66,4 +76,192 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const ListGoodsScalarFieldEnum = {
+  userId: 'userId',
+  skuId: 'skuId',
+  skuName: 'skuName',
+  price: 'price',
+  discount: 'discount',
+  discountedPrice: 'discountedPrice',
+  clubDiscountedPrice: 'clubDiscountedPrice',
+  disabled: 'disabled',
+  lastFetch: 'lastFetch',
+  lastUpdated: 'lastUpdated',
+  isPriceUpdated: 'isPriceUpdated',
+  errorText: 'errorText',
+  deleted: 'deleted'
+} as const
+
+export type ListGoodsScalarFieldEnum = (typeof ListGoodsScalarFieldEnum)[keyof typeof ListGoodsScalarFieldEnum]
+
+
+export const ReportLoadingStateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  loadingInProgress: 'loadingInProgress',
+  lastReportRequestTimestamp: 'lastReportRequestTimestamp',
+  freshReportPeriodIndex: 'freshReportPeriodIndex',
+  isReportLoadingIsStopped: 'isReportLoadingIsStopped',
+  loadingStopReason: 'loadingStopReason',
+  queueCapacity: 'queueCapacity'
+} as const
+
+export type ReportLoadingStateScalarFieldEnum = (typeof ReportLoadingStateScalarFieldEnum)[keyof typeof ReportLoadingStateScalarFieldEnum]
+
+
+export const ReportPeriodsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  reportId: 'reportId',
+  monthName: 'monthName',
+  monthIndex: 'monthIndex',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo'
+} as const
+
+export type ReportPeriodsScalarFieldEnum = (typeof ReportPeriodsScalarFieldEnum)[keyof typeof ReportPeriodsScalarFieldEnum]
+
+
+export const ReportsQueueScalarFieldEnum = {
+  queuePosition: 'queuePosition',
+  queueItemId: 'queueItemId',
+  userId: 'userId',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo',
+  failedCount: 'failedCount',
+  isEmptyPeriod: 'isEmptyPeriod'
+} as const
+
+export type ReportsQueueScalarFieldEnum = (typeof ReportsQueueScalarFieldEnum)[keyof typeof ReportsQueueScalarFieldEnum]
+
+
+export const ReportsWithAccountedFinancesScalarFieldEnum = {
+  userId: 'userId',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo',
+  reportId: 'reportId',
+  financesAccountedAt: 'financesAccountedAt'
+} as const
+
+export type ReportsWithAccountedFinancesScalarFieldEnum = (typeof ReportsWithAccountedFinancesScalarFieldEnum)[keyof typeof ReportsWithAccountedFinancesScalarFieldEnum]
+
+
+export const SkuScalarFieldEnum = {
+  skuId: 'skuId',
+  userId: 'userId',
+  skuName: 'skuName',
+  reportId: 'reportId',
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo',
+  reportIsEmpty: 'reportIsEmpty',
+  isCrossYearPeriod: 'isCrossYearPeriod',
+  buybackReportIsExist: 'buybackReportIsExist',
+  isFinancesAccounted: 'isFinancesAccounted',
+  financesAccountedAt: 'financesAccountedAt',
+  year: 'year',
+  recordedToYear: 'recordedToYear',
+  recordedToMonth: 'recordedToMonth',
+  qty: 'qty',
+  tax: 'tax',
+  fines: 'fines',
+  revenue: 'revenue',
+  costPrice: 'costPrice',
+  acceptance: 'acceptance',
+  storageCost: 'storageCost',
+  retailAmount: 'retailAmount',
+  returnAmount: 'returnAmount',
+  deliveryCost: 'deliveryCost',
+  taxableAmount: 'taxableAmount',
+  otherExpenses: 'otherExpenses',
+  sellerPayoutAmount: 'sellerPayoutAmount',
+  deductionOrPayment: 'deductionOrPayment',
+  additionalPayment: 'additionalPayment',
+  insuranceFee: 'insuranceFee',
+  additionalInsuranceFee: 'additionalInsuranceFee',
+  isInsuranceFeeIncluded: 'isInsuranceFeeIncluded',
+  profit: 'profit',
+  preTaxProfit: 'preTaxProfit',
+  finalProfit: 'finalProfit',
+  profitMargin: 'profitMargin',
+  isCostPriceSet: 'isCostPriceSet',
+  averageProfit: 'averageProfit',
+  averageStorageCost: 'averageStorageCost',
+  averageAdvertisingCost: 'averageAdvertisingCost',
+  schemaVersion: 'schemaVersion'
+} as const
+
+export type SkuScalarFieldEnum = (typeof SkuScalarFieldEnum)[keyof typeof SkuScalarFieldEnum]
+
+
+export const TaxParamsScalarFieldEnum = {
+  userId: 'userId',
+  year: 'year',
+  taxRate: 'taxRate',
+  finalProfit: 'finalProfit',
+  paidTaxAmount: 'paidTaxAmount',
+  retailAmount: 'retailAmount',
+  otherExpenses: 'otherExpenses',
+  taxableAmount: 'taxableAmount',
+  maxInsuranceFee: 'maxInsuranceFee',
+  isInsuranceFeePaid: 'isInsuranceFeePaid',
+  excessInsuranceRate: 'excessInsuranceRate',
+  mandatoryInsuranceFee: 'mandatoryInsuranceFee',
+  additionalInsuranceFee: 'additionalInsuranceFee',
+  insuranceFeePercentage: 'insuranceFeePercentage',
+  mandatoryInsuranceFeeRate: 'mandatoryInsuranceFeeRate',
+  hasExcessIncomeForInsurance: 'hasExcessIncomeForInsurance',
+  mandatoryInsuranceFeeIsPaid: 'mandatoryInsuranceFeeIsPaid',
+  additionalInsuranceFeeIsPaid: 'additionalInsuranceFeeIsPaid',
+  requiresAdditionalInsuranceFee: 'requiresAdditionalInsuranceFee',
+  excessIncomeForAdditionalInsuranceFee: 'excessIncomeForAdditionalInsuranceFee'
+} as const
+
+export type TaxParamsScalarFieldEnum = (typeof TaxParamsScalarFieldEnum)[keyof typeof TaxParamsScalarFieldEnum]
+
+
+export const TokenScalarFieldEnum = {
+  userId: 'userId',
+  lastUsed: 'lastUsed',
+  token: 'token',
+  tokenHasBeenRemoved: 'tokenHasBeenRemoved'
+} as const
+
+export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof TokenScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  userId: 'userId',
+  login: 'login',
+  passwd: 'passwd',
+  role: 'role',
+  registeredAt: 'registeredAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+} as const
+
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

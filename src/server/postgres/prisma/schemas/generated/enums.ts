@@ -9,7 +9,27 @@
 * 🟢 You can import this file directly.
 */
 
+export const MonthsList = {
+  январь: 'январь',
+  февраль: 'февраль',
+  март: 'март',
+  апрель: 'апрель',
+  май: 'май',
+  июнь: 'июнь',
+  июль: 'июль',
+  август: 'август',
+  сентябрь: 'сентябрь',
+  октябрь: 'октябрь',
+  ноябрь: 'ноябрь',
+  декабрь: 'декабрь'
+} as const
+
+export type MonthsList = (typeof MonthsList)[keyof typeof MonthsList]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const Role = {
+  user: 'user',
+  admin: 'admin'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]

@@ -2,8 +2,8 @@ model ReportPeriods {
   id                Int                 @default(autoincrement())
   userId            String              
   reportId          Int                 
-  monthName         MonthsList          @db.VarChar(8)    
-  monthIndex        SmallInt            
+  monthName         MonthsList          
+  monthIndex        Int                 @db.SmallInt          
   dateFrom          String              @db.VarChar(10)
   dateTo            String              @db.VarChar(10)
 
