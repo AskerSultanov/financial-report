@@ -1,6 +1,7 @@
 import parseJwt from "./utils/parseJwt.js";
 import isTestToken from "./utils/isTestToken.js";
 import checkTokenExpiry from "./utils/checkTokenExpiry.js";
+import checkTokenPayload from "./utils/checkTokenPayload.js";
 import isPresumablyJwtToken from "./utils/isPresumablyJwtToken.js";
 
 var validateTokenService = async (token) => {
@@ -11,6 +12,12 @@ var validateTokenService = async (token) => {
   }
 
   var tokenPayload = parseJwt(token);
+
+  var { payloadIsInvalid } = checkTokenPayload(tokenPayload);
+
+  if (payloadIsInvalid) {
+    return { tokenIsValid, tokenPayload: {} };
+  }
 
   if (isTestToken(tokenPayload)) {
     return { tokenIsValid, tokenPayload: {} };
