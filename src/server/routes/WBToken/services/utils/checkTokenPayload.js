@@ -17,7 +17,7 @@ var tokenPayloadSchema = Joi.object({
 var checkTokenPayload = (tokenPayload) => {
   var { error } = tokenPayloadSchema.validate(tokenPayload);
 
-  return { payloadIsInvalid: error };
+  return { payloadIsInvalid: Boolean(error) };
 };
 
 export default checkTokenPayload;
