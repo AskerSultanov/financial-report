@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 var schema = Joi.object({
-  userId: Joi.string().required(),
+  userId: Joi.string().uuid().required(),
   reportId: Joi.number().required(),
   year: Joi.number().required(),
   skuName: Joi.string().required(),

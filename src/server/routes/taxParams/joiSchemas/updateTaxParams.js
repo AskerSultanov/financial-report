@@ -9,7 +9,7 @@ var dataObjectSchema = Joi.object({
 var schema = Joi.object({
   data: dataObjectSchema,
   year: Joi.number().required(),
-  userId: Joi.string().required(),
+  userId: Joi.string().uuid().required(),
   reportsNeedRecalculation: Joi.boolean().required(),
 });
 

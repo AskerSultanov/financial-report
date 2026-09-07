@@ -16,7 +16,7 @@ var skuSchema = Joi.object({
 
 var schema = Joi.object({
   year: Joi.number().required(),
-  userId: Joi.string().required(),
+  userId: Joi.string().uuid().required(),
   dateFrom: Joi.string().required(),
   dateTo: Joi.string().required(),
   skuName: Joi.string().required(),

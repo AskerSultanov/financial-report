@@ -16,7 +16,7 @@ var setCostPriceToSkuService = async (data) => {
 
   return await session.withTransaction(async () => {
     var { report } = await getSkuFromReport(userId, reportId, skuName, session);
-
+    
     if (!report) {
       return {
         reportNotFound: true,

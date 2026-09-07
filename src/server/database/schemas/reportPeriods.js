@@ -1,6 +1,19 @@
 import { Schema } from "mongoose";
 
-var monthList = ["январь", "февраль", "марта", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
+var monthList = [
+  "январь",
+  "февраль",
+  "марта",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
 
 var reportSchema = new Schema(
   {
@@ -20,6 +33,9 @@ var reportPeriodsSchema = new Schema({
 });
 
 reportPeriodsSchema.index({ userId: 1 }, { unique: true });
-reportPeriodsSchema.index({ userId: 1, "reportPeriods.dateFrom": 1 }, { unique: true });
+reportPeriodsSchema.index(
+  { userId: 1, "reportPeriods.dateFrom": 1 },
+  { unique: true },
+);
 
 export default reportPeriodsSchema;

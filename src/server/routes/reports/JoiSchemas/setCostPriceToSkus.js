@@ -7,7 +7,7 @@ var costPricesItemSchema = Joi.object({
 });
 
 var schema = Joi.object({
-  userId: Joi.string().required(),
+  userId: Joi.string().uuid().required(),
   reportId: Joi.number().required(),
   year: Joi.number().required(),
   costPrices: Joi.array().items(costPricesItemSchema).required(),

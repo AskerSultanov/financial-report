@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import checkLogin from "./utils/checkLogin.js";
 import checkPasswd from "./utils/checkPasswd.js";
 import { dbClient } from "../../../database/index.js";
@@ -28,7 +28,7 @@ var createUserService = async (candidate) => {
       return { userIsExist: true, mgs: "", userId: null, role: "" };
     }
 
-    var userId = randomBytes(10).toString("hex");
+    var userId = randomUUID();
 
     candidate.userId = userId;
     candidate.role =

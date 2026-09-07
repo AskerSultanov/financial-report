@@ -34,7 +34,13 @@ var skuSchema = new Schema(
   },
   { _id: false },
 );
-var recordedToSchema = new Schema({ year: { type: Number, required: true }, month: { type: String, required: true } }, { _id: false });
+var recordedToSchema = new Schema(
+  {
+    year: { type: Number, required: true },
+    month: { type: String, required: true },
+  },
+  { _id: false },
+);
 
 var reportSchema = new Schema({
   userId: { type: String, required: true },
