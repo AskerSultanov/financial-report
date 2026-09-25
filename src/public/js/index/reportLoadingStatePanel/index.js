@@ -29,7 +29,9 @@ var reportLoadingStatePanelBuilder = async (
           }
         }, nextRequestDelay);
       });
+    }
 
+    if (reportLoadingState.loadingInProgress) {
       var { reportsQueue, abandonedReports } = reportLoadingState;
 
       enableParentReportLoadingStatePanel();
