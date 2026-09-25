@@ -6,8 +6,14 @@ import refreshReportLoadingStateStatus from "./refreshReportLoadingStateStatus.j
 import { enableParentReportLoadingStatePanel } from "./toggleVisibilityOfParentReportLoadingStatePanel.js";
 
 var builderWasCalled = false;
+var reportsQueueTbodyId = "reports-queue-tbody";
+var abandonedReportsTbodyId = "abandoned-reports-tbody";
 
-var reportLoadingStatePanelBuilder = async (userId, reportLoadingState, isMainPageLoad) => {
+var reportLoadingStatePanelBuilder = async (
+  userId,
+  reportLoadingState,
+  isMainPageLoad,
+) => {
   if (!builderWasCalled) {
     builderWasCalled = true;
 
@@ -15,15 +21,13 @@ var reportLoadingStatePanelBuilder = async (userId, reportLoadingState, isMainPa
       reportLoadingState = await getReportLoadingState(userId);
     }
 
-    var { reportsQueue, abandonedReports, loadingInProgress } = reportLoadingState;
+    var { reportsQueue, abandonedReports, loadingInProgress } =
+      reportLoadingState;
 
     if (loadingInProgress) {
       enableParentReportLoadingStatePanel();
       await showReportLoadingStatePanel();
       await updateLoadingProgressText(reportLoadingState);
-
-      var reportsQueueTbodyId = "reports-queue-tbody";
-      var abandonedReportsTbodyId = "abandoned-reports-tbody";
 
       insertDataToTable(reportsQueue, reportsQueueTbodyId);
       insertDataToTable(abandonedReports, abandonedReportsTbodyId);
