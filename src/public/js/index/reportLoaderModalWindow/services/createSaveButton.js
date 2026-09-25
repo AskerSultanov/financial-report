@@ -24,6 +24,7 @@ var createSaveButton = (
 
     var needToLoadAllReports = uploadAllReportsCheckbox.checked;
     console.log({ needToLoadAllReports });
+    
     try {
       if (needToLoadAllReports) {
         await handleAllReportsLoading(userId);
@@ -77,11 +78,7 @@ async function handleAllReportsLoading(userId) {
     true,
   );
 
-  setTimeout(
-    () =>
-      reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad),
-    3000,
-  );
+  reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad);
 }
 
 async function handleSameWeekPeriod(userId, dateFrom, dateTo) {
@@ -109,9 +106,5 @@ async function handleSameWeekPeriod(userId, dateFrom, dateTo) {
 async function handleNonSameWeekPeriod(userId, dateFrom, dateTo) {
   await sendReportPeriod(userId, dateFrom, dateTo, false);
 
-  setTimeout(
-    () =>
-      reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad),
-    3000,
-  );
+  reportLoadingStatePanelBuilder(userId, reportLoadState, isMainPageLoad);
 }
