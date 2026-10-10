@@ -25,6 +25,7 @@ var deductionOrPaymentTitleText = "Удержания";
 var returnAmountTitleText = "Количество возврата";
 var orderDateTitleText = "Дата заказа покупателем";
 var paidAcceptanceTitleText = "Операции на приемке";
+var otherPaidAcceptanceTitleText = 'Услуга по обработке Товара'
 var retailAmountTitleText = "Вайлдберриз реализовал Товар (Пр)";
 var deliveryCostTitleText = "Услуги по доставке товара покупателю";
 var additionalPaymentTitleText = "Корректировка Вознаграждения Вайлдберриз (ВВ)";
@@ -122,9 +123,10 @@ function getRequiredColumnsNameFromWeeklyFinanfialReportFile(workSheet, columnsN
   }
   requiredColumnsName.orderDateColumn = orderDateColumn;
 
-  var paidAcceptanceColumn = workSheet.getCell(expectedPaidAcceptanceTitleColumnName + titlesRowNum).value === paidAcceptanceTitleText;
+  var paidAcceptanceCellContent = workSheet.getCell(expectedPaidAcceptanceTitleColumnName + titlesRowNum).value 
+  var paidAcceptanceColumn = paidAcceptanceCellContent === paidAcceptanceTitleText && paidAcceptanceCellContent === otherPaidAcceptanceTitleText;
   if (!paidAcceptanceColumn) {
-    paidAcceptanceColumn = topCells.find((colName) => colName.colTitle === paidAcceptanceTitleText).colName;
+    paidAcceptanceColumn = topCells.find((colName) => colName.colTitle === paidAcceptanceTitleText || colName.colTitle === otherPaidAcceptanceTitleText).colName;
   } else {
     paidAcceptanceColumn = expectedPaidAcceptanceTitleColumnName;
   }
