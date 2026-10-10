@@ -1,5 +1,6 @@
 import calc from "../calcServices/index.js";
 
+var tax = 0;
 var costPrice = 0;
 var otherExpenses = 0;
 var insuranceFee = 0;
@@ -32,7 +33,7 @@ var parseSku = async (skuName, skuQty, skuFilteredReport, storageCost, taxRate, 
 
   var retailAmount = calc.retailAmount(skuFilteredReport);
 
-  var tax = calc.taxAmount(taxableAmount, taxRate);
+  // var tax = calc.taxAmount(taxableAmount, taxRate);
 
   var returnAmount = calc.returnAmount(skuFilteredReport);
 

@@ -16,11 +16,11 @@ var calcRestSkuParams = (sku, prevSkuData, taxParams) => {
   updatedSkuFields.preTaxProfit = newPreTaxProfit;
 
   var prevSkuInsuranceFee = prevSkuData.insuranceFee;
-  var { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields } = recalculateInsuranceFee(updatedSkuFields, prevSkuInsuranceFee, taxParams);
+  //var { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields } = recalculateInsuranceFee(updatedSkuFields, prevSkuInsuranceFee, taxParams);
 
-  sku.insuranceFee = skuInsuranceFee;
-  updatedSkuFields.insuranceFee = skuInsuranceFee;
-  updatedSkuFields.isInsuranceFeeIncluded = isInsuranceFeeIncluded;
+  //sku.insuranceFee = skuInsuranceFee;
+  //updatedSkuFields.insuranceFee = skuInsuranceFee;
+  //updatedSkuFields.isInsuranceFeeIncluded = isInsuranceFeeIncluded;
 
   var newFinalProfit = calcFinalProfit(sku);
   var newProfitMargin = calcProfitMargin(newFinalProfit, sku.retailAmount);
@@ -28,7 +28,7 @@ var calcRestSkuParams = (sku, prevSkuData, taxParams) => {
   updatedSkuFields.finalProfit = newFinalProfit;
   updatedSkuFields.profitMargin = newProfitMargin;
 
-  return { updatedSkuFields, updatedTaxParamsFieldsBySku: updatedTaxParamsFields };
+  return { updatedSkuFields, updatedTaxParamsFieldsBySku: taxParams };
 };
 
 export default calcRestSkuParams;
@@ -40,18 +40,18 @@ var recalculateInsuranceFee = function (updatedSkuFields, prevSkuInsuranceFee, t
   var updatedTaxParamsFields = {};
   updatedTaxParamsFields.finalProfit = taxParams.finalProfit;
   updatedTaxParamsFields.otherExpenses = taxParams.otherExpenses;
-  updatedTaxParamsFields.paidInsuranceFee = taxParams.paidInsuranceFee;
+  //updatedTaxParamsFields.paidInsuranceFee = taxParams.paidInsuranceFee;
 
   if (taxParams.mandatoryInsuranceFeeIsPaid) {
     return { skuInsuranceFee, isInsuranceFeeIncluded, updatedTaxParamsFields };
   }
 
-  skuInsuranceFee = calcInsuranceFee(updatedSkuFields.preTaxProfit, taxParams.mandatoryInsuranceFeeRate);
+  //skuInsuranceFee = calcInsuranceFee(updatedSkuFields.preTaxProfit, taxParams.mandatoryInsuranceFeeRate);
 
-  isInsuranceFeeIncluded = true;
+  //isInsuranceFeeIncluded = true;
 
-  var recalculatedPaidInsuranceFee = taxParams.paidInsuranceFee - prevSkuInsuranceFee + skuInsuranceFee;
-  updatedTaxParamsFields.paidInsuranceFee = truncateNum(recalculatedPaidInsuranceFee);
+  //var recalculatedPaidInsuranceFee = taxParams.paidInsuranceFee - prevSkuInsuranceFee + skuInsuranceFee;
+  //updatedTaxParamsFields.paidInsuranceFee = truncateNum(recalculatedPaidInsuranceFee);
 
   if (updatedTaxParamsFields.paidInsuranceFee >= taxParams.mandatoryInsuranceFee) {
     var difference = updatedTaxParamsFields.paidInsuranceFee - taxParams.mandatoryInsuranceFee;

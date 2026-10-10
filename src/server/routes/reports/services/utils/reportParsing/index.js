@@ -37,10 +37,10 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
     var sku = await parseSku(name, skuNamesFromWeeklyFinancialReport.length, skuByYear, skuStorageCost, taxParams.taxRate, reportTotals);
 
     if (sku) {
-      var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(sku, recalculatedTaxParams);
+      // var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(sku, recalculatedTaxParams);
 
-      recalculatedTaxParams = Object.assign(recalculatedTaxParams, updatedTaxParams);
-      sku.additionalInsuranceFee = skuAdditionalInsuranceFee;
+      // recalculatedTaxParams = Object.assign(recalculatedTaxParams, updatedTaxParams);
+      // sku.additionalInsuranceFee = skuAdditionalInsuranceFee;
 
       skus.push(sku);
     }

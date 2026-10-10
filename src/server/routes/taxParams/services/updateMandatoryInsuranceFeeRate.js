@@ -20,11 +20,11 @@ var updateMandatoryInsuranceFeeRateService = async (
       return { mandatoryInsuranceFeeRateIsEqual: true };
     }
 
-    var { reports } = await getReportsByUserId(userId, session);
+    // var { reports } = await getReportsByUserId(userId, session);
 
     var updatedTaxParams = [];
 
-    if (!reportsNeedRecalculation) {
+    // if (!reportsNeedRecalculation) {
       updatedTaxParams.push({
         year,
         data: { mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate },
@@ -32,45 +32,45 @@ var updateMandatoryInsuranceFeeRateService = async (
 
       await updateTaxParamsToDb(userId, updatedTaxParams, session);
       return { mandatoryInsuranceFeeRateIsEqual: false };
-    }
+    // }
 
-    if (reports.length) {
-      var { mandatoryInsuranceFee } = taxParams;
-      var {
-        updatedReports,
-        finalProfit,
-        paidInsuranceFee,
-        mandatoryInsuranceFeeIsPaid,
-      } = recalculateReportsWithNewMandatoryInsuranceRate(
-        year,
-        reports,
-        mandatoryInsuranceFee,
-        newMandatoryInsuranceFeeRate,
-      );
+    // if (reports.length) {
+    //   var { mandatoryInsuranceFee } = taxParams;
+    //   var {
+    //     updatedReports,
+    //     finalProfit,
+    //     paidInsuranceFee,
+    //     mandatoryInsuranceFeeIsPaid,
+    //   } = recalculateReportsWithNewMandatoryInsuranceRate(
+    //     year,
+    //     reports,
+    //     mandatoryInsuranceFee,
+    //     newMandatoryInsuranceFeeRate,
+    //   );
 
-      await saveUpdatedReports(userId, updatedReports, session);
+    //   await saveUpdatedReports(userId, updatedReports, session);
 
-      updatedTaxParams.push({
-        year,
-        data: {
-          finalProfit,
-          paidInsuranceFee,
-          mandatoryInsuranceFeeIsPaid,
-          mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate,
-        },
-      });
+    //   updatedTaxParams.push({
+    //     year,
+    //     data: {
+    //       finalProfit,
+    //       paidInsuranceFee,
+    //       mandatoryInsuranceFeeIsPaid,
+    //       mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate,
+    //     },
+    //   });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { mandatoryInsuranceFeeRateIsEqual: false };
-    } else {
-      updatedTaxParams.push({
-        year,
-        data: { mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate },
-      });
+    //   await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    //   return { mandatoryInsuranceFeeRateIsEqual: false };
+    // } else {
+    //   updatedTaxParams.push({
+    //     year,
+    //     data: { mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate },
+    //   });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { mandatoryInsuranceFeeRateIsEqual: false };
-    }
+    //   await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    //   return { mandatoryInsuranceFeeRateIsEqual: false };
+    // }
   });
 };
 

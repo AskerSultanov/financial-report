@@ -20,43 +20,43 @@ var updateTaxRateService = async (
       return { taxRateIsEqual: true };
     }
 
-    var { reports } = await getReportsByUserId(userId, session);
+    //var { reports } = await getReportsByUserId(userId, session);
 
     var updatedTaxParams = [];
 
-    if (!reportsNeedRecalculation) {
+   // if (!reportsNeedRecalculation) {
       updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
 
       await updateTaxParamsToDb(userId, updatedTaxParams, session);
       return { taxRateIsEqual: false };
-    }
+  //  }
 
-    if (reports.length) {
-      var resetPaidTaxAmount = -taxParams.mandatoryInsuranceFee;
+    //if (reports.length) {
+      // var resetPaidTaxAmount = -taxParams.mandatoryInsuranceFee;
 
-      var { updatedReports, finalProfit, paidTaxAmount } =
-        recalculateReportsWithNewTaxRate(
-          reports,
-          resetPaidTaxAmount,
-          newTaxRate,
-          year,
-        );
+      // var { updatedReports, finalProfit, paidTaxAmount } =
+      //   recalculateReportsWithNewTaxRate(
+      //     reports,
+      //     resetPaidTaxAmount,
+      //     newTaxRate,
+      //     year,
+      //   );
 
-      await saveUpdatedReports(userId, updatedReports, session);
+      // await saveUpdatedReports(userId, updatedReports, session);
 
-      updatedTaxParams.push({
-        year,
-        data: { finalProfit, paidTaxAmount, taxRate: newTaxRate },
-      });
+      // updatedTaxParams.push({
+      //   year,
+      //   data: { finalProfit, paidTaxAmount, taxRate: newTaxRate },
+      // });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { taxRateIsEqual: false };
-    } else {
-      updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
+      // await updateTaxParamsToDb(userId, updatedTaxParams, session);
+      // return { taxRateIsEqual: false };
+   // } else {
+      // updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { taxRateIsEqual: false };
-    }
+      // await updateTaxParamsToDb(userId, updatedTaxParams, session);
+      // return { taxRateIsEqual: false };
+  //  }
   });
 };
 
