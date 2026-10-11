@@ -1,6 +1,12 @@
 import createTdElement from "./services/createTdElement.js";
+import openTaxAmountModal from "./services/modal/taxAmountModal/openTaxAmountModal.js";
 
-var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText) => {
+var createTotalsTable = (
+  report,
+  year,
+  isCrossYearPeriod,
+  reportSummaryLabelText,
+) => {
   var tableRow = document.createElement("tr");
 
   var yearTd = createTdElement(year);
@@ -28,10 +34,22 @@ var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText
   var tablesContainer = document.getElementById("tables-container");
 
   if (isCrossYearPeriod) {
-    var { reportSummaryLabel } = createReportSummaryLabel(reportSummaryLabelText);
+    var { reportSummaryLabel } = createReportSummaryLabel(
+      reportSummaryLabelText,
+    );
     tablesContainer.append(reportSummaryLabel, table);
   } else {
     tablesContainer.append(table);
+  }
+
+  if (isCrossYearPeriod) {
+  } else {
+    var data = { userId: report.userId, year: "", reportId: report.reportId };
+    var taxAmountModalHandler = openTaxAmountModal(data, false);
+
+    var taxAmountField = document.getElementById("taxAmount-");
+    console.log(taxAmountModalHandler);
+    taxAmountField.append(taxAmountModalHandler);
   }
 };
 
