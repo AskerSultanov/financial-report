@@ -68,6 +68,8 @@ var main = async () => {
     ).reportPeriodText;
 
     createTotalsTable(
+      userId,
+      reportId,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
@@ -84,6 +86,8 @@ var main = async () => {
     ).reportPeriodText;
 
     createTotalsTable(
+      userId,
+      reportId,
       startYearReportTotals,
       startYear,
       isCrossYearPeriod,
@@ -101,6 +105,8 @@ var main = async () => {
       dateTo,
     ).reportPeriodText;
     createTotalsTable(
+      userId,
+      reportId,
       endYearReportTotals,
       endYear,
       isCrossYearPeriod,
@@ -110,6 +116,8 @@ var main = async () => {
     createSkusTable(userId, reportId, endYear, endYearSkus);
   } else {
     createTotalsTable(
+      userId,
+      reportId,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,

@@ -9,16 +9,22 @@ import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js"
 
 var event = "click";
 
-var taxAmountModal = (newTaxData, taxAmountDisplayElement, isGuestAccess) => {
+var titlesMap = {
+  taxAmount: "Добавить налоги к отчету",
+  insuranceFee: "Добавить страховые взносы к отчету",
+  additionalInsuranceFee: "Добавить доп. страховые взносы к отчету",
+};
+
+var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 
   var modalContent = createDiv("modal-content");
 
-  var titleContent = `Добавить налоги к отчету`;
+  var titleContent = titlesMap[dataToUpdation.data.key];
   var title = createTitle("modal-title", titleContent);
 
-  var taxInput = createInput("modal-input", taxAmountDisplayElement);
+  var input = createInput("modal-input", displayElement);
 
   var buttonsContainer = createDiv("modal-buttons");
 
@@ -45,11 +51,11 @@ var taxAmountModal = (newTaxData, taxAmountDisplayElement, isGuestAccess) => {
   );
 
   buttonsContainer.append(cancelButton, saveButton);
-  modalContent.append(title, taxInput, buttonsContainer);
+  modalContent.append(title, input, buttonsContainer);
   modal.append(modalContent);
   document.body.append(modal);
 
-  taxInput.focus();
+  input.focus();
 
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
@@ -60,14 +66,16 @@ var taxAmountModal = (newTaxData, taxAmountDisplayElement, isGuestAccess) => {
   async function saveButtonHandler() {
     document.body.removeChild(modal);
 
-    newTaxData.newTax = +taxInput.value;
+    dataToUpdation.data.value = +input.value;
 
-    taxAmountDisplayElement.textContent = taxInput.value;
+    displayElement.textContent = input.value;
+
+    var url = "/report/" + dataToUpdation.data.key;
 
     return;
-    var res = await fetch("/report/tax-amount", {
+    var res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(newTaxData),
+      body: JSON.stringify(dataToUpdation),
       headers: { "Content-Type": "application/json" },
     });
 
@@ -101,4 +109,4 @@ var taxAmountModal = (newTaxData, taxAmountDisplayElement, isGuestAccess) => {
   }
 };
 
-export default taxAmountModal;
+export default createTotalsModal;

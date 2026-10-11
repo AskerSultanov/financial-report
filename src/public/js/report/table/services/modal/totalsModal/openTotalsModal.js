@@ -1,15 +1,15 @@
-import taxAmountModal from "./taxAmountModal.js";
+import taxAmountModal from "./createTotalsModal.js";
 import createButton from "../utils/createButton.js";
 
-var openTaxAmountModal = (data, isGuestAccess) => {
+var openTotalsModal = (data, isGuestAccess = false) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
   var taxAmountDisplayElement = document.createElement("span");
   taxAmountDisplayElement.className = "editable-field-value";
-  taxAmountDisplayElement.textContent = data.taxAmount;
-  taxAmountDisplayElement.id = `taxAmount-${data.year}`;
-    console.log(taxAmountDisplayElement)
+  taxAmountDisplayElement.textContent = data.data.value;
+  taxAmountDisplayElement.id = `${data.data.key}-${data.year}`;
+
   var event = "click";
   var cb = () => {
     var hasActiveModal = document.getElementById("modal-window");
@@ -33,4 +33,4 @@ var openTaxAmountModal = (data, isGuestAccess) => {
   return container;
 };
 
-export default openTaxAmountModal;
+export default openTotalsModal;

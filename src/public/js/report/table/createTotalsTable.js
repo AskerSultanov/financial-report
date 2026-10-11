@@ -1,8 +1,12 @@
 import createTdElement from "./services/createTdElement.js";
-import openTaxAmountModal from "./services/modal/taxAmountModal/openTaxAmountModal.js";
+import openTotalsModal from "./services/modal/totalsModal/openTotalsModal.js";
+
+var fieldsWithModal = ["taxAmount", "insuranceFee", "additionalInsuranceFee"];
 
 var createTotalsTable = (
-  report,
+  userId,
+  reportId,
+  reportTotals,
   year,
   isCrossYearPeriod,
   reportSummaryLabelText,
@@ -12,12 +16,20 @@ var createTotalsTable = (
   var yearTd = createTdElement(year);
   tableRow.append(yearTd);
 
-  for (var key in report) {
+  for (var key in reportTotals) {
     var elemId = year ? key + "-" + year : key + "-";
 
-    var value = (+report[key]).toFixed(2);
+    var value = (+reportTotals[key]).toFixed(2);
 
-    var tdElement = createTdElement(value, elemId);
+    if (fieldsWithModal.includes(key)) {
+      var data = { userId, reportId, year, data: { key, value: 0 } };
+      var modal = openTotalsModal(data);
+
+      var tdElement = createTdElement(modal);
+    } else {
+      var tdElement = createTdElement(value, elemId);
+    }
+
     tableRow.append(tdElement);
   }
 
@@ -40,16 +52,6 @@ var createTotalsTable = (
     tablesContainer.append(reportSummaryLabel, table);
   } else {
     tablesContainer.append(table);
-  }
-
-  if (isCrossYearPeriod) {
-  } else {
-    var data = { userId: report.userId, year: "", reportId: report.reportId };
-    var taxAmountModalHandler = openTaxAmountModal(data, false);
-
-    var taxAmountField = document.getElementById("taxAmount-");
-    console.log(taxAmountModalHandler);
-    taxAmountField.append(taxAmountModalHandler);
   }
 };
 
@@ -86,11 +88,11 @@ function createTotalsTableHead() {
 
 function createReportSummaryLabel(reportSummaryLabelText) {
   var reportSummaryLabel = document.createElement("span");
-  reportSummaryLabel.className = "report-summary-label";
+  reportSummaryLabel.className = "reportTotals-summary-label";
   reportSummaryLabel.textContent = "Сводка " + reportSummaryLabelText;
 
   var reportSummaryLabelWrapper = document.createElement("div");
-  reportSummaryLabelWrapper.className = "report-summary-label-wrapper";
+  reportSummaryLabelWrapper.className = "reportTotals-summary-label-wrapper";
   reportSummaryLabelWrapper.append(reportSummaryLabel);
 
   return { reportSummaryLabel: reportSummaryLabelWrapper };
