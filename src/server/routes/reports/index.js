@@ -12,6 +12,7 @@ import getReportPageController from "./controllers/getReportPage.js";
 import skuPhotoUploadController from "./controllers/skuPhotoUpload.js";
 import setCostPriceToSkuController from "./controllers/setCostPriceToSku.js";
 import checkReportExistsController from "./controllers/checkReportExists.js";
+import setExtraAmountsToReport from "./controllers/setExtraAmountsToReport.js";
 import reportLoadDelegateController from "./controllers/reportLoadDelegate.js";
 import checkReportPeriodsController from "./controllers/checkReportPeriods.js";
 import saveReportFromFileController from "./controllers/saveReportFromFile.js";
@@ -130,5 +131,7 @@ router.delete(
   joiSchemaValidator(joiSchemas.deleteImageSchema),
   deleteImageController,
 );
+
+router.post("/extra-amounts", joiSchemaValidator(joiSchemas.setExtraAmountsToReportSchema), setExtraAmountsToReport);
 
 router.get("/fields-descrition/", getReportFieldsDescriptionPageController);

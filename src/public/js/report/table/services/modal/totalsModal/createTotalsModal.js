@@ -70,7 +70,7 @@ var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
 
     displayElement.textContent = input.value;
 
-    var url = "/report/" + dataToUpdation.data.key;
+    var url = "/report/extra-amounts";
 
     return;
     var res = await fetch(url, {

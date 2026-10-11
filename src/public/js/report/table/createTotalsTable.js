@@ -22,7 +22,13 @@ var createTotalsTable = (
     var value = (+reportTotals[key]).toFixed(2);
 
     if (fieldsWithModal.includes(key)) {
-      var data = { userId, reportId, year, data: { key, value: 0 } };
+      var data = {
+        year,
+        userId,
+        reportId,
+        isCrossYearPeriod,
+        data: { key, value: 0 },
+      };
       var modal = openTotalsModal(data);
 
       var tdElement = createTdElement(modal);

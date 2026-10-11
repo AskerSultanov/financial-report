@@ -9,6 +9,7 @@ import downloadReportAsXLSXSchema from "./downloadReportAsXLSX.js";
 import downloadReportsAsZipSchema from "./downloadReportsAsZip.js";
 import getreportLoadingStatechema from "./getReportLoadingState.js";
 import setOtherExpensesToSkuSchema from "./setOtherExpensesToSku.js";
+import setExtraAmountsToReportSchema from "./setExtraAmountsToReport.js";
 import resumeAbandonedReportsLoadingSchema from "./resumeAbandonedReportsLoading.js";
 import changeFinancialAccountingStatusSchema from "./changeFinancialAccountingStatus.js";
 
@@ -24,6 +25,7 @@ export {
   downloadReportAsXLSXSchema,
   getreportLoadingStatechema,
   setOtherExpensesToSkuSchema,
+  setExtraAmountsToReportSchema,
   resumeAbandonedReportsLoadingSchema,
   changeFinancialAccountingStatusSchema,
 };
