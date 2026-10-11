@@ -1,26 +1,26 @@
-import taxAmountModal from "./createTotalsModal.js";
+import createTotalsModal from "./createTotalsModal.js";
 import createButton from "../utils/createButton.js";
 
 var openTotalsModal = (data, isGuestAccess = false) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
-  var taxAmountDisplayElement = document.createElement("span");
-  taxAmountDisplayElement.className = "editable-field-value";
-  taxAmountDisplayElement.textContent = data.data.value;
-  taxAmountDisplayElement.id = `${data.data.key}-${data.year}`;
+  var displayElement = document.createElement("span");
+  displayElement.className = "editable-field-value";
+  displayElement.textContent = data.data.value;
+  displayElement.id = `${data.data.key}-${data.year}`;
 
   var event = "click";
   var cb = () => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
-      taxAmountModal(data, taxAmountDisplayElement, isGuestAccess);
+      createTotalsModal(data, displayElement, isGuestAccess);
     }
   };
 
   var buttonTextContent = "Изменить";
-  var openTaxAmountModalButton = createButton(
+  var openTotalsModalButton = createButton(
     "editable-field-button",
     buttonTextContent,
     {
@@ -29,7 +29,7 @@ var openTotalsModal = (data, isGuestAccess = false) => {
     },
   );
 
-  container.append(taxAmountDisplayElement, openTaxAmountModalButton);
+  container.append(displayElement, openTotalsModalButton);
   return container;
 };
 
