@@ -81,6 +81,10 @@ var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess) => {
       updateReportFromLocalStorage(data);
     }
   }
+
+  costPriceInput.addEventListener("input", function () {
+    this.value = this.value.replace(/,/gi, ".");
+  });
 };
 
 export default costPriceModal;

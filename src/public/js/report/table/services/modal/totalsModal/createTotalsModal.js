@@ -9,8 +9,10 @@ import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js"
 
 var event = "click";
 
+var hasComma = (val) => val?.split("").includes(",");
+
 var titlesMap = {
-  taxAmount: "Добавить налоги к отчету",
+  tax: "Добавить налоги к отчету",
   insuranceFee: "Добавить страховые взносы к отчету",
   additionalInsuranceFee: "Добавить доп. страховые взносы к отчету",
 };
@@ -21,7 +23,7 @@ var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
 
   var modalContent = createDiv("modal-content");
 
-  var titleContent = titlesMap[dataToUpdation.data.key];
+  var titleContent = titlesMap[dataToUpdation.updateField.key];
   var title = createTitle("modal-title", titleContent);
 
   var input = createInput("modal-input", displayElement);
@@ -66,14 +68,12 @@ var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
   async function saveButtonHandler() {
     document.body.removeChild(modal);
 
-    dataToUpdation.data.value = +input.value;
+    var value = +input.value;
 
+    dataToUpdation.updateField.value = value;
     displayElement.textContent = input.value;
 
-    var url = "/report/extra-amounts";
-
-    return;
-    var res = await fetch(url, {
+    var res = await fetch("/report/extra-amounts", {
       method: "POST",
       body: JSON.stringify(dataToUpdation),
       headers: { "Content-Type": "application/json" },
@@ -86,27 +86,28 @@ var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
       return;
     }
 
-    if (json?.infoText) {
-      alert(json.infoText);
-      return;
-    }
+    var { skusDataToClient, years, isCrossYearPeriod } = json.data;
 
-    var { sku, years, isCrossYearPeriod } = json.data;
-    var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
+    skusDataToClient.forEach((sku) => {
+      var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
-    updateSkusTableFields(sku);
-
-    updateTotalsTableFields(
-      sku.data,
-      years,
-      prevSkuFieldsValue,
-      isCrossYearPeriod,
-    );
+      updateSkusTableFields(sku, years);
+      updateTotalsTableFields(
+        sku.data,
+        years,
+        prevSkuFieldsValue,
+        isCrossYearPeriod,
+      );
+    });
 
     if (isGuestAccess) {
       updateReportFromLocalStorage(json.data);
     }
   }
+
+  input.addEventListener("input", function () {
+    this.value = this.value.replace(/,/gi, ".");
+  });
 };
 
 export default createTotalsModal;

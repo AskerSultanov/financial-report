@@ -1,13 +1,15 @@
-import { dbClient } from "../../../database/index.js";
-import dbUtils from "../../../database/modelsUtil/index.js";
-
-var { getReportById, saveUpdatedReport } = dbUtils.reportModelUtils;
+import setExtraAmountsToReportService from "../services/setExtraAmountsToReport.js";
 
 var setExtraAmountsToReport = async (req, res, next) => {
-  var { userId, reportId, year, isCrossYearPeriod, data } = req.body;
+  var { data, reportNotFound } = await setExtraAmountsToReportService(req.body);
 
-  switch (data.key) {
+  var errorText = "";
+
+  if (reportNotFound) {
+    errorText = "Отчет не найден";
   }
+
+  return res.json({ data, errorText });
 };
 
 export default setExtraAmountsToReport;

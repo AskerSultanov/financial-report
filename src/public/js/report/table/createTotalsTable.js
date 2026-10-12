@@ -1,11 +1,12 @@
 import createTdElement from "./services/createTdElement.js";
 import openTotalsModal from "./services/modal/totalsModal/openTotalsModal.js";
 
-var fieldsWithModal = ["taxAmount", "insuranceFee", "additionalInsuranceFee"];
+var fieldsWithModal = ["tax", "insuranceFee", "additionalInsuranceFee"];
 
 var createTotalsTable = (
   userId,
   reportId,
+  recordedTo,
   reportTotals,
   year,
   isCrossYearPeriod,
@@ -22,13 +23,15 @@ var createTotalsTable = (
     var value = (+reportTotals[key]).toFixed(2);
 
     if (fieldsWithModal.includes(key)) {
+      var yearToClient = isCrossYearPeriod ? year : recordedTo.year;
+
       var data = {
-        year,
         userId,
         reportId,
-        isCrossYearPeriod,
-        data: { key, value: 0 },
+        year: yearToClient,
+        updateField: { key, value },
       };
+
       var modal = openTotalsModal(data);
 
       var tdElement = createTdElement(modal);

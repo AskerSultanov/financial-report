@@ -7,8 +7,8 @@ var openTotalsModal = (data, isGuestAccess = false) => {
 
   var displayElement = document.createElement("span");
   displayElement.className = "editable-field-value";
-  displayElement.textContent = data.data.value;
-  displayElement.id = `${data.data.key}-${data.year}`;
+  displayElement.textContent = data.updateField.value;
+  displayElement.id = `${data.updateField.key}-${data.year}`;
 
   var event = "click";
   var cb = () => {

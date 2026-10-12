@@ -8,7 +8,7 @@ var getTaxParamsFromDb = async (userId, year, session) => {
   var data = await taxParamModel.findOne({ userId }, null, { ...sessionOptions });
 
   if (year) {
-    return data.toObject().years.find((date) => date.year == year);
+    return data.years.find((date) => date.year == year).toObject();
   }
 
   return data.toObject().years;

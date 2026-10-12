@@ -1,17 +1,35 @@
 import calcProfitMargin from "../calcProfitMargin.js";
 
-var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue, isCrossYearPeriod) => {
-  var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
+var updateTotalsTableFields = (
+  updatedSkuData,
+  years,
+  prevSkuFieldsValue,
+  isCrossYearPeriod,
+) => {
+  var skuKeys = Object.keys(updatedSkuData).filter(
+    (key) =>
+      key !== "profitMargin" &&
+      key !== "tax" &&
+      key !== "insuranceFee" &&
+      key !== "additionalInsuranceFee",
+  );
 
   for (var skuKey of skuKeys) {
     var totalFieldId = skuKey + "-";
 
     var totalField = document.getElementById(totalFieldId);
 
-    if (totalField && typeof prevSkuFieldsValue[skuKey] === "number" && !isNaN(prevSkuFieldsValue[skuKey])) {
+    if (
+      totalField &&
+      typeof prevSkuFieldsValue[skuKey] === "number" &&
+      !isNaN(prevSkuFieldsValue[skuKey])
+    ) {
       var prevTotalFieldValue = +totalField.textContent;
 
-      var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
+      var newTotalFieldValue =
+        prevTotalFieldValue -
+        prevSkuFieldsValue[skuKey] +
+        updatedSkuData[skuKey];
 
       totalField.textContent = newTotalFieldValue.toFixed(2);
 
@@ -29,7 +47,10 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue, isCros
   var finalProfitElemValue = +finalProfitElem.textContent;
   var retailAmountElemValue = +retailAmountElem.textContent;
 
-  var profitMargin = calcProfitMargin(finalProfitElemValue, retailAmountElemValue);
+  var profitMargin = calcProfitMargin(
+    finalProfitElemValue,
+    retailAmountElemValue,
+  );
 
   var profitMarginElem = document.getElementById("profitMargin-");
   profitMarginElem.textContent = profitMargin;
@@ -42,17 +63,26 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue, isCros
 
   if (isCrossYearPeriod) {
     for (var year of years) {
-      var skuKeys = Object.keys(updatedSkuData).filter((key) => key !== "profitMargin");
+      var skuKeys = Object.keys(updatedSkuData).filter(
+        (key) => key !== "profitMargin",
+      );
 
       for (var skuKey of skuKeys) {
         var totalFieldId = skuKey + "-" + year;
 
         var totalField = document.getElementById(totalFieldId);
 
-        if (totalField && typeof prevSkuFieldsValue[skuKey] === "number" && !isNaN(prevSkuFieldsValue[skuKey])) {
+        if (
+          totalField &&
+          typeof prevSkuFieldsValue[skuKey] === "number" &&
+          !isNaN(prevSkuFieldsValue[skuKey])
+        ) {
           var prevTotalFieldValue = +totalField.textContent;
 
-          var newTotalFieldValue = prevTotalFieldValue - prevSkuFieldsValue[skuKey] + updatedSkuData[skuKey];
+          var newTotalFieldValue =
+            prevTotalFieldValue -
+            prevSkuFieldsValue[skuKey] +
+            updatedSkuData[skuKey];
 
           totalField.textContent = newTotalFieldValue.toFixed(2);
 
@@ -70,7 +100,10 @@ var updateTotalsTableFields = (updatedSkuData, years, prevSkuFieldsValue, isCros
       var finalProfitElemValue = +finalProfitElem.textContent;
       var retailAmountElemValue = +retailAmountElem.textContent;
 
-      var profitMargin = calcProfitMargin(finalProfitElemValue, retailAmountElemValue);
+      var profitMargin = calcProfitMargin(
+        finalProfitElemValue,
+        retailAmountElemValue,
+      );
 
       var profitMarginElem = document.getElementById("profitMargin-" + year);
       profitMarginElem.textContent = profitMargin;

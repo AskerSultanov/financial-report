@@ -41,15 +41,8 @@ var getReportData = async () => {
 
 var main = async () => {
   var { report, signedUrls, skusWithLastCostPrices } = await getReportData();
-  var {
-    reportId,
-    dateFrom,
-    dateTo,
-    recordedTo,
-    skus,
-    isCrossYearPeriod,
-    taxRate,
-  } = report;
+  var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } =
+    report;
   var { year } = recordedTo;
 
   var startYear = +dateFrom.split("-")[0];
@@ -70,6 +63,7 @@ var main = async () => {
     createTotalsTable(
       userId,
       reportId,
+      recordedTo,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
@@ -88,6 +82,7 @@ var main = async () => {
     createTotalsTable(
       userId,
       reportId,
+      recordedTo,
       startYearReportTotals,
       startYear,
       isCrossYearPeriod,
@@ -107,6 +102,7 @@ var main = async () => {
     createTotalsTable(
       userId,
       reportId,
+      recordedTo,
       endYearReportTotals,
       endYear,
       isCrossYearPeriod,
@@ -118,6 +114,7 @@ var main = async () => {
     createTotalsTable(
       userId,
       reportId,
+      recordedTo,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,

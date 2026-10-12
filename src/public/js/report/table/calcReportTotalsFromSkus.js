@@ -13,7 +13,7 @@ var calcReportTotalsFromSkus = (skus) => {
   var deductionOrPayment = skus.reduce((acc, sku) => acc + sku.deductionOrPayment, 0);
   var storageCost = skus.reduce((acc, sku) => acc + sku.storageCost, 0);
   var advertisingCosts = skus.reduce((acc, sku) => acc + sku.averageAdvertisingCost, 0);
-  var taxAmount = skus.reduce((acc, sku) => acc + sku.tax, 0);
+  var tax = skus.reduce((acc, sku) => acc + sku.tax, 0);
   var insuranceFee = skus.reduce((acc, sku) => acc + sku.insuranceFee, 0);
   var additionalInsuranceFee = skus.reduce((acc, sku) => acc + sku.additionalInsuranceFee, 0);
   var finalProfit = skus.reduce((acc, sku) => acc + sku.finalProfit, 0);
@@ -36,7 +36,7 @@ var calcReportTotalsFromSkus = (skus) => {
     deductionOrPayment,
     storageCost,
     advertisingCosts,
-    taxAmount,
+    tax,
     insuranceFee,
     additionalInsuranceFee,
     profitMargin,

@@ -90,6 +90,10 @@ var otherExpensesModal = (
       document.body.removeChild(modal);
     }
   });
+
+  otherExpensesInput.addEventListener("input", function () {
+    this.value = this.value.replace(/,/gi, ".");
+  });
 };
 
 export default otherExpensesModal;
