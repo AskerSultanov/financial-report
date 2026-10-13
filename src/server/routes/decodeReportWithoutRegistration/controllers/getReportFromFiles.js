@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import processReportSkus from "../../reports/services/utils/reportParsing/index.js";
 import removeDublicateFiles from "../../reports/services/utils/reportsFileParser/removeDublicateFiles.js";
+import getReportTargetYearAndMonth from "../../reports/services/utils/different/getReportTargetYearAndMonth.js";
 import extractWorkSheetFromFile from "../../reports/services/utils/reportsFileParser/extractWorkSheetFromFile.js";
 import extractReportsFileBufferFromZip from "../../reports/services/utils/reportsFileParser/extractReportsFileBufferFromZip.js";
 import extractReportDataFromWorkSheets from "../../reports/services/utils/reportsFileParser/extractReportDataFromWorkSheets.js";
@@ -25,6 +26,21 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
+var monthList = [
+  "январь",
+  "февраль",
+  "марта",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
+
 var getReportFromFilesController = async (req, res) => {
   var { deduplicatedFiles } = removeDublicateFiles(req.files);
 
@@ -44,6 +60,11 @@ var getReportFromFilesController = async (req, res) => {
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
+
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(
+    dateFrom,
+    dateTo,
+  );
 
   var { reports, reportPeriodIsEmpty } =
     await extractReportDataFromWorkSheets(onePeriodReports);
@@ -68,10 +89,11 @@ var getReportFromFilesController = async (req, res) => {
   report.dateTo = dateTo;
   report.skus = reportSkus;
   report.dateFrom = dateFrom;
+  report.userId = randomUUID();
   report.taxRate = taxParamsStub.taxRate;
   report.isCrossYearPeriod = isCrossYearPeriod;
-  report.userId = randomUUID();
   report.reportId = reports.weeklyFinancialReport[0].reportId;
+  report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
 
   return res.json({ report, reportPeriodIsEmpty });
 };

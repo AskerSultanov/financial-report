@@ -1,18 +1,16 @@
 var updateSkusTableFields = (sku) => {
-  var { skuName, data, year } = sku;
+  var { data, year, skuName } = sku;
 
   for (var key in data) {
-    var elemId = key + "-" + skuName + "-" + year;
-    var skuField = document.getElementById(elemId);
+    var skuFieldId = key + "-" + skuName + "-" + year;
+    var skuField = document.getElementById(skuFieldId);
 
     if (skuField) {
-      skuField.textContent = data[key].toFixed(2);
+      var val = +data[key].toFixed(2);
+      var newColor = val < 0 ? "red" : "#04ff00";
 
-      if (data[key] < 0) {
-        skuField.style.color = "red";
-      } else {
-        skuField.style.color = "#04ff00";
-      }
+      skuField.textContent = val;
+      skuField.style.color = newColor;
     }
   }
 };

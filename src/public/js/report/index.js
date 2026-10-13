@@ -1,4 +1,5 @@
 import reportInfo from "./reportInfo.js";
+import getReportData from "./getReportData.js";
 import createSkusTable from "./table/createSkusTable.js";
 import deleteReportHandler from "./deleteReportHandler.js";
 import createTotalsTable from "./table/createTotalsTable.js";
@@ -23,26 +24,12 @@ var reportId = pathParts.at(-1);
 var url = "/report/" + userId + "/" + reportId;
 var urlToDownloadReportAsXLSX = "/report/xlsx/";
 
-var getReportData = async () => {
-  var res = await fetch(url);
-
-  if (res.status === 404) {
-    alert("Отчет не найден");
-    window.location.href = "/";
-  } else if (!res.ok) {
-    alert("Ошибка при получении отчета");
-    window.location.href = "/";
-  }
-
-  var data = await res.json();
-
-  return data;
-};
-
 var main = async () => {
-  var { report, signedUrls, skusWithLastCostPrices } = await getReportData();
+  var { report, signedUrls, skusWithLastCostPrices } = await getReportData(url);
+
   var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } =
     report;
+
   var { year } = recordedTo;
 
   var startYear = +dateFrom.split("-")[0];
@@ -67,6 +54,7 @@ var main = async () => {
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
+      false,
       fullReportPeriodText,
     );
 
@@ -86,6 +74,7 @@ var main = async () => {
       startYearReportTotals,
       startYear,
       isCrossYearPeriod,
+      true,
       startReportPeriodText,
     );
 
@@ -105,6 +94,7 @@ var main = async () => {
       recordedTo,
       endYearReportTotals,
       endYear,
+      true,
       isCrossYearPeriod,
       endReportPeriodText,
     );
@@ -118,6 +108,7 @@ var main = async () => {
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
+      true,
       reportSummaryLabelTextStub,
     );
     createSkusTable(userId, reportId, year, skus);

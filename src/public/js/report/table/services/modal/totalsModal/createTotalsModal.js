@@ -4,12 +4,17 @@ import createInput from "../utils/createInput.js";
 import createButton from "../utils/createButton.js";
 import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
-import updateTotalsTableFields from "../../updateTotalsTableFields.js";
+import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
+import replaceCommaToDotCallback from "../../replaceCommaToDotCallback.js";
 import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
+import getChildTablePrevFieldsValue from "../../getChildTablePrevFieldsValue.js";
+import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
+import updateParentTableExtraAmountField from "../../updateParentTableExtraAmountField.js";
 
 var event = "click";
-
-var hasComma = (val) => val?.split("").includes(",");
+var saveButtonText = "Сохранить";
+var cancelButtonText = "Отмена";
+var url = "/report/extra-amounts";
 
 var titlesMap = {
   tax: "Добавить налоги к отчету",
@@ -17,96 +22,104 @@ var titlesMap = {
   additionalInsuranceFee: "Добавить доп. страховые взносы к отчету",
 };
 
-var createTotalsModal = (dataToUpdation, displayElement, isGuestAccess) => {
+var createTotalsModal = (dataToUpdate, displayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 
   var modalContent = createDiv("modal-content");
 
-  var titleContent = titlesMap[dataToUpdation.updateField.key];
+  var titleContent = titlesMap[dataToUpdate.updateField.key];
   var title = createTitle("modal-title", titleContent);
 
   var input = createInput("modal-input", displayElement);
 
   var buttonsContainer = createDiv("modal-buttons");
 
-  var saveButtonTextContent = "Сохранить";
+  var saveButtonClass = "modal-button modal-button-save";
+  var saveButton = createButton(saveButtonClass, saveButtonText, {
+    event,
+    cb: saveButtonHandler,
+  });
 
-  var saveButton = createButton(
-    "modal-button modal-button-save",
-    saveButtonTextContent,
-    {
-      event,
-      cb: saveButtonHandler,
-    },
-  );
-
-  var cancelButtonTextContent = "Отмена";
-  var cancelCb = () => document.body.removeChild(modal);
-  var cancelButton = createButton(
-    "modal-button modal-button-cancel",
-    cancelButtonTextContent,
-    {
-      event,
-      cb: cancelCb,
-    },
-  );
+  var cancelCb = () => modal.remove();
+  var cancelButtonClass = "modal-button modal-button-cancel";
+  var cancelButton = createButton(cancelButtonClass, cancelButtonText, {
+    event,
+    cb: cancelCb,
+  });
 
   buttonsContainer.append(cancelButton, saveButton);
+
   modalContent.append(title, input, buttonsContainer);
+
   modal.append(modalContent);
+
   document.body.append(modal);
 
   input.focus();
 
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      document.body.removeChild(modal);
-    }
-  });
-
   async function saveButtonHandler() {
-    document.body.removeChild(modal);
+    modal.remove();
 
     var value = +input.value;
 
-    dataToUpdation.updateField.value = value;
+    dataToUpdate.updateField.value = value;
     displayElement.textContent = input.value;
 
-    var res = await fetch("/report/extra-amounts", {
+    var url = "/" + window.location.pathname.split("/")[1] + "/extra-amounts";
+
+    var res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(dataToUpdation),
+      body: JSON.stringify(dataToUpdate),
       headers: { "Content-Type": "application/json" },
     });
 
-    var json = await res.json();
+    var updatedData = await res.json();
 
-    if (json?.errorText) {
-      alert(json.errorText);
+    if (updatedData?.errorText) {
+      alert(updatedData.errorText);
       return;
     }
 
-    var { skusDataToClient, years, isCrossYearPeriod } = json.data;
+    var { years, skusDataToClient, requiredYear, isCrossYearPeriod } =
+      updatedData.data;
 
     skusDataToClient.forEach((sku) => {
       var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
-      updateSkusTableFields(sku, years);
-      updateTotalsTableFields(
-        sku.data,
-        years,
-        prevSkuFieldsValue,
-        isCrossYearPeriod,
-      );
+      updateSkusTableFields(sku);
+
+      if (isCrossYearPeriod) {
+        var { childTablePrevData } = getChildTablePrevFieldsValue(sku.year);
+
+        updateTotalsTableFields(
+          sku.year,
+          sku.data,
+          prevSkuFieldsValue,
+          isCrossYearPeriod,
+        );
+
+        updateParentTotalsTableFields(requiredYear, childTablePrevData);
+        updateParentTableExtraAmountField(years, dataToUpdate.updateField.key);
+      } else {
+        updateTotalsTableFields(
+          sku.year,
+          sku.data,
+          prevSkuFieldsValue,
+          isCrossYearPeriod,
+        );
+      }
     });
 
     if (isGuestAccess) {
-      updateReportFromLocalStorage(json.data);
+      updateReportFromLocalStorage(updatedData.data);
     }
   }
 
-  input.addEventListener("input", function () {
-    this.value = this.value.replace(/,/gi, ".");
+  input.addEventListener("input", replaceCommaToDotCallback);
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.remove();
   });
 };
 

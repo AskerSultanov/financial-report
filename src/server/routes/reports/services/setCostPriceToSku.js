@@ -1,4 +1,4 @@
-import calc from "./utils/calcServices/index.js";
+import calc from "./utils/calcUtils/index.js";
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
@@ -16,7 +16,7 @@ var setCostPriceToSkuService = async (data) => {
 
   return await session.withTransaction(async () => {
     var { report } = await getSkuFromReport(userId, reportId, skuName, session);
-    
+
     if (!report) {
       return {
         reportNotFound: true,
@@ -53,7 +53,7 @@ var setCostPriceToSkuService = async (data) => {
       taxParams,
     );
 
-    var updatedSkus = [{ skuName, data: updatedSkuFields }];
+    var updatedSkus = [{ skuName, year: sku.year, data: updatedSkuFields }];
 
     var { updatedTaxParamsField } = recalculateTaxParams(
       updatedTaxParamsFieldsBySku,
@@ -72,21 +72,20 @@ var setCostPriceToSkuService = async (data) => {
       session,
     );
 
-    var years = [];
+    var requiredYear;
     var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
 
     if (report.isCrossYearPeriod) {
       var startYear = +report.dateFrom.split("-")[0];
       var endYear = +report.dateTo.split("-")[0];
-      var requiredYear = year === startYear ? startYear : endYear;
-      years = [requiredYear];
+      requiredYear = year === startYear ? startYear : endYear;
     }
 
     return {
       costPriceIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {
-        years,
+        requiredYear,
         sku: { year, skuName, data: skuDataToClient },
         isCrossYearPeriod: report.isCrossYearPeriod,
       },

@@ -1,5 +1,4 @@
 import showReport from "./showReport.js";
-import checkTaxRate from "./checkTaxRate.js";
 import sendReportData from "./sendReportData.js";
 import uploadFilesButtonHandler from "./uploadFilesButtonHandler.js";
 import writeReportToLocalStorage from "./writeReportToLocalStorage.js";
@@ -25,11 +24,9 @@ var main = async () => {
         var token = document.getElementById("token").value;
         var dateFrom = document.getElementById("dateFrom").value;
         var dateTo = document.getElementById("dateTo").value;
-        var taxRate = +document.getElementById("tax-rate").value || 0;
 
         var { validDateFrom } = checkDateFrom(dateFrom);
         var { validDateTo } = checkDateTo(dateTo, validDateFrom);
-        var { taxRate } = checkTaxRate(taxRate);
 
         document.getElementById("dialog").close();
 
@@ -39,7 +36,6 @@ var main = async () => {
           validDateFrom,
           validDateTo,
           token,
-          taxRate,
         );
 
         await hideSpinner();

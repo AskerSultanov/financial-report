@@ -1,4 +1,4 @@
-import calc from "../calcServices/index.js";
+import calc from "../calcUtils/index.js";
 
 var tax = 0;
 var costPrice = 0;
@@ -12,7 +12,14 @@ var isCostPriceSet = false;
 var additionalInsuranceFee = 0;
 var isInsuranceFeeIncluded = false;
 
-var parseSku = async (skuName, skuQty, skuFilteredReport, storageCost, taxRate, totals) => {
+var parseSku = async (
+  skuName,
+  skuQty,
+  skuFilteredReport,
+  storageCost,
+  taxRate,
+  totals,
+) => {
   var { totalSold, totalStorageCost, totalAdvertisingCosts } = totals;
 
   if (!skuFilteredReport.length) {
@@ -37,19 +44,45 @@ var parseSku = async (skuName, skuQty, skuFilteredReport, storageCost, taxRate, 
 
   var returnAmount = calc.returnAmount(skuFilteredReport);
 
-  var deliveryCost = calc.sum(skuFilteredReport, "deliveryService", "truncate-on");
+  var deliveryCost = calc.sum(
+    skuFilteredReport,
+    "deliveryService",
+    "truncate-on",
+  );
 
-  var deductionOrPayment = calc.sum(skuFilteredReport, "deduction", "truncate-on");
+  var deductionOrPayment = calc.sum(
+    skuFilteredReport,
+    "deduction",
+    "truncate-on",
+  );
 
-  var additionalPayment = calc.sum(skuFilteredReport, "additionalPayment", "truncate-on");
+  var additionalPayment = calc.sum(
+    skuFilteredReport,
+    "additionalPayment",
+    "truncate-on",
+  );
 
   var sellerPayoutAmount = calc.sellerPayoutAmount(skuFilteredReport);
 
-  var averageStorageCost = calc.averageStorageCost(totalStorageCost, totalSold, qty);
+  var averageStorageCost = calc.averageStorageCost(
+    totalStorageCost,
+    totalSold,
+    qty,
+  );
 
-  var averageAdvertisingCost = calc.averageAdvertisingCost(skuQty, totalAdvertisingCosts);
+  var averageAdvertisingCost = calc.averageAdvertisingCost(
+    skuQty,
+    totalAdvertisingCosts,
+  );
 
-  var profit = sellerPayoutAmount - fines - acceptance - additionalPayment - averageAdvertisingCost - storageCost - deliveryCost;
+  var profit =
+    sellerPayoutAmount -
+    fines -
+    acceptance -
+    additionalPayment -
+    averageAdvertisingCost -
+    storageCost -
+    deliveryCost;
 
   var sku = {
     id,

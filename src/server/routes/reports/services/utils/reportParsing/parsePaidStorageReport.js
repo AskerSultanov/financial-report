@@ -1,4 +1,4 @@
-import calc from "../calcServices/index.js";
+import calc from "../calcUtils/index.js";
 
 import getSkuNamesFromPaidStorageReport from "./getSkuNamesFromPaidStorageReport.js";
 
@@ -9,10 +9,14 @@ var parsePaidStorageReport = (paidStorageReport) => {
     return { parsedPaidStorageReport };
   }
 
-  var { skuNamesFromPaidStorageReport } = getSkuNamesFromPaidStorageReport(paidStorageReport);
+  var { skuNamesFromPaidStorageReport } =
+    getSkuNamesFromPaidStorageReport(paidStorageReport);
 
   for (var name of skuNamesFromPaidStorageReport) {
-    var { skuStorageCost } = calc.sku.storageCostFromPaidStorageReport(paidStorageReport, name);
+    var { skuStorageCost } = calc.sku.storageCostFromPaidStorageReport(
+      paidStorageReport,
+      name,
+    );
 
     parsedPaidStorageReport.push({ name, skuStorageCost });
   }

@@ -14,7 +14,7 @@ var cancelButtonTextContent = "Отмена";
 var saveButtonTextContent = "Установить";
 var titleContent = `Последние себестоимости для:`;
 
-var skusLastCostPriceModal = (years, skusLastCostPrice) => {
+var skusLastCostPriceModal = (requiredYear, skusLastCostPrice) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
   var modalContent = createDiv("modal-content");
@@ -37,7 +37,7 @@ var skusLastCostPriceModal = (years, skusLastCostPrice) => {
 
   var skusCostPriceContainer = createSkusCostPriceContainer(
     skusLastCostPrice,
-    years,
+    requiredYear,
   );
 
   buttonsContainer.append(cancelButton, saveButton);
@@ -62,18 +62,16 @@ var skusLastCostPriceModal = (years, skusLastCostPrice) => {
       return;
     }
 
-    var { skusDataToClient, years, isCrossYearPeriod } = await sendCostPrices(
-      selectedYear,
-      skusLastCostPrice,
-    );
+    var { skusDataToClient, requiredYear, isCrossYearPeriod } =
+      await sendCostPrices(selectedYear, skusLastCostPrice);
 
     skusDataToClient.forEach((sku) => {
       var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
-      updateSkusTableFields(sku, years);
+      updateSkusTableFields(sku, requiredYear);
       updateTotalsTableFields(
         sku.data,
-        years,
+        requiredYear,
         prevSkuFieldsValue,
         isCrossYearPeriod,
       );

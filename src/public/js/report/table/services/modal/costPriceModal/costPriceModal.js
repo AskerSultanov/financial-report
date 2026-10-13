@@ -5,86 +5,103 @@ import createButton from "../utils/createButton.js";
 import sendChangedData from "../../sendChangedData.js";
 import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
-import updateTotalsTableFields from "../../updateTotalsTableFields.js";
+import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
+import replaceCommaToDotCallback from "../../replaceCommaToDotCallback.js";
+import getChildTablePrevFieldsValue from "../../getChildTablePrevFieldsValue.js";
 import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
+import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
 
 var event = "click";
 
-var costPriceModal = (skuData, costPriceDisplayElement, isGuestAccess) => {
+var saveButtonTextContent = "Сохранить";
+var saveButtonClass = "modal-button modal-button-save";
+
+var cancelButtonText = "Отмена";
+var cancelButtonClass = "modal-button modal-button-cancel";
+
+var costPriceModal = (dataToUpdate, displayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 
   var modalContent = createDiv("modal-content");
 
-  var titleContent = `Изменить себестоимость для "${skuData.skuName}"`;
+  var titleContent = `Изменить себестоимость для "${dataToUpdate.skuName}"`;
   var title = createTitle("modal-title", titleContent);
 
-  var costPriceInput = createInput("modal-input", costPriceDisplayElement);
+  var input = createInput("modal-input", displayElement);
 
   var buttonsContainer = createDiv("modal-buttons");
 
-  var saveButtonTextContent = "Сохранить";
+  var saveButton = createButton(saveButtonClass, saveButtonTextContent, {
+    event,
+    cb: saveButtonHandler,
+  });
 
-  var saveButton = createButton(
-    "modal-button modal-button-save",
-    saveButtonTextContent,
-    { event, cb: saveButtonHandler },
-  );
-
-  var cancelButtonTextContent = "Отмена";
-  var cancelCb = () => document.body.removeChild(modal);
-  var cancelButton = createButton(
-    "modal-button modal-button-cancel",
-    cancelButtonTextContent,
-    { event, cb: cancelCb },
-  );
+  var cancelCb = () => modal.remove();
+  var cancelButton = createButton(cancelButtonClass, cancelButtonText, {
+    event,
+    cb: cancelCb,
+  });
 
   buttonsContainer.append(cancelButton, saveButton);
-  modalContent.append(title, costPriceInput, buttonsContainer);
+  modalContent.append(title, input, buttonsContainer);
   modal.append(modalContent);
   document.body.append(modal);
 
-  costPriceInput.focus();
+  input.focus();
 
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      document.body.removeChild(modal);
-    }
+    if (e.target === modal) modal.remove();
   });
 
   async function saveButtonHandler() {
-    document.body.removeChild(modal);
+    modal.remove();
 
-    skuData.costPrice = +costPriceInput.value;
+    dataToUpdate.costPrice = +input.value;
 
-    var data = await sendChangedData(skuData, isGuestAccess, "setcostprice");
+    var updatedData = await sendChangedData(
+      dataToUpdate,
+      isGuestAccess,
+      "setcostprice",
+    );
 
-    if (!data) {
+    if (!updatedData) {
       return;
     }
 
-    costPriceDisplayElement.textContent = costPriceInput.value;
+    displayElement.textContent = input.value;
 
-    var { sku, years, isCrossYearPeriod } = data;
+    var { sku, requiredYear, isCrossYearPeriod } = updatedData;
     var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
     updateSkusTableFields(sku);
 
-    updateTotalsTableFields(
-      sku.data,
-      years,
-      prevSkuFieldsValue,
-      isCrossYearPeriod,
-    );
+    if (isCrossYearPeriod) {
+      var { childTablePrevData } = getChildTablePrevFieldsValue(sku.year);
+
+      updateTotalsTableFields(
+        sku.year,
+        sku.data,
+        prevSkuFieldsValue,
+        isCrossYearPeriod,
+      );
+
+      updateParentTotalsTableFields(requiredYear, childTablePrevData);
+    } else {
+      updateTotalsTableFields(
+        sku.year,
+        sku.data,
+        prevSkuFieldsValue,
+        isCrossYearPeriod,
+      );
+    }
 
     if (isGuestAccess) {
-      updateReportFromLocalStorage(data);
+      updateReportFromLocalStorage(updatedData);
     }
   }
 
-  costPriceInput.addEventListener("input", function () {
-    this.value = this.value.replace(/,/gi, ".");
-  });
+  input.addEventListener("input", replaceCommaToDotCallback);
 };
 
 export default costPriceModal;

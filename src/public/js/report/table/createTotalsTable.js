@@ -10,6 +10,7 @@ var createTotalsTable = (
   reportTotals,
   year,
   isCrossYearPeriod,
+  tableNeedModal,
   reportSummaryLabelText,
 ) => {
   var tableRow = document.createElement("tr");
@@ -18,11 +19,14 @@ var createTotalsTable = (
   tableRow.append(yearTd);
 
   for (var key in reportTotals) {
-    var elemId = year ? key + "-" + year : key + "-";
+    var keyWithoutYear = key + "-";
+    var keyWithYear = key + "-" + year;
+
+    var elemId = isCrossYearPeriod ? keyWithYear : keyWithoutYear;
 
     var value = (+reportTotals[key]).toFixed(2);
 
-    if (fieldsWithModal.includes(key)) {
+    if (fieldsWithModal.includes(key) && tableNeedModal) {
       var yearToClient = isCrossYearPeriod ? year : recordedTo.year;
 
       var data = {

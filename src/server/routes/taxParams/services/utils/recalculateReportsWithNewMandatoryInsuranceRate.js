@@ -1,4 +1,4 @@
-import calc from "../../../reports/services/utils/calcServices/index.js";
+import calc from "../../../reports/services/utils/calcUtils/index.js";
 import truncateNum from "../../../reports/services/utils/reportParsing/truncateNum.js";
 
 var recalculateReportsWithNewMandatoryInsuranceRate = (

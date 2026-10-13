@@ -1,8 +1,13 @@
 import createTdElement from "../report/table/services/createTdElement.js";
 
-var nonUsedFields = ["insuranceFee", "additionalInsuranceFee"];
+var nonUsedFields = ["tax", "insuranceFee", "additionalInsuranceFee"];
 
-var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText) => {
+var createTotalsTable = (
+  report,
+  year,
+  isCrossYearPeriod,
+  reportSummaryLabelText,
+) => {
   var tableRow = document.createElement("tr");
 
   var yearTd = createTdElement(year);
@@ -33,7 +38,9 @@ var createTotalsTable = (report, year, isCrossYearPeriod, reportSummaryLabelText
   var tablesContainer = document.getElementById("tables-container");
 
   if (isCrossYearPeriod) {
-    var { reportSummaryLabel } = createReportSummaryLabel(reportSummaryLabelText);
+    var { reportSummaryLabel } = createReportSummaryLabel(
+      reportSummaryLabelText,
+    );
     tablesContainer.append(reportSummaryLabel, table);
   } else {
     tablesContainer.append(table);
@@ -55,7 +62,6 @@ var tableHeadContent = `
             <th>Удержания/Выплаты</th>
             <th>Хранение</th>
             <th>Реклама</th>
-            <th>Налоги</th>
             <th>Маржинальность %</th>
             <th>Итого</th>
           `;

@@ -1,5 +1,5 @@
 import truncateNum from "./truncateNum.js";
-import calcInsuranceFee from "../calcServices/utils/insuranceFee.js";
+import calcInsuranceFee from "../calcUtils/utils/insuranceFee.js";
 
 var recalculateSkuAndTaxParams = (sku, taxParams) => {
   var updatedTaxParams = { ...taxParams };

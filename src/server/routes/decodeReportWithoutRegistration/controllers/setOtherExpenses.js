@@ -1,4 +1,4 @@
-import calc from "../../reports/services/utils/calcServices/index.js";
+import calc from "../../reports/services/utils/calcUtils/index.js";
 import getPrevSkuData from "../../reports/services/utils/different/getPrevSkuData.js";
 
 var taxParamsStub = {
@@ -21,7 +21,8 @@ var taxParamsStub = {
 };
 
 var setOtherExpensesToSkuController = async (req, res, next) => {
-  var { dateFrom, dateTo, userId, skuName, sku, taxRate, year, isCrossYearPeriod } = req.body;
+  var { dateFrom, dateTo, userId, skuName, sku, year, isCrossYearPeriod } =
+    req.body;
 
   if (sku.otherExpenses === req.body.otherExpenses) {
     return res.sendStatus(409);
@@ -40,7 +41,12 @@ var setOtherExpensesToSkuController = async (req, res, next) => {
 
   sku.otherExpenses = req.body.otherExpenses;
 
-  var { updatedSkuFields } = calc.sku.restParams(sku, prevSkuData, { taxRate, ...taxParamsStub }, prevSkuData);
+  var { updatedSkuFields } = calc.sku.restParams(
+    sku,
+    prevSkuData,
+    taxParamsStub,
+    prevSkuData,
+  );
 
   return res.json({
     userId,

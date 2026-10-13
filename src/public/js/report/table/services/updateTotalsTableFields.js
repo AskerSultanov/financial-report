@@ -6,15 +6,7 @@ var updateTotalsTableFields = (
   prevSkuFieldsValue,
   isCrossYearPeriod,
 ) => {
-  var skuKeys = Object.keys(updatedSkuData).filter(
-    (key) =>
-      key !== "profitMargin" &&
-      key !== "tax" &&
-      key !== "insuranceFee" &&
-      key !== "additionalInsuranceFee",
-  );
-
-  for (var skuKey of skuKeys) {
+  for (var skuKey in updatedSkuData) {
     var totalFieldId = skuKey + "-";
 
     var totalField = document.getElementById(totalFieldId);

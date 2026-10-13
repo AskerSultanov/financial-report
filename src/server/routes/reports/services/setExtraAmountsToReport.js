@@ -1,7 +1,8 @@
-import calcUtils from "./utils/calcServices/index.js";
+import calcUtils from "./utils/calcUtils/index.js";
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import truncateNum from "./utils/reportParsing/truncateNum.js";
+import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import calcBaseAndRemainder from "./utils/different/calcBaseAndRemainder.js";
 
 var { getReportById, saveUpdatedReport } = dbUtils.reportModelUtils;
@@ -57,21 +58,26 @@ var setExtraAmountsToReportService = async (data) => {
       var cents = baseCents + extraCents;
 
       var sku = skusFilteredByYear[i];
+      var prevSkuData = getPrevSkuData(sku);
+
       sku[key] = cents / 100;
 
-      var recalculatedFinalProfit = sku.finalProfit + sku[key];
-      sku.finalProfit = truncateNum(recalculatedFinalProfit);
-      newFinalProfit += sku.finalProfit;
+      var { updatedSkuFields } = calcUtils.sku.restParams(
+        sku,
+        prevSkuData,
+        taxParam,
+      );
 
-      var updatedSku = { finalProfit: sku.finalProfit, [key]: sku[key] };
+      newFinalProfit += updatedSkuFields.finalProfit;
 
-      updatedSkus.push({ skuName: sku.skuName, data: updatedSku });
-
-      skusDataToClient.push({
-        year,
+      var updatedSku = {
+        year: sku.year,
         skuName: sku.skuName,
-        data: updatedSku,
-      });
+        data: { ...updatedSkuFields, [key]: sku[key] },
+      };
+
+      updatedSkus.push(updatedSku);
+      skusDataToClient.push(updatedSku);
     }
 
     var recalculatedFinalProfit =
@@ -115,11 +121,15 @@ var setExtraAmountsToReportService = async (data) => {
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
     await saveUpdatedReport(userId, reportId, updatedSkus, session);
 
+    var startYear = +report.dateFrom.split("-")[0];
+    var endYear = +report.dateTo.split("-")[0];
+
     return {
       reportNotFound: false,
       data: {
         skusDataToClient,
-        years: [year],
+        requiredYear: year,
+        years: [startYear, endYear],
         isCrossYearPeriod: report.isCrossYearPeriod,
       },
     };

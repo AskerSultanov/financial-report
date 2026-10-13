@@ -22,7 +22,7 @@ var sendChangedData = async (data, isGuestAccess = false, changedData) => {
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
   });
-
+  
   if (!res.ok) {
     alert("Не удалось изменить данные");
     return;

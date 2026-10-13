@@ -4,7 +4,7 @@ import getMonthlySummary from "./services/getMonthlySummary.js";
 import createTotalsSheet from "./services/createTotalsSheet.js";
 import writeTotalsTitleToSheet from "./services/writeTotalsTitleToSheet.js";
 import writeTotalValuesToSheet from "./services/writeTotalValuesToSheet.js";
-import calcReportTotalsFromSkus from "../calcServices/utils/calcReportTotalsFromSkus.js";
+import calcReportTotalsFromSkus from "../calcUtils/utils/calcReportTotalsFromSkus.js";
 
 var getReportAsXLSXBuffer = async (report) => {
   var { dateFrom, dateTo, reportId, skus } = report;
@@ -22,7 +22,7 @@ var getReportAsXLSXBuffer = async (report) => {
   var skusSheet = workbook.addWorksheet("Товары");
   var totalsSheet = workbook.addWorksheet("Сводка");
 
-  var indentToTotalsData = 2; 
+  var indentToTotalsData = 2;
 
   skusSheet = await createSKUsSheet(skus, skusSheet);
   totalsSheet = await createTotalsSheet(

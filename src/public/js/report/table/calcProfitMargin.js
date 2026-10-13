@@ -7,7 +7,7 @@ var calcProfitMargin = (finalProfit, retailAmount) => {
 
   profitMargin = (finalProfit * 100) / retailAmount;
 
-  return profitMargin.toFixed(2);
+  return +profitMargin.toFixed(2);
 };
 
 export default calcProfitMargin;

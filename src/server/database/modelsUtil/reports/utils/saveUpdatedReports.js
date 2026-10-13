@@ -11,10 +11,14 @@ var createBulkQuery = (userId, updatedReports) => {
       var count = 0;
 
       for (var updatedSku of updatedSkus) {
-        var { skuName, data } = updatedSku;
+        var { year, data, skuName } = updatedSku;
 
         var skuFilterName = `skuElem${count}`;
-        arrayFilters.push({ [`${skuFilterName}.skuName`]: skuName });
+
+        arrayFilters.push({
+          [`${skuFilterName}.year`]: year,
+          [`${skuFilterName}.skuName`]: skuName,
+        });
 
         for (var skuKey in data) {
           var queryKey = `skus.$[${skuFilterName}].${skuKey}`;
@@ -26,7 +30,13 @@ var createBulkQuery = (userId, updatedReports) => {
     }
 
     if (arrayFilters.length) {
-      bulkOptions.push({ updateOne: { filter: { userId, reportId }, update: { $set: query }, arrayFilters } });
+      bulkOptions.push({
+        updateOne: {
+          filter: { userId, reportId },
+          update: { $set: query },
+          arrayFilters,
+        },
+      });
     }
   }
 

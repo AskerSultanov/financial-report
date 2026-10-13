@@ -1,8 +1,7 @@
 import { randomUUID } from "node:crypto";
 import wbapi from "../../reports/services/utils/WBAPI/index.js";
 import processReportSkus from "../../reports/services/utils/reportParsing/index.js";
-
-var errorText = "";
+import getReportTargetYearAndMonth from "../../reports/services/utils/different/getReportTargetYearAndMonth.js";
 
 var taxParamsStub = {
   finalProfit: 0,
@@ -23,12 +22,32 @@ var taxParamsStub = {
   excessIncomeForAdditionalInsuranceFee: 300000,
 };
 
+var monthList = [
+  "январь",
+  "февраль",
+  "марта",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
+
 var getReportFromWBAPIController = async (req, res, next) => {
-  var { dateFrom, dateTo, token, taxRate } = req.body;
+  var { dateFrom, dateTo, token } = req.body;
 
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
   var isCrossYearPeriod = startYear !== endYear;
+
+  var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(
+    dateFrom,
+    dateTo,
+  );
 
   var reports = await wbapi.getReports(
     "decode-without-auth",
@@ -42,7 +61,7 @@ var getReportFromWBAPIController = async (req, res, next) => {
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
     var { skus } = await processReportSkus(
       reports,
-      { year: currentYear, ...taxParamsStub, taxRate },
+      { year: currentYear, ...taxParamsStub },
       isCrossYearPeriod,
     );
     reportSkus.push(...skus);
@@ -51,14 +70,14 @@ var getReportFromWBAPIController = async (req, res, next) => {
   var report = {};
 
   report.dateTo = dateTo;
-  report.dateFrom = dateFrom;
-  report.taxRate = taxRate;
   report.skus = reportSkus;
+  report.dateFrom = dateFrom;
   report.userId = randomUUID();
   report.isCrossYearPeriod = isCrossYearPeriod;
   report.reportId = reports.weeklyFinancialReport[0].reportId;
+  report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
 
-  return res.json({ report, errorText });
+  return res.json({ report, errorText: "" });
 };
 
 export default getReportFromWBAPIController;
