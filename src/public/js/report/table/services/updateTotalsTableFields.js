@@ -19,11 +19,7 @@ var updateTotalsTableFields = (
 
     var totalField = document.getElementById(totalFieldId);
 
-    if (
-      totalField &&
-      typeof prevSkuFieldsValue[skuKey] === "number" &&
-      !isNaN(prevSkuFieldsValue[skuKey])
-    ) {
+    if (totalField && Number.isFinite(prevSkuFieldsValue[skuKey])) {
       var prevTotalFieldValue = +totalField.textContent;
 
       var newTotalFieldValue =
@@ -72,11 +68,7 @@ var updateTotalsTableFields = (
 
         var totalField = document.getElementById(totalFieldId);
 
-        if (
-          totalField &&
-          typeof prevSkuFieldsValue[skuKey] === "number" &&
-          !isNaN(prevSkuFieldsValue[skuKey])
-        ) {
+        if (totalField && Number.isFinite(prevSkuFieldsValue[skuKey])) {
           var prevTotalFieldValue = +totalField.textContent;
 
           var newTotalFieldValue =
