@@ -73,7 +73,7 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
       taxParams = Object.assign(taxParams, updatedTaxParamsField);
 
-      updatedSkus.push({ skuName, data: updatedSkuFields });
+      updatedSkus.push({ skuName, year: sku.year, data: updatedSkuFields });
       updatedSkusToListGoods.push({
         skuName,
         year: sku.year,

@@ -58,6 +58,9 @@
         <div class="dialog-actions">
           <button type="button" onclick="window.dialog.close()">Закрыть</button>
           <button type="button" id="get-report">Получить отчет</button>
+          <button id="reset-report-button" class="top-btn">
+            Обнулить отчет
+          </button>
         </div>
       </form>
     </dialog>
@@ -65,6 +68,10 @@
     <button hidden id="download-report-as-xlsx-button">
       Скачать отчет как эксель
     </button>
+    <script>
+      src = "/js/report/resetReportButtonHandler.js";
+      type = "module";
+    </script>
     <script
       src="/js/decodeReportWithoutRegistration/index.js"
       type="module"

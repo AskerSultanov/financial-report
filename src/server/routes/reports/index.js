@@ -6,6 +6,7 @@ import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
 
 import getReportController from "./controllers/getReport.js";
 import deleteImageController from "./controllers/deleteImage.js";
+import resetReportController from "./controllers/resetReport.js";
 import saveReportsController from "./controllers/saveReports.js";
 import deleteReportController from "./controllers/deleteReport.js";
 import getReportPageController from "./controllers/getReportPage.js";
@@ -132,6 +133,16 @@ router.delete(
   deleteImageController,
 );
 
-router.post("/extra-amounts", joiSchemaValidator(joiSchemas.setExtraAmountsToReportSchema), setExtraAmountsToReport);
+router.post(
+  "/reset/",
+  joiSchemaValidator(joiSchemas.resetReportSchema),
+  resetReportController,
+);
+
+router.post(
+  "/extra-amounts",
+  joiSchemaValidator(joiSchemas.setExtraAmountsToReportSchema),
+  setExtraAmountsToReport,
+);
 
 router.get("/fields-descrition/", getReportFieldsDescriptionPageController);

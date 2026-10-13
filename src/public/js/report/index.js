@@ -3,6 +3,7 @@ import getReportData from "./getReportData.js";
 import createSkusTable from "./table/createSkusTable.js";
 import deleteReportHandler from "./deleteReportHandler.js";
 import createTotalsTable from "./table/createTotalsTable.js";
+import resetReportButtonHandler from "./resetReportButtonHandler.js";
 import calcReportTotalsFromSkus from "./table/calcReportTotalsFromSkus.js";
 import injectSignedUrlsIntoImgTags from "./table/services/injectSignedUrlsIntoImgTags.js";
 import downloadReportAsXLSXButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
@@ -100,6 +101,14 @@ var main = async () => {
     );
 
     createSkusTable(userId, reportId, endYear, endYearSkus);
+
+    resetReportButtonHandler(
+      userId,
+      reportId,
+      isCrossYearPeriod,
+      startYearSkus,
+      endYearSkus,
+    );
   } else {
     createTotalsTable(
       userId,
@@ -111,11 +120,15 @@ var main = async () => {
       true,
       reportSummaryLabelTextStub,
     );
+
     createSkusTable(userId, reportId, year, skus);
+
+    resetReportButtonHandler(userId, reportId, isCrossYearPeriod, skus);
   }
 
   reportInfo(report);
   deleteReportHandler(userId, reportId);
+
   injectSignedUrlsIntoImgTags(userId, signedUrls);
   setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
   downloadReportAsXLSXButtonHandler(report, urlToDownloadReportAsXLSX);

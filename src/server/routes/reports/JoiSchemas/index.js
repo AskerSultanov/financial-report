@@ -1,4 +1,5 @@
 import getReportSchema from "./getReport.js";
+import resetReportSchema from './resetReport.js'
 import saveReportsSchema from "./saveReports.js";
 import deleteImageSchema from "./deleteImage.js";
 import deleteReportSchema from "./deleteReport.js";
@@ -16,6 +17,7 @@ import changeFinancialAccountingStatusSchema from "./changeFinancialAccountingSt
 export {
   getReportSchema,
   saveReportsSchema,
+  resetReportSchema,
   deleteImageSchema,
   deleteReportSchema,
   skuPhotoUploadSchema,
