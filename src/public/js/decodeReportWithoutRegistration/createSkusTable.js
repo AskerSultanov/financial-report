@@ -6,20 +6,21 @@ var isGuestAccess = true;
 
 var createSkusTable = (report, skus, year) => {
   var tableBody = document.createElement("tbody");
-  var { userId, taxRate, dateFrom, dateTo } = report;
+
+  var { userId, dateFrom, dateTo } = report;
 
   for (var sku of skus) {
     var tableRow = document.createElement("tr");
-    var skuName = createTdElement(sku.skuName);
+
     var qty = createTdElement(sku.qty);
+    var skuName = createTdElement(sku.skuName);
     var returnAmount = createTdElement(sku.returnAmount);
 
-    var data = {
-      year,
+    var dataToUpdate = {
       userId,
-      taxRate,
       dateFrom,
       dateTo,
+      year: sku.year,
       skuName: sku.skuName,
       costPrice: sku.costPrice,
       otherExpenses: sku.otherExpenses,
@@ -39,8 +40,11 @@ var createSkusTable = (report, skus, year) => {
       },
     };
 
-    var costPriceInputField = openCostPriceModal(data, isGuestAccess);
-    var otherExpensesInputField = openOtherExpensesModal(data, isGuestAccess);
+    var costPriceInputField = openCostPriceModal(dataToUpdate, isGuestAccess);
+    var otherExpensesInputField = openOtherExpensesModal(
+      dataToUpdate,
+      isGuestAccess,
+    );
 
     var costPrice = createTdElement(costPriceInputField);
     var otherExpenses = createTdElement(otherExpensesInputField);
@@ -51,10 +55,10 @@ var createSkusTable = (report, skus, year) => {
     var acceptance = createTdElement(sku.acceptance);
     var profit = createTdElement(sku.profit);
 
-    var profitMarginTdId = "profitMargin" + "-" + sku.skuName + "-" + year;
+    var profitMarginTdId = "profitMargin" + "-" + sku.skuName + "-" + sku.year;
     var profitMargin = createTdElement(sku.profitMargin, profitMarginTdId);
 
-    var finalProfitTdId = "finalProfit" + "-" + sku.skuName + "-" + year;
+    var finalProfitTdId = "finalProfit" + "-" + sku.skuName + "-" + sku.year;
     var finalProfit = createTdElement(sku.finalProfit, finalProfitTdId);
 
     tableRow.append(
@@ -77,7 +81,7 @@ var createSkusTable = (report, skus, year) => {
   }
 
   var table = document.createElement("table");
-  table.id = "skus-table-" + year;
+  table.id = "skus-table-" + sku.year;
 
   var { tableHead } = createSkusTableHead();
 

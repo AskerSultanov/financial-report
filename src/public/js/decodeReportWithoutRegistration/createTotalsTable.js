@@ -18,7 +18,10 @@ var createTotalsTable = (
       continue;
     }
 
-    var elemId = year ? key + "-" + year : key + "-";
+    var keyWithoutYear = key + "-";
+    var keyWithYear = key + "-" + year;
+
+    var elemId = year ? keyWithYear : keyWithoutYear;
 
     var tdElement = createTdElement(report[key], elemId);
     tableRow.append(tdElement);

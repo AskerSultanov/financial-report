@@ -51,6 +51,7 @@ var setCostPriceController = async (req, res, next) => {
     userId,
     years,
     isCrossYearPeriod,
+    requiredYear: year,
     sku: {
       year,
       skuName,

@@ -23,7 +23,6 @@ var schema = Joi.object({
   costPrice: Joi.number(),
   isCrossYearPeriod: Joi.boolean().required(),
   otherExpenses: Joi.number(),
-  taxRate: Joi.number().required(),
   sku: skuSchema,
 });
 
