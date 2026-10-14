@@ -28,9 +28,9 @@ var resetReportButtonHandler = (
         alert("Отчет успешно обнулен");
 
         if (isCrossYearPeriod) {
-          var startYear = startYearSkus[0].year;
-          var endYear = endYearSkus[0].year;
-
+          var startYear = startYearSkus[0]?.year;
+          var endYear = endYearSkus[0]?.year;
+          
           resetSkusTable(startYearSkus, startYear);
           resetSkusTable(endYearSkus, endYear);
 
@@ -38,7 +38,7 @@ var resetReportButtonHandler = (
           resetTotalsTable(startYearSkus, startYear);
           resetTotalsTable(endYearSkus, endYear);
         } else {
-          var year = skus[0].year;
+          var year = skus[0]?.year;
           resetSkusTable(skus, year);
 
           resetTotalsTable(skus);
