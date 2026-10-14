@@ -1,6 +1,7 @@
 var fontStyles = { font: 10 };
-
 var alignmentStyles = { vertical: "middle", horizontal: "right" };
+
+var fieldsNeedConvertToStr = ["reportId"];
 
 var writeTotalValuesToSheet = (sheet, cellNum, totalValues) => {
   var cellName = "B";
@@ -10,6 +11,10 @@ var writeTotalValuesToSheet = (sheet, cellNum, totalValues) => {
   sheet.getColumn(2).alignment = alignmentStyles;
 
   for (var key in totalValues) {
+    if (fieldsNeedConvertToStr.includes(key)) {
+      totalValues[key] = totalValues[key] + "";
+    }
+
     var currentCell = cellName + cellNum;
     cellNum++;
 
