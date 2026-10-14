@@ -1,12 +1,13 @@
 var createDeleteImgButton = (userId, skuName) => {
   var button = document.createElement("button");
 
-  button.id = "delete-img-button-" + skuName;
-  button.className = "delete-img-button";
   button.type = "button";
-  button.setAttribute("aria-label", "Удалить фото SKU " + skuName);
   button.title = "Удалить фото";
   button.style.display = "none";
+  button.className = "delete-img-button";
+  button.setAttribute("skuName", skuName);
+  button.id = "delete-img-button-" + skuName;
+  button.setAttribute("aria-label", "Удалить фото SKU " + skuName);
 
   button.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -20,11 +21,20 @@ var createDeleteImgButton = (userId, skuName) => {
     });
 
     if (res.status === 204) {
-      var imgTadId = "img-" + skuName;
-      var img = document.getElementById(imgTadId);
-      img.src = null;
+      var imageElements = document.querySelectorAll(
+        `img[skuName="${skuName}"]`,
+      );
+      var btnElements = document.querySelectorAll(
+        `button[skuName="${skuName}"]`,
+      );
 
-      button.style.display = "none";
+      for (var image of imageElements) {
+        image.src = null;
+      }
+
+      for (var deleteImgButton of btnElements) {
+        deleteImgButton.style.display = "none";
+      }
     } else {
       alert("Не удалось удалить фото.\nПопробуйте еще раз.");
     }

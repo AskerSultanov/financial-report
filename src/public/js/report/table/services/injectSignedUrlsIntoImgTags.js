@@ -2,31 +2,30 @@ import createDeleteImgButton from "./skuPhotoUploader/createDeleteImgButton.js";
 
 var injectSignedUrlsIntoImgTags = (userId, signedUrls) => {
   for (var { skuName, signedUrl } of signedUrls) {
-    var imageTagId = "img-" + skuName;
-
-    var image = document.getElementById(imageTagId);
-
-    image.width = 90;
-    image.height = 75;
-    image.src = signedUrl;
-    image.style.display = "block";
-
-    var spanTagId = "span-" + skuName;
-    var span = document.getElementById(spanTagId);
-    span.style.display = "none";
-
-    var deleteImageButton = document.getElementById(
-      "delete-image-button-" + skuName,
+    var imageElements = document.querySelectorAll(`img[skuName="${skuName}"]`);
+    var spanElements = document.querySelectorAll(`span[skuName="${skuName}"]`);
+    var imageContainers = document.querySelectorAll(
+      `div[skuName="${skuName}"]`,
     );
 
-    var photoCellContainer = document.getElementById(
-      "photo-cell-container-" + skuName,
-    );
+    for (var span of spanElements) {
+      span.style.display = "none";
+    }
 
-    var deleteImageButton = createDeleteImgButton(userId, skuName);
+    for (var image of imageElements) {
+      image.width = 90;
+      image.height = 75;
+      image.src = signedUrl;
+      image.style.display = "block";
+    }
 
-    deleteImageButton.style.display = "block";
-    photoCellContainer.append(deleteImageButton);
+    for (var container of imageContainers) {
+      var deleteImageButton = createDeleteImgButton(userId, skuName);
+
+      deleteImageButton.style.display = "block";
+
+      container.append(deleteImageButton);
+    }
   }
 };
 

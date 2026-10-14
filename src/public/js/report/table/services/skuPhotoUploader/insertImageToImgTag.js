@@ -5,18 +5,22 @@ var insertImageToImgTag = (event, skuName) => {
 
   reader.readAsDataURL(file);
   reader.addEventListener("load", (e) => {
-    var span = document.getElementById("span-" + skuName);
-    span.style.display = "none";
+    var imageElements = document.querySelectorAll(`img[skuName="${skuName}"]`);
+    var spanElements = document.querySelectorAll(`span[skuName="${skuName}"]`);
+    var btnElements = document.querySelectorAll(`button[skuName="${skuName}"]`);
 
-    var img = document.getElementById("img-" + skuName);
-    img.style.display = "block";
-    img.src = e.target.result;
+    for (var span of spanElements) {
+      span.style.display = "none";
+    }
 
-    var deleteImgButton = document.getElementById(
-      "delete-img-button-" + skuName,
-    );
+    for (var image of imageElements) {
+      image.src = e.target.result;
+      image.style.display = "block";
+    }
 
-    deleteImgButton.style.display = "block";
+    for (var deleteImgButton of btnElements) {
+      deleteImgButton.style.display = "block";
+    }
   });
 };
 

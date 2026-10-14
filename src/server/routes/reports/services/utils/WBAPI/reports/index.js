@@ -11,7 +11,7 @@ var catNotCreatePaidStorageReportTaskMsg =
   "Не удалось создать отчет о платном хранении";
 
 var getReports = async (userId, dateFrom, dateTo, token) => {
-
+  return reports
   var { taskId } = await createPaidStorageReportTask(
     dateFrom,
     dateTo,
