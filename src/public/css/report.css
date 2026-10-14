@@ -262,3 +262,36 @@ th:last-child {
   border-radius: 2.8px;
   letter-spacing: 0.35px;
 }
+
+.table-scroll {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 70vh;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-surface);
+}
+
+.table-scroll > table {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  overflow: visible;
+  table-layout: fixed;
+}
+
+.table-scroll > table th,
+.table-scroll > table td {
+  overflow-wrap: anywhere;
+}
+
+.table-scroll > table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

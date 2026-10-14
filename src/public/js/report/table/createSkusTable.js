@@ -1,4 +1,5 @@
 import createTdElement from "./services/createTdElement.js";
+import wrapTableToScrollElem from "./wrapTableToScroll.js";
 import createSkuPhotoUploader from "./services/skuPhotoUploader/index.js";
 import openCostPriceModal from "./services/modal/costPriceModal/openCostPriceModal.js";
 import openOtherExpensesModal from "./services/modal/otherExpensesModal/openOtherExpensesModal.js";
@@ -93,9 +94,10 @@ var createSkusTable = (userId, reportId, year, skus) => {
   var { tableHead } = createSkusTableHead();
 
   table.append(tableHead, tableBody);
+  var wrappedToScrollTable = wrapTableToScrollElem(table);
 
   var tablesContainer = document.getElementById("tables-container");
-  tablesContainer.append(table);
+  tablesContainer.append(wrappedToScrollTable);
 };
 
 export default createSkusTable;
