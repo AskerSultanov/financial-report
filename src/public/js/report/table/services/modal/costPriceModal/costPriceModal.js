@@ -22,7 +22,7 @@ var cancelButtonClass = "modal-button modal-button-cancel";
 var costPriceModal = (dataToUpdate, displayElement, isGuestAccess) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
-  console.log(dataToUpdate);
+
   var modalContent = createDiv("modal-content");
 
   var titleContent = `Изменить себестоимость для "${dataToUpdate.skuName}"`;

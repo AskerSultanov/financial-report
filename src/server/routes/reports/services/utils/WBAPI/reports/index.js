@@ -5,13 +5,13 @@ import getWeeklyFinancialReportFromWBAPI from "./getWeeklyFinancialReportFromWBA
 import checkPaidStorageReportCreationStatus from "./checkPaidStorageReportCreationStatus.js";
 import getPaidStorageReportByTaskIdFromWBAPI from "./getPaidStorageReportByTaskIdFromWBAPI.js";
 
-import reports from './reports.js'
+import reports from "./reports.js";
 
 var catNotCreatePaidStorageReportTaskMsg =
   "Не удалось создать отчет о платном хранении";
 
 var getReports = async (userId, dateFrom, dateTo, token) => {
-  return reports
+
   var { taskId } = await createPaidStorageReportTask(
     dateFrom,
     dateTo,

@@ -1,30 +1,48 @@
 import ExcelJS from "exceljs-community";
-import createSKUsSheet from "./services/createSKUsSheet.js";
-import getMonthlySummary from "./services/getMonthlySummary.js";
-import createTotalsSheet from "./services/createTotalsSheet.js";
-import writeTotalsTitleToSheet from "./services/writeTotalsTitleToSheet.js";
-import writeTotalValuesToSheet from "./services/writeTotalValuesToSheet.js";
+import createSkusSheet from "./utils/createSKUsSheet.js";
+import splitSkusByYear from "./utils/splitReportsByYear.js";
+import getMonthlySummary from "./utils/getMonthlySummary.js";
+import createTotalsSheet from "./utils/createTotalsSheet.js";
+import getReportDateRange from "./utils/getReportDateRange.js";
+import writeTotalsTitleToSheet from "./utils/writeTotalsTitleToSheet.js";
+import writeTotalValuesToSheet from "./utils/writeTotalValuesToSheet.js";
 import calcReportTotalsFromSkus from "../calcUtils/utils/calcReportTotalsFromSkus.js";
 
 var getReportAsXLSXBuffer = async (report) => {
-  var { dateFrom, dateTo, reportId, skus } = report;
+  var { dateFrom, dateTo, skus } = report;
 
   var reportTotals = {};
   reportTotals.dateFrom = dateFrom;
   reportTotals.dateTo = dateTo;
-  reportTotals.reportId = reportId;
 
   var restReportTotals = calcReportTotalsFromSkus(skus).reportTotals;
+
   reportTotals = Object.assign(reportTotals, restReportTotals);
 
   var workbook = new ExcelJS.Workbook();
 
-  var skusSheet = workbook.addWorksheet("Товары");
   var totalsSheet = workbook.addWorksheet("Сводка");
+
+  if (report.isCrossYearPeriod) {
+    var startYear = +dateFrom.split("-")[0];
+    var endYear = +dateTo.split("-")[0];
+
+    var startYearSheet = workbook.addWorksheet("Товары " + startYear);
+    var endYearSheet = workbook.addWorksheet("Товары " + endYear);
+
+    var startYearSkus = skus.filter((sku) => sku.year === startYear);
+    var endYearSkus = skus.filter((sku) => sku.year === endYear);
+
+    await createSkusSheet(startYearSkus, startYearSheet);
+    await createSkusSheet(endYearSkus, endYearSheet);
+  } else {
+    var skusSheet = workbook.addWorksheet("Товары");
+
+    await createSkusSheet(skus, skusSheet);
+  }
 
   var indentToTotalsData = 2;
 
-  skusSheet = await createSKUsSheet(skus, skusSheet);
   totalsSheet = await createTotalsSheet(
     reportTotals,
     totalsSheet,
@@ -39,44 +57,56 @@ var getReportAsXLSXBuffer = async (report) => {
 var getMonthlySummaryAsXLSXBuffer = async (reports) => {
   var workbook = new ExcelJS.Workbook();
 
-  var sheet = workbook.addWorksheet("Лист 1");
-
-  var indent = 2;
-
-  sheet = await writeTotalsTitleToSheet(sheet, indent);
-
-  var monthlySummary = await getMonthlySummary(reports);
-
-  sheet = await writeTotalValuesToSheet(sheet, indent, monthlySummary);
-
-  var isCrossYearPeriodReport = reports.filter(
+  var crossYearPeriodReport = reports.find(
     (report) => report.isCrossYearPeriod,
   );
 
-  if (isCrossYearPeriodReport.length) {
-    var startYear = isCrossYearPeriodReport[0].dateFrom.split("-")[0];
-    var currentYearSheet = workbook.addWorksheet("Сводка за " + startYear);
-    var currentYearMonthlySummary = await getMonthlySummary(
-      isCrossYearPeriodReport,
-    );
-    currentYearSheet = await writeTotalsTitleToSheet(currentYearSheet, indent);
-    currentYearSheet = await writeTotalValuesToSheet(
-      currentYearSheet,
-      indent,
-      currentYearMonthlySummary,
+  var indent = 2;
+  var sheet = workbook.addWorksheet("Сводка");
+
+  sheet = await writeTotalsTitleToSheet(sheet, indent);
+
+  var { firstDate, lastDate } = getReportDateRange(reports);
+
+  var { monthlySummary } = await getMonthlySummary(
+    reports,
+    firstDate,
+    lastDate,
+  );
+
+  await writeTotalValuesToSheet(sheet, indent, monthlySummary);
+
+  if (crossYearPeriodReport) {
+    var { dateFrom, dateTo } = crossYearPeriodReport;
+    var startYear = +dateFrom.split("-")[0];
+    var endYear = +dateTo.split("-")[0];
+
+    var { startYearSkus, endYearSkus } = splitSkusByYear(reports, startYear);
+
+    var startYearTotals = calcReportTotalsFromSkus(startYearSkus).reportTotals;
+    var endYearTotals = calcReportTotalsFromSkus(endYearSkus).reportTotals;
+
+    var startYearSheet = workbook.addWorksheet("Сводка за " + startYear);
+    var endYearSheet = workbook.addWorksheet("Сводка за " + endYear);
+
+    var startPeriod = endYear + "-01-01";
+    var endPeriod = startYear + "-12-31";
+
+    startYearSheet = await writeTotalsTitleToSheet(startYearSheet, indent);
+    endYearSheet = await writeTotalsTitleToSheet(endYearSheet, indent);
+
+    startYearTotals = Object.assign(
+      {},
+      { dateFrom, dateTo: endPeriod, ...startYearTotals },
     );
 
-    var endYear = isCrossYearPeriodReport[0].dateTo.split("-")[0];
-    var nextYearSheet = workbook.addWorksheet("Сводка за " + endYear);
-    var nextYearMonthlySummary = await getMonthlySummary(
-      isCrossYearPeriodReport,
+    endYearTotals = Object.assign(
+      {},
+      { dateFrom: startPeriod, dateTo, ...endYearTotals },
     );
-    nextYearSheet = await writeTotalsTitleToSheet(nextYearSheet, indent);
-    nextYearSheet = await writeTotalValuesToSheet(
-      nextYearSheet,
-      indent,
-      nextYearMonthlySummary,
-    );
+
+    await writeTotalValuesToSheet(startYearSheet, indent, startYearTotals);
+    await writeTotalValuesToSheet(endYearSheet, indent, endYearTotals);
   }
 
   var buffer = await workbook.xlsx.writeBuffer();

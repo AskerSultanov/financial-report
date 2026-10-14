@@ -5,7 +5,6 @@ var costPrice = 0;
 var otherExpenses = 0;
 var insuranceFee = 0;
 var preTaxProfit = 0;
-var finalProfit = 0;
 var profitMargin = 0;
 var averageProfit = 0;
 var isCostPriceSet = false;
@@ -83,6 +82,8 @@ var parseSku = async (
     averageAdvertisingCost -
     storageCost -
     deliveryCost;
+
+  var finalProfit = profit;
 
   var sku = {
     id,

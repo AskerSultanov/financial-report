@@ -4,8 +4,6 @@ var getCheckedSkuCheckboxes = (tbodyID) => {
   var checkedCheckboxes = document.querySelectorAll(
     `input.${checkboxesAttribute}:checked`,
   );
-
-  console.log(checkedCheckboxes.length);
 };
 
 export default getCheckedSkuCheckboxes;

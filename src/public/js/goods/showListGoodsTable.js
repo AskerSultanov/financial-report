@@ -102,7 +102,7 @@ var handleNonEmptyWeeklyPricesAndDiscounts = function (
   toggleDownloadWeeklyPricesAndDiscountsFileButtonVisibility("enable");
 
   var currentDayData = weeklyPricesAndDiscounts[currentDayIndex];
-  console.log(currentDayData);
+
   createSkusTable(enabledSku, "enabled-skus-tbody", currentDayData);
   weekDaySelectorHandler(enabledSku, weeklyPricesAndDiscounts, currentDayIndex);
 

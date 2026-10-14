@@ -8,12 +8,12 @@ var resetReportButtonHandler = (
   userId,
   reportId,
   isCrossYearPeriod,
+  skus,
   startYearSkus,
   endYearSkus,
 ) => {
   resetReportButton.addEventListener("click", async () => {
     var url = "/" + window.location.pathname.split("/")[1] + "/reset/";
-    console.log({ url });
 
     var confirmed = confirm(confirmMsg);
 
@@ -34,14 +34,14 @@ var resetReportButtonHandler = (
           resetSkusTable(startYearSkus, startYear);
           resetSkusTable(endYearSkus, endYear);
 
-          resetTotalsTable();
-          resetTotalsTable(startYear);
-          resetTotalsTable(endYear);
+          resetTotalsTable(skus);
+          resetTotalsTable(startYearSkus, startYear);
+          resetTotalsTable(endYearSkus, endYear);
         } else {
-          var year = startYearSkus[0].year;
-          resetSkusTable(startYearSkus, year);
+          var year = skus[0].year;
+          resetSkusTable(skus, year);
 
-          resetTotalsTable();
+          resetTotalsTable(skus);
         }
       } else {
         alert("Не удалось обнулить отчет.\nПопробуйте еще раз.");

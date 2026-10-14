@@ -58,9 +58,13 @@ var main = async () => {
     ).reportPeriodText;
 
     createTotalsTable(
+      userId,
+      reportId,
+      recordedTo,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
+      false,
       fullReportPeriodText,
     );
 
@@ -74,11 +78,14 @@ var main = async () => {
       calcReportTotalsFromSkus(startYearSkus).reportTotals;
 
     createTotalsTable(
+      userId,
+      reportId,
+      recordedTo,
       startYearReportTotals,
       startYear,
       isCrossYearPeriod,
+      true,
       startReportPeriodText,
-      currentYearPostfix,
     );
 
     createSkusTable(userId, reportId, startYear, startYearSkus);
@@ -93,19 +100,26 @@ var main = async () => {
       calcReportTotalsFromSkus(endYearSkus).reportTotals;
 
     createTotalsTable(
+      userId,
+      reportId,
+      recordedTo,
       endYearReportTotals,
       endYear,
       isCrossYearPeriod,
+      true,
       endReportPeriodText,
-      nextYearPostfix,
     );
 
     createSkusTable(userId, reportId, endYear, endYearSkus);
   } else {
     createTotalsTable(
+      userId,
+      reportId,
+      recordedTo,
       reportTotals,
       yearValueStub,
       isCrossYearPeriod,
+      true,
       reportSummaryLabelTextStub,
     );
 

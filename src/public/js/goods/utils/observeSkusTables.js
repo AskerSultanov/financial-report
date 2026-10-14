@@ -18,12 +18,10 @@ var observeSkusTables = () => {
   var enabledSkusTableObserver = new MutationObserver((mutations) => {
     for (var m of mutations) {
       if (m.type === "childList") {
-        console.log({ length: enabledSkusTbody.childNodes.length });
         if (enabledSkusTbody.childNodes.length === 0) {
           toggleSkuTableVisibillity("enabled-skus-table", "disable");
           toggleTableScrollVisibillity("enabled-skus-table-scroll", "disable");
         } else {
-          console.log("enabled");
           toggleSkuTableVisibillity("enabled-skus-table", "enable");
           toggleTableScrollVisibillity("enabled-skus-table-scroll", "enable");
         }

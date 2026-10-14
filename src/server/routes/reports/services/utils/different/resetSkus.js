@@ -1,9 +1,9 @@
 import truncateNum from "../reportParsing/truncateNum.js";
+import calcProfitMargin from "../calcUtils/utils/profitMargin.js";
 
 var cleanSku = {
   tax: 0,
   costPrice: 0,
-  finalProfit: 0,
   insuranceFee: 0,
   profitMargin: 0,
   isCostPriceSet: false,
@@ -31,8 +31,14 @@ var resetSkus = (skus) => {
     prevAdditionalInsuranceFee = truncateNum(prevAdditionalInsuranceFee);
 
     var { year, skuName } = sku;
+    var finalProfit = sku.profit;
+    var profitMargin = calcProfitMargin(finalProfit, sku.retailAmount);
 
-    cleanSkusData.push({ year, skuName, data: cleanSku });
+    cleanSkusData.push({
+      year,
+      skuName,
+      data: { ...cleanSku, finalProfit, profitMargin },
+    });
   }
 
   return {

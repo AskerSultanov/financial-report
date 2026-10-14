@@ -5,7 +5,7 @@ var calcReportTotalsFromSkus = (skus) => {
   var sold = skus.reduce((acc, sku) => acc + sku.qty, 0);
   var returnAmount = skus.reduce((acc, sku) => acc + sku.returnAmount, 0);
   var sellerPayoutAmount = skus.reduce((acc, sku) => acc + sku.sellerPayoutAmount, 0);
-  var productCosts = skus.reduce((acc, sku) => acc + sku.costPrice, 0)   * sold;
+  var productCosts = skus.reduce((acc, sku) => acc + (sku.costPrice * sku.qty), 0)
   var otherExpenses = skus.reduce((acc, sku) => acc + sku.otherExpenses, 0);
   var deliveryCost = skus.reduce((acc, sku) => acc + sku.deliveryCost, 0);
   var paidAcceptance = skus.reduce((acc, sku) => acc + sku.acceptance, 0);

@@ -106,6 +106,7 @@ var main = async () => {
       userId,
       reportId,
       isCrossYearPeriod,
+      skus,
       startYearSkus,
       endYearSkus,
     );

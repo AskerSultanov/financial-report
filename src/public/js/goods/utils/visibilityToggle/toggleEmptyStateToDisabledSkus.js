@@ -7,7 +7,6 @@ var emptyStateToDisabledSkuTable = document.getElementById(
  */
 
 var toggleEmptyStateToDisabledSkus = (action) => {
-  console.log({ action: action === "disable" });
   emptyStateToDisabledSkuTable.hidden = action === "disable";
 };
 
