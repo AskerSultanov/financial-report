@@ -51,10 +51,15 @@
         <button type="button" id="upload-files-btn">Загрузить файлы</button>
         <label for="token">Введите токен</label>
         <input type="text" id="token" autofocus />
-        <label for="dateFrom">Введите начало периода</label>
-        <input type="text" id="dateFrom" placeholder="гггг-мм-дд" />
-        <label for="dateTo">Введите конец периода</label>
-        <input type="text" id="dateTo" placeholder="гггг-мм-дд" />
+        <div class="dialog-date-area">
+          <div class="dialog-date-fields">
+            <label for="dateFrom">Введите начало периода</label>
+            <input type="text" id="dateFrom" placeholder="гггг-мм-дд" />
+            <label for="dateTo">Введите конец периода</label>
+            <input type="text" id="dateTo" placeholder="гггг-мм-дд" />
+          </div>
+          <div class="dialog-datepicker-area" id="dialog-datepicker-area"></div>
+        </div>
         <div class="dialog-actions">
           <button type="button" onclick="window.dialog.close()">Закрыть</button>
           <button type="button" id="get-report">Получить отчет</button>

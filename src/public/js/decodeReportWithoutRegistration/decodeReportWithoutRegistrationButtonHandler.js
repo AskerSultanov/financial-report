@@ -2,9 +2,11 @@ import wrapInputElementsIntoDatepicker from "./wrapInputElementsIntoDatepicker.j
 import { disableDownloadReportAsXLSXButton } from "./downloadReportAsXLSXButton.js";
 
 var tablesContainer = document.getElementById("tables-container");
-var downloadReportAsXLSXButton = document.getElementById(
+
+var downloadReportXlxsButton = document.getElementById(
   "download-report-as-xlsx-button",
 );
+
 var decodeReportWithoutRegistrationButton = document.getElementById(
   "decode-report-without-registration-button",
 );
@@ -14,7 +16,7 @@ var newTextContentToDecodeReportWithoutRegistrationButton =
 
 var decodeReportWithoutRegistrationButtonHandler = () => {
   decodeReportWithoutRegistrationButton.onclick = () => {
-    wrapInputElementsIntoDatepicker()
+    wrapInputElementsIntoDatepicker();
 
     var reportSummaryLabels = document.querySelectorAll(
       ".report-summary-label-wrapper",

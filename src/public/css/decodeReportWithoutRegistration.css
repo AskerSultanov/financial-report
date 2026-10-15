@@ -128,7 +128,10 @@ body {
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
 }
 
-#dialog button {
+/* Кнопки самого диалога. Селектор намеренно не захватывает кнопки
+   календаря, который открывается внутри .dialog-datepicker-area */
+#dialog form > button,
+#dialog .dialog-actions button {
   background-color: #495057;
   color: #f8f9fa;
   border: none;
@@ -147,7 +150,8 @@ body {
   align-self: center;
 }
 
-#dialog button:hover {
+#dialog form > button:hover,
+#dialog .dialog-actions button:hover {
   background-color: #5a6268;
 }
 
@@ -172,6 +176,54 @@ body {
   box-sizing: border-box;
   flex: 1;
   max-width: 180px;
+}
+
+/* ===== Поля дат и место под датапикер ===== */
+/* Поля дат укорачиваются, справа от них остаётся пустое место под календарь */
+.dialog-date-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.dialog-date-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Зарезервированное место: высота фиксирована, чтобы при открытии
+   календаря содержимое диалога не сдвигалось.
+   16rem — ширина календаря, 18rem — его высота (в тех же единицах,
+   что использует библиотека) */
+.dialog-datepicker-area {
+  box-sizing: border-box;
+  flex: 0 0 16rem;
+  width: 16rem;
+  min-height: 18rem;
+}
+
+/* Календарь раскрывается в отведённом месте, а не поверх полей и кнопок.
+   Стили общие для датапикера не меняются — только внутри этого диалога. */
+#dialog .datepicker-dropdown {
+  position: static;
+  width: auto;
+}
+
+/* datepicker-theme.css рассчитан на переменные из theme.css, но на эту
+   страницу theme.css не подключён. Значения задаются только вокруг
+   календаря, поэтому на остальные стили страницы они не влияют. */
+#dialog .dialog-datepicker-area {
+  --bg-surface: #343a40;
+  --bg-elevated: #3a4047;
+  --bg-hover: #495057;
+  --border: #495057;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --accent: #0d6efd;
+  --success: #28a745;
 }
 
 .dialog-information {
@@ -223,6 +275,16 @@ body {
   #dialog form {
     padding: 16px;
     gap: 12px;
+  }
+
+  #dialog .dialog-date-area {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #dialog .dialog-datepicker-area {
+    flex: 0 0 auto;
+    width: 100%;
   }
 }
 

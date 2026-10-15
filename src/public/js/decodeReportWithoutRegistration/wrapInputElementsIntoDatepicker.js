@@ -1,8 +1,16 @@
 var dateFromInput = document.getElementById("dateFrom");
 var dateToInput = document.getElementById("dateTo");
+var datepickerArea = document.getElementById("dialog-datepicker-area");
+
+var dateFromDatepicker;
+var dateToDatepicker;
 
 var wrapInputElementsIntoDatepicker = () => {
-  new Datepicker(dateFromInput, {
+  dateFromDatepicker?.destroy();
+  dateToDatepicker?.destroy();
+
+  dateFromDatepicker = new Datepicker(dateFromInput, {
+    container: datepickerArea,
     language: "ru",
     format: "yyyy-mm-dd",
     todayHighlight: false,
@@ -15,7 +23,8 @@ var wrapInputElementsIntoDatepicker = () => {
     },
   });
 
-  new Datepicker(dateToInput, {
+  dateToDatepicker = new Datepicker(dateToInput, {
+    container: datepickerArea,
     language: "ru",
     format: "yyyy-mm-dd",
     autoFocus: false,
