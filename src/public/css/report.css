@@ -164,6 +164,57 @@ th:last-child {
   border-right: none;
 }
 
+.table-scroll {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 70vh;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-surface);
+}
+
+.table-scroll > table {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  overflow: visible;
+  table-layout: fixed;
+}
+
+.table-scroll > table th,
+.table-scroll > table td {
+  overflow-wrap: anywhere;
+}
+
+.table-scroll > table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-scroll > table th:nth-child(1),
+.table-scroll > table td:nth-child(1) {
+  width: 100px;
+}
+
+.table-scroll > table th:nth-child(2),
+.table-scroll > table td:nth-child(2) {
+  width: 160px;
+}
+
+.table-scroll > table th:nth-child(12),
+.table-scroll > table td:nth-child(12),
+.table-scroll > table th:nth-child(13),
+.table-scroll > table td:nth-child(13) {
+  width: 100px;
+  white-space: nowrap;
+}
+
 /* ===== Загрузчик фото SKU ===== */
 .sku-photo-uploader {
   width: 100%;
@@ -261,37 +312,4 @@ th:last-child {
   background: rgba(13, 110, 253, 0.15);
   border-radius: 2.8px;
   letter-spacing: 0.35px;
-}
-
-.table-scroll {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto 16px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 70vh;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
-  background: var(--bg-surface);
-}
-
-.table-scroll > table {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  overflow: visible;
-  table-layout: fixed;
-}
-
-.table-scroll > table th,
-.table-scroll > table td {
-  overflow-wrap: anywhere;
-}
-
-.table-scroll > table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
 }

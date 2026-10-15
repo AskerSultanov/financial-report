@@ -1,5 +1,6 @@
 import createTotalsModal from "./createTotalsModal.js";
-import createButton from "../utils/createButton.js";
+
+var editablePen = "&#9999;&#65039;";
 
 var openTotalsModal = (data, isGuestAccess = false) => {
   var container = document.createElement("div");
@@ -10,26 +11,19 @@ var openTotalsModal = (data, isGuestAccess = false) => {
   displayElement.textContent = data.updateField.value;
   displayElement.id = `${data.updateField.key}-${data.year}`;
 
-  var event = "click";
-  var cb = () => {
+  var openModalButton = document.createElement("button");
+  openModalButton.className = "editable-field-button";
+  openModalButton.innerHTML = editablePen;
+
+  openModalButton.addEventListener("click", () => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
       createTotalsModal(data, displayElement, isGuestAccess);
     }
-  };
+  });
 
-  var buttonTextContent = "Изменить";
-  var openTotalsModalButton = createButton(
-    "editable-field-button",
-    buttonTextContent,
-    {
-      event,
-      cb,
-    },
-  );
-
-  container.append(displayElement, openTotalsModalButton);
+  container.append(displayElement, openModalButton);
   return container;
 };
 

@@ -1,5 +1,6 @@
 import costPriceModal from "./costPriceModal.js";
-import createButton from "../utils/createButton.js";
+
+var editablePen = "&#9999;&#65039;";
 
 var openCostPriceModal = (skuData, isGuestAccess) => {
   var container = document.createElement("div");
@@ -10,23 +11,20 @@ var openCostPriceModal = (skuData, isGuestAccess) => {
   costPriceDisplayElement.textContent = skuData.costPrice;
   costPriceDisplayElement.id = `costPrice-${skuData.skuName}-${skuData.year}`;
 
-  var event = "click";
-  var cb = () => {
+  var openModalButton = document.createElement("button");
+  openModalButton.className = "editable-field-button";
+
+  openModalButton.addEventListener("click", () => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
       costPriceModal(skuData, costPriceDisplayElement, isGuestAccess);
     }
-  };
+  });
 
-  var buttonTextContent = "Изменить";
-  var openCostPriceModalButton = createButton(
-    "editable-field-button",
-    buttonTextContent,
-    { event, cb },
-  );
+  openModalButton.innerHTML = editablePen;
 
-  container.append(costPriceDisplayElement, openCostPriceModalButton);
+  container.append(costPriceDisplayElement, openModalButton);
   return container;
 };
 

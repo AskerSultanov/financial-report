@@ -1,5 +1,6 @@
-import createButton from "../utils/createButton.js";
 import otherExpensesModal from "./otherExpensesModal.js";
+
+var editablePen = "&#9999;&#65039;";
 
 var openOtherExpensesModal = (skuData, isGuestAccess) => {
   var container = document.createElement("div");
@@ -10,22 +11,20 @@ var openOtherExpensesModal = (skuData, isGuestAccess) => {
   otherExpensesTdElement.textContent = skuData.otherExpenses;
   otherExpensesTdElement.id = `otherExpenses-${skuData.skuName}-${skuData.year}`;
 
-  var event = "click";
-  var cb = () => {
+  var openModalButton = document.createElement("button");
+  openModalButton.className = "editable-field-button";
+
+  openModalButton.addEventListener("click", () => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
       otherExpensesModal(skuData, otherExpensesTdElement, isGuestAccess);
     }
-  };
-  var buttonTextContent = "Изменить";
-  var openOtherExpensesModalButton = createButton(
-    "editable-field-button",
-    buttonTextContent,
-    { event, cb },
-  );
+  });
 
-  container.append(otherExpensesTdElement, openOtherExpensesModalButton);
+  openModalButton.innerHTML = editablePen;
+
+  container.append(otherExpensesTdElement, openModalButton);
   return container;
 };
 
