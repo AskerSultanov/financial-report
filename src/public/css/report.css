@@ -141,6 +141,11 @@ td {
   border-right: 1px solid #40484f;
 }
 
+/* Числовые значения (цены) не должны переноситься на другую строку */
+td {
+  white-space: nowrap;
+}
+
 th {
   background: linear-gradient(to bottom, #40484f, #343a40);
   color: #dee2e6;
@@ -169,7 +174,7 @@ th:last-child {
   width: 100%;
   max-width: 1600px;
   margin: 0 auto 16px;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   max-height: 70vh;
   border-radius: var(--radius-md);
@@ -183,11 +188,16 @@ th:last-child {
   max-width: none;
   margin: 0;
   overflow: visible;
-  table-layout: fixed;
 }
 
-.table-scroll > table th,
-.table-scroll > table td {
+/* Заголовки переносятся, чтобы не растягивать таблицу */
+.table-scroll > table th {
+  overflow-wrap: break-word;
+}
+
+/* Артикул — единственное текстовое значение, ему перенос разрешён */
+.table-scroll > table td:nth-child(2) {
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 
@@ -211,8 +221,7 @@ th:last-child {
 .table-scroll > table td:nth-child(12),
 .table-scroll > table th:nth-child(13),
 .table-scroll > table td:nth-child(13) {
-  width: 100px;
-  white-space: nowrap;
+  width: 110px;
 }
 
 /* ===== Загрузчик фото SKU ===== */
