@@ -1,6 +1,9 @@
 var firstRowNum = 3;
 
-var getReportPeriodFromPaidStorageReportFile = (workSheet, requiredColumnsName) => {
+var getReportPeriodFromPaidStorageReportFile = (
+  workSheet,
+  requiredColumnsName,
+) => {
   var lastRowNum = workSheet.actualRowCount;
 
   var dateFromCellAddress = requiredColumnsName.dateColumn + firstRowNum;

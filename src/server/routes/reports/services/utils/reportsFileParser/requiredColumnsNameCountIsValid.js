@@ -1,4 +1,7 @@
-var requiredColumnsNameCountIsValid = (requiredColumnsName, expectedQtyOfRequiredColumnsName) =>
+var requiredColumnsNameCountIsValid = (
+  requiredColumnsName,
+  expectedQtyOfRequiredColumnsName,
+) =>
   Object.keys(requiredColumnsName).length === expectedQtyOfRequiredColumnsName;
 
 export default requiredColumnsNameCountIsValid;

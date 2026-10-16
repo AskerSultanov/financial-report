@@ -25,15 +25,20 @@ var deductionOrPaymentTitleText = "Удержания";
 var returnAmountTitleText = "Количество возврата";
 var orderDateTitleText = "Дата заказа покупателем";
 var paidAcceptanceTitleText = "Операции на приемке";
-var otherPaidAcceptanceTitleText = 'Услуга по обработке Товара'
+var otherPaidAcceptanceTitleText = "Услуга по обработке Товара";
 var retailAmountTitleText = "Вайлдберриз реализовал Товар (Пр)";
 var deliveryCostTitleText = "Услуги по доставке товара покупателю";
-var additionalPaymentTitleText = "Корректировка Вознаграждения Вайлдберриз (ВВ)";
-var sellerPayoutAmountTitleText = "К перечислению Продавцу за реализованный Товар";
+var additionalPaymentTitleText =
+  "Корректировка Вознаграждения Вайлдберриз (ВВ)";
+var sellerPayoutAmountTitleText =
+  "К перечислению Продавцу за реализованный Товар";
 
 var titlesRowNum = 1;
 
-function getRequiredColumnsNameFromWeeklyFinanfialReportFile(workSheet, columnsNames) {
+function getRequiredColumnsNameFromWeeklyFinanfialReportFile(
+  workSheet,
+  columnsNames,
+) {
   var topCells = [];
   var requiredColumnsName = {};
 
@@ -43,122 +48,228 @@ function getRequiredColumnsNameFromWeeklyFinanfialReportFile(workSheet, columnsN
     topCells.push({ colName, colTitle });
   }
 
-  var qtyColumn = workSheet.getCell(expectedQtyTitleColumnName + titlesRowNum).value === qtyTitleText;
+  var qtyCellAddress = expectedQtyTitleColumnName + titlesRowNum;
+
+  var qtyColumn = workSheet.getCell(qtyCellAddress).value === qtyTitleText;
+
   if (!qtyColumn) {
-    qtyColumn = topCells.find((colName) => colName.colTitle === qtyTitleText).colName;
+    qtyColumn = topCells.find(
+      (colName) => colName.colTitle === qtyTitleText,
+    ).colName;
   } else {
     qtyColumn = expectedQtyTitleColumnName;
   }
   requiredColumnsName.qtyColumn = qtyColumn;
 
-  var countryColumn = workSheet.getCell(expectedCountryTitleName + titlesRowNum).value === countryTitleText;
+  var countryCellAddress = expectedCountryTitleName + titlesRowNum;
+
+  var countryColumn =
+    workSheet.getCell(countryCellAddress).value === countryTitleText;
+
   if (!countryColumn) {
-    countryColumn = topCells.find((colName) => colName.colTitle === countryTitleText).colTitle;
+    countryColumn = topCells.find(
+      (colName) => colName.colTitle === countryTitleText,
+    ).colTitle;
   } else {
     countryColumn = expectedCountryTitleName;
   }
   requiredColumnsName.countryColumn = countryColumn;
 
-  var saleDateColumn = workSheet.getCell(expectedSaleDateTitleColumnName + titlesRowNum).value === saleDateTitleText;
+  var saleDateCellAddress = expectedSaleDateTitleColumnName + titlesRowNum;
+
+  var saleDateColumn =
+    workSheet.getCell(saleDateCellAddress).value === saleDateTitleText;
+
   if (!saleDateColumn) {
-    saleDateColumn = topCells.find((colName) => colName.colTitle === saleDateTitleText).colName;
+    saleDateColumn = topCells.find(
+      (colName) => colName.colTitle === saleDateTitleText,
+    ).colName;
   } else {
     saleDateColumn = expectedSaleDateTitleColumnName;
   }
   requiredColumnsName.saleDateColumn = saleDateColumn;
 
-  var storageCostColumn = (workSheet.getCell(expectedStorageCostTitleColumnName + titlesRowNum).value = storageCostTitleText);
+  var storageCellAddress = expectedStorageCostTitleColumnName + titlesRowNum;
+
+  var storageCostColumn =
+    workSheet.getCell(storageCellAddress).value === storageCostTitleText;
+
   if (!storageCostColumn) {
-    storageCostColumn = topCells.find((colName) => colName.colTitle === storageCostTitleText).colName;
+    storageCostColumn = topCells.find(
+      (colName) => colName.colTitle === storageCostTitleText,
+    ).colName;
   } else {
     storageCostColumn = expectedStorageCostTitleColumnName;
   }
   requiredColumnsName.storageCostColumn = storageCostColumn;
 
-  var docTypeNameColumn = workSheet.getCell(expectedDocTypeNameTitleColumnName + titlesRowNum).value === docTypeNameTitleText;
+  var docTypeNameCellAddress =
+    expectedDocTypeNameTitleColumnName + titlesRowNum;
+
+  var docTypeNameColumn =
+    workSheet.getCell(docTypeNameCellAddress).value === docTypeNameTitleText;
+
   if (!docTypeNameColumn) {
-    docTypeNameColumn = topCells.find((colName) => colName.colTitle === docTypeNameTitleText).colName;
+    docTypeNameColumn = topCells.find(
+      (colName) => colName.colTitle === docTypeNameTitleText,
+    ).colName;
   } else {
     docTypeNameColumn = expectedDocTypeNameTitleColumnName;
   }
   requiredColumnsName.docTypeNameColumn = docTypeNameColumn;
 
-  var finesColumn = workSheet.getCell(expectedFinesTitleColumnName + titlesRowNum).value === finesTitleText;
+  var finesCellAddress = expectedFinesTitleColumnName + titlesRowNum;
+  var finesColumn =
+    workSheet.getCell(finesCellAddress).value === finesTitleText;
+
   if (!finesColumn) {
-    finesColumn = topCells.find((colName) => colName.colTitle === finesTitleText).colName;
+    finesColumn = topCells.find(
+      (colName) => colName.colTitle === finesTitleText,
+    ).colName;
   } else {
     finesColumn = expectedFinesTitleColumnName;
   }
   requiredColumnsName.finesColumn = finesColumn;
 
-  var retailPriceColumn = workSheet.getCell(expectedRetailPriceTitleColumnName + titlesRowNum).value === retailPriceTitleText;
+  var retailPriceCellAddress =
+    expectedRetailPriceTitleColumnName + titlesRowNum;
+
+  var retailPriceColumn =
+    workSheet.getCell(retailPriceCellAddress).value === retailPriceTitleText;
+
   if (!retailPriceColumn) {
-    retailPriceColumn = topCells.find((colName) => colName.colTitle === retailPriceTitleText).colName;
+    retailPriceColumn = topCells.find(
+      (colName) => colName.colTitle === retailPriceTitleText,
+    ).colName;
   } else {
     retailPriceColumn = expectedRetailPriceTitleColumnName;
   }
   requiredColumnsName.retailPriceColumn = retailPriceColumn;
 
-  var deductionOrPaymentColumn = workSheet.getCell(expectedDeductionOrPaymentTitleColumnName + titlesRowNum).value === deductionOrPaymentTitleText;
+  var deductionOrPaymentCellAddress =
+    expectedDeductionOrPaymentTitleColumnName + titlesRowNum;
+
+  var deductionOrPaymentColumn =
+    workSheet.getCell(deductionOrPaymentCellAddress).value ===
+    deductionOrPaymentTitleText;
+
   if (!deductionOrPaymentColumn) {
-    deductionOrPaymentColumn = topCells.find((colName) => colName.colTitle === deductionOrPaymentTitleText).colName;
+    deductionOrPaymentColumn = topCells.find(
+      (colName) => colName.colTitle === deductionOrPaymentTitleText,
+    ).colName;
   } else {
     deductionOrPaymentColumn = expectedDeductionOrPaymentTitleColumnName;
   }
   requiredColumnsName.deductionOrPaymentColumn = deductionOrPaymentColumn;
 
-  var returnAmountColumn = workSheet.getCell(expectedReturnAmountTitleColumnName + titlesRowNum).value === returnAmountTitleText;
+  var returnAmountCellAddress =
+    expectedReturnAmountTitleColumnName + titlesRowNum;
+
+  var returnAmountColumn =
+    workSheet.getCell(returnAmountCellAddress).value === returnAmountTitleText;
+
   if (!returnAmountColumn) {
-    returnAmountColumn = topCells.find((colName) => colName.colTitle === returnAmountTitleText).colName;
+    returnAmountColumn = topCells.find(
+      (colName) => colName.colTitle === returnAmountTitleText,
+    ).colName;
   } else {
     returnAmountColumn = expectedReturnAmountTitleColumnName;
   }
   requiredColumnsName.returnAmountColumn = returnAmountColumn;
 
-  var orderDateColumn = workSheet.getCell(expectedOrderDateTitleColumnName + titlesRowNum).value === orderDateTitleText;
+  var orderDateCellAddress = expectedOrderDateTitleColumnName + titlesRowNum;
+
+  var orderDateColumn =
+    workSheet.getCell(orderDateCellAddress).value === orderDateTitleText;
+
   if (!orderDateColumn) {
-    orderDateColumn = topCells.find((colName) => colName.colTitle === orderDateTitleText).colName;
+    orderDateColumn = topCells.find(
+      (colName) => colName.colTitle === orderDateTitleText,
+    ).colName;
   } else {
     orderDateColumn = expectedOrderDateTitleColumnName;
   }
   requiredColumnsName.orderDateColumn = orderDateColumn;
 
-  var paidAcceptanceCellContent = workSheet.getCell(expectedPaidAcceptanceTitleColumnName + titlesRowNum).value 
-  var paidAcceptanceColumn = paidAcceptanceCellContent === paidAcceptanceTitleText && paidAcceptanceCellContent === otherPaidAcceptanceTitleText;
+  var paidAcceptanceCellAddress =
+    expectedPaidAcceptanceTitleColumnName + titlesRowNum;
+
+  var paidAcceptanceCellContent = workSheet.getCell(
+    paidAcceptanceCellAddress,
+  ).value;
+
+  var paidAcceptanceColumn =
+    paidAcceptanceCellContent === paidAcceptanceTitleText &&
+    paidAcceptanceCellContent === otherPaidAcceptanceTitleText;
+
   if (!paidAcceptanceColumn) {
-    paidAcceptanceColumn = topCells.find((colName) => colName.colTitle === paidAcceptanceTitleText || colName.colTitle === otherPaidAcceptanceTitleText).colName;
+    paidAcceptanceColumn = topCells.find(
+      (colName) =>
+        colName.colTitle === paidAcceptanceTitleText ||
+        colName.colTitle === otherPaidAcceptanceTitleText,
+    ).colName;
   } else {
     paidAcceptanceColumn = expectedPaidAcceptanceTitleColumnName;
   }
   requiredColumnsName.paidAcceptanceColumn = paidAcceptanceColumn;
 
-  var retailAmountColumn = workSheet.getCell(expectedRetailAmountTitleColumnName + titlesRowNum).value === retailAmountTitleText;
+  var retailAmountCellAddress =
+    expectedRetailAmountTitleColumnName + titlesRowNum;
+
+  var retailAmountColumn =
+    workSheet.getCell(retailAmountCellAddress).value === retailAmountTitleText;
+
   if (!retailAmountColumn) {
-    retailAmountColumn = topCells.find((colName) => colName.colTitle === retailAmountTitleText).colName;
+    retailAmountColumn = topCells.find(
+      (colName) => colName.colTitle === retailAmountTitleText,
+    ).colName;
   } else {
     retailAmountColumn = expectedRetailAmountTitleColumnName;
   }
   requiredColumnsName.retailAmountColumn = retailAmountColumn;
 
-  var deliveryCostColumn = workSheet.getCell(expectedDeliveryCostTitleColumnName + titlesRowNum).value === deliveryCostTitleText;
+  var deliveryCostCellAddress =
+    expectedDeliveryCostTitleColumnName + titlesRowNum;
+
+  var deliveryCostColumn =
+    workSheet.getCell(deliveryCostCellAddress).value === deliveryCostTitleText;
+
   if (!deliveryCostColumn) {
-    deliveryCostColumn = topCells.find((colName) => colName.colTitle === deliveryCostTitleText).colName;
+    deliveryCostColumn = topCells.find(
+      (colName) => colName.colTitle === deliveryCostTitleText,
+    ).colName;
   } else {
     deliveryCostColumn = expectedDeliveryCostTitleColumnName;
   }
   requiredColumnsName.deliveryCostColumn = deliveryCostColumn;
 
-  var additionalPaymentColumn = workSheet.getCell(expectedAdditionalPaymentTitleColumnName + titlesRowNum).value === additionalPaymentTitleText;
+  var additionalPaymentCellAddress =
+    expectedAdditionalPaymentTitleColumnName + titlesRowNum;
+
+  var additionalPaymentColumn =
+    workSheet.getCell(additionalPaymentCellAddress).value ===
+    additionalPaymentTitleText;
+
   if (!additionalPaymentColumn) {
-    additionalPaymentColumn = topCells.find((colName) => colName.colTitle === additionalPaymentTitleText).colName;
+    additionalPaymentColumn = topCells.find(
+      (colName) => colName.colTitle === additionalPaymentTitleText,
+    ).colName;
   } else {
     additionalPaymentColumn = expectedAdditionalPaymentTitleColumnName;
   }
   requiredColumnsName.additionalPaymentColumn = additionalPaymentColumn;
 
-  var sellerPayoutAmountColumn = workSheet.getCell(expectedSellerPayoutAmountTitleColumnName + titlesRowNum).value === sellerPayoutAmountTitleText;
+  var sellerPayoutAmountCellAddress =
+    expectedSellerPayoutAmountTitleColumnName + titlesRowNum;
+
+  var sellerPayoutAmountColumn =
+    workSheet.getCell(sellerPayoutAmountCellAddress).value ===
+    sellerPayoutAmountTitleText;
+
   if (!sellerPayoutAmountColumn) {
-    sellerPayoutAmountColumn = topCells.find((colName) => colName.colTitle === sellerPayoutAmountTitleText).colName;
+    sellerPayoutAmountColumn = topCells.find(
+      (colName) => colName.colTitle === sellerPayoutAmountTitleText,
+    ).colName;
   } else {
     sellerPayoutAmountColumn = expectedSellerPayoutAmountTitleColumnName;
   }

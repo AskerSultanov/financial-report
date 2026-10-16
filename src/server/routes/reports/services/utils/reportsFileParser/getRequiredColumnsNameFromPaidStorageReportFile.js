@@ -1,7 +1,7 @@
-var expectedDateColumnName = "A";
-var expectedSkuIdColumnName = "Q";
-var expectedSkuNameColumnName = "P";
-var expectedWarehousePriceColumnName = "T";
+var expectedDateColName = "A";
+var expectedSkuIdColName = "Q";
+var expectedSkuNameColName = "P";
+var expectedWarehousePriceColName = "T";
 
 var dateTitleText = "Дата";
 var skuIdTitleText = "Артикул WB";
@@ -10,7 +10,10 @@ var warehousePriceTitleText = "Сумма хранения, руб";
 
 var titlesRowNum = 2;
 
-var getRequiredColumnsNameFromPaidStorageReportFile = (workSheet, columnsNames) => {
+var getRequiredColumnsNameFromPaidStorageReportFile = (
+  workSheet,
+  columnsNames,
+) => {
   var topCells = [];
   var requiredColumnsName = [];
 
@@ -20,32 +23,55 @@ var getRequiredColumnsNameFromPaidStorageReportFile = (workSheet, columnsNames) 
     topCells.push({ colName, colTitle });
   }
 
-  var dateColumn = workSheet.getCell(expectedDateColumnName + titlesRowNum).value === dateTitleText;
+  var dateCellAddress = expectedDateColName + titlesRowNum;
+  var dateColumn = workSheet.getCell(dateCellAddress).value === dateTitleText;
+
   if (!dateColumn) {
-    requiredColumnsName.dateColumn = topCells.find((topCell) => topCell.colTitle === dateTitleText).colName;
+    requiredColumnsName.dateColumn = topCells.find(
+      (topCell) => topCell.colTitle === dateTitleText,
+    ).colName;
   } else {
-    requiredColumnsName.dateColumn = expectedDateColumnName;
+    requiredColumnsName.dateColumn = expectedDateColName;
   }
 
-  var skuIdColumn = workSheet.getCell(expectedSkuIdColumnName + titlesRowNum).value === skuIdTitleText;
+  var skuIdCellAddress = expectedSkuIdColName + titlesRowNum;
+
+  var skuIdColumn =
+    workSheet.getCell(skuIdCellAddress).value === skuIdTitleText;
+
   if (!skuIdColumn) {
-    requiredColumnsName.skuIdColumn = topCells.find((topCell) => topCell.colTitle === skuIdTitleText).colName;
+    requiredColumnsName.skuIdColumn = topCells.find(
+      (topCell) => topCell.colTitle === skuIdTitleText,
+    ).colName;
   } else {
-    requiredColumnsName.skuIdColumn = expectedSkuIdColumnName;
+    requiredColumnsName.skuIdColumn = expectedSkuIdColName;
   }
 
-  var skuNameColumn = workSheet.getCell(expectedSkuNameColumnName + titlesRowNum).value === skuNameTitleText;
+  var skuNameCellAddress = expectedSkuNameColName + titlesRowNum;
+
+  var skuNameColumn =
+    workSheet.getCell(skuNameCellAddress).value === skuNameTitleText;
+
   if (skuNameColumn) {
-    requiredColumnsName.skuNameColumn = topCells.find((topCell) => topCell.colTitle === skuNameTitleText).colName;
+    requiredColumnsName.skuNameColumn = topCells.find(
+      (topCell) => topCell.colTitle === skuNameTitleText,
+    ).colName;
   } else {
-    requiredColumnsName.skuNameColumn = expectedSkuNameColumnName;
+    requiredColumnsName.skuNameColumn = expectedSkuNameColName;
   }
 
-  var warehousePriceColumn = workSheet.getCell(expectedWarehousePriceColumnName + titlesRowNum).value === warehousePriceTitleText;
+  var warehousePriceCellAddress = expectedWarehousePriceColName + titlesRowNum;
+
+  var warehousePriceColumn =
+    workSheet.getCell(warehousePriceCellAddress).value ===
+    warehousePriceTitleText;
+
   if (warehousePriceColumn) {
-    requiredColumnsName.warehousePriceColumn = topCells.find((topCell) => topCell.colTitle === warehousePriceTitleText).colName;
+    requiredColumnsName.warehousePriceColumn = topCells.find(
+      (topCell) => topCell.colTitle === warehousePriceTitleText,
+    ).colName;
   } else {
-    requiredColumnsName.warehousePriceColumn = expectedWarehousePriceColumnName;
+    requiredColumnsName.warehousePriceColumn = expectedWarehousePriceColName;
   }
 
   return { requiredColumnsName };

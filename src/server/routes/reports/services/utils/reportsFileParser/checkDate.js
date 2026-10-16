@@ -1,11 +1,9 @@
 var dayStub = 15;
-var daysInWeek = 7;
 var mondayIndex = 1;
 var sundayIndex = 0;
 var reportRange = 6;
 var firstMonthNum = 1;
 var lastMonthNum = 12;
-var firstMonthIndex = 0;
 var pseudoSundayIndex = 7;
 
 var checkAndFixMonday = (dateFrom) => {
@@ -13,7 +11,6 @@ var checkAndFixMonday = (dateFrom) => {
 
   var date = new Date(year, month - 1, day);
   var dayIndex = date.getDay();
-  var daysPerMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
   var isMonday = dayIndex === mondayIndex;
 
@@ -29,14 +26,22 @@ var checkAndFixMonday = (dateFrom) => {
     if (isFirstMonth) {
       var prevYear = +year - 1;
       var lastMonthDate = new Date(prevYear, lastMonthNum, dayStub);
-      var daysPerLastMonth = new Date(lastMonthDate.getFullYear(), lastMonthDate.getMonth() + 1, 0).getDate();
+      var daysPerLastMonth = new Date(
+        lastMonthDate.getFullYear(),
+        lastMonthDate.getMonth() + 1,
+        0,
+      ).getDate();
       var mondayDay = daysPerLastMonth + +day - reportRange;
 
       dateFrom = `${prevYear}-${lastMonthNum}-${String(mondayDay).padStart(2, "0")}`;
     } else {
       var prevMonthNum = +month - 1;
       var prevMonthDate = new Date(year, prevMonthNum - 1, day);
-      var daysPerPrevMonth = new Date(prevMonthDate.getFullYear(), prevMonthDate.getMonth() + 1, 0).getDate();
+      var daysPerPrevMonth = new Date(
+        prevMonthDate.getFullYear(),
+        prevMonthDate.getMonth() + 1,
+        0,
+      ).getDate();
 
       var isSunday = dayIndex === sundayIndex;
 
@@ -78,7 +83,11 @@ var checkAndFixSunday = (dateTo) => {
     return { dateTo };
   }
 
-  var daysPerMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  var daysPerMonth = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0,
+  ).getDate();
 
   var daysSum = +day + reportRange;
   var restDays = daysPerMonth - +day;
@@ -92,14 +101,10 @@ var checkAndFixSunday = (dateTo) => {
 
     if (isLastMonth) {
       var nextYear = +year + 1;
-      var firstMonthDate = new Date(nextYear, firstMonthIndex, dayStub);
-      var daysPerFirstMonth = new Date(firstMonthDate.getFullYear(), firstMonthDate.getMonth() + 1, 0).getDate();
 
       dateTo = `${nextYear}-${String(firstMonthNum).padStart(2, "0")}-${String(daysToSundayInCurrentMonth).padStart(2, "0")}`;
     } else {
       var nextMonthNum = +month + 1;
-      var nextMonthDate = new Date(year, nextMonthNum - 1, dayStub);
-      var daysPerNextMonth = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0).getDate();
 
       dateTo = `${year}-${String(nextMonthNum).padStart(2, "0")}-${String(daysToSundayInCurrentMonth).padStart(2, "0")}`;
     }

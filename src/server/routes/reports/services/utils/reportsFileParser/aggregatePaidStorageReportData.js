@@ -1,5 +1,3 @@
-import exceljs from "exceljs-community";
-
 var aggregatePaidStorageReportData = (paidStorageReports) => {
   var paidStorageReport = [];
 

@@ -1,10 +1,11 @@
 var firstRowNum = 2;
+var dateColumnChar = "M";
 
-var getReportPeriod = (workSheet, requiredColumnsName = "M") => {
+var getReportPeriod = (workSheet) => {
   var lastRowNum = workSheet.actualRowCount;
 
-  var dateFromCellAddress = "M" + firstRowNum;
-  var dateToCellAddress = "M" + lastRowNum;
+  var dateFromCellAddress = dateColumnChar + firstRowNum;
+  var dateToCellAddress = dateColumnChar + lastRowNum;
 
   var dateFrom = workSheet.getCell(dateFromCellAddress).value;
   var dateTo = workSheet.getCell(dateToCellAddress).value;

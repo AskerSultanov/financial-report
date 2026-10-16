@@ -2,13 +2,23 @@ import aggregatePaidStorageReportData from "./aggregatePaidStorageReportData.js"
 import aggregateWeeklyFinancialReports from "./aggregateWeeklyFinancialReports.js";
 
 var extractReportDataFromWorkSheets = async (onePeriodReports) => {
-  var { paidStorageReport } = aggregatePaidStorageReportData(onePeriodReports?.paidStorageReports);
+  var { paidStorageReport } = aggregatePaidStorageReportData(
+    onePeriodReports?.paidStorageReports,
+  );
 
-  var { weeklyFinancialReport, paidStorageReport } = aggregateWeeklyFinancialReports(onePeriodReports.weeklyFinancialReports, paidStorageReport);
+  var { weeklyFinancialReport, paidStorageReport } =
+    aggregateWeeklyFinancialReports(
+      onePeriodReports.weeklyFinancialReports,
+      paidStorageReport,
+    );
 
   return {
     reportPeriodIsEmpty: !weeklyFinancialReport.length,
-    reports: { weeklyFinancialReport, paidStorageReport, advertisingReport: [] },
+    reports: {
+      weeklyFinancialReport,
+      paidStorageReport,
+      advertisingReport: [],
+    },
   };
 };
 

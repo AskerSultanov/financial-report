@@ -10,18 +10,28 @@ var removeDublicateFiles = (files) => {
   for (var { buffer, mimetype, originalname } of files) {
     var decodedFileName = Buffer.from(originalname, "latin1").toString("utf8");
 
-    if (originalname.startsWith(weeklyFinancialReportFileName) || decodedFileName.startsWith(weeklyFinancialReportFileName)) {
-      originalname = originalname.startsWith(weeklyFinancialReportFileName) ? originalname : decodedFileName;
+    if (
+      originalname.startsWith(weeklyFinancialReportFileName) ||
+      decodedFileName.startsWith(weeklyFinancialReportFileName)
+    ) {
+      originalname = originalname.startsWith(weeklyFinancialReportFileName)
+        ? originalname
+        : decodedFileName;
       var { reportId } = getReportIdFromFileName(originalname);
 
       if (!uniqueFiles.has(reportId)) {
         uniqueFiles.set(reportId, { buffer, mimetype, originalname });
       }
     } else if (originalname.startsWith(paidStorageReportFileName)) {
-      var { paidStorageReportPeriod } = getReportPeriodFromPaisStorageReportFileName(originalname);
+      var { paidStorageReportPeriod } =
+        getReportPeriodFromPaisStorageReportFileName(originalname);
 
       if (!uniqueFiles.has(paidStorageReportPeriod)) {
-        uniqueFiles.set(paidStorageReportPeriod, { buffer, mimetype, originalname });
+        uniqueFiles.set(paidStorageReportPeriod, {
+          buffer,
+          mimetype,
+          originalname,
+        });
       }
     }
   }
