@@ -52,7 +52,6 @@ var reportSchema = new Schema(
     recordedTo: { type: recordedToSchema, required: true },
     buybackReportIsExist: { type: Boolean, default: false },
     isFinancesAccounted: { type: Boolean, default: false },
-    reportIsEmpty: { type: Boolean, default: false },
     skus: [{ type: skuSchema, required: true }],
   },
   { autoIndex: false },

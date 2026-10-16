@@ -71,7 +71,6 @@ var reportsProcessing = async (
   report.userId = userId;
   report.dateFrom = dateFrom;
   report.reportId = reportId;
-  report.reportIsEmpty = !report.skus.length;
   report.isCrossYearPeriod = isCrossYearPeriod;
   report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
 
@@ -113,7 +112,7 @@ var reportsProcessing = async (
   }
 
   return {
-    reportPeriodIsEmpty: report.reportIsEmpty,
+    reportPeriodIsEmpty: false,
     reportData: {
       reportId,
       dateFrom,
