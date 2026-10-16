@@ -1,28 +1,17 @@
 /**
- * @param {'setcostprice' | 'setotherexpenses'} changedData
+ * @param {'cost-price' | 'other-expenses'} targetUrlEnding
  */
 
-var sendChangedData = async (data, isGuestAccess = false, changedData) => {
-  var targetUrl;
+var sendChangedData = async (data, targetUrlEnding) => {
+  var targetRouterPath = window.location.pathname.split("/")[1];
+  var url = "/" + targetRouterPath + "/skus/" + targetUrlEnding;
 
-  if (isGuestAccess) {
-    var setCostPriceUrl = "/decode-report-without-registration/report/cost-price";
-    var setOtherExpensesUrl = "/decode-report-without-registration/report/other-expenses";
-
-    var targetUrl = changedData === "setcostprice" ? setCostPriceUrl : setOtherExpensesUrl;
-  } else {
-    var setCostPriceUrl = "/report/skus/cost-price";
-    var setOtherExpensesUrl = "/report/skus/other-expenses";
-
-    var targetUrl = changedData === "setcostprice" ? setCostPriceUrl : setOtherExpensesUrl;
-  }
-
-  var res = await fetch(targetUrl, {
+  var res = await fetch(url, {
     method: "PATCH",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
   });
-  
+
   if (!res.ok) {
     alert("Не удалось изменить данные");
     return;

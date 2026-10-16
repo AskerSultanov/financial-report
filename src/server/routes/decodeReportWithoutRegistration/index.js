@@ -31,13 +31,13 @@ router.post(
 );
 
 router.patch(
-  "/report/cost-price",
+  "/skus/cost-price",
   joiSchemaValidator(schemas.setCostPrice),
   setCostPriceController,
 );
 
 router.patch(
-  "/report/other-expenses",
+  "/skus/other-expenses",
   joiSchemaValidator(schemas.setCostPrice),
   setOtherExpensesController,
 );

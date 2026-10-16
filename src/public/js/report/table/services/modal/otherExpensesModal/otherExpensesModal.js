@@ -61,11 +61,7 @@ var otherExpensesModal = (dataToUpdate, displayElement, isGuestAccess) => {
 
     dataToUpdate.otherExpenses = +input.value;
 
-    var updatedData = await sendChangedData(
-      dataToUpdate,
-      isGuestAccess,
-      "setotherexpenses",
-    );
+    var updatedData = await sendChangedData(dataToUpdate, "other-expenses");
 
     if (!updatedData) {
       return;

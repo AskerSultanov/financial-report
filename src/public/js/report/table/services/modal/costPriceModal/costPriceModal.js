@@ -59,11 +59,7 @@ var costPriceModal = (dataToUpdate, displayElement, isGuestAccess) => {
 
     dataToUpdate.costPrice = +input.value;
 
-    var updatedData = await sendChangedData(
-      dataToUpdate,
-      isGuestAccess,
-      "setcostprice",
-    );
+    var updatedData = await sendChangedData(dataToUpdate, "cost-price");
 
     if (!updatedData) {
       return;
