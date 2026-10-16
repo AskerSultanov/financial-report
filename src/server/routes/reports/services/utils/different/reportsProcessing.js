@@ -58,6 +58,12 @@ var reportsProcessing = async (
     updatedTaxParams.push({ year: currentYear, data: recalculatedTaxParams });
   }
 
+  if (!reportSkus.length) {
+    await addReportToEmptyReportPeriods(userId, dateFrom, dateTo, session);
+
+    return { reportPeriodIsEmpty: true, reportData: {} };
+  }
+
   var report = {};
   report.skus = reportSkus;
 
@@ -85,30 +91,25 @@ var reportsProcessing = async (
     await setLastReportRequestTimestamp(userId, session);
   }
 
-  if (report.skus.length) {
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+  await updateTaxParamsToDb(userId, updatedTaxParams, session);
 
-    var skuNames = report.skus.map((sku) => sku.skuName);
+  var skuNames = report.skus.map((sku) => sku.skuName);
 
-    var { listGoods } = await getListGoodsFromDb(
-      userId,
-      skuNames,
-      selectedFields,
-      session,
-    );
+  var { listGoods } = await getListGoodsFromDb(
+    userId,
+    skuNames,
+    selectedFields,
+    session,
+  );
 
-    var skuNamesAndIds = reportSkus.map((sku) => {
-      return { name: sku.skuName, id: sku.id };
-    });
+  var skuNamesAndIds = reportSkus.map((sku) => {
+    return { name: sku.skuName, id: sku.id };
+  });
 
-    var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
+  var { newSkus } = getNewSkusToListGoods(listGoods, skuNamesAndIds);
 
-    if (newSkus.length) {
-      await saveNewSkusToDb(userId, newSkus, session);
-    }
-  } else {
-    await addReportToEmptyReportPeriods(userId, dateFrom, dateTo, session);
-    return { reportPeriodIsEmpty: report.reportIsEmpty, reportData: {} };
+  if (newSkus.length) {
+    await saveNewSkusToDb(userId, newSkus, session);
   }
 
   return {
