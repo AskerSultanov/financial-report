@@ -24,7 +24,7 @@ var createTotalsTable = (
 
     var elemId = isCrossYearPeriod ? keyWithYear : keyWithoutYear;
 
-    var value = (+reportTotals[key]).toFixed(2);
+    var value = reportTotals[key];
 
     if (fieldsWithModal.includes(key) && tableNeedModal) {
       var yearToClient = isCrossYearPeriod ? year : recordedTo.year;
@@ -73,7 +73,6 @@ export default createTotalsTable;
 var tableHeadContent = `
             <th>Отчётный год</th>
             <th>WB реализовал</th>
-            <th>Налогооблагаемая база</th>
             <th>Продано шт.</th>
             <th>Возвратов</th>
             <th>Перечисления продавцу</th>
