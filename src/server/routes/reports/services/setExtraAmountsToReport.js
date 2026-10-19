@@ -9,6 +9,7 @@ var { getReportById, saveUpdatedReport } = dbUtils.reportModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setExtraAmountsToReportService = async (data) => {
+  console.log(data);
   var { userId, reportId, updateField, year } = data;
 
   var skusDataToClient = [];

@@ -39,10 +39,9 @@ var calcReportTotalsFromSkus = (skus) => {
     .reduce((acc, sku) => acc + sku.storageCost, 0)
     .toFixed(2);
 
-  var advertisingCosts = skus.reduce(
-    (acc, sku) => acc + sku.averageAdvertisingCost,
-    0,
-  );
+  var advertisingCosts = skus
+    .reduce((acc, sku) => acc + sku.averageAdvertisingCost, 0)
+    .toFixed(2);
 
   var tax = skus.reduce((acc, sku) => acc + sku.tax, 0).toFixed(2);
 
@@ -64,7 +63,6 @@ var calcReportTotalsFromSkus = (skus) => {
 
   var reportTotals = {
     retailAmount,
-    //  taxableAmount,
     sold,
     returnAmount,
     sellerPayoutAmount,
@@ -73,9 +71,9 @@ var calcReportTotalsFromSkus = (skus) => {
     fines,
     deductionOrPayment,
     storageCost,
-    advertisingCosts,
     productCosts,
     otherExpenses,
+    advertisingCosts,
     tax,
     insuranceFee,
     additionalInsuranceFee,

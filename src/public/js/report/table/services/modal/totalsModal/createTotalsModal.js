@@ -12,9 +12,12 @@ import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.j
 import updateParentTableExtraAmountField from "../../updateParentTableExtraAmountField.js";
 
 var event = "click";
+
 var saveButtonText = "Сохранить";
+var saveButtonClass = "modal-button modal-button-save";
+
 var cancelButtonText = "Отмена";
-var url = "/report/extra-amounts";
+var cancelButtonClass = "modal-button modal-button-cancel";
 
 var titlesMap = {
   tax: "Добавить налоги к отчету",
@@ -35,14 +38,12 @@ var createTotalsModal = (dataToUpdate, displayElement, isGuestAccess) => {
 
   var buttonsContainer = createDiv("modal-buttons");
 
-  var saveButtonClass = "modal-button modal-button-save";
   var saveButton = createButton(saveButtonClass, saveButtonText, {
     event,
     cb: saveButtonHandler,
   });
 
   var cancelCb = () => modal.remove();
-  var cancelButtonClass = "modal-button modal-button-cancel";
   var cancelButton = createButton(cancelButtonClass, cancelButtonText, {
     event,
     cb: cancelCb,
