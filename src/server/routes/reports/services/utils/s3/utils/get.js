@@ -3,16 +3,16 @@ import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 
 var getFile = async (client, Key) => {
   var headObjCommand = new HeadObjectCommand({
-    Bucket: process.env.BUCKET_NAME,
     Key,
+    Bucket: process.env.S3_BUCKET_NAME,
   });
 
   try {
     await client.send(headObjCommand);
 
     var getObjCommand = new GetObjectCommand({
-      Bucket: process.env.BUCKET_NAME,
       Key,
+      Bucket: process.env.S3_BUCKET_NAME,
     });
 
     var signedUrl = await getSignedUrl(client, getObjCommand, {

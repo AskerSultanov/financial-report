@@ -1,7 +1,7 @@
 import { HeadBucketCommand, CreateBucketCommand } from "@aws-sdk/client-s3";
 
-var command = new HeadBucketCommand({ Bucket: process.env.BUCKET_NAME });
-var createBucketCommand = new CreateBucketCommand({ Bucket: process.env.BUCKET_NAME });
+var command = new HeadBucketCommand({ Bucket: process.env.S3_BUCKET_NAME });
+var createBucketCommand = new CreateBucketCommand({ Bucket: process.env.S3_BUCKET_NAME });
 
 var checkBucketExist = async (client) => {
   try {

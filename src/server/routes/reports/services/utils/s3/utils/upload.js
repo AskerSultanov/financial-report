@@ -8,7 +8,7 @@ var uploadFile = async (client, Key, fileType) => {
   var command = new PutObjectCommand({
     Key,
     ContentType: fileType,
-    Bucket: process.env.BUCKET_NAME,
+    Bucket: process.env.S3_BUCKET_NAME,
   });
 
   var presignedUrl = await getSignedUrl(client, command);
