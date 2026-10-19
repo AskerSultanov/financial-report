@@ -4,7 +4,15 @@ import deleteFile from "./utils/delete.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import checkBucketExist from "./utils/checkBucketExist.js";
 
-var client = new S3Client(JSON.parse(process.env.S3_CLIENT_OPTIONS));
+var options = {
+  region: process.env.S3_REGION,
+  endpoint: process.env.S3_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  },
+};
+var client = new S3Client(options);
 
 export default {
   getFile: (key) => getFile(client, key),
