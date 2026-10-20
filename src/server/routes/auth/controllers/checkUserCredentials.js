@@ -1,7 +1,7 @@
 import * as jose from "jose";
 import validateUser from "../services/validateUser.js";
 
-var alg = "RS256";
+var alg = "HS256";
 var oneDayMs = 86_400_000;
 
 var checkUserCredentialsController = async (req, res) => {
@@ -23,14 +23,17 @@ var checkUserCredentialsController = async (req, res) => {
 
   var payload = { role, userId };
 
-  var privateKey = await jose.importPKCS8(process.env.pkcs8, alg);
-  var token = await new jose.SignJWT(payload)
+  var accessTokenSecret = jose.base64url.decode(
+    process.env.ACCESS_TOKEN_SECRET,
+  );
+
+  var accessToken = await new jose.SignJWT(payload)
     .setExpirationTime("1d")
     .setProtectedHeader({ alg })
-    .sign(privateKey, {});
+    .sign(accessTokenSecret);
 
   return res
-    .cookie("token", token, { httpOnly: true, maxAge: oneDayMs })
+    .cookie("access_token", accessToken, { httpOnly: true, maxAge: oneDayMs })
     .cookie("userId", userId, { httpOnly: false, maxAge: oneDayMs })
     .json({ redirectUrl: "/" });
 };

@@ -1,20 +1,26 @@
 import * as jose from "jose";
 import { join } from "node:path";
 
-var alg = "RS256";
-
 var verifyAuthentication = async (req, res, next) => {
-  var token = req.cookies?.token;
+  var accessToken = req.cookies?.access_token;
 
-  if (!token) {
-    return res.sendFile(join(import.meta.dirname, "../../public/html/decodeReportWithoutRegistration/index.html"));
+  if (!accessToken) {
+    return res.sendFile(
+      join(
+        import.meta.dirname,
+        "../../public/html/decodeReportWithoutRegistration/index.html",
+      ),
+    );
   }
 
   try {
-    var publicKey = await jose.importSPKI(process.env.spki, alg);
-    var { payload } = await jose.jwtVerify(token, publicKey);
+    var accessTokenSecret = jose.base64url.decode(
+      process.env.ACCESS_TOKEN_SECRET,
+    );
+
+    var { payload } = await jose.jwtVerify(accessToken, accessTokenSecret);
   } catch (e) {
-    res.clearCookie("token");
+    res.clearCookie("access_token");
     return res.sendStatus(401);
   }
 

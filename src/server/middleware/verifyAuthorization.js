@@ -7,8 +7,14 @@ var verifyAuthorization = (req, res, next) => {
   var currentTimestamp = Date.now() / 1000;
 
   if (currentTimestamp >= payload.exp || !payload?.role) {
-    res.clearCookie("token");
-    return res.sendFile(join(import.meta.dirname, "../../public/html/decodeReportWithoutRegistration/index.html"));
+    res.clearCookie("access_token");
+
+    return res.sendFile(
+      join(
+        import.meta.dirname,
+        "../../public/html/decodeReportWithoutRegistration/index.html",
+      ),
+    );
   }
 
   if (roles.includes(payload.role)) {
@@ -16,7 +22,8 @@ var verifyAuthorization = (req, res, next) => {
     return next();
   }
 
-  res.clearCookie("token");
+  res.clearCookie("access_token");
+
   return res.sendStatus(403);
 };
 
