@@ -1,5 +1,5 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
-import { getReportAsXLSXBuffer } from "./utils/reportAsXLSXBuffer/index.js";
+import { getReportAsXLSXBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
 var { getReportById } = dbUtils.reportModelUtils;
 

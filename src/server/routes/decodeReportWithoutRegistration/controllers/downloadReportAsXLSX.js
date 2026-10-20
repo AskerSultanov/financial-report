@@ -1,4 +1,4 @@
-import { getReportAsXLSXBuffer } from "../../reports/services/utils/reportAsXLSXBuffer/index.js";
+import { getReportAsXLSXBuffer } from "../../reports/services/utils/reportToXlsxBuffer/index.js";
 
 var downloadReportAsXLSXController = async (req, res, next) => {
   var { report } = req.body;
@@ -10,7 +10,8 @@ var downloadReportAsXLSXController = async (req, res, next) => {
   var { buffer } = await getReportAsXLSXBuffer(report);
 
   res.set({
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Type":
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": 'attachment; filename="download.xlsx"',
   });
 

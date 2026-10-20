@@ -3,7 +3,7 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import {
   getReportAsXLSXBuffer,
   getMonthlySummaryAsXLSXBuffer,
-} from "./utils/reportAsXLSXBuffer/index.js";
+} from "./utils/reportToXlsxBuffer/index.js";
 
 var session = null;
 var folderName = "Отчёты";
