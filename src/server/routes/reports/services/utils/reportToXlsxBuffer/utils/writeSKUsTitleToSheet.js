@@ -7,12 +7,12 @@ var titles = [
   "Себестоимость",
   "Доставка",
   "Удержания/    выплаты",
+  "Реклама",
   "Хранение",
   "Приемка",
-  "Прочите расходы",
   "Выплата с вычетом всех услуг WB",
-  "Налогооблагаемая база",
   "Налоги",
+  "Прочите расходы",
   "Cтраховые взносы",
   "Доп. страховые взносы",
   "Маржинальность %",
@@ -33,6 +33,7 @@ var alignmentStyles = {
 var writeSKUsTitleToSheet = (sheet) => {
   var cellNum = 1;
   var columnNum = 1;
+
   for (var i = 0; i < columns.length; i++) {
     var cellName = columns[i] + cellNum;
 

@@ -1,23 +1,23 @@
-var requiredSKUsFieldsName = [
+var requiredSkusFieldsName = [
   "skuName",
   "qty",
   "returnAmount",
   "costPrice",
   "deliveryCost",
   "deductionOrPayment",
+  'averageAdvertisingCost',
   "storageCost",
   "acceptance",
-  "otherExpenses",
   "profit",
-  "taxableAmount",
   "tax",
+  "otherExpenses",
   "insuranceFee",
   "additionalInsuranceFee",
   "profitMargin",
   "finalProfit",
 ];
 
-var getRequiredSKUFieldsName = (skus) =>
+var getRequiredSkusFieldsName = (skus) =>
   skus.map((sku) => {
     return {
       skuName: sku.skuName,
@@ -26,12 +26,12 @@ var getRequiredSKUFieldsName = (skus) =>
       returnAmount: sku.returnAmount,
       deliveryCost: sku.deliveryCost,
       deductionOrPayment: sku.deductionOrPayment,
+      averageAdvertisingCost: sku.averageAdvertisingCost,
       storageCost: sku.storageCost,
       acceptance: sku.acceptance,
-      otherExpenses: sku.otherExpenses,
       profit: sku.profit,
-      taxableAmount: sku.taxableAmount,
       tax: sku.tax,
+      otherExpenses: sku.otherExpenses,
       insuranceFee: sku.insuranceFee,
       additionalInsuranceFee: sku.additionalInsuranceFee,
       profitMargin: sku.profitMargin,
@@ -39,4 +39,4 @@ var getRequiredSKUFieldsName = (skus) =>
     };
   });
 
-export { getRequiredSKUFieldsName, requiredSKUsFieldsName };
+export { getRequiredSkusFieldsName, requiredSkusFieldsName };

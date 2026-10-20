@@ -1,6 +1,23 @@
-import { requiredSKUsFieldsName } from "./getRequiredSKUFieldsName.js";
+import { requiredSkusFieldsName } from "./getRequiredSkusFieldsName.js";
 
-var columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"];
+var columns = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+];
 
 var alignmentStyles = {
   vertical: "middle",
@@ -8,20 +25,22 @@ var alignmentStyles = {
 };
 
 var writeSKUsToSheet = (sheet, skus) => {
-  var cellNum = 2;
-  
+  var rowNum = 2;
+
   for (var i = 0; i < skus.length; i++) {
     for (var j = 0; j < columns.length; j++) {
-      var cellName = columns[j] + cellNum;
+      var column = columns[j];
+      var cellAddress = column + rowNum;
 
-      var skuFieldValue = skus[i][requiredSKUsFieldsName[j]];
+      var skuField = requiredSkusFieldsName[j];
+      var skuFieldValue = skus[i][skuField];
 
-      sheet.getCell(cellName).alignment = alignmentStyles;
+      sheet.getCell(cellAddress).alignment = alignmentStyles;
 
-      sheet.getCell(cellName).value = skuFieldValue;
+      sheet.getCell(cellAddress).value = skuFieldValue;
     }
 
-    ++cellNum;
+    ++rowNum;
   }
 
   return sheet;
