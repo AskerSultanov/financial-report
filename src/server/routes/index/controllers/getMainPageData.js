@@ -1,6 +1,7 @@
 import getMainPageDataService from "../services/getMainPageData.js";
 
 var getMainPageDataController = async (req, res, next) => {
+  var role = req?.payload?.role;
   var { userId } = req.params;
 
   var {
@@ -12,11 +13,14 @@ var getMainPageDataController = async (req, res, next) => {
   } = await getMainPageDataService(userId);
 
   return res.json({
-    reportTree,
-    lastReports,
-    reportLoadingState,
-    reportLoadingStateUrl,
-    reportsWithAccountedFinances,
+    role,
+    data: {
+      reportTree,
+      lastReports,
+      reportLoadingState,
+      reportLoadingStateUrl,
+      reportsWithAccountedFinances,
+    },
   });
 };
 

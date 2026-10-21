@@ -1,3 +1,5 @@
+import doRequest from "../../../utils/doRequest.js";
+
 var url = "/goods/prices-discounts/";
 var userId = document.cookie.split("=")[1];
 
@@ -9,7 +11,7 @@ var sendPriceAndDiscount = async (
   setNewPriceNow,
   expectedPriceExists = false,
 ) => {
-  var res = await fetch(url, {
+  var res = await doRequest(url, {
     method: "PATCH",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({

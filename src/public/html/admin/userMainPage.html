@@ -8,15 +8,20 @@
     <link rel="stylesheet" href="/css/loader.css" type="text/css" />
     <link rel="stylesheet" href="/css/uploadFilesModal.css" type="text/css" />
     <link rel="icon" href="../image/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="/css/reportLoadingStatePanel.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="/css/reportLoadingStatePanel.css"
+      type="text/css"
+    />
     <title>Пользователь</title>
   </head>
   <body id="main">
     <div class="top-bar">
       <div class="top-actions">
-        <button id="tax-params-page-link">Налоги</button>
-        <button id="goods-page-link">Товары</button>
-        <button id="wb-token-page-link">Токен</button>
+        <button id="back-to-admin-panel">Назад в панель</button>
+        <button id="tax-params-page">Налоги</button>
+        <button id="goods-page">Товары</button>
+        <button id="wb-token-page">Токен</button>
       </div>
     </div>
     <div id="last-accounted-finances-report"></div>
@@ -25,7 +30,9 @@
     <script src="/js/admin/bootstrapUserMainPage.js" type="module"></script>
     <script>
       if (window.innerWidth < 768) {
-        alert("В настоящий момент сайт для\nмобильного устройства не адаптирован.\n\nПожалуйста, воспользуйтесь десктопным устройством.\n\nСпасибо.");
+        alert(
+          "В настоящий момент сайт для\nмобильного устройства не адаптирован.\n\nПожалуйста, воспользуйтесь десктопным устройством.\n\nСпасибо.",
+        );
       }
     </script>
   </body>

@@ -1,3 +1,4 @@
+import navigateTo from "../utils/navigateTo.js";
 import sendRegistationData from "./sendRegistationData.js";
 
 var registrationFormHandler = async () =>
@@ -24,7 +25,7 @@ var registrationFormHandler = async () =>
       return;
     }
 
-    window.location.href = redirectUrl;
+    navigateTo(redirectUrl);
   });
 
 registrationFormHandler();

@@ -10,23 +10,45 @@
   </head>
   <body id="report-body">
     <div class="top-bar">
-      <form action="/" class="inline-form">
-        <button type="submit" id="url-to-main" class="top-btn main-btn">На главную</button>
-      </form>
+      <button type="submit" id="main" class="top-btn main-btn">
+        На главную
+      </button>
       <div id="report-info">
         <span>Отчётный период: <span id="report-period">—</span></span>
         <span class="separator">•</span>
         <span class="separator">•</span>
         <span>Товаров: <span id="report-items-count">0</span></span>
-        <span>Финансы отчета учтены: <span id="financial-accounting-status"></span></span>
+        <span
+          >Финансы отчета учтены: <span id="financial-accounting-status"></span
+        ></span>
       </div>
       <div id="buttons-container" class="right-buttons">
-        <button id="financial-accounting-status-button" class="top-btn financial-accounting-status-btn">Изменить статус учета финансов</button>
-        <button id="download-report-as-xlsx-button" class="top-btn excel-btn">Скачать как Excel</button>
-        <button id="set-cost-prices-from-previous-report-period" class="top-btn cost-btn">Установить последние себестоимости</button>
-        <button id="delete-report-button" class="top-btn delete-btn">Удалить отчёт</button>
+        <button
+          id="financial-accounting-status-button"
+          class="top-btn financial-accounting-status-btn"
+        >
+          Изменить статус учета финансов
+        </button>
+        <button id="download-report-as-xlsx-button" class="top-btn excel-btn">
+          Скачать как Excel
+        </button>
+        <button
+          id="set-cost-prices-from-previous-report-period"
+          class="top-btn cost-btn"
+        >
+          Установить последние себестоимости
+        </button>
+        <button id="delete-report-button" class="top-btn delete-btn">
+          Удалить отчёт
+        </button>
         <button id="reset-report-button" class="top-btn">Обнулить отчет</button>
-        <button id="report-fields-description-button" onclick="window.open('/report/fields-descrition/', '_blank')"  class="top-btn">Объяснение полей отчета</button>
+        <button
+          id="report-fields-description-button"
+          onclick="window.open('/report/fields-descrition/', '_blank')"
+          class="top-btn"
+        >
+          Объяснение полей отчета
+        </button>
       </div>
     </div>
     <div id="tables-container"></div>

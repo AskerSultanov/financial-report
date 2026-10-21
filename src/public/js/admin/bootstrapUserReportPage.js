@@ -1,3 +1,5 @@
+import doRequest from "../utils/doRequest.js";
+import navigateTo from "../utils/navigateTo.js";
 import reportInfo from "../report/reportInfo.js";
 import createSkusTable from "../report/table/createSkusTable.js";
 import createTotalsTable from "../report/table/createTotalsTable.js";
@@ -20,17 +22,19 @@ var reportId = splitedPathParts.at(-1);
 var userId = splitedPathParts.includes("user")
   ? splitedPathParts[3]
   : document.cookie.split("=")[1];
-btnToUserMainPage.onclick = () =>
-  (window.location.href = "/admin/user/" + userId);
+
+var userMainPageUrl = "/admin/user/" + userId;
+
+btnToUserMainPage.onclick = () => navigateTo(userMainPageUrl);
 
 var url = "/report/" + userId + "/" + reportId;
 
 var getReportData = async () => {
-  var res = await fetch(url);
+  var res = await doRequest(url);
 
   if (!res.ok) {
     alert("Ошибка при получении отчета");
-    window.location.href = "/";
+    navigateTo("/");
   }
 
   var data = await res.json();

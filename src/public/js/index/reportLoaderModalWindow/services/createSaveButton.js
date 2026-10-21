@@ -1,6 +1,7 @@
 import checkDateTo from "./checkDateTo.js";
 import checkDateFrom from "./checkDateFrom.js";
 import sendReportPeriod from "./sendReportPeriod.js";
+import navigateTo from "../../../utils/navigateTo.js";
 import { showSpinner, hideSpinner } from "./loaderSpinner.js";
 import { insertNewReportToTree } from "../../reportTreeBuilder/index.js";
 import reportLoadingStatePanelBuilder from "../../reportLoadingStatePanel/index.js";
@@ -104,7 +105,9 @@ async function handleSameWeekPeriod(userId, dateFrom, dateTo) {
   var confirmed = confirm("Отчет успешно сохранен.\nПерейти к отчету?");
 
   if (confirmed) {
-    window.location.href = "/report/" + reportData.reportId;
+    var url = "/report/" + reportData.reportId;
+    navigateTo(url)
+
   }
 }
 

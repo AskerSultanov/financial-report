@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,9 +7,12 @@
   </head>
   <body>
     <form id="form">
-      <label for="login"></label><label for="passwd"></label><input type="text" id="login" /><input type="password" id="passwd" />
+      <label for="login"></label><label for="passwd"></label
+      ><input type="text" id="login" /><input type="password" id="passwd" />
       <button type="submit" id="button">Отправить</button>
     </form>
+
+    
     <script>
       window["button"].onclick = async (e) => {
         e.preventDefault();
@@ -17,7 +20,10 @@
         await fetch("/admin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ login: window["login"].value, passwd: window["passwd"].value }),
+          body: JSON.stringify({
+            login: window["login"].value,
+            passwd: window["passwd"].value,
+          }),
         });
       };
     </script>

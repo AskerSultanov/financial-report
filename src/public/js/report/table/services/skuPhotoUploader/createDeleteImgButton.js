@@ -1,3 +1,5 @@
+import doRequest from "../../../../utils/doRequest.js";
+
 var createDeleteImgButton = (userId, skuName) => {
   var button = document.createElement("button");
 
@@ -14,7 +16,7 @@ var createDeleteImgButton = (userId, skuName) => {
 
     var objectKey = userId + ";" + skuName;
 
-    var res = await fetch("/report/image/", {
+    var res = await doRequest("/report/image/", {
       method: "DELETE",
       body: JSON.stringify({ objectKey }),
       headers: { "Content-Type": "application/json" },

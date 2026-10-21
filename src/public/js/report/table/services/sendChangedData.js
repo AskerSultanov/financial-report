@@ -1,3 +1,5 @@
+import doRequest from "../../../utils/doRequest.js";
+
 /**
  * @param {'cost-price' | 'other-expenses'} targetUrlEnding
  */
@@ -6,7 +8,7 @@ var sendChangedData = async (data, targetUrlEnding) => {
   var targetRouterPath = window.location.pathname.split("/")[1];
   var url = "/" + targetRouterPath + "/skus/" + targetUrlEnding;
 
-  var res = await fetch(url, {
+  var res = await doRequest(url, {
     method: "PATCH",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },

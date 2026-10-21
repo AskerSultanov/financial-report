@@ -1,13 +1,16 @@
+import doRequest from "../../utils/doRequest.js";
+import navigateTo from "../../utils/navigateTo.js";
+
 var confirmMsg = "Выйти из аккаунта?";
 var logoutButton = document.getElementById("logout-button");
 
-var logoutButtonHandler = (userId) => {
+var logoutButtonHandler = () => {
   logoutButton.addEventListener("click", async () => {
     var confirmed = confirm(confirmMsg);
 
     if (confirmed) {
-      await fetch("/logout", { method: "POST" });
-      window.location.href = "/decode-report-without-registration/";
+      await doRequest("/logout", { method: "POST" });
+      navigateTo("/decode-report-without-registration/");
     }
   });
 };

@@ -1,3 +1,4 @@
+import navigateTo from "../utils/navigateTo.js";
 import getTokenData from "../wbToken/getTokenData.js";
 import createTokenCard from "../wbToken/tokenCard/createTokenCard.js";
 import uploadTokenModalHandler from "../wbToken/uploadTokenModalHandler.js";
@@ -16,8 +17,10 @@ var bootstrapUserWbTokenPage = async () => {
 
   uploadTokenModalHandler(userId);
 
-  btnBackToMainPage.onclick = () =>
-    (window.location.href = "/admin/user/" + userId);
+  btnBackToMainPage.onclick = () => {
+    var url = "/admin/user/" + userId;
+    navigateTo(url);
+  };
 };
 
 bootstrapUserWbTokenPage();

@@ -1,3 +1,5 @@
+import doRequest from "../../../utils/doRequest.js";
+
 var url = "/report/zip/";
 
 var createMonthlyReportDownloadButton = (userId, reportIds, year, month) => {
@@ -12,7 +14,7 @@ var createMonthlyReportDownloadButton = (userId, reportIds, year, month) => {
   button.addEventListener("click", async (e) => {
     e.preventDefault();
 
-    var res = await fetch(url, {
+    var res = await doRequest(url, {
       method: "POST",
       body: JSON.stringify({ userId, reportIds }),
       headers: { "Content-Type": "application/json" },

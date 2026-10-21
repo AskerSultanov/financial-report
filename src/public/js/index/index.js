@@ -1,15 +1,28 @@
 import logoutButtonHandler from "./logout/index.js";
 import getMainPageData from "./utils/getMainPageData.js";
 import { createReportTree } from "./reportTreeBuilder/index.js";
+import enableButtonToAdminPanel from "./utils/enableButtonToAdminPanel.js";
 import accountedFinancesPanelHandler from "./accountedFinancesPanel/index.js";
 import reportLoaderModalWindowHandler from "./reportLoaderModalWindow/index.js";
 import reportLoadingStatePanelBuilder from "./reportLoadingStatePanel/index.js";
 import reportFileUploadModalWindow from "./reportFileUploadModalWindow/index.js";
 
+import getGoodsPageButtonHandler from "./utils/getGoodsPageButtonHandler.js";
+import getWBTokenPageButtonHandler from "./utils/getWBTokenPageButtonHandler.js";
+import getTaxParamsPageButtonHandler from "./utils/getTaxParamsPageButtonHandler.js";
+
 var isMainPageLoad = true;
 var userId = document.cookie.split("=")[1];
+
 var bootstrapUserPage = async () => {
-  var { lastReports, reportTree, reportLoadingState, reportsWithAccountedFinances } = await getMainPageData(userId);
+  var { data, role } = await getMainPageData(userId);
+
+  var {
+    reportTree,
+    lastReports,
+    reportLoadingState,
+    reportsWithAccountedFinances,
+  } = data;
 
   createReportTree(userId, lastReports, reportTree);
 
@@ -20,6 +33,12 @@ var bootstrapUserPage = async () => {
   logoutButtonHandler(userId);
 
   reportFileUploadModalWindow(userId);
+
+  getGoodsPageButtonHandler();
+  getWBTokenPageButtonHandler();
+  getTaxParamsPageButtonHandler();
+
+  if (role === "admin") enableButtonToAdminPanel();
 };
 
 bootstrapUserPage();

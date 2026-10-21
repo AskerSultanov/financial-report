@@ -1,5 +1,7 @@
+import doRequest from "../../../../utils/doRequest.js";
+
 var sendSkuPhoto = async (imgData) => {
-  var res = await fetch("/report/image/", {
+  var res = await doRequest("/report/image/", {
     method: "POST",
     body: imgData,
   });

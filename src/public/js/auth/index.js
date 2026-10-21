@@ -1,5 +1,8 @@
+import doRequest from "../utils/doRequest.js";
+import navigateTo from "../utils/navigateTo.js";
+
 var sendAuthData = async (login, passwd) => {
-  var res = await fetch("/auth", {
+  var res = await doRequest("/auth", {
     method: "POST",
     body: JSON.stringify({ login, passwd }),
     headers: { "Content-Type": "application/json" },
@@ -33,7 +36,7 @@ var authFormHandler = async () =>
       return;
     }
 
-    window.location.href = redirectUrl;
+    navigateTo(redirectUrl);
   });
 
 authFormHandler();

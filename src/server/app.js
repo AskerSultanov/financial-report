@@ -124,6 +124,8 @@ async function runMainServer() {
   app.use(express.json());
   app.use(express.static(join(import.meta.dirname, "../public")));
 
+  app.use(cookieParser());
+
   app.use("/auth", authRouter);
   app.use("/reg", registrationRouter);
   app.use("/background-tasks", backgroundTasksRouter);
@@ -132,7 +134,6 @@ async function runMainServer() {
     decodeReportWithoutRegistrationRouter,
   );
 
-  app.use(cookieParser());
   app.use(verifyAuthentication, verifyAuthorization);
   app.use("/", checkRoles(["admin", "user"]), rootRouter);
   app.use("/wbtoken", checkRoles(["admin", "user"]), tokenRouter);

@@ -1,18 +1,25 @@
+import navigateTo from "../../../../utils/navigateTo.js";
+
 var splitedPathName = window.location.pathname.split("/");
 
 var createLinkToTheReport = (reportId) => {
   var button = document.createElement("button");
-  var form = document.createElement("form");
 
-  button.append("Открыть отчет");
+  button.textContent = "Открыть отчет";
 
-  form.append(button);
+  var url;
 
-  var url = splitedPathName.includes("user") ? `/admin/user/${splitedPathName.at(-1)}/report/${reportId}` : "/report/" + reportId;
+  if (splitedPathName.includes("user")) {
+    var userId = splitedPathName.at(-1);
 
-  form.action = url;
+    url = `/admin/user/${userId}/report/${reportId}`;
+  } else {
+    url = "/report/" + reportId;
+  }
 
-  return form;
+  button.onclick = () => navigateTo(url);
+
+  return button;
 };
 
 export default createLinkToTheReport;

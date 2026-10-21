@@ -1,7 +1,9 @@
+import doRequest from "../../utils/doRequest.js";
+
 var getGoodsData = async (userId) => {
   var url = "/goods/api/" + userId;
 
-  var res = await fetch(url);
+  var res = await doRequest(url);
 
   if (!res.ok) {
     alert("some error message");

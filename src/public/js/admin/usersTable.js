@@ -1,3 +1,4 @@
+import navigateTo from "../utils/navigateTo.js";
 import createRemoveUserButton from "./createRemoveUserButton.js";
 import createTdElement from "../report/table/services/createTdElement.js";
 
@@ -14,17 +15,23 @@ var usersTable = (users) => {
       var removeUserButton = createRemoveUserButton(login, userId);
       var removeUserButtonTdElem = createTdElement(removeUserButton);
 
-      var linkToUserElem = document.createElement("a");
-      var linkToUserPage = "/admin/user/" + userId;
-      linkToUserElem.href = linkToUserPage;
+      var buttonToUser = document.createElement("button");
 
-      linkToUserElem.target = "_blank";
-      linkToUserElem.textContent = "открыть";
+      var urlToUserPage = "/admin/user/" + userId;
+
+      buttonToUser.textContent = "открыть";
+      buttonToUser.onclick = () => navigateTo(urlToUserPage);
 
       var tableRow = document.createElement("tr");
       tableRow.id = userId;
 
-      tableRow.append(userIdTdElement, loginTdElement, registeredAtTdElem, linkToUserElem, removeUserButtonTdElem);
+      tableRow.append(
+        userIdTdElement,
+        loginTdElement,
+        registeredAtTdElem,
+        buttonToUser,
+        removeUserButtonTdElem,
+      );
       tableBody.append(tableRow);
     }
   }

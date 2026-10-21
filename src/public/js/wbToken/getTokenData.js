@@ -1,7 +1,9 @@
-var url = "/wbtoken/";
+import doRequest from "../utils/doRequest.js";
 
 var getTokenData = async (userId) => {
-  var res = await fetch(url + userId);
+  var url = "/wbtoken/" + userId;
+
+  var res = await doRequest(url);
 
   var { tokensDetails } = await res.json();
 

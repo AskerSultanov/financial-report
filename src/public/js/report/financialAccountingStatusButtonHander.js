@@ -1,15 +1,26 @@
+import doRequest from "../utils/doRequest.js";
+
 var url = "/report/financial-accounting-status/";
 var button = document.getElementById("financial-accounting-status-button");
 
 var yes = "Да";
 var no = "Нет";
 
-var financialAccountingStatusButtonHander = (userId, reportId, dateFrom, dateTo) => {
+var financialAccountingStatusButtonHander = (
+  userId,
+  reportId,
+  dateFrom,
+  dateTo,
+) => {
   button.onclick = async () => {
-    var financialAccountingStatusSpanElem = document.getElementById("financial-accounting-status");
+    var financialAccountingStatusSpanElem = document.getElementById(
+      "financial-accounting-status",
+    );
     var currentStatus = false;
 
-    if (financialAccountingStatusSpanElem.hasAttribute("is-finances-accounted")) {
+    if (
+      financialAccountingStatusSpanElem.hasAttribute("is-finances-accounted")
+    ) {
       currentStatus = true;
     }
 
@@ -20,7 +31,13 @@ var financialAccountingStatusButtonHander = (userId, reportId, dateFrom, dateTo)
     var confirmed = confirm(message);
 
     if (confirmed) {
-      var success = await sendNewFinancialAccountingStatus(userId, reportId, dateFrom, dateTo, newStatusIsTrue);
+      var success = await sendNewFinancialAccountingStatus(
+        userId,
+        reportId,
+        dateFrom,
+        dateTo,
+        newStatusIsTrue,
+      );
 
       if (!success) {
         alert("Не удалось изменить статус...");
@@ -30,9 +47,14 @@ var financialAccountingStatusButtonHander = (userId, reportId, dateFrom, dateTo)
       financialAccountingStatusSpanElem.textContent = newTextContent;
 
       if (newStatusIsTrue) {
-        financialAccountingStatusSpanElem.setAttribute("is-finances-accounted", "");
+        financialAccountingStatusSpanElem.setAttribute(
+          "is-finances-accounted",
+          "",
+        );
       } else {
-        financialAccountingStatusSpanElem.removeAttribute("is-finances-accounted");
+        financialAccountingStatusSpanElem.removeAttribute(
+          "is-finances-accounted",
+        );
       }
     }
   };
@@ -40,8 +62,14 @@ var financialAccountingStatusButtonHander = (userId, reportId, dateFrom, dateTo)
 
 export default financialAccountingStatusButtonHander;
 
-async function sendNewFinancialAccountingStatus(userId, reportId, dateFrom, dateTo, newStatus) {
-  var res = await fetch(url, {
+async function sendNewFinancialAccountingStatus(
+  userId,
+  reportId,
+  dateFrom,
+  dateTo,
+  newStatus,
+) {
+  var res = await doRequest(url, {
     method: "PATCH",
     body: JSON.stringify({ userId, reportId, dateFrom, dateTo, newStatus }),
     headers: { "Content-type": "application/json" },

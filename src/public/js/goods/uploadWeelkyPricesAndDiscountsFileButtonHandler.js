@@ -1,7 +1,9 @@
+import doRequest from "../utils/doRequest.js";
+
 var url = "/goods/prices-discounts/upload/";
 
 var sendUploadFile = async (file) => {
-  var res = await fetch(url, {
+  var res = await doRequest(url, {
     method: "POST",
     body: file,
   });

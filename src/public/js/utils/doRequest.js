@@ -1,10 +1,28 @@
-var doRequest = async (url, options = {}) => {
-  var res = await fetch(url, options);
+var refreshPromise = null;
 
-  if (res.status === 401) {
-    window.location.href = "/decode-report-without-registration/";
+var doRequest = async (url, options = {}) => {
+  var res = await fetch(url, { credentials: "include", ...options });
+
+  if (res.status !== 401) return res;
+
+  if (!refreshPromise) {
+    refreshPromise = fetch("/auth/refresh/", {
+      method: "POST",
+      credentials: "include",
+    }).finally(() => {
+      refreshPromise = null;
+    });
   }
-  return res;
+
+  var refreshRes = await refreshPromise;
+
+  if (!refreshRes.ok) {
+    window.location.replace("/decode-report-without-registration/");
+
+    throw new Error("session expired");
+  }
+
+  return fetch(url, { credentials: "include", ...options });
 };
 
 export default doRequest;

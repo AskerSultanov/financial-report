@@ -1,3 +1,4 @@
+import doRequest from "../utils/doRequest.js";
 import createSkusTable from "./utils/createSkusTable.js";
 import {
   toggleSkuTableVisibillity,
@@ -14,7 +15,7 @@ var loadListGoodsButtonHandler = (userId) => {
   uploadListGoodsButton.addEventListener("click", async (e) => {
     e.preventDefault();
 
-    var res = await fetch(url, {
+    var res = await doRequest(url, {
       method: "POST",
       body: JSON.stringify({ userId, requiredTokenType: "set" }),
       headers: { "content-type": "application/json" },

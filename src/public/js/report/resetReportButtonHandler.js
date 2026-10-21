@@ -1,3 +1,4 @@
+import doRequest from "../utils/doRequest.js";
 import { resetSkusTable, resetTotalsTable } from "./table/resetTables.js";
 
 var resetReportButton = document.getElementById("reset-report-button");
@@ -18,7 +19,7 @@ var resetReportButtonHandler = (
     var confirmed = confirm(confirmMsg);
 
     if (confirmed) {
-      var res = await fetch(url, {
+      var res = await doRequest(url, {
         method: "POST",
         body: JSON.stringify({ userId, reportId }),
         headers: { "Content-Type": "application/json" },
@@ -30,7 +31,7 @@ var resetReportButtonHandler = (
         if (isCrossYearPeriod) {
           var startYear = startYearSkus[0]?.year;
           var endYear = endYearSkus[0]?.year;
-          
+
           resetSkusTable(startYearSkus, startYear);
           resetSkusTable(endYearSkus, endYear);
 

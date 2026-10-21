@@ -1,13 +1,17 @@
+import doRequest from "../../../utils/doRequest.js";
 import createReportsTable from "./createReportsTable.js";
 import createMonthlyReportDownloadButton from "./createMonthlyReportDownloadButton.js";
 
 var url = "/api/required-reports/";
 
 var getRequiredReports = async (userId, reportIds) => {
-  var res = await fetch(url, {
+  var res = await doRequest(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, reportIds: reportIds.map((item) => item.reportId) }),
+    body: JSON.stringify({
+      userId,
+      reportIds: reportIds.map((item) => item.reportId),
+    }),
   });
 
   var { reports } = await res.json();
@@ -51,7 +55,12 @@ var createMonthsDetails = (userId, months, year) => {
   monthsContainer.id = `months_container_${year}`;
 
   for (var { month, reportIds } of months) {
-    var reportsContainer = createDetailsToReportsContainer(userId, year, month, reportIds);
+    var reportsContainer = createDetailsToReportsContainer(
+      userId,
+      year,
+      month,
+      reportIds,
+    );
     monthsContainer.append(reportsContainer);
   }
 

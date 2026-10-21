@@ -22,16 +22,10 @@
   </head>
   <body id="main">
     <div class="top-bar">
-      <div class="top-actions">
-        <button id="options" onclick="window.location.href = '/tax-params/'">
-          Налоги
-        </button>
-        <button id="products-button" onclick="window.location.href = '/goods'">
-          Товары
-        </button>
-        <button id="wb-token-page" onclick="window.location.href = '/wbtoken'">
-          Токен
-        </button>
+      <div class="top-actions" id="top-actions">
+        <button id="tax-params-page">Налоги</button>
+        <button id="goods-page">Товары</button>
+        <button id="wb-token-page">Токен</button>
         <button id="period-button">Загрузить отчёты с токеном</button>
         <button id="upload-files-btn">Загрузить отчёты файлами</button>
         <button onclick="window.open('https://t.me/wbreportscanner', '_blank')">

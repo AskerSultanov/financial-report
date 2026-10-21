@@ -1,3 +1,4 @@
+import doRequest from "../../utils/doRequest.js";
 import getCurrentDayMSK from "./getCurrentDayMSK.js";
 
 var yes = "да";
@@ -54,7 +55,7 @@ var createCheckboxForParticipationInPromo = (
 
     if (!needWrapIntoFieldset) {
       var { selectedWeedDayIndex } = getSelectedWeekDayIndex();
-      var res = await fetch(url, {
+      var res = await doRequest(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

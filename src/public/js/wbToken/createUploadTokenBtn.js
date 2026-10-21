@@ -1,3 +1,4 @@
+import doRequest from "../utils/doRequest.js";
 import createTokenCard from "./tokenCard/createTokenCard.js";
 import isPresumablyJwtToken from "./isPresumablyJwtToken.js";
 import { updateTokenCardInfo } from "./tokenCard/updateTokenCardInfo.js";
@@ -28,7 +29,7 @@ var createUploadTokenBtn = (userId, input, modal) => {
         return;
       }
 
-      var res = await fetch("/wbtoken", {
+      var res = await doRequest("/wbtoken", {
         method: "POST",
         body: JSON.stringify({ userId, token }),
         headers: { "Content-Type": "application/json" },

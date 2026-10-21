@@ -1,3 +1,4 @@
+import doRequest from "../../utils/doRequest.js";
 import { insertNewReportToTree } from "../reportTreeBuilder/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
 import showReport from "../../decodeReportWithoutRegistration/showReport.js";
@@ -262,7 +263,7 @@ var createUploadBtn = () => {
     closeModal();
     showSpinner();
 
-    var res = await fetch(url, {
+    var res = await doRequest(url, {
       method: "POST",
       body: formData,
     });

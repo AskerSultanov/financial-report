@@ -5,6 +5,7 @@ import deleteReportHandler from "./deleteReportHandler.js";
 import createTotalsTable from "./table/createTotalsTable.js";
 import resetReportButtonHandler from "./resetReportButtonHandler.js";
 import calcReportTotalsFromSkus from "./table/calcReportTotalsFromSkus.js";
+import getMainPageButtonHandler from "../taxParams/getMainPageButtonHandler.js";
 import injectSignedUrlsIntoImgTags from "./table/services/injectSignedUrlsIntoImgTags.js";
 import downloadReportAsXLSXButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
@@ -137,3 +138,4 @@ var main = async () => {
 };
 
 main();
+getMainPageButtonHandler();

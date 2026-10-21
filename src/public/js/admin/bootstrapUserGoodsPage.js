@@ -1,3 +1,4 @@
+import navigateTo from "../utils/navigateTo.js";
 import showListGoodsTable from "../goods/showListGoodsTable.js";
 import switchSkuTables from "../goods/utils/switchSkuTables.js";
 import downloadSkusMetricsFileButtonHandler from "../goods/downloadSkusMetricsFileButtonHandler.js";
@@ -15,8 +16,10 @@ var bootstrapUserGoodsPage = async () => {
 
   switchSkuTables();
 
-  btnBackToMainPage.onclick = () =>
-    (window.location.href = "/admin/user/" + userId);
+  btnBackToMainPage.onclick = () => {
+    var url = "/admin/user/" + userId;
+    navigateTo(url);
+  };
 };
 
 bootstrapUserGoodsPage();

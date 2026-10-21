@@ -29,12 +29,17 @@ var createTableToNewReports = (reports) => {
     var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
     var reportPeriodTdElement = createTdElement(reportPeriodText);
 
-    var a = document.createElement("a");
-    a.target = "_blank";
-    a.className = "link-to-report";
-    a.href = "/report/" + reportId;
-    a.textContent = "перейти к отчёту";
+    var buttonToReport = document.createElement("button");
 
+    var buttonToReport = document.createElement("button");
+
+    buttonToReport.className = "link-to-report";
+    buttonToReport.textContent = "перейти к отчёту";
+
+    buttonToReport.onclick = () => {
+      var url = "/report/" + reportId;
+      navigateTo(url);
+    };
     var linkWrapper = document.createElement("div");
     linkWrapper.className = "last-accounted-finances-report-link-wrapper";
     linkWrapper.append(a);

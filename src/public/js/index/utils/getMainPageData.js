@@ -1,13 +1,15 @@
+import doRequest from "../../utils/doRequest.js";
+
 var getMainPageData = async (userId) => {
-  var res = await fetch("/api/" + userId);
+  var res = await doRequest("/api/" + userId);
 
   if (!res.ok) {
     return alert("Не удалось загрузить отчеты");
   }
 
-  var data = await res.json();
+  var { role, data } = await res.json();
 
-  return data;
+  return { role, data };
 };
 
 export default getMainPageData;

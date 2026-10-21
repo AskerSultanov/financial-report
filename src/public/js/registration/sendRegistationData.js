@@ -1,5 +1,7 @@
+import doRequest from "../utils/doRequest.js";
+
 var sendRegistationData = async (login, passwd) => {
-  var res = await fetch("/reg/new", {
+  var res = await doRequest("/reg/new", {
     method: "POST",
     body: JSON.stringify({ login, passwd }),
     headers: { "Content-Type": "application/json" },

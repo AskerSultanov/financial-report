@@ -1,3 +1,5 @@
+import doRequest from "../utils/doRequest.js";
+
 var createRemoveUserButton = (login, userId) => {
   var button = document.createElement("button");
   button.textContent = "удалить";
@@ -6,7 +8,11 @@ var createRemoveUserButton = (login, userId) => {
     var confirmed = confirm(`Удалить пользователя ${login} ?`);
 
     if (confirmed) {
-      var res = await fetch("/admin", { method: "DELETE", body: JSON.stringify({ userId }), headers: { "Content-Type": "application/json" } });
+      var res = await doRequest("/admin", {
+        method: "DELETE",
+        body: JSON.stringify({ userId }),
+        headers: { "Content-Type": "application/json" },
+      });
       if (res.status === 200) {
         var userTableRow = document.getElementById(userId);
         userTableRow.remove();

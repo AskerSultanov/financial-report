@@ -1,9 +1,13 @@
-var downloadSkusMetricsFileButton = document.getElementById("download-skus-metrics");
+import doRequest from "../utils/doRequest.js";
+
+var downloadSkusMetricsFileButton = document.getElementById(
+  "download-skus-metrics",
+);
 
 var downloadSkusMetricsFileButtonHandler = (userId) =>
   (downloadSkusMetricsFileButton.onclick = async () => {
     var url = "/goods/metrics/download/" + userId;
-    var res = await fetch(url);
+    var res = await doRequest(url);
     var blob = await res.blob();
     var downloadUrl = window.URL.createObjectURL(blob);
 

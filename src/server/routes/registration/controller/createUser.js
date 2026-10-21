@@ -1,8 +1,8 @@
-import * as jose from "jose";
 import createUserService from "../services/createUser.js";
+import generageAuthTokens from "../../auth/services/utils/generageAuthTokens.js";
 
-var alg = "HS256";
 var oneDayMs = 86_400_000;
+var thirtyDaysMs = 2592e6;
 
 var createUserController = async (req, res, next) => {
   var candidate = req.body;
@@ -20,16 +20,13 @@ var createUserController = async (req, res, next) => {
 
   var payload = { userId, role };
 
-  var accessTokenSecret = jose.base64url.decode(
-    process.env.ACCESS_TOKEN_SECRET,
-  );
-
-  var accessToken = await new jose.SignJWT(payload)
-    .setExpirationTime("1d")
-    .setProtectedHeader({ alg })
-    .sign(accessTokenSecret);
+  var { accessToken, refreshToken } = await generageAuthTokens(payload);
 
   return res
+    .cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      maxAge: thirtyDaysMs,
+    })
     .cookie("access_token", accessToken, { httpOnly: true, maxAge: oneDayMs })
     .cookie("userId", userId, { httpOnly: false, maxAge: oneDayMs })
     .json({ redirectUrl: "/" });

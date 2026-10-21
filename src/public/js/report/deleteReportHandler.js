@@ -1,7 +1,10 @@
+import doRequest from "../utils/doRequest.js";
+import navigateTo from "../utils/navigateTo.js";
+
 var button = document.getElementById("delete-report-button");
 
 var sendDeletionRequest = async (userId, reportId) => {
-  var res = await fetch("/report", {
+  var res = await doRequest("/report", {
     method: "DELETE",
     body: JSON.stringify({ userId, reportId }),
     headers: { "Content-Type": "application/json" },
@@ -23,9 +26,11 @@ var deleteReportHandler = (userId, reportId) =>
         alert("Отчет успешно удален");
         var splitedPathName = window.location.pathname.split("/");
 
-        var urlToMainPage = splitedPathName.includes("user") ? "/admin/user/" + userId : "/";
+        var urlToMainPage = splitedPathName.includes("user")
+          ? "/admin/user/" + userId
+          : "/";
 
-        window.location.href = urlToMainPage;
+        navigateTo(urlToMainPage);
       } else {
         alert("Не удалось удалить отчет...");
       }

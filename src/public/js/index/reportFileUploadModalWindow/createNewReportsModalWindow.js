@@ -1,3 +1,4 @@
+import navigateTo from "../../utils/navigateTo.js";
 import createThElement from "../../report/table/services/createThElement.js";
 import createTdElement from "../../report/table/services/createTdElement.js";
 import createDiv from "../../report/table/services/modal/utils/createDiv.js";
@@ -29,15 +30,19 @@ var createTableToNewReports = (reports) => {
     var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
     var reportPeriodTdElement = createTdElement(reportPeriodText);
 
-    var a = document.createElement("a");
-    a.target = "_blank";
-    a.className = "link-to-report";
-    a.href = "/report/" + reportId;
-    a.textContent = "перейти к отчёту";
+    var buttonToReport = document.createElement("button");
+
+    buttonToReport.className = "link-to-report";
+    buttonToReport.textContent = "перейти к отчёту";
+
+    buttonToReport.onclick = () => {
+      var url = "/report/" + reportId;
+      navigateTo(url);
+    };
 
     var linkWrapper = document.createElement("div");
     linkWrapper.className = "last-accounted-finances-report-link-wrapper";
-    linkWrapper.append(a);
+    linkWrapper.append(buttonToReport);
 
     var linkToReportTdElem = createTdElement(linkWrapper);
 
@@ -55,7 +60,11 @@ var createNewReportsModalWindow = (reports) => {
   var event = "click";
   var cb = () => modal.remove();
   var cancelButtonTextContent = "закрыть";
-  var cancelButton = createButton("modal-button modal-button-cancel", cancelButtonTextContent, { event, cb });
+  var cancelButton = createButton(
+    "modal-button modal-button-cancel",
+    cancelButtonTextContent,
+    { event, cb },
+  );
 
   var buttonsContainer = createDiv("modal-buttons");
   buttonsContainer.append(cancelButton);
@@ -65,7 +74,11 @@ var createNewReportsModalWindow = (reports) => {
   var titleContent = "Добавлено отчётов: " + reports.length;
   var title = createTitle("modal-title", titleContent);
 
-  modalContent.append(title, createTableToNewReports(reports), buttonsContainer);
+  modalContent.append(
+    title,
+    createTableToNewReports(reports),
+    buttonsContainer,
+  );
   modal.append(modalContent);
 
   document.body.append(modal);

@@ -1,5 +1,7 @@
+import doRequest from "../../../../utils/doRequest.js";
+
 var getPresignedUrl = async (userId, skuName, fileType) => {
-  var res = await fetch("/report/image/upload-url", {
+  var res = await doRequest("/report/image/upload-url", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, skuName, fileType }),

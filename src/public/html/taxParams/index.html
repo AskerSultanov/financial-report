@@ -26,7 +26,7 @@
       </thead>
       <tbody id="tax-tbody"></tbody>
     </table>
-    <button id="main" onclick="window.location.href = '/'">На главную</button>
+    <button id="main">На главную</button>
     <form>
       <label for="tax-year">Отчетный год</label>
       <select id="tax-year" name="tax-year"></select>
@@ -36,35 +36,63 @@
       <input id="tax-rate" type="text" />
       <div class="radio-group">
         <div class="radio-item">
-          <input type="radio" id="recalculate-all-reports-tax-amount" name="tax-rate" checked />
-          <label for="recalculate-all-reports-tax-amount">Пересчитать сумму налога для имеющихся отчетов (если есть)</label>
+          <input
+            type="radio"
+            id="recalculate-all-reports-tax-amount"
+            name="tax-rate"
+            checked
+          />
+          <label for="recalculate-all-reports-tax-amount"
+            >Пересчитать сумму налога для имеющихся отчетов (если есть)</label
+          >
         </div>
         <div class="radio-item">
-          <input type="radio" id="calculate-tax-amount-for-future-reports" name="tax-rate" />
-          <label for="calculate-tax-amount-for-future-reports">Применить новое значение к будущим отчетам</label>
+          <input
+            type="radio"
+            id="calculate-tax-amount-for-future-reports"
+            name="tax-rate"
+          />
+          <label for="calculate-tax-amount-for-future-reports"
+            >Применить новое значение к будущим отчетам</label
+          >
         </div>
       </div>
       <button id="tax-rate-button">Сохранить</button>
     </form>
     <form>
-      <label for="mandatory-insurance-fee">Установить сумму обязательных страховых взносов, уплачиваемых за год</label
+      <label for="mandatory-insurance-fee"
+        >Установить сумму обязательных страховых взносов, уплачиваемых за
+        год</label
       ><input id="mandatory-insurance-fee" type="text" />
       <button id="mandatory-insurance-fee-button">Сохранить</button>
     </form>
     <form>
       <label for="mandatory-insurance-fee-rate"
-        >Установить процент от прибыли, который будет уходить на погашение обязательных страховых взносов</label
+        >Установить процент от прибыли, который будет уходить на погашение
+        обязательных страховых взносов</label
       ><input id="mandatory-insurance-fee-rate" type="text" />
       <div class="radio-group">
         <div class="radio-item">
-          <input type="radio" id="recalculate-all-reports-mandatory-insurance-fee-rate" name="mandatory-insurance-fee-rate" checked />
+          <input
+            type="radio"
+            id="recalculate-all-reports-mandatory-insurance-fee-rate"
+            name="mandatory-insurance-fee-rate"
+            checked
+          />
           <label for="recalculate-all-reports-mandatory-insurance-fee-rate"
-            >Пересчитать сумму погашения обязательных страховых взносов с новым значением % в отчетах (если есть)</label
+            >Пересчитать сумму погашения обязательных страховых взносов с новым
+            значением % в отчетах (если есть)</label
           >
         </div>
         <div class="radio-item">
-          <input type="radio" id="calculate-mandatory-insurance-fee-rate-for-future-reports" name="mandatory-insurance-fee-rate" />
-          <label for="calculate-mandatory-insurance-fee-rate-for-future-reports">Применить новое значение к будущим отчетам</label>
+          <input
+            type="radio"
+            id="calculate-mandatory-insurance-fee-rate-for-future-reports"
+            name="mandatory-insurance-fee-rate"
+          />
+          <label for="calculate-mandatory-insurance-fee-rate-for-future-reports"
+            >Применить новое значение к будущим отчетам</label
+          >
         </div>
       </div>
       <button id="mandatory-insurance-fee-rate-button">Сохранить</button>

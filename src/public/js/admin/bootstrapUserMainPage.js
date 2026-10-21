@@ -1,3 +1,4 @@
+import navigateTo from "../utils/navigateTo.js";
 import getMainPageData from "../index/utils/getMainPageData.js";
 import { createReportTree } from "../index/reportTreeBuilder/index.js";
 import accountedFinancesPanelHandler from "../index/accountedFinancesPanel/index.js";
@@ -10,7 +11,14 @@ var isMainPageLoad = true;
 var userId = window.location.pathname.split("/").at(-1);
 
 var bootstrapUserMainPage = async () => {
-  var { lastReports, reportTree, reportLoadingState, reportsWithAccountedFinances } = await getMainPageData(userId);
+  var { data } = await getMainPageData(userId);
+
+  var {
+    lastReports,
+    reportTree,
+    reportLoadingState,
+    reportsWithAccountedFinances,
+  } = data;
 
   updateLinks(userId);
   createReportTree(userId, lastReports, reportTree);
@@ -19,12 +27,27 @@ var bootstrapUserMainPage = async () => {
 
 bootstrapUserMainPage();
 
-var btnToUserGoodsPage = document.getElementById("goods-page-link");
-var btnToUserWbTokenPage = document.getElementById("wb-token-page-link");
-var btnToUserTaxParamsPage = document.getElementById("tax-params-page-link");
+var btnToUserGoodsPage = document.getElementById("goods-page");
+var btnToUserWbTokenPage = document.getElementById("wb-token-page");
+var btnToBackToAdminPanel = document.getElementById("back-to-admin-panel");
+var btnToUserTaxParamsPage = document.getElementById("tax-params-page");
 
 function updateLinks(userId) {
-  btnToUserGoodsPage.onclick = () => (window.location.href = "/admin/user/goods/" + userId);
-  btnToUserWbTokenPage.onclick = () => (window.location.href = "/admin/user/wbtoken/" + userId);
-  btnToUserTaxParamsPage.onclick = () => (window.location.href = "/admin/user/tax-params/" + userId);
+  btnToUserGoodsPage.onclick = () => {
+    var url = "/admin/user/goods/" + userId;
+    navigateTo(url);
+  };
+  btnToUserWbTokenPage.onclick = () => {
+    var url = "/admin/user/wbtoken/" + userId;
+    navigateTo(url);
+  };
+  btnToUserTaxParamsPage.onclick = () => {
+    var url = "/admin/user/tax-params/" + userId;
+    navigateTo(url);
+  };
+
+  btnToBackToAdminPanel.onclick = () => {
+    var url = "/admin";
+    navigateTo(url);
+  };
 }

@@ -2,6 +2,7 @@ import createDiv from "../utils/createDiv.js";
 import createTitle from "../utils/createTitle.js";
 import createInput from "../utils/createInput.js";
 import createButton from "../utils/createButton.js";
+import doRequest from "../../../../../utils/doRequest.js";
 import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
@@ -69,7 +70,7 @@ var createTotalsModal = (dataToUpdate, displayElement, isGuestAccess) => {
 
     var url = "/" + window.location.pathname.split("/")[1] + "/extra-amounts";
 
-    var res = await fetch(url, {
+    var res = await doRequest(url, {
       method: "POST",
       body: JSON.stringify(dataToUpdate),
       headers: { "Content-Type": "application/json" },

@@ -1,3 +1,5 @@
+import doRequest from "../../../utils/doRequest.js";
+
 var url = "/report/";
 var requiredTokenType = "read";
 
@@ -8,7 +10,7 @@ var sendReportPeriod = async (
   isPeriodWithinSameWeek = false,
   needToLoadAllReports = false,
 ) => {
-  var res = await fetch(url, {
+  var res = await doRequest(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -1,3 +1,4 @@
+import doRequest from "../../utils/doRequest.js";
 import { removeTokenCard } from "./removeTokenCard.js";
 
 var createTokenCard = (userId, token) => {
@@ -182,7 +183,7 @@ var createRemoveTokenBtn = (userId, tokenType, url = "/wbtoken/") => {
 
     if (confirmed) {
       try {
-        var res = await fetch(url, {
+        var res = await doRequest(url, {
           method: "DELETE",
           body: JSON.stringify({ userId, tokenType }),
           headers: { "Content-Type": "application/json" },

@@ -2,6 +2,7 @@ import createTaxTable from "./taxTable.js";
 import getTaxParams from "./getTaxParams.js";
 import taxRateHandler from "./taxRateHandler.js";
 import handleTaxYearSelection from "./handleTaxYearSelection.js";
+import getMainPageButtonHandler from "./getMainPageButtonHandler.js";
 import insertTaxYearsToSelectElem from "./insertTaxYearsToSelectElem.js";
 import mandatoryInsuranceFeeHandler from "./mandatoryInsuranceFeeHandler.js";
 import mandatoryInsuranceRateHandler from "./mandatoryInsuranceRateHandler.js";
@@ -31,6 +32,8 @@ var main = async () => {
   mandatoryInsuranceRateHandler(userId);
   handleTaxYearSelection(taxParams);
   insertTaxYearsToSelectElem(taxParams);
+
+  getMainPageButtonHandler()
 };
 
 main();
