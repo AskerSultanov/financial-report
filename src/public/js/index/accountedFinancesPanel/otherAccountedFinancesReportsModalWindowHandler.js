@@ -6,6 +6,7 @@ import createDiv from "../../report/table/services/modal/utils/createDiv.js";
 import createTitle from "../../report/table/services/modal/utils/createTitle.js";
 import createButton from "../../report/table/services/modal/utils/createButton.js";
 
+var needToOpenNewWindow = true;
 var splitedPathParts = window.location.pathname.split("/");
 
 var createTableToOtherAccountedFinancesReports = (
@@ -65,7 +66,7 @@ var createTableToOtherAccountedFinancesReports = (
         url = "/report/" + reportId;
       }
 
-      navigateTo(url);
+      navigateTo(url, needToOpenNewWindow);
     };
 
     var linkWrapper = document.createElement("div");

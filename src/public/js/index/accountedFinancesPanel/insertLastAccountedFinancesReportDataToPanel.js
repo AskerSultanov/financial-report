@@ -1,6 +1,7 @@
 import navigateTo from "../../utils/navigateTo.js";
 import getReportPeriodText from "./getReportPeriodText.js";
 
+var needToOpenNewWindow = true;
 var splitedPathParts = window.location.pathname.split("/");
 
 var insertLastAccountedFinancesReportDataToPanel = (lastAccountedFinances) => {
@@ -30,7 +31,7 @@ var insertLastAccountedFinancesReportDataToPanel = (lastAccountedFinances) => {
       url = "/report/" + reportId;
     }
 
-    navigateTo(url);
+    navigateTo(url, needToOpenNewWindow);
   };
 };
 

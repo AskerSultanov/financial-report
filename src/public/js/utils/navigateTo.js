@@ -1,10 +1,10 @@
 import doRequest from "./doRequest.js";
 
-var navigateTo = async (url) => {
+var navigateTo = async (url, openNewWindow = false) => {
   var res = await doRequest("/", { method: "GET" });
 
   if (res.ok) {
-    window.location.href = url;
+    openNewWindow ? window.open(url, "_blank") : (window.location.href = url);
   }
 };
 

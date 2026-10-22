@@ -2,6 +2,8 @@ import navigateTo from "../utils/navigateTo.js";
 import createRemoveUserButton from "./createRemoveUserButton.js";
 import createTdElement from "../report/table/services/createTdElement.js";
 
+var needToOpenNewWindow = true;
+
 var usersTable = (users) => {
   var tableBody = document.getElementById("tbody");
 
@@ -20,7 +22,8 @@ var usersTable = (users) => {
       var urlToUserPage = "/admin/user/" + userId;
 
       buttonToUser.textContent = "открыть";
-      buttonToUser.onclick = () => navigateTo(urlToUserPage);
+      buttonToUser.onclick = () =>
+        navigateTo(urlToUserPage, needToOpenNewWindow);
 
       var tableRow = document.createElement("tr");
       tableRow.id = userId;
