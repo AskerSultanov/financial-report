@@ -18,9 +18,9 @@ var insertLastAccountedFinancesReportDataToPanel = (lastAccountedFinances) => {
 
   financesAccountedAtElem.textContent += financesAccountedAt;
 
-  var linkToReportElem = document.getElementById("link-to-report");
+  var buttonToReport = document.getElementById("link-to-report");
 
-  linkToReportElem.onclick = () => {
+  buttonToReport.onclick = () => {
     var url;
 
     if (splitedPathParts.includes("user")) {

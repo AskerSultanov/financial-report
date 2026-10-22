@@ -1,4 +1,17 @@
-var months = ["января", "февряля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+var months = [
+  "января",
+  "февряля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
+];
 
 var getReportPeriodText = (dateFrom, dateTo, targetPeriod) => {
   var [startYear, startMonth, startDay] = dateFrom.split("-").map(Number);
@@ -30,7 +43,6 @@ var getReportPeriodText = (dateFrom, dateTo, targetPeriod) => {
     reportPeriodText = `с ${startDay} ${startMonthName} ${startYear} по ${endDay} ${endMonthName} ${endYear}`;
   }
 
-  var reportPeriod = `с ${startDay} ${startMonthName} ${startYear} по ${endDay} ${endMonthName} ${endYear}`;
   return { reportPeriodText };
 };
 

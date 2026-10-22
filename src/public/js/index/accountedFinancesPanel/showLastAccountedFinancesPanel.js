@@ -4,11 +4,12 @@ var panel = `
         <div id="finances-accounted-at">Финансы учтены: </div>
         <div id="report-period">Отчётный период: </div>
         <div class="last-accounted-finances-report-link-wrapper">
-          <a target="_blank" class="link-to-report" id="link-to-report">перейти к отчёту</a>
+          <button class="link-to-report" id="link-to-report">перейти к отчёту</button>
           <button id="other-accounted-finances-reports">другие отчёты</button>
         </div>
     </div>`;
 
-var showLastAccountedFinancesPanel = () => (document.getElementById("last-accounted-finances-report").innerHTML = panel);
+var showLastAccountedFinancesPanel = () =>
+  (document.getElementById("last-accounted-finances-report").innerHTML = panel);
 
 export default showLastAccountedFinancesPanel;
