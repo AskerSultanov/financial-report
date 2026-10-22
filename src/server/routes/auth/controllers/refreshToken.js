@@ -1,8 +1,6 @@
+import ms from "ms";
 import * as jose from "jose";
 import generageAuthTokens from "../services/utils/generageAuthTokens.js";
-
-var oneDayMs = 86_400_000;
-var thirtyDaysMs = 2592e6;
 
 var refreshTokenController = async (req, res) => {
   var refreshToken = req.cookies?.refresh_token;
@@ -24,14 +22,22 @@ var refreshTokenController = async (req, res) => {
 
     var { accessToken, refreshToken } = await generageAuthTokens(payload);
 
+    var accessTokenTTLInMs = ms(process.env.ACCESS_TOKEN_TTL);
+    var refreshTokenTTLInMs = ms(process.env.REFRESH_TOKEN_TTL);
+
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
-      maxAge: thirtyDaysMs,
+      maxAge: refreshTokenTTLInMs,
     });
 
     res.cookie("access_token", accessToken, {
       httpOnly: true,
-      maxAge: oneDayMs,
+      maxAge: accessTokenTTLInMs,
+    });
+
+    res.cookie("userId", payload.userId, {
+      httpOnly: false,
+      maxAge: accessTokenTTLInMs,
     });
 
     res.sendStatus(200);

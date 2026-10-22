@@ -1,8 +1,6 @@
+import ms from "ms";
 import validateUser from "../services/validateUser.js";
 import generageAuthTokens from "../services/utils/generageAuthTokens.js";
-
-var oneDayMs = 86_400_000;
-var thirtyDaysMs = 2592e6;
 
 var checkUserCredentialsController = async (req, res) => {
   var { login, passwd } = req.body;
@@ -25,13 +23,19 @@ var checkUserCredentialsController = async (req, res) => {
 
   var { accessToken, refreshToken } = await generageAuthTokens(payload);
 
+  var accessTokenTTLInMs = ms(process.env.ACCESS_TOKEN_TTL);
+  var refreshTokenTTLInMs = ms(process.env.REFRESH_TOKEN_TTL);
+
   return res
     .cookie("refresh_token", refreshToken, {
       httpOnly: true,
-      maxAge: thirtyDaysMs,
+      maxAge: refreshTokenTTLInMs,
     })
-    .cookie("access_token", accessToken, { httpOnly: true, maxAge: oneDayMs })
-    .cookie("userId", userId, { httpOnly: false, maxAge: oneDayMs })
+    .cookie("access_token", accessToken, {
+      httpOnly: true,
+      maxAge: accessTokenTTLInMs,
+    })
+    .cookie("userId", userId, { httpOnly: false, maxAge: accessTokenTTLInMs })
     .json({ redirectUrl: "/" });
 };
 

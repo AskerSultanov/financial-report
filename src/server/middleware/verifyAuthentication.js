@@ -23,7 +23,7 @@ var verifyAuthentication = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
     );
     var { payload } = await jose.jwtVerify(accessToken, accessTokenSecret);
-  } catch {
+    } catch {
     return deny();
   }
 
