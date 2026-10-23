@@ -1,4 +1,3 @@
-import { insertNewReportToTree } from "../reportTreeBuilder/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
 import showReport from "../../decodeReportWithoutRegistration/showReport.js";
 import {
@@ -17,17 +16,6 @@ var allowedFileMimeTypes = [
   "application/x-zip-compressed",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
-
-var isDecodeReportWithoutRegistrationPage = () => {
-  var sources = [];
-  var folderName = "decodeReportWithoutRegistration";
-
-  for (var { src } of document.scripts) {
-    sources.push(src);
-  }
-
-  return sources.some((src) => src.split("/")[4] === folderName);
-};
 
 var closeModal = () => {
   selectedFiles = [];
@@ -126,37 +114,11 @@ function handleFiles(files) {
   var count = 0;
   var validFiles = [];
 
-  if (isDecodeReportWithoutRegistrationPage()) {
-    var paidStorageReportAdded = false;
-    var weeklyFinancialReportAdded = false;
+  for (var file of files) {
+    if (fileIsValid(file) && count <= maxFilesCount) {
+      validFiles.push(file);
 
-    for (var file of files) {
-      if (
-        fileIsValid(file) &&
-        file.name.startsWith(weeklyFinancialReportFileName)
-      ) {
-        if (!weeklyFinancialReportAdded) {
-          validFiles.push(file);
-          weeklyFinancialReportAdded = true;
-        }
-      }
-      if (
-        fileIsValid(file) &&
-        file.name.startsWith(paidStorageReportFileName)
-      ) {
-        if (!paidStorageReportAdded) {
-          validFiles.push(file);
-          paidStorageReportAdded = true;
-        }
-      }
-    }
-  } else {
-    for (var file of files) {
-      if (fileIsValid(file) && count <= maxFilesCount) {
-        validFiles.push(file);
-
-        count++;
-      }
+      count++;
     }
   }
 
