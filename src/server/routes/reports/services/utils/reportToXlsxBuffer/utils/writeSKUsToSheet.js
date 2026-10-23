@@ -1,3 +1,4 @@
+import setFormulasToSku from "./setFormulasToSku.js";
 import { requiredSkusFieldsName } from "./getRequiredSkusFieldsName.js";
 
 var columns = [
@@ -17,6 +18,9 @@ var columns = [
   "N",
   "O",
   "P",
+  "Q",
+  "R",
+  "S",
 ];
 
 var alignmentStyles = {
@@ -40,6 +44,7 @@ var writeSKUsToSheet = (sheet, skus) => {
       sheet.getCell(cellAddress).value = skuFieldValue;
     }
 
+    setFormulasToSku(sheet, rowNum);
     ++rowNum;
   }
 
