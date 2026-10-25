@@ -1,4 +1,8 @@
 /**
+ * Сводка за весь отчётный период создаётся без года в id
+ * (`summary-text-`, `totals-table-`), поэтому переключение половин
+ * периода её не затрагивает — она всегда остаётся видимой.
+ * @param {number | string} year
  * @param {'enable' | 'disable'} action
  */
 
@@ -25,6 +29,19 @@ var toggleTablesVisibility = (year, action) => {
   if (summaryTextElem) {
     summaryTextElem.hidden = action;
   }
+
+  toggleTabActiveState(year, !action);
 };
+
+function toggleTabActiveState(year, isActive) {
+  var tab = document.getElementById(String(year));
+
+  if (!tab) {
+    return;
+  }
+
+  tab.className = isActive ? "tab is-active" : "tab";
+  tab.setAttribute("aria-selected", String(isActive));
+}
 
 export default toggleTablesVisibility;

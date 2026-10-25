@@ -4,6 +4,12 @@
   --report-top-bar-height: 49px;
 }
 
+/* Перекрывает display у элементов, которые скрываются через hidden
+   (например, сводку и таблицу второй половины периода) */
+[hidden] {
+  display: none !important;
+}
+
 body {
   box-sizing: border-box;
   display: flex;
@@ -345,12 +351,11 @@ th:last-child {
 }
 
 /* ============================================================
-    Tabs
+    Tabs (стили как в goods.css)
     ============================================================ */
 .tabs {
   order: 1;
-  position: sticky;
-  top: var(--report-top-bar-height);
+  position: relative;
   z-index: 10;
   box-sizing: border-box;
   display: flex;
@@ -359,10 +364,8 @@ th:last-child {
   width: 100%;
   max-width: 1190px;
   margin: 0 auto 12px;
-  padding: 8px 4px;
-  background: var(--bg-base);
+  padding: 0 4px;
   border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
 }
 
 .tab {
@@ -378,6 +381,7 @@ th:last-child {
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition-base);
+  margin-bottom: -1px;
 }
 
 .tab:hover {
@@ -386,7 +390,6 @@ th:last-child {
 }
 
 .tab.is-active {
-  color: var(--text-primary);
-  background: var(--accent);
+  color: var(--accent-hover);
   border-bottom-color: var(--accent);
 }
