@@ -1,8 +1,13 @@
 import ExcelJS from "exceljs-community";
 import createSkusSheet from "./utils/createSKUsSheet.js";
 import createTotalsSheet from "./utils/createTotalsSheet.js";
-import setFormulasToTotalsSheet from "./utils/setFormulasToTotalsSheet.js";
 import calcReportTotalsFromSkus from "../calcUtils/utils/calcReportTotalsFromSkus.js";
+import {
+  setFormulasToTotalsSheet,
+  setFormulasToParentTotalsSheet,
+} from "./utils/setFormulasToTotalsSheet.js";
+
+var totalsSheetName = "Сводка";
 
 var generateReportXlsxBuffer = async (report) => {
   var { dateFrom, dateTo, skus, isCrossYearPeriod } = report;
@@ -17,7 +22,7 @@ var generateReportXlsxBuffer = async (report) => {
 
   var workbook = new ExcelJS.Workbook();
 
-  var totalsSheet = workbook.addWorksheet("Сводка");
+  var totalsSheet = workbook.addWorksheet(totalsSheetName);
 
   var indentToTotalsData = 2;
 
@@ -28,45 +33,74 @@ var generateReportXlsxBuffer = async (report) => {
   );
 
   if (isCrossYearPeriod) {
+    var childTotalSheetsName = [];
     var startYear = +dateFrom.split("-")[0];
     var startYearSkus = skus.filter((sku) => sku.year === startYear);
 
-    var startYearSheetOpt = {};
-
     if (startYearSkus.length) {
-      var startYearSheetName = "Товары_" + startYear;
-      var startYearSheet = workbook.addWorksheet(startYearSheetName);
+      var startYearTotalsSheetName = "Сводка_" + startYear;
+
+      childTotalSheetsName.push(startYearTotalsSheetName);
+
+      var startYearTotalsSheet = workbook.addWorksheet(
+        startYearTotalsSheetName,
+      );
+
+      var startYearTotals =
+        calcReportTotalsFromSkus(startYearSkus).reportTotals;
+
+      startYearTotals = Object.assign(reportTotals, startYearTotals);
+
+      startYearTotalsSheet = await createTotalsSheet(
+        startYearTotals,
+        startYearTotalsSheet,
+        indentToTotalsData,
+      );
+
+      var startYearSkusSheetName = "Товары_" + startYear;
+      var startYearSheet = workbook.addWorksheet(startYearSkusSheetName);
+
       await createSkusSheet(startYearSkus, startYearSheet);
 
-      startYearSheetOpt.sheetName = startYearSheetName;
-      startYearSheetOpt.skusQty = startYearSkus.length + 1;
+      setFormulasToTotalsSheet(
+        startYearTotalsSheet,
+        startYearSkusSheetName,
+        startYearSkus.length + 1,
+      );
     }
 
     var endYear = +dateTo.split("-")[0];
     var endYearSkus = skus.filter((sku) => sku.year === endYear);
-    var endYearSheetOpt = {};
 
     if (endYearSkus.length) {
-      var endYearSheetName = "Товары_" + endYear;
-      var endYearSheet = workbook.addWorksheet(endYearSheetName);
+      var endYearTotalsSheetName = "Сводка_" + endYear;
+      childTotalSheetsName.push(endYearTotalsSheetName);
+
+      var endYearTotalsSheet = workbook.addWorksheet(endYearTotalsSheetName);
+
+      var endYearTotals = calcReportTotalsFromSkus(endYearSkus).reportTotals;
+
+      endYearTotals = Object.assign(reportTotals, endYearTotals);
+
+      endYearTotalsSheet = await createTotalsSheet(
+        endYearTotals,
+        endYearTotalsSheet,
+        indentToTotalsData,
+      );
+
+      var endYearSkusSheetName = "Товары_" + endYear;
+      var endYearSheet = workbook.addWorksheet(endYearSkusSheetName);
+
       await createSkusSheet(endYearSkus, endYearSheet);
 
-      endYearSheetOpt.sheetName = endYearSheetName;
-      endYearSheetOpt.skusQty = endYearSkus.length + 1;
-    }
-
-    if (!startYearSheetOpt?.sheetName) {
-      setFormulasToTotalsSheet(totalsSheet, false, endYearSheetOpt);
-    } else if (!endYearSheetOpt?.sheetName) {
-      setFormulasToTotalsSheet(totalsSheet, false, startYearSheetOpt);
-    } else {
       setFormulasToTotalsSheet(
-        totalsSheet,
-        isCrossYearPeriod,
-        startYearSheetOpt,
-        endYearSheetOpt,
+        endYearTotalsSheet,
+        endYearSkusSheetName,
+        endYearSkus.length + 1,
       );
     }
+
+    setFormulasToParentTotalsSheet(totalsSheet, childTotalSheetsName);
   } else {
     var year = dateFrom.split("-")[0];
     var sheetName = "Товары_" + year;
@@ -74,12 +108,7 @@ var generateReportXlsxBuffer = async (report) => {
 
     await createSkusSheet(skus, skusSheet);
 
-    var sheetOpt = {
-      sheetName,
-      skusQty: skus.length + 1,
-    };
-
-    setFormulasToTotalsSheet(totalsSheet, isCrossYearPeriod, sheetOpt);
+    setFormulasToTotalsSheet(totalsSheet, sheetName, skus.length + 1);
   }
 
   var buffer = await workbook.xlsx.writeBuffer();
