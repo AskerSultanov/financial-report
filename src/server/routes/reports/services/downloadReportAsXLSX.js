@@ -1,5 +1,5 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
-import { getReportAsXLSXBuffer } from "./utils/reportToXlsxBuffer/index.js";
+import { generateReportXlsxBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
 var { getReportById } = dbUtils.reportModelUtils;
 
@@ -8,7 +8,7 @@ var downloadReportAsXLSXService = async (data) => {
 
   var { report } = await getReportById(userId, reportId);
 
-  var { buffer } = await getReportAsXLSXBuffer(report);
+  var { buffer } = await generateReportXlsxBuffer(report);
 
   return { buffer };
 };

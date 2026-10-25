@@ -1,4 +1,4 @@
-import { getReportAsXLSXBuffer } from "../../reports/services/utils/reportToXlsxBuffer/index.js";
+import { generateReportXlsxBuffer } from "../../reports/services/utils/reportToXlsxBuffer/index.js";
 
 var downloadReportAsXLSXController = async (req, res, next) => {
   var { report } = req.body;
@@ -7,7 +7,7 @@ var downloadReportAsXLSXController = async (req, res, next) => {
     return res.status(500).json({ msg: "Не удалось скачать отчет..." });
   }
 
-  var { buffer } = await getReportAsXLSXBuffer(report);
+  var { buffer } = await generateReportXlsxBuffer(report);
 
   res.set({
     "Content-Type":

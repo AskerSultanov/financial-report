@@ -1,8 +1,8 @@
 import JSZip from "jszip";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import {
-  getReportAsXLSXBuffer,
-  getMonthlySummaryAsXLSXBuffer,
+  generateReportXlsxBuffer,
+  generateMonthlySummaryXlsxBuffer,
 } from "./utils/reportToXlsxBuffer/index.js";
 
 var session = null;
@@ -31,14 +31,14 @@ var downloadReportsAsZipService = async (data) => {
   var folder = zip.folder(folderName);
 
   for (var report of reports) {
-    var { buffer } = await getReportAsXLSXBuffer(report);
+    var { buffer } = await generateReportXlsxBuffer(report);
 
     var fileNameForSeparateReport = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
 
     folder.file(fileNameForSeparateReport, buffer);
   }
 
-  var { buffer } = await getMonthlySummaryAsXLSXBuffer(reports);
+  var { buffer } = await generateMonthlySummaryXlsxBuffer(reports);
 
   folder.file(mainFileName, buffer);
 
