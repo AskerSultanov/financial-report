@@ -46,7 +46,6 @@ var main = async () => {
 
   if (isCrossYearPeriod) {
     enableTablesSwitcher(years);
-    tablesSwitcherHandler(startYear, endYear);
 
     var startYearSkus = skus.filter((sku) => sku.year === startYear);
     var endYearSkus = skus.filter((sku) => sku.year === endYear);
@@ -120,6 +119,7 @@ var main = async () => {
     );
 
     switchToFirstTable(startYear);
+    tablesSwitcherHandler(startYear, endYear);
   } else {
     createTotalsTable(
       userId,

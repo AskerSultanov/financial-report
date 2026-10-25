@@ -61,6 +61,7 @@ var createTotalsTable = (
   if (isCrossYearPeriod) {
     var { reportSummaryLabel } = createReportSummaryLabel(
       reportSummaryLabelText,
+      year,
     );
     tablesContainer.append(reportSummaryLabel, table);
   } else {
@@ -98,10 +99,11 @@ function createTotalsTableHead() {
   return { tableHead };
 }
 
-function createReportSummaryLabel(reportSummaryLabelText) {
+function createReportSummaryLabel(reportSummaryLabelText, year) {
   var reportSummaryLabel = document.createElement("span");
   reportSummaryLabel.className = "reportTotals-summary-label";
   reportSummaryLabel.textContent = "Сводка " + reportSummaryLabelText;
+  reportSummaryLabel.id = "summary-text-" + year;
 
   var reportSummaryLabelWrapper = document.createElement("div");
   reportSummaryLabelWrapper.className = "reportTotals-summary-label-wrapper";

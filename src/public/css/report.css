@@ -1,12 +1,31 @@
 @import url("./theme.css");
 
+:root {
+  --report-top-bar-height: 49px;
+}
+
 body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  padding: 0;
+  padding: calc(var(--report-top-bar-height) + 16px) 0 0;
   background: linear-gradient(135deg, #1e2227 0%, #2d3439 100%);
   color: #e9ecef;
   font-family: "Segoe UI", Arial, sans-serif;
   min-height: 100vh;
+}
+
+/* Контейнер «растворяется», чтобы общая сводка, табы и таблицы
+   стали элементами body и выстроились в нужном визуальном порядке */
+#tables-container {
+  display: contents;
+}
+
+/* Всё, что идёт после общей сводки (заголовок + таблица — первые два
+   элемента), располагается ниже табов */
+#tables-container > :nth-child(n + 3) {
+  order: 2;
 }
 
 /* ===== Верхняя панель ===== */
@@ -15,7 +34,8 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 49px;
+  box-sizing: border-box;
+  height: var(--report-top-bar-height);
   background: rgba(34, 39, 46, 0.97);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(73, 80, 87, 0.6);
@@ -123,7 +143,7 @@ body {
 table {
   width: 100%;
   max-width: 1190px;
-  margin: 105px auto 42px;
+  margin: 0 auto 24px;
   border-collapse: separate;
   border-spacing: 0;
   background: #2d3439;
@@ -306,13 +326,14 @@ th:last-child {
   background: #383d44;
 }
 
-.report-summary-label-wrapper {
+.report-summary-label-wrapper,
+.reportTotals-summary-label-wrapper {
   text-align: center;
-  margin-top: 105px;
-  margin-bottom: -77px;
+  margin: 0 0 12px;
 }
 
-.report-summary-label {
+.report-summary-label,
+.reportTotals-summary-label {
   display: inline-block;
   font-size: 21px;
   font-weight: 600;
@@ -327,11 +348,21 @@ th:last-child {
     Tabs
     ============================================================ */
 .tabs {
+  order: 1;
+  position: sticky;
+  top: var(--report-top-bar-height);
+  z-index: 10;
+  box-sizing: border-box;
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
+  width: 100%;
+  max-width: 1190px;
   margin: 0 auto 12px;
-  padding: 0 4px;
+  padding: 8px 4px;
+  background: var(--bg-base);
   border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .tab {
@@ -347,7 +378,6 @@ th:last-child {
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition-base);
-  margin-bottom: -1px;
 }
 
 .tab:hover {
@@ -356,11 +386,7 @@ th:last-child {
 }
 
 .tab.is-active {
-  color: var(--accent-hover);
-  border-bottom-color: var(--accent);
-}
-
-.tab.is-active {
   color: var(--text-primary);
   background: var(--accent);
+  border-bottom-color: var(--accent);
 }
