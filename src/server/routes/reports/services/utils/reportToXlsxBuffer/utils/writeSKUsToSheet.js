@@ -1,4 +1,4 @@
-import setFormulasToSku from "./setFormulasToSku.js";
+import setFormulasToSkusSheet from "./setFormulasToSkusSheet.js";
 import { requiredSkusFieldsName } from "./getRequiredSkusFieldsName.js";
 
 var columns = [
@@ -44,7 +44,8 @@ var writeSKUsToSheet = (sheet, skus) => {
       sheet.getCell(cellAddress).value = skuFieldValue;
     }
 
-    setFormulasToSku(sheet, rowNum);
+    setFormulasToSkusSheet(sheet, rowNum);
+
     ++rowNum;
   }
 

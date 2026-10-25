@@ -1,4 +1,4 @@
-var columnsMap = {
+var columnsMapOfSkusSheet = {
   qty: "B",
   returnAmount: "C",
   retailAmount: "D",
@@ -18,14 +18,7 @@ var columnsMap = {
   finalProfit: "S",
 };
 
-var startRowNum = 2;
-var valuesColumn = "C";
-var skusSheetName = "Товары";
-
-var profitMarginCol = "R";
-var profitMarginRowNum = 19;
-
-var rowsMap = {
+var rowsMapOfTotalsSheet = {
   4: "retailAmount",
   5: "qty",
   6: "returnAmount",
@@ -44,16 +37,65 @@ var rowsMap = {
   20: "finalProfit",
 };
 
-var setFormulasToTotalsSheet = (ws, skuQty) => {
-  for (var rowNum in rowsMap) {
-    var rowVal = rowsMap[rowNum];
-    var startCellAddress = columnsMap[rowVal] + startRowNum;
-    var endCellAddress = columnsMap[rowVal] + skuQty;
+var startRowNum = 2;
+var valuesColumn = "B";
 
-    var formula = `SUM(${skusSheetName}!${startCellAddress}:${endCellAddress})`;
-    var formulaCellAddress = valuesColumn + rowNum;
-    ws.getCell(formulaCellAddress).value = { formula };
+var retailAmountCellAddress = "B4";
+var finalProfitCellAddress = "B20";
+var profitMarginCellAddress = "B19";
+var profitMarginCalcFormula = `TRUNC(IF(OR(${finalProfitCellAddress} = 0, ${retailAmountCellAddress} = 0), 0, ${finalProfitCellAddress} * 100 / ${retailAmountCellAddress}), 2)`;
+
+var setFormulasToTotalsSheet = (
+  workSheet,
+  isCrossYearPeriod,
+  startYearSheetOpt,
+  endYearSheetOpt,
+) => {
+  if (isCrossYearPeriod) {
+    var startYearSheetName = startYearSheetOpt.sheetName;
+    var endYearSheetName = endYearSheetOpt.sheetName;
+
+    var startYearSkusQty = startYearSheetOpt.skusQty;
+    var endYearSkusQty = endYearSheetOpt.skusQty;
+
+    for (var rowNum in rowsMapOfTotalsSheet) {
+      var rowVal = rowsMapOfTotalsSheet[rowNum];
+
+      var startCellAddress = columnsMapOfSkusSheet[rowVal] + startRowNum;
+
+      var lastCellAddressToStartYearSheet =
+        columnsMapOfSkusSheet[rowVal] + startYearSkusQty;
+
+      var lastCellAddressToEndYearSheer =
+        columnsMapOfSkusSheet[rowVal] + endYearSkusQty;
+
+      var startYearFormulaPart = `${startYearSheetName}!${startCellAddress}:${lastCellAddressToStartYearSheet}`;
+      var endYearFormulaPart = `${endYearSheetName}!${startCellAddress}:${lastCellAddressToEndYearSheer}`;
+
+      var formula = `SUM(${startYearFormulaPart}, ${endYearFormulaPart})`;
+
+      var formulaCellAddress = valuesColumn + rowNum;
+
+      workSheet.getCell(formulaCellAddress).value = { formula };
+    }
+  } else {
+    var { sheetName, skusQty } = startYearSheetOpt;
+
+    for (var rowNum in rowsMapOfTotalsSheet) {
+      var rowVal = rowsMapOfTotalsSheet[rowNum];
+      var startCellAddress = columnsMapOfSkusSheet[rowVal] + startRowNum;
+      var endCellAddress = columnsMapOfSkusSheet[rowVal] + skusQty;
+
+      var formula = `SUM(${sheetName}!${startCellAddress}:${endCellAddress})`;
+
+      var formulaCellAddress = valuesColumn + rowNum;
+      workSheet.getCell(formulaCellAddress).value = { formula };
+    }
   }
+
+  workSheet.getCell(profitMarginCellAddress).value = {
+    formula: profitMarginCalcFormula,
+  };
 };
 
 export default setFormulasToTotalsSheet;

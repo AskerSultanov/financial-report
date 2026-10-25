@@ -20,7 +20,11 @@ var getProfitMarginCalcFormula = (rowNum) => {
   var retailAmountCellAddress = retailAmountCol + rowNum;
   var finalProfitCellAddress = finalProfitCol + rowNum;
 
-  var profitMarginCalcFormula = `IF(OR(${finalProfitCellAddress} = 0, ${retailAmountCellAddress} = 0), 0, ${finalProfitCellAddress} * 100 / ${retailAmountCellAddress})`;
+  var checkFinalProfitValPart = `${finalProfitCellAddress} = 0`;
+  var checkRetailAmountValPart = `${retailAmountCellAddress} = 0`;
+  var profitMarginCalcFormulaItself = `${finalProfitCellAddress} * 100 / ${retailAmountCellAddress}`;
+
+  var profitMarginCalcFormula = `TRUNC(IF(OR(${checkFinalProfitValPart}, ${checkRetailAmountValPart}), 0, ${profitMarginCalcFormulaItself}), 2)`;
   return { profitMarginCalcFormula: { formula: profitMarginCalcFormula } };
 };
 
@@ -67,7 +71,7 @@ var getFinalProfitCalcFormula = (rowNum) => {
   return { finalProfitCalcFormula: { formula: finalProfitCalcFormula } };
 };
 
-var setFormulasToSku = (ws, rowNum) => {
+var setFormulasToSkusSheet = (ws, rowNum) => {
   var { profitCalcFormula } = getProfitCalcFormula(rowNum);
   var { finalProfitCalcFormula } = getFinalProfitCalcFormula(rowNum);
   var { profitMarginCalcFormula } = getProfitMarginCalcFormula(rowNum);
@@ -81,4 +85,4 @@ var setFormulasToSku = (ws, rowNum) => {
   ws.getCell(profitMarginCellAddress).value = profitMarginCalcFormula;
 };
 
-export default setFormulasToSku;
+export default setFormulasToSkusSheet;
