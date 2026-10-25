@@ -6,11 +6,15 @@ import createTotalsTable from "./table/createTotalsTable.js";
 import resetReportButtonHandler from "./resetReportButtonHandler.js";
 import calcReportTotalsFromSkus from "./table/calcReportTotalsFromSkus.js";
 import getMainPageButtonHandler from "../taxParams/getMainPageButtonHandler.js";
-import injectSignedUrlsIntoImgTags from "./table/services/injectSignedUrlsIntoImgTags.js";
 import downloadReportAsXLSXButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
-import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
 import setSkusLastCostPricesButtonHandler from "./setSkusLastCostPricesButtonHandler.js";
+import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
+import injectSignedUrlsIntoImgTags from "./table/services/injectSignedUrlsIntoImgTags.js";
 import financialAccountingStatusButtonHander from "./financialAccountingStatusButtonHander.js";
+
+import switchToFirstTable from "./table/switchToFirstTable.js";
+import enableTablesSwitcher from "./table/enableTablesSwitcher.js";
+import tablesSwitcherHandler from "./table/tablesSwitcherHandler.js";
 
 var yearValueStub = "";
 var reportSummaryLabelTextStub = "";
@@ -41,6 +45,9 @@ var main = async () => {
   var { reportTotals } = calcReportTotalsFromSkus(skus);
 
   if (isCrossYearPeriod) {
+    enableTablesSwitcher(years);
+    tablesSwitcherHandler(startYear, endYear);
+
     var startYearSkus = skus.filter((sku) => sku.year === startYear);
     var endYearSkus = skus.filter((sku) => sku.year === endYear);
 
@@ -111,6 +118,8 @@ var main = async () => {
       startYearSkus,
       endYearSkus,
     );
+
+    switchToFirstTable(startYear);
   } else {
     createTotalsTable(
       userId,
