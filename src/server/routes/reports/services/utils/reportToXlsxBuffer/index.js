@@ -24,8 +24,8 @@ var getReportAsXLSXBuffer = async (report) => {
   var totalsSheet = workbook.addWorksheet("Сводка");
 
   if (report.isCrossYearPeriod) {
-    var startYear = +dateFrom.split("-")[0];
-    var endYear = +dateTo.split("-")[0];
+    var startYear = dateFrom.split("-")[0];
+    var endYear = dateTo.split("-")[0];
 
     var startYearSheet = workbook.addWorksheet("Товары " + startYear);
     var endYearSheet = workbook.addWorksheet("Товары " + endYear);
@@ -36,7 +36,8 @@ var getReportAsXLSXBuffer = async (report) => {
     await createSkusSheet(startYearSkus, startYearSheet);
     await createSkusSheet(endYearSkus, endYearSheet);
   } else {
-    var skusSheet = workbook.addWorksheet("Товары");
+    var year = dateFrom.split("-")[0];
+    var skusSheet = workbook.addWorksheet("Товары " + year);
 
     await createSkusSheet(skus, skusSheet);
   }
