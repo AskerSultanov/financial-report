@@ -33,7 +33,7 @@ var downloadReportsAsZipService = async (data) => {
   for (var report of reports) {
     var { buffer } = await getReportAsXLSXBuffer(report);
 
-    var fileNameForSeparateReport = `Детали отчета от ${report.dateFrom} по ${report.dateTo}.xlsx`;
+    var fileNameForSeparateReport = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
 
     folder.file(fileNameForSeparateReport, buffer);
   }
