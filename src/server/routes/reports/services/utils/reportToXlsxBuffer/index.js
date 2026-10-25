@@ -24,8 +24,8 @@ var getReportAsXLSXBuffer = async (report) => {
   var totalsSheet = workbook.addWorksheet("Сводка");
 
   if (report.isCrossYearPeriod) {
-    var startYear = dateFrom.split("-")[0];
-    var endYear = dateTo.split("-")[0];
+    var startYear = +dateFrom.split("-")[0];
+    var endYear = +dateTo.split("-")[0];
 
     var startYearSheet = workbook.addWorksheet("Товары " + startYear);
     var endYearSheet = workbook.addWorksheet("Товары " + endYear);
