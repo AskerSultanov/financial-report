@@ -1,8 +1,8 @@
-import createEditableFieldModal from "./createEditableFieldModal.js";
+import createEditableFieldModal from "./createEditableSkuFieldModal.js";
 
 var editablePen = "&#9999;&#65039;";
 
-var openEditableFieldModal = (sku, updateField) => {
+var openEditableSkuFieldModal = (sku, updateField) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
@@ -31,4 +31,4 @@ var openEditableFieldModal = (sku, updateField) => {
   return container;
 };
 
-export default openEditableFieldModal;
+export default openEditableSkuFieldModal;

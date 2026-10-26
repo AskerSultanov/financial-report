@@ -30,7 +30,11 @@ var equalValuesMsg = "Значение совпадает с предыдущи�
 var hasNoSalesMsg =
   "Себестоимость не будет установлена: отсутствуют проданные единицы.";
 
-var createEditableFieldModal = (skuToUpdate, updateField, displayElement) => {
+var createEditableSkuFieldModal = (
+  skuToUpdate,
+  updateField,
+  displayElement,
+) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 
@@ -121,4 +125,4 @@ var createEditableFieldModal = (skuToUpdate, updateField, displayElement) => {
   input.addEventListener("input", replaceCommaToDotCallback);
 };
 
-export default createEditableFieldModal;
+export default createEditableSkuFieldModal;

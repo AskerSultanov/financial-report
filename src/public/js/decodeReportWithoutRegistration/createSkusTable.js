@@ -1,5 +1,5 @@
 import createTdElement from "./createTdElement.js";
-import openEditableFieldModal from "./utils/editableFieldModal/index.js";
+import openEditableSkuFieldModal from "./utils/editableSkuFieldModal/index.js";
 
 var createSkusTable = (report, skus) => {
   if (!skus.length) {
@@ -29,9 +29,9 @@ var createSkusTable = (report, skus) => {
       isCrossYearPeriod: report.isCrossYearPeriod,
     };
 
-    var costPriceModal = openEditableFieldModal(dataToUpdate, "costPrice");
+    var costPriceModal = openEditableSkuFieldModal(dataToUpdate, "costPrice");
 
-    var otherExpensesModal = openEditableFieldModal(
+    var otherExpensesModal = openEditableSkuFieldModal(
       dataToUpdate,
       "otherExpenses",
     );
