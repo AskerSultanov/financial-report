@@ -1,7 +1,8 @@
 import showReport from "../../showReport.js";
 import reportFileParser from "../reportsFileParser/index.js";
-import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
 import writeReportToLocalStorage from "../../writeReportToLocalStorage.js";
+import { generateMonthlySummaryXlsxBuffer } from "../reportToXlsxBuffer/index.js";
+import downloadReportAsXLSXButtonHandler from "../../downloadReportAsXLSXButtonHandler.js";
 import {
   showSpinner,
   hideSpinner,
@@ -232,8 +233,13 @@ var createUploadBtn = () => {
     hideSpinner();
     // return
 
-    for (var report of reportsData) {
+    if (reportsData.length > 1) {
+    } else {
+      var report = reportsData[0];
+
       showReport(report);
+      writeReportToLocalStorage(report);
+      downloadReportAsXLSXButtonHandler(report.reportId);
     }
   });
 

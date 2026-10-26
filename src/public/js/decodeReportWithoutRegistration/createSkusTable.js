@@ -1,8 +1,5 @@
-import createTdElement from "../report/table/services/createTdElement.js";
-import openCostPriceModal from "../report/table/services/modal/costPriceModal/openCostPriceModal.js";
-import openOtherExpensesModal from "../report/table/services/modal/otherExpensesModal/openOtherExpensesModal.js";
-
-var isGuestAccess = true;
+import createTdElement from "./createTdElement.js";
+import openEditableFieldModal from "./utils/editableFieldModal/index.js";
 
 var createSkusTable = (report, skus) => {
   if (!skus.length) {
@@ -10,8 +7,6 @@ var createSkusTable = (report, skus) => {
   }
 
   var tableBody = document.createElement("tbody");
-
-  var { userId, dateFrom, dateTo } = report;
 
   for (var sku of skus) {
     var tableRow = document.createElement("tr");
@@ -21,37 +16,28 @@ var createSkusTable = (report, skus) => {
     var returnAmount = createTdElement(sku.returnAmount);
 
     var dataToUpdate = {
-      userId,
-      dateFrom,
-      dateTo,
+      qty: sku.qty,
       year: sku.year,
+      profit: sku.profit,
       skuName: sku.skuName,
       costPrice: sku.costPrice,
+      reportId: report.reportId,
+      finalProfit: sku.finalProfit,
+      retailAmount: sku.retailAmount,
+      preTaxProfit: sku.preTaxProfit,
       otherExpenses: sku.otherExpenses,
       isCrossYearPeriod: report.isCrossYearPeriod,
-      sku: {
-        tax: sku.tax,
-        qty: sku.qty,
-        profit: sku.profit,
-        costPrice: sku.costPrice,
-        finalProfit: sku.finalProfit,
-        profitMargin: sku.profitMargin,
-        retailAmount: sku.retailAmount,
-        insuranceFee: sku.insuranceFee,
-        preTaxProfit: sku.preTaxProfit,
-        otherExpenses: sku.otherExpenses,
-        additionalInsuranceFee: sku.additionalInsuranceFee,
-      },
     };
 
-    var costPriceInputField = openCostPriceModal(dataToUpdate, isGuestAccess);
-    var otherExpensesInputField = openOtherExpensesModal(
+    var costPriceModal = openEditableFieldModal(dataToUpdate, "costPrice");
+
+    var otherExpensesModal = openEditableFieldModal(
       dataToUpdate,
-      isGuestAccess,
+      "otherExpenses",
     );
 
-    var costPrice = createTdElement(costPriceInputField);
-    var otherExpenses = createTdElement(otherExpensesInputField);
+    var costPrice = createTdElement(costPriceModal);
+    var otherExpenses = createTdElement(otherExpensesModal);
     var deliveryCost = createTdElement(sku.deliveryCost);
     var deductionOrPayment = createTdElement(sku.deductionOrPayment);
     var fines = createTdElement(sku.fines);
@@ -108,7 +94,7 @@ var tableHeadContent = `
           <th>Хранение</th>
           <th>Приёмка</th>
           <th>Выплата с вычетом всех услуг WB</th>
-          <th>Себестоимость</th>
+          <th>Себестоимость 1ед.</th>
           <th>Прочие расходы</th>
           <th>Маржинальность %</th>
           <th>Итого</th>

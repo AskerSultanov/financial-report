@@ -1,6 +1,4 @@
-import createTdElement from "../report/table/services/createTdElement.js";
-
-var nonUsedFields = ["tax", "insuranceFee", "additionalInsuranceFee"];
+import createTdElement from "./createTdElement.js";
 
 var createTotalsTable = (
   report,
@@ -14,10 +12,6 @@ var createTotalsTable = (
   tableRow.append(yearTd);
 
   for (var key in report) {
-    if (nonUsedFields.includes(key)) {
-      continue;
-    }
-
     var keyWithoutYear = key + "-";
     var keyWithYear = key + "-" + year;
 
@@ -53,17 +47,16 @@ var createTotalsTable = (
 var tableHeadContent = `
             <th>Отчётный год</th>
             <th>WB реализовал</th>
-            <th>Налогооблагаемая база</th>
             <th>Продано шт.</th>
             <th>Возвратов</th>
             <th>Перечисления продавцу</th>
-            <th>Себестоимость товаров</th>
-            <th>Прочие расходы</th>
             <th>Доставка</th>
             <th>Приёмка</th>
             <th>Штрафы</th>
             <th>Удержания/Выплаты</th>
             <th>Хранение</th>
+            <th>Себестоимость товаров</th>
+            <th>Прочие расходы</th>
             <th>Реклама</th>
             <th>Маржинальность %</th>
             <th>Итого</th>

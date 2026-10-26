@@ -1,7 +1,7 @@
 import createSkusTable from "./createSkusTable.js";
 import createTotalsTable from "./createTotalsTable.js";
-import calcReportTotalsFromSkus from "../report/table/calcReportTotalsFromSkus.js";
 import { enableDownloadReportAsXLSXButton } from "./downloadReportAsXLSXButton.js";
+import calcReportTotalsFromSkus from "./utils/calcUtils/utils/calcReportTotalsFromSkus.js";
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
 import downloadReportAsXLSXButtonHandler from "../report/downloadReportAsXLSXButtonHandler.js";
 

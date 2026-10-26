@@ -1,3 +1,7 @@
-var writeReportToLocalStorage = (report) => localStorage.setItem(report.userId, JSON.stringify(report));
+var writeReportToLocalStorage = (report) => {
+  var reportInJson = JSON.stringify(report);
+
+  localStorage.setItem(report.reportId, reportInJson);
+};
 
 export default writeReportToLocalStorage;
