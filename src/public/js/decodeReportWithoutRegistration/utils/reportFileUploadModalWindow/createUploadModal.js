@@ -1,10 +1,11 @@
+import showReport from "../../showReport.js";
+import reportFileParser from "../reportsFileParser/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
-import showReport from "../../decodeReportWithoutRegistration/showReport.js";
+import writeReportToLocalStorage from "../../writeReportToLocalStorage.js";
 import {
   showSpinner,
   hideSpinner,
-} from "../reportLoaderModalWindow/services/loaderSpinner.js";
-import writeReportToLocalStorage from "../../decodeReportWithoutRegistration/writeReportToLocalStorage.js";
+} from "../../../index/reportLoaderModalWindow/services/loaderSpinner.js";
 
 var maxFilesCount = 15;
 var selectedFiles = [];
@@ -214,21 +215,43 @@ var createUploadBtn = () => {
       return;
     }
 
-    selectedFiles.forEach((file) => formData.append("file", file));
+    var files = [];
+
+    for (var file of selectedFiles) {
+      var mimetype = file.type;
+      var originalname = file.name;
+      var buffer = await file2Buffer(file);
+
+      files.push({ buffer, mimetype, originalname });
+    }
 
     closeModal();
     showSpinner();
-
-    //parse files
+    var { reportsData } = await reportFileParser(files);
 
     hideSpinner();
+    // return
 
-    writeReportToLocalStorage(report);
-    showReport(report);
+    for (var report of reportsData) {
+      showReport(report);
+    }
   });
 
   return { uploadBtn };
 };
+
+async function file2Buffer(file) {
+  return await new Promise(function (resolve) {
+    var reader = new FileReader();
+    var readFile = function () {
+      var buffer = reader.result;
+      resolve(buffer);
+    };
+
+    reader.addEventListener("load", readFile);
+    reader.readAsArrayBuffer(file);
+  });
+}
 
 var createModalFooterButtons = () => {
   var { cancelBtn } = createCancelBtn();

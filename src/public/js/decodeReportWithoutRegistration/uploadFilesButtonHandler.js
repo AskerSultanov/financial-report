@@ -1,4 +1,4 @@
-import createUploadModal from "../index/reportFileUploadModalWindow/createUploadModal.js";
+import createUploadModal from "./utils/reportFileUploadModalWindow/createUploadModal.js";
 
 var uploadFilesBtn = document.getElementById("upload-files-btn");
 

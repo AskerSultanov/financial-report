@@ -3,30 +3,27 @@ import calc from "../calcUtils/index.js";
 import getSkuByYear from "./getSkuByYear.js";
 import truncateSkuNums from "./truncateSkuNums.js";
 import parsePaidStorageReport from "./parsePaidStorageReport.js";
-import recalculateSkuAndTaxParams from "./recalculateSkuAndTaxParams.js";
 import getPaidStorageReportByYear from "./getPaidStorageReportByYear.js";
 import getAdvertisingReportByYear from "./getAdvertisingReportByYear.js";
 import getWeeklyFinancialReportByYear from "./getWeeklyFinancialReportByYear.js";
 import getSkuNamesFromWeeklyFinancialReport from "./getSkuNamesFromWeeklyFinancialReport.js";
 
-var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
-  var recalculatedTaxParams = { ...taxParams };
-
+var processReportSkus = async (reports, year, isCrossYearPeriod) => {
   var { weeklyFinancialReport, paidStorageReport, advertisingReport } = reports;
 
   var { storageReportByYear } = getPaidStorageReportByYear(
     paidStorageReport,
-    taxParams.year,
+    year,
     isCrossYearPeriod,
   );
   var { advertisingReportByYear } = getAdvertisingReportByYear(
     advertisingReport,
-    taxParams.year,
+    year,
     isCrossYearPeriod,
   );
   var { weeklyFinancialReportByYear } = getWeeklyFinancialReportByYear(
     weeklyFinancialReport,
-    taxParams.year,
+    year,
     isCrossYearPeriod,
   );
 
@@ -42,6 +39,7 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
   );
 
   var skus = [];
+
   var { skuNamesFromWeeklyFinancialReport } =
     getSkuNamesFromWeeklyFinancialReport(weeklyFinancialReportByYear);
 
@@ -53,33 +51,22 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
       parsedPaidStorageReport.find((item) => item.name === name)
         ?.skuStorageCost || 0;
 
-    var { skuByYear } = getSkuByYear(
-      skuFilteredReport,
-      recalculatedTaxParams.year,
-    );
+    var { skuByYear } = getSkuByYear(skuFilteredReport, year);
 
     var sku = await parseSku(
       name,
       skuNamesFromWeeklyFinancialReport.length,
       skuByYear,
       skuStorageCost,
-      taxParams.taxRate,
       reportTotals,
     );
 
-    if (sku) {
-      // var { skuAdditionalInsuranceFee, updatedTaxParams } = recalculateSkuAndTaxParams(sku, recalculatedTaxParams);
-
-      // recalculatedTaxParams = Object.assign(recalculatedTaxParams, updatedTaxParams);
-      // sku.additionalInsuranceFee = skuAdditionalInsuranceFee;
-
-      skus.push(sku);
-    }
+    skus.push(sku);
 
     skus = truncateSkuNums(skus);
   }
 
-  return { skus, recalculatedTaxParams };
+  return { skus };
 };
 
 export default processReportSkus;

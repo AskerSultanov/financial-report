@@ -4,7 +4,11 @@ import openOtherExpensesModal from "../report/table/services/modal/otherExpenses
 
 var isGuestAccess = true;
 
-var createSkusTable = (report, skus, year) => {
+var createSkusTable = (report, skus) => {
+  if (!skus.length) {
+    return;
+  }
+
   var tableBody = document.createElement("tbody");
 
   var { userId, dateFrom, dateTo } = report;

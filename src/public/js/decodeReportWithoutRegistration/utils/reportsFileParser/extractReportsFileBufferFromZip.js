@@ -1,4 +1,3 @@
-import JSZip from "jszip";
 import getReportIdFromFileName from "./getReportIdFromFileName.js";
 
 var zipFileMimeTypes = ["application/zip", "application/x-zip-compressed"];
@@ -20,7 +19,7 @@ var extractReportsFileBufferFromZip = async (fileBuffers) => {
         for (var file of Object.keys(files)) {
           var nestedFileName = files[file].name;
 
-          var xlsxBuffer = await zip.file(nestedFileName).async("nodebuffer");
+          var xlsxBuffer = await zip.file(nestedFileName).async("arraybuffer");
 
           if (
             nestedFileName

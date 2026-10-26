@@ -1,4 +1,3 @@
-import ExcelJs from "exceljs-community";
 import getReportPeriod from "./getReportPeriod.js";
 import generateColumnNames from "./generateColumnNames.js";
 import { checkAndFixMonday, checkAndFixSunday } from "./checkDate.js";
@@ -20,7 +19,7 @@ var extractWorkSheetFromFile = async (
   var workSheets = [];
 
   for (var { reportId, buffer } of weeklyFinancialReportsBuffer) {
-    var wb = new ExcelJs.Workbook();
+    var wb = new ExcelJS.Workbook();
     await wb.xlsx.load(buffer);
     var workSheet = wb.getWorksheet(
       requiredWeeklyFinancialReportFileWorkSheetName,
@@ -91,7 +90,7 @@ var extractWorkSheetFromFile = async (
 
   if (weeklyFinancialReportsBuffer.length) {
     for (var buffer of paidStorageReportsBuffer) {
-      var wb = new ExcelJs.Workbook();
+      var wb = new ExcelJS.Workbook();
       await wb.xlsx.load(buffer);
       var workSheet = wb.getWorksheet(
         requiredPaidStorageReportFileWorkSheetName,

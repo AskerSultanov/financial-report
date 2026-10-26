@@ -16,7 +16,6 @@ var parseSku = async (
   skuQty,
   skuFilteredReport,
   storageCost,
-  taxRate,
   totals,
 ) => {
   var { totalSold, totalStorageCost, totalAdvertisingCosts } = totals;
@@ -38,8 +37,6 @@ var parseSku = async (
   var acceptance = calc.sum(skuFilteredReport, "paidAcceptance", "truncate-on");
 
   var retailAmount = calc.retailAmount(skuFilteredReport);
-
-  // var tax = calc.taxAmount(taxableAmount, taxRate);
 
   var returnAmount = calc.returnAmount(skuFilteredReport);
 

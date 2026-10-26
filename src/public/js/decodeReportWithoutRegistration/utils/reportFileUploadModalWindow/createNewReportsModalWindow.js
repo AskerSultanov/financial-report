@@ -1,9 +1,9 @@
-import createThElement from "../../report/table/services/createThElement.js";
-import createTdElement from "../../report/table/services/createTdElement.js";
-import createDiv from "../../report/table/services/modal/utils/createDiv.js";
-import createTitle from "../../report/table/services/modal/utils/createTitle.js";
-import createButton from "../../report/table/services/modal/utils/createButton.js";
-import getReportPeriodText from "../accountedFinancesPanel/getReportPeriodText.js";
+import createThElement from "../../../report/table/services/createThElement.js";
+import createTdElement from "../../../report/table/services/createTdElement.js";
+import createDiv from "../../../report/table/services/modal/utils/createDiv.js";
+import createTitle from "../../../report/table/services/modal/utils/createTitle.js";
+import createButton from "../../../report/table/services/modal/utils/createButton.js";
+import getReportPeriodText from "../../../index/accountedFinancesPanel/getReportPeriodText.js";
 
 var createTableToNewReports = (reports) => {
   var table = document.createElement("table");
@@ -60,7 +60,11 @@ var createNewReportsModalWindow = (reports) => {
   var event = "click";
   var cb = () => modal.remove();
   var cancelButtonTextContent = "закрыть";
-  var cancelButton = createButton("modal-button modal-button-cancel", cancelButtonTextContent, { event, cb });
+  var cancelButton = createButton(
+    "modal-button modal-button-cancel",
+    cancelButtonTextContent,
+    { event, cb },
+  );
 
   var buttonsContainer = createDiv("modal-buttons");
   buttonsContainer.append(cancelButton);
@@ -70,7 +74,11 @@ var createNewReportsModalWindow = (reports) => {
   var titleContent = "Добавлено отчётов: " + reports.length;
   var title = createTitle("modal-title", titleContent);
 
-  modalContent.append(title, createTableToNewReports(reports), buttonsContainer);
+  modalContent.append(
+    title,
+    createTableToNewReports(reports),
+    buttonsContainer,
+  );
   modal.append(modalContent);
 
   document.body.append(modal);

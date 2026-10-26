@@ -123,6 +123,12 @@ async function runMainServer() {
   app.use(express.urlencoded());
   app.use(express.json());
   app.use(express.static(join(import.meta.dirname, "../public")));
+  app.use(
+    "/vendor/exceljs",
+    express.static(
+      join(import.meta.dirname, "../../node_modules/exceljs-community/dist"),
+    ),
+  );
 
   app.use(cookieParser());
 
