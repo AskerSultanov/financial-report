@@ -55,6 +55,12 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
       var sku = skus[skuIndex];
 
+      var hasNoSales = sku.profit === 0 || sku.qty === 0;
+
+      if (hasNoSales) {
+        continue;
+      }
+
       if (sku.year !== year) {
         continue;
       }

@@ -22,6 +22,7 @@ var setCostPriceToSkuService = async (data) => {
         reportNotFound: true,
         updatedSkuData: {},
         costPriceIsEqual: false,
+        hasNoSales: false,
       };
     }
 
@@ -33,11 +34,23 @@ var setCostPriceToSkuService = async (data) => {
       sku = report.skus[0];
     }
 
+    var hasNoSales = sku.profit === 0 || sku.qty === 0;
+
+    if (hasNoSales) {
+      return {
+        hasNoSales,
+        costPriceIsEqual: true,
+        reportNotFound: false,
+        updatedSkuData: {},
+      };
+    }
+
     if (sku.costPrice === costPrice) {
       return {
         costPriceIsEqual: true,
         reportNotFound: false,
         updatedSkuData: {},
+        hasNoSales: false,
       };
     }
 
@@ -82,6 +95,7 @@ var setCostPriceToSkuService = async (data) => {
     }
 
     return {
+      hasNoSales: false,
       costPriceIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {

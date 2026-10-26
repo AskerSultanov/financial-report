@@ -14,6 +14,11 @@ var sendChangedData = async (data, targetUrlEnding) => {
     headers: { "Content-Type": "application/json" },
   });
 
+  if (res.status === 406) {
+    alert("Себестоимость не будет установлена: отсутствуют проданные единицы.");
+    return;
+  }
+
   if (!res.ok) {
     alert("Не удалось изменить данные");
     return;
