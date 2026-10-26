@@ -4,8 +4,6 @@ import createSkuPhotoUploader from "./services/skuPhotoUploader/index.js";
 import openCostPriceModal from "./services/modal/costPriceModal/openCostPriceModal.js";
 import openOtherExpensesModal from "./services/modal/otherExpensesModal/openOtherExpensesModal.js";
 
-var isGuestAccess = false;
-
 var createSkusTable = (userId, reportId, year, skus) => {
   var tableBody = document.createElement("tbody");
   tableBody.id = "skus-tbody-" + year;
@@ -14,17 +12,12 @@ var createSkusTable = (userId, reportId, year, skus) => {
     var tr = document.createElement("tr");
     tr.id = sku.skuName + "-" + sku.year;
 
-    var data = {
-      year,
-      userId,
-      reportId,
-      skuName: sku.skuName,
-      costPrice: sku.costPrice,
-      otherExpenses: sku.otherExpenses,
-    };
+    sku.userId = userId;
+    sku.reportId = reportId;
 
-    var costPriceInputField = openCostPriceModal(data, isGuestAccess);
-    var otherExpensesInputField = openOtherExpensesModal(data, isGuestAccess);
+    var costPriceInputField = openCostPriceModal(sku);
+    var otherExpensesInputField = openOtherExpensesModal(sku);
+
     var skuPhotoUploader = createSkuPhotoUploader(
       userId,
       reportId,

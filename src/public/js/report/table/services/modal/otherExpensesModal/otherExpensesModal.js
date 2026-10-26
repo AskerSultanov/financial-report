@@ -8,7 +8,6 @@ import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
 import replaceCommaToDotCallback from "../../replaceCommaToDotCallback.js";
 import getChildTablePrevFieldsValue from "../../getChildTablePrevFieldsValue.js";
-import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
 import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
 
 var event = "click";
@@ -19,16 +18,18 @@ var saveButtonClass = "modal-button modal-button-save";
 var cancelButtonText = "Отмена";
 var cancelButtonClass = "modal-button modal-button-cancel";
 
-var otherExpensesModal = (dataToUpdate, displayElement, isGuestAccess) => {
+var equalValuesMsg = "Значение совпадает с предыдущим";
+
+var otherExpensesModal = (skuFromTable, displayElem) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 
   var modalContent = createDiv("modal-content");
 
-  var titleContent = `Изменить прочие расходы для "${dataToUpdate.skuName}"`;
+  var titleContent = `Изменить прочие расходы для "${skuFromTable.skuName}"`;
   var title = createTitle("modal-title", titleContent);
 
-  var input = createInput("modal-input", displayElement);
+  var input = createInput("modal-input", displayElem);
 
   var buttonsContainer = createDiv("modal-buttons");
 
@@ -57,9 +58,30 @@ var otherExpensesModal = (dataToUpdate, displayElement, isGuestAccess) => {
   });
 
   async function saveButtonHandler() {
+    var newValue = +input.value;
+
+    var isEqual = newValue === skuFromTable.costPrice;
+
+    if (isEqual) {
+      alert(equalValuesMsg);
+      return;
+    }
+
     modal.remove();
 
-    dataToUpdate.otherExpenses = +input.value;
+    var { year, userId, reportId, skuName, costPrice, otherExpenses } =
+      skuFromTable;
+
+    var dataToUpdate = {
+      year,
+      userId,
+      skuName,
+      reportId,
+      costPrice,
+      otherExpenses,
+    };
+
+    dataToUpdate.otherExpenses = newValue;
 
     var updatedData = await sendChangedData(dataToUpdate, "other-expenses");
 
@@ -67,35 +89,31 @@ var otherExpensesModal = (dataToUpdate, displayElement, isGuestAccess) => {
       return;
     }
 
-    displayElement.otherExpensesnt = input.value;
+    displayElem.otherExpensesnt = newValue;
 
-    var { sku, requiredYear, isCrossYearPeriod } = updatedData;
+    var { sku, isCrossYearPeriod } = updatedData;
     var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
 
-    updateSkusTableFields(sku, requiredYear);
+    updateSkusTableFields(sku, year);
 
     if (isCrossYearPeriod) {
-      var { childTablePrevData } = getChildTablePrevFieldsValue(sku.year);
+      var { childTablePrevData } = getChildTablePrevFieldsValue(year);
 
       updateTotalsTableFields(
-        sku.year,
+        year,
         sku.data,
         prevSkuFieldsValue,
         isCrossYearPeriod,
       );
 
-      updateParentTotalsTableFields(requiredYear, childTablePrevData);
+      updateParentTotalsTableFields(year, childTablePrevData);
     } else {
       updateTotalsTableFields(
-        sku.year,
+        year,
         sku.data,
         prevSkuFieldsValue,
         isCrossYearPeriod,
       );
-    }
-
-    if (isGuestAccess) {
-      updateReportFromLocalStorage(updatedData);
     }
   }
 

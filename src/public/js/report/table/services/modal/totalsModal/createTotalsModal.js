@@ -7,7 +7,6 @@ import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
 import replaceCommaToDotCallback from "../../replaceCommaToDotCallback.js";
-import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
 import getChildTablePrevFieldsValue from "../../getChildTablePrevFieldsValue.js";
 import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
 import updateParentTableExtraAmountField from "../../updateParentTableExtraAmountField.js";
@@ -112,10 +111,6 @@ var createTotalsModal = (dataToUpdate, displayElement, isGuestAccess) => {
         );
       }
     });
-
-    if (isGuestAccess) {
-      updateReportFromLocalStorage(updatedData.data);
-    }
   }
 
   input.addEventListener("input", replaceCommaToDotCallback);

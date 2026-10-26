@@ -85,21 +85,13 @@ var setCostPriceToSkuService = async (data) => {
       session,
     );
 
-    var requiredYear;
     var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
-
-    if (report.isCrossYearPeriod) {
-      var startYear = +report.dateFrom.split("-")[0];
-      var endYear = +report.dateTo.split("-")[0];
-      requiredYear = year === startYear ? startYear : endYear;
-    }
 
     return {
       hasNoSales: false,
       costPriceIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {
-        requiredYear,
         sku: { year, skuName, data: skuDataToClient },
         isCrossYearPeriod: report.isCrossYearPeriod,
       },

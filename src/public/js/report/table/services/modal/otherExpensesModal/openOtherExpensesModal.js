@@ -2,14 +2,14 @@ import otherExpensesModal from "./otherExpensesModal.js";
 
 var editablePen = "&#9999;&#65039;";
 
-var openOtherExpensesModal = (skuData, isGuestAccess) => {
+var openOtherExpensesModal = (sku) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
-  var otherExpensesTdElement = document.createElement("span");
-  otherExpensesTdElement.className = "editable-field-value";
-  otherExpensesTdElement.textContent = skuData.otherExpenses;
-  otherExpensesTdElement.id = `otherExpenses-${skuData.skuName}-${skuData.year}`;
+  var displayElem = document.createElement("span");
+  displayElem.className = "editable-field-value";
+  displayElem.textContent = sku.otherExpenses;
+  displayElem.id = `otherExpenses-${sku.skuName}-${sku.year}`;
 
   var openModalButton = document.createElement("button");
   openModalButton.className = "editable-field-button";
@@ -18,13 +18,13 @@ var openOtherExpensesModal = (skuData, isGuestAccess) => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
-      otherExpensesModal(skuData, otherExpensesTdElement, isGuestAccess);
+      otherExpensesModal(sku, displayElem);
     }
   });
 
   openModalButton.innerHTML = editablePen;
 
-  container.append(otherExpensesTdElement, openModalButton);
+  container.append(displayElem, openModalButton);
   return container;
 };
 

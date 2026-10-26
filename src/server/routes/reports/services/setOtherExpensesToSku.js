@@ -64,20 +64,12 @@ var setOtherExpensesToSkuService = async (data) => {
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
     await saveUpdatedReport(userId, reportId, updatedSkus, session);
 
-    var requiredYear;
     var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
-
-    if (report.isCrossYearPeriod) {
-      var startYear = +report.dateFrom.split("-")[0];
-      var endYear = +report.dateTo.split("-")[0];
-      requiredYear = year === startYear ? startYear : endYear;
-    }
 
     return {
       otherExpensesIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {
-        requiredYear,
         sku: { year, skuName, data: skuDataToClient },
         isCrossYearPeriod: report.isCrossYearPeriod,
       },
