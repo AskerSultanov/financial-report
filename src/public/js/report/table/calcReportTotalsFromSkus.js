@@ -12,10 +12,8 @@ var calcReportTotalsFromSkus = (skus) => {
   var sellerPayoutAmount = skus
     .reduce((acc, sku) => acc + sku.sellerPayoutAmount, 0)
     .toFixed(2);
-  var productCosts = skus.reduce(
-    (acc, sku) => acc + sku.costPrice * sku.qty,
-    0,
-  );
+
+  var costPrice = skus.reduce((acc, sku) => acc + sku.costPrice * sku.qty, 0);
 
   var otherExpenses = skus
     .reduce((acc, sku) => acc + sku.otherExpenses, 0)
@@ -71,7 +69,7 @@ var calcReportTotalsFromSkus = (skus) => {
     fines,
     deductionOrPayment,
     storageCost,
-    productCosts,
+    costPrice,
     otherExpenses,
     advertisingCosts,
     tax,
