@@ -38,7 +38,7 @@ var generateReportXlsxBuffer = async (report) => {
     var startYearSkus = skus.filter((sku) => sku.year === startYear);
 
     if (startYearSkus.length) {
-      var startYearTotalsSheetName = "Сводка_" + startYear;
+      var startYearTotalsSheetName = "Сводка " + startYear;
 
       childTotalSheetsName.push(startYearTotalsSheetName);
 
@@ -57,7 +57,7 @@ var generateReportXlsxBuffer = async (report) => {
         indentToTotalsData,
       );
 
-      var startYearSkusSheetName = "Товары_" + startYear;
+      var startYearSkusSheetName = "Товары " + startYear;
       var startYearSheet = workbook.addWorksheet(startYearSkusSheetName);
 
       await createSkusSheet(startYearSkus, startYearSheet);
@@ -73,7 +73,7 @@ var generateReportXlsxBuffer = async (report) => {
     var endYearSkus = skus.filter((sku) => sku.year === endYear);
 
     if (endYearSkus.length) {
-      var endYearTotalsSheetName = "Сводка_" + endYear;
+      var endYearTotalsSheetName = "Сводка " + endYear;
       childTotalSheetsName.push(endYearTotalsSheetName);
 
       var endYearTotalsSheet = workbook.addWorksheet(endYearTotalsSheetName);
@@ -88,7 +88,7 @@ var generateReportXlsxBuffer = async (report) => {
         indentToTotalsData,
       );
 
-      var endYearSkusSheetName = "Товары_" + endYear;
+      var endYearSkusSheetName = "Товары " + endYear;
       var endYearSheet = workbook.addWorksheet(endYearSkusSheetName);
 
       await createSkusSheet(endYearSkus, endYearSheet);
@@ -103,7 +103,7 @@ var generateReportXlsxBuffer = async (report) => {
     setFormulasToParentTotalsSheet(totalsSheet, childTotalSheetsName);
   } else {
     var year = dateFrom.split("-")[0];
-    var sheetName = "Товары_" + year;
+    var sheetName = "Товары " + year;
     var skusSheet = workbook.addWorksheet(sheetName);
 
     await createSkusSheet(skus, skusSheet);

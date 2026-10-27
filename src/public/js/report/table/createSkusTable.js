@@ -1,8 +1,7 @@
-import createTdElement from "./services/createTdElement.js";
 import wrapTableToScrollElem from "./wrapTableToScroll.js";
+import createTdElement from "./services/createTdElement.js";
 import createSkuPhotoUploader from "./services/skuPhotoUploader/index.js";
-import openCostPriceModal from "./services/modal/costPriceModal/openCostPriceModal.js";
-import openOtherExpensesModal from "./services/modal/otherExpensesModal/openOtherExpensesModal.js";
+import openEditableSkuFieldModal from "./services/modal/editableSkuFieldModal/index.js";
 
 var hasNoSalesMsg =
   "Себестоимость не будет установлена: отсутствуют проданные единицы.";
@@ -23,14 +22,17 @@ var createSkusTable = (userId, reportId, year, skus) => {
     var costPriceTdElem;
 
     if (!hasNoSales) {
-      var costPriceModal = openCostPriceModal(sku);
+      var costPriceModal = openEditableSkuFieldModal(sku, "costPrice");
       costPriceTdElem = createTdElement(costPriceModal);
     } else {
       costPriceTdElem = createTdElement(0);
       costPriceTdElem.title = hasNoSalesMsg;
     }
 
-    var otherExpensesInputField = openOtherExpensesModal(sku);
+    var otherExpensesInputField = openEditableSkuFieldModal(
+      sku,
+      "otherExpenses",
+    );
 
     var skuPhotoUploader = createSkuPhotoUploader(
       userId,
@@ -121,7 +123,7 @@ var tableHeadContent = `
           <th>Приёмка</th>
           <th>Выплата с вычетом всех услуг WB</th>
           <th>Страховые взносы</th>
-          <th>Себестоимость</th>
+          <th>Себестоимость 1ед.</th>
           <th>Прочие расходы</th>
           <th>Маржинальность %</th>
           <th>Итого</th>

@@ -92,7 +92,7 @@ var setCostPriceToSkuService = async (data) => {
       costPriceIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {
-        sku: { year, skuName, data: skuDataToClient },
+        updatedSku: skuDataToClient,
         isCrossYearPeriod: report.isCrossYearPeriod,
       },
     };

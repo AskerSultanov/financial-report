@@ -1,10 +1,13 @@
 import doRequest from "../../../utils/doRequest.js";
 
 /**
- * @param {'cost-price' | 'other-expenses'} targetUrlEnding
+ * @param {'costPrice' | 'otherExpenses'} targetUrlEnding
  */
 
 var sendChangedData = async (data, targetUrlEnding) => {
+  targetUrlEnding =
+    targetUrlEnding === "costPrice" ? "cost-price" : "other-expenses";
+
   var targetRouterPath = window.location.pathname.split("/")[1];
   var url = "/" + targetRouterPath + "/skus/" + targetUrlEnding;
 

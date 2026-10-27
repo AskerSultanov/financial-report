@@ -1,12 +1,12 @@
 import showReport from "../../showReport.js";
 import reportFileParser from "../reportsFileParser/index.js";
+import downloadReportsInZip from "./downloadReportsInZip.js";
 import writeReportToLocalStorage from "../../writeReportToLocalStorage.js";
-import { generateMonthlySummaryXlsxBuffer } from "../reportToXlsxBuffer/index.js";
 import downloadReportAsXLSXButtonHandler from "../../downloadReportAsXLSXButtonHandler.js";
 import {
-  showSpinner,
-  hideSpinner,
-} from "../../../index/reportLoaderModalWindow/services/loaderSpinner.js";
+  generateReportXlsxBuffer,
+  generateMonthlySummaryXlsxBuffer,
+} from "../reportToXlsxBuffer/index.js";
 
 var maxFilesCount = 15;
 var selectedFiles = [];
@@ -227,13 +227,31 @@ var createUploadBtn = () => {
     }
 
     closeModal();
-    showSpinner();
+
     var { reportsData } = await reportFileParser(files);
 
-    hideSpinner();
-    // return
+    if (reportsData.length > 0) {
+      var zip = new JSZip();
+      var folder = zip.folder("Отчёты");
 
-    if (reportsData.length > 1) {
+      for (var report of reportsData) {
+        var { buffer } = await generateReportXlsxBuffer(report);
+
+        var fileNameForSeparateReport = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
+
+        folder.file(fileNameForSeparateReport, buffer);
+      }
+
+      var { buffer } = await generateMonthlySummaryXlsxBuffer(reportsData);
+
+      folder.file("Сводка.xlsx", buffer);
+
+      var zipBuffer = await zip.generateAsync({
+        type: "arrayBuffer",
+        compression: "DEFLATE",
+      });
+
+      downloadReportsInZip(zipBuffer);
     } else {
       var report = reportsData[0];
 
@@ -271,8 +289,7 @@ var createModalFooterButtons = () => {
   return { modalFooterButtons: buttonsWrapper };
 };
 
-var createUploadModalBodyDescription = () => {
-  var uploaderModalBodyDescription = `
+var uploaderModalBodyDescription = `
     <div class="upload-description">
             <p class="upload-description-text">
               Загрузите файлы отчётов Wildberries в формате <strong>ZIP</strong> или <strong>XLSX</strong>. 
@@ -285,12 +302,9 @@ var createUploadModalBodyDescription = () => {
               <li>Отчёт по платному хранению (номенклатуры) за тот же отчётный период.</li>
               </ul>
             <p class="upload-description-note">
-              <strong>Примечания:<br> </strong><br> - За один раз можно загрузить не более 15 файлов.<br> - Загрузка отчёта по платному хранению носит рекомендательный характер.
+              <strong>Примечания:<br> </strong><br> - За один раз можно загрузить не более ${maxFilesCount} файлов.<br> - Загрузка отчёта по платному хранению носит рекомендательный характер.
             </p>
           </div>`;
-
-  return { uploaderModalBodyDescription };
-};
 
 var createUploadedFileList = () => {
   var fileList = document.createElement("div");
@@ -303,7 +317,6 @@ var createUploadModalBody = () => {
   var uploadModalBody = document.createElement("div");
   uploadModalBody.className = "modal-body";
 
-  var { uploaderModalBodyDescription } = createUploadModalBodyDescription();
   var { dropZone } = createDropZone();
 
   var { fileList } = createUploadedFileList();

@@ -2,7 +2,7 @@ import createEditableFieldModal from "./createEditableSkuFieldModal.js";
 
 var editablePen = "&#9999;&#65039;";
 
-var openEditableSkuFieldModal = (sku, dataToUpdate, updateField) => {
+var openEditableSkuFieldModal = (sku, updateField) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
@@ -21,12 +21,7 @@ var openEditableSkuFieldModal = (sku, dataToUpdate, updateField) => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
-      createEditableFieldModal(
-        sku,
-        dataToUpdate,
-        updateField,
-        editableFieldDisplayElement,
-      );
+      createEditableFieldModal(sku, updateField, editableFieldDisplayElement);
     }
   });
 

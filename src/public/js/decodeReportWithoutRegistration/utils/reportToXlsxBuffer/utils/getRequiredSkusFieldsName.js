@@ -11,11 +11,8 @@ var requiredSkusFieldsName = [
   "acceptance",
   "fines",
   "profit",
-  "tax",
   "costPrice",
   "otherExpenses",
-  "insuranceFee",
-  "additionalInsuranceFee",
   "profitMargin",
   "finalProfit",
 ];

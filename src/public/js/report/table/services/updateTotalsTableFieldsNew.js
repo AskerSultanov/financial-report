@@ -2,21 +2,26 @@ import calcProfitMargin from "../calcProfitMargin.js";
 
 var updateTotalsTableFields = (
   year,
-  updatedSkuValues,
-  prevSkuValues,
+  updatedSku,
+  prevSku,
   isCrossYearPeriod,
 ) => {
   var yearKeyPart = isCrossYearPeriod ? year : "";
 
-  for (var key in updatedSkuValues) {
+  for (var key in updatedSku) {
     var totalFieldId = key + "-" + yearKeyPart;
     var totalField = document.getElementById(totalFieldId);
 
-    if (totalField && Number.isFinite(prevSkuValues[key])) {
+    if (totalField && Number.isFinite(prevSku[key])) {
       var prevTotalValue = +totalField.textContent;
 
-      var prevValue = prevSkuValues[key];
-      var newValue = updatedSkuValues[key];
+      if (key === "costPrice") {
+        prevSku[key] = prevSku[key] * updatedSku.qty;
+        updatedSku[key] = updatedSku[key] * updatedSku.qty;
+      }
+
+      var prevValue = prevSku[key];
+      var newValue = updatedSku[key];
       var newTotalValue = prevTotalValue - prevValue + newValue;
 
       var newColor = newTotalValue < 0 ? "red" : "#04ff00";

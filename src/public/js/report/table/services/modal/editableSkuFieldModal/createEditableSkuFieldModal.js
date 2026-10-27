@@ -8,7 +8,6 @@ import updateSkusTableFields from "../../updateSkusTableFields.js";
 import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
 import replaceCommaToDotCallback from "../../replaceCommaToDotCallback.js";
 import getChildTablePrevFieldsValue from "../../getChildTablePrevFieldsValue.js";
-import updateReportFromLocalStorage from "../../updateReportFromLocalStorage.js";
 import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
 
 var event = "click";
@@ -27,8 +26,7 @@ var titlesStartPartMap = {
 var equalValuesMsg = "Значение совпадает с предыдущим";
 
 var createEditableSkuFieldModal = (
-  sku,
-  dataToUpdate,
+  skuFromTable,
   updateField,
   displayElement,
 ) => {
@@ -38,7 +36,7 @@ var createEditableSkuFieldModal = (
   var modalContent = createDiv("modal-content");
 
   var titleStartPart = titlesStartPartMap[updateField];
-  var titleContent = titleStartPart + sku.skuName;
+  var titleContent = titleStartPart + skuFromTable.skuName;
   var title = createTitle("modal-title", titleContent);
 
   var input = createInput("modal-input", displayElement);
@@ -70,7 +68,7 @@ var createEditableSkuFieldModal = (
   async function saveButtonHandler() {
     var newValue = +input.value;
 
-    var isEqual = newValue === dataToUpdate[updateField];
+    var isEqual = newValue === skuFromTable[updateField];
 
     if (isEqual) {
       alert(equalValuesMsg);
@@ -79,44 +77,56 @@ var createEditableSkuFieldModal = (
 
     modal.remove();
 
+    var { year, userId, reportId, skuName, costPrice, otherExpenses } =
+      skuFromTable;
+
+    var dataToUpdate = {
+      year,
+      userId,
+      skuName,
+      reportId,
+      costPrice,
+      otherExpenses,
+    };
+
     dataToUpdate[updateField] = newValue;
 
-    var updatedData = await sendChangedData(dataToUpdate, "cost-price");
+    var updatedData = await sendChangedData(dataToUpdate, updateField);
 
     if (!updatedData) {
       return;
     }
 
-    var { year, skuName } = sku;
-    displayElement.textContent = input.value;
-
     var { updatedSku, isCrossYearPeriod } = updatedData;
-    var { prevSkuFieldsValue } = getPrevSkuFieldsValue(updatedSku);
+    var { prevSkuFieldsValue } = getPrevSkuFieldsValue(
+      year,
+      skuName,
+      updatedSku,
+    );
 
-    updateSkusTableFields(updatedSku);
+    updatedSku.qty = skuFromTable.qty;
+
+    updateSkusTableFields(year, skuName, updatedSku);
+    displayElement.textContent = newValue;
 
     if (isCrossYearPeriod) {
       var { childTablePrevData } = getChildTablePrevFieldsValue(year);
 
       updateTotalsTableFields(
         year,
-        sku.data,
+        updatedSku,
         prevSkuFieldsValue,
         isCrossYearPeriod,
       );
 
-      updateParentTotalsTableFields(requiredYear, childTablePrevData);
+      updateParentTotalsTableFields(year, childTablePrevData);
     } else {
       updateTotalsTableFields(
-        sku.year,
-        sku.data,
+        year,
+        updatedSku,
         prevSkuFieldsValue,
         isCrossYearPeriod,
       );
-    }
-
-    if (isGuestAccess) {
-      updateReportFromLocalStorage(updatedData);
     }
   }
 

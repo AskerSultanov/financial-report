@@ -1,51 +1,49 @@
 import calcProfitMargin from "./profitMargin.js";
 
 var calcReportTotalsFromSkus = (skus) => {
-  var retailAmount = skus
+  var retailAmount = +skus
     .reduce((acc, sku) => acc + sku.retailAmount, 0)
     .toFixed(2);
 
-  var sold = skus.reduce((acc, sku) => acc + sku.qty, 0);
+  var sold = +skus.reduce((acc, sku) => acc + sku.qty, 0);
 
-  var returnAmount = skus.reduce((acc, sku) => acc + sku.returnAmount, 0);
+  var returnAmount = +skus.reduce((acc, sku) => acc + sku.returnAmount, 0);
 
-  var sellerPayoutAmount = skus
+  var sellerPayoutAmount = +skus
     .reduce((acc, sku) => acc + sku.sellerPayoutAmount, 0)
     .toFixed(2);
 
-  var costPrice = skus.reduce((acc, sku) => acc + sku.costPrice * sku.qty, 0);
+  var costPrice = +skus.reduce((acc, sku) => acc + sku.costPrice * sku.qty, 0);
 
-  var otherExpenses = skus
+  var otherExpenses = +skus
     .reduce((acc, sku) => acc + sku.otherExpenses, 0)
     .toFixed(2);
 
-  var deliveryCost = skus
+  var deliveryCost = +skus
     .reduce((acc, sku) => acc + sku.deliveryCost, 0)
     .toFixed(2);
 
-  var paidAcceptance = skus
+  var paidAcceptance = +skus
     .reduce((acc, sku) => acc + sku.acceptance, 0)
     .toFixed(2);
 
-  var fines = skus.reduce((acc, sku) => acc + sku.fines, 0).toFixed(2);
+  var fines = +skus.reduce((acc, sku) => acc + sku.fines, 0).toFixed(2);
 
-  var deductionOrPayment = skus
+  var deductionOrPayment = +skus
     .reduce((acc, sku) => acc + sku.deductionOrPayment, 0)
     .toFixed(2);
 
-  var storageCost = skus
+  var storageCost = +skus
     .reduce((acc, sku) => acc + sku.storageCost, 0)
     .toFixed(2);
 
-  var advertisingCosts = skus
+  var advertisingCosts = +skus
     .reduce((acc, sku) => acc + sku.averageAdvertisingCost, 0)
     .toFixed(2);
 
-  var finalProfit = skus
+  var finalProfit = +skus
     .reduce((acc, sku) => acc + sku.finalProfit, 0)
     .toFixed(2);
-
-  //var taxableAmount = skus.reduce((acc, sku) => acc + sku.taxableAmount, 0);
 
   var profitMargin = calcProfitMargin(finalProfit, retailAmount);
 

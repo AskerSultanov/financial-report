@@ -70,7 +70,7 @@ var setOtherExpensesToSkuService = async (data) => {
       otherExpensesIsEqual: false,
       reportNotFound: false,
       updatedSkuData: {
-        sku: { year, skuName, data: skuDataToClient },
+        updatedSku: skuDataToClient,
         isCrossYearPeriod: report.isCrossYearPeriod,
       },
     };

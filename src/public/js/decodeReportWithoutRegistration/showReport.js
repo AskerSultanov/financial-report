@@ -1,22 +1,19 @@
 import createSkusTable from "./createSkusTable.js";
 import createTotalsTable from "./createTotalsTable.js";
-import { enableDownloadReportAsXLSXButton } from "./downloadReportAsXLSXButton.js";
+import getReportPeriodText from "./getReportPeriodText.js";
+import downloadReportAsXlsxuttonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import calcReportTotalsFromSkus from "./utils/calcUtils/utils/calcReportTotalsFromSkus.js";
-import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
-import downloadReportAsXLSXButtonHandler from "../report/downloadReportAsXLSXButtonHandler.js";
+import { enableDownloadReportAsXLSXButton } from "./toggleDownloadReportAsXlsxButtonVisibility.js";
 
 var yearValueStub = "";
-var isGuestAccess = true;
 var reportSummaryLabelTextStub = "";
-var downloadReportLink = "/decode-report-without-registration/xlsx/";
-var newTextContentToDecodeReportWithoutRegistrationButton =
-  "Получить новый отчёт";
-var decodeReportWithoutRegistrationButton = document.getElementById(
-  "decode-report-without-registration-button",
-);
+
+var textContentToDecodeButton = "Получить новый отчёт";
+
+var decodeReportButton = document.getElementById("decode-report-button");
 
 var showReport = async (report) => {
-  var { dateFrom, dateTo, isCrossYearPeriod, skus } = report;
+  var { dateFrom, dateTo, isCrossYearPeriod, skus, reportId } = report;
 
   var startYear = +report.dateFrom.split("-")[0];
   var endYear = +report.dateTo.split("-")[0];
@@ -81,7 +78,7 @@ var showReport = async (report) => {
   }
 
   enableDownloadReportAsXLSXButton();
-  downloadReportAsXLSXButtonHandler(report, downloadReportLink, isGuestAccess);
+  downloadReportAsXlsxuttonHandler(reportId);
 
   if (isCrossYearPeriod) {
     window.scrollTo({ top: 500, behavior: "smooth" });
@@ -89,8 +86,7 @@ var showReport = async (report) => {
     window.scrollTo({ top: 900, behavior: "smooth" });
   }
 
-  decodeReportWithoutRegistrationButton.textContent =
-    newTextContentToDecodeReportWithoutRegistrationButton;
+  decodeReportButton.textContent = textContentToDecodeButton;
 };
 
 export default showReport;

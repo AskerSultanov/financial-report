@@ -3,12 +3,10 @@ import calc from "../calcUtils/index.js";
 var tax = 0;
 var costPrice = 0;
 var otherExpenses = 0;
-var insuranceFee = 0;
 var preTaxProfit = 0;
 var profitMargin = 0;
 var averageProfit = 0;
 var isCostPriceSet = false;
-var additionalInsuranceFee = 0;
 var isInsuranceFeeIncluded = false;
 
 var parseSku = async (
@@ -96,7 +94,6 @@ var parseSku = async (
     deductionOrPayment,
     averageStorageCost,
     profit,
-    insuranceFee,
     acceptance,
     additionalPayment,
     storageCost,
@@ -105,7 +102,6 @@ var parseSku = async (
     isCostPriceSet,
     averageAdvertisingCost,
     sellerPayoutAmount,
-    additionalInsuranceFee,
     isInsuranceFeeIncluded,
     preTaxProfit,
     finalProfit,

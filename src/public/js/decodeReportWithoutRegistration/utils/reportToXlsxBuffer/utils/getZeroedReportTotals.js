@@ -15,9 +15,6 @@ var getZeroedReportTotals = () => {
     deductionOrPayment: 0,
     storageCost: 0,
     advertisingCosts: 0,
-    taxAmount: 0,
-    insuranceFee: 0,
-    additionalInsuranceFe: 0,
     profitMargin: 0,
     finalProfit: 0,
   };

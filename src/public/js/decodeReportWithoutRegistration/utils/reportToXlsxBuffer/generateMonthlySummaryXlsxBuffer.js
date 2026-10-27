@@ -24,7 +24,7 @@ var generateMonthlySummaryXlsxBuffer = async (reports) => {
     firstDate,
     lastDate,
   );
-
+  console.log(monthlySummary)
   await writeTotalValuesToSheet(sheet, indent, monthlySummary);
 
   if (crossYearPeriodReport) {

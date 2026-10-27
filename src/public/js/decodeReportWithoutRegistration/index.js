@@ -2,12 +2,8 @@ import showReport from "./showReport.js";
 import sendReportData from "./sendReportData.js";
 import uploadFilesButtonHandler from "./uploadFilesButtonHandler.js";
 import writeReportToLocalStorage from "./writeReportToLocalStorage.js";
-import checkDateTo from "../index/reportLoaderModalWindow/services/checkDateTo.js";
-import checkDateFrom from "../index/reportLoaderModalWindow/services/checkDateFrom.js";
-import {
-  showSpinner,
-  hideSpinner,
-} from "../index/reportLoaderModalWindow/services/loaderSpinner.js";
+// import checkDateTo from "../index/reportLoaderModalWindow/services/checkDateTo.js";
+// import checkDateFrom from "../index/reportLoaderModalWindow/services/checkDateFrom.js";
 
 var errorMsg = "Что-то пошло не так...";
 var getReportBtn = document.getElementById("get-report");
@@ -30,15 +26,11 @@ var main = async () => {
 
         document.getElementById("dialog").close();
 
-        showSpinner();
-
         var { report, errorText } = await sendReportData(
           validDateFrom,
           validDateTo,
           token,
         );
-
-        await hideSpinner();
 
         if (errorText) {
           alert(errorText);
@@ -57,13 +49,11 @@ var main = async () => {
         reportSummaryLabels.forEach((label) => label.remove());
 
         alert(errorMsg);
-        hideSpinner();
       }
     };
   } catch {
     alert(errorMsg);
-    hideSpinner();
   }
 };
 
-main();
+// main();

@@ -8,13 +8,10 @@ var storageCol = "I";
 var acceptanceCol = "J";
 var finesCol = "K";
 var profitCol = "L";
-var taxCol = "M";
-var costPriceCol = "N";
-var otherExpensesCol = "O";
-var insuranceFeeCol = "P";
-var additionalInsuranceFeeCol = "Q";
-var profitMarginCol = "R";
-var finalProfitCol = "S";
+var costPriceCol = "M";
+var otherExpensesCol = "N";
+var profitMarginCol = "O";
+var finalProfitCol = "P";
 
 var getProfitMarginCalcFormula = (rowNum) => {
   var retailAmountCellAddress = retailAmountCol + rowNum;
@@ -55,18 +52,9 @@ var getFinalProfitCalcFormula = (rowNum) => {
   var productCostsFormula = `${qtyCellAddress} * ${costPriceCellAddress}`;
 
   var profitCellAddress = profitCol + rowNum;
-  var taxCellAddress = taxCol + rowNum;
   var otherExpensesCellAddress = otherExpensesCol + rowNum;
-  var insuranceFeeCellAddress = insuranceFeeCol + rowNum;
-  var additionalInsuranceFeeCellAddress = additionalInsuranceFeeCol + rowNum;
 
-  var finalProfitCalcFormula = `
-    ${profitCellAddress} -
-    ${taxCellAddress} -
-    ${otherExpensesCellAddress} -
-    ${insuranceFeeCellAddress} -
-    ${additionalInsuranceFeeCellAddress} -
-    ${productCostsFormula}`;
+  var finalProfitCalcFormula = `${profitCellAddress} - ${otherExpensesCellAddress} - ${productCostsFormula}`;
 
   return { finalProfitCalcFormula: { formula: finalProfitCalcFormula } };
 };

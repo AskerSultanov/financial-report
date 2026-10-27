@@ -22,10 +22,6 @@ var getMonthlySummary = async (reports, dateFrom, dateTo) => {
     monthlySummary.deductionOrPayment += reportTotals.deductionOrPayment;
     monthlySummary.advertisingCosts += reportTotals.advertisingCosts;
     monthlySummary.productsCosts += reportTotals.productCosts ?? 0;
-    monthlySummary.taxableAmount += reportTotals.taxableAmount;
-    monthlySummary.taxAmount += reportTotals.taxAmount;
-    monthlySummary.insuranceFee += reportTotals.insuranceFee;
-    monthlySummary.additionalInsuranceFe += reportTotals.additionalInsuranceFee;
     monthlySummary.profitMargin += reportTotals.profitMargin;
     monthlySummary.finalProfit += reportTotals.finalProfit;
   }

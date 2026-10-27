@@ -18,9 +18,6 @@ var columns = [
   "N",
   "O",
   "P",
-  "Q",
-  "R",
-  "S",
 ];
 
 var alignmentStyles = {

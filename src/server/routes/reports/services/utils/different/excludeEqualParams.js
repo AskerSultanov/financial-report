@@ -8,7 +8,7 @@ var excludeEqualParams = (prevData, currentData) => {
     var prevDataKey = prevDataKeys.find((key) => key === currentDataKey);
 
     if (prevDataKey) {
-      if (prevData[prevDataKey] !== currentData[currentDataKey] && !currentDataKey.startsWith("costPrice")) {
+      if (prevData[prevDataKey] !== currentData[currentDataKey]) {
         nonEqualParams[currentDataKey] = currentData[currentDataKey];
       }
     }
