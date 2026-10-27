@@ -4,6 +4,9 @@ import createSkuPhotoUploader from "./services/skuPhotoUploader/index.js";
 import openCostPriceModal from "./services/modal/costPriceModal/openCostPriceModal.js";
 import openOtherExpensesModal from "./services/modal/otherExpensesModal/openOtherExpensesModal.js";
 
+var hasNoSalesMsg =
+  "Себестоимость не будет установлена: отсутствуют проданные единицы.";
+
 var createSkusTable = (userId, reportId, year, skus) => {
   var tableBody = document.createElement("tbody");
   tableBody.id = "skus-tbody-" + year;
@@ -15,7 +18,18 @@ var createSkusTable = (userId, reportId, year, skus) => {
     sku.userId = userId;
     sku.reportId = reportId;
 
-    var costPriceInputField = openCostPriceModal(sku);
+    var hasNoSales = sku.profit === 0 || sku.qty === 0;
+
+    var costPriceTdElem;
+
+    if (!hasNoSales) {
+      var costPriceModal = openCostPriceModal(sku);
+      costPriceTdElem = createTdElement(costPriceModal);
+    } else {
+      costPriceTdElem = createTdElement(0);
+      costPriceTdElem.title = hasNoSalesMsg;
+    }
+
     var otherExpensesInputField = openOtherExpensesModal(sku);
 
     var skuPhotoUploader = createSkuPhotoUploader(
@@ -34,7 +48,6 @@ var createSkusTable = (userId, reportId, year, skus) => {
     var skuName = createTdElement(sku.skuName);
     var qty = createTdElement(sku.qty);
     var returnAmount = createTdElement(sku.returnAmount);
-    var costPrice = createTdElement(costPriceInputField);
     var otherExpenses = createTdElement(otherExpensesInputField);
     var deliveryCost = createTdElement(sku.deliveryCost);
     var deductionOrPayment = createTdElement(sku.deductionOrPayment);
@@ -72,7 +85,7 @@ var createSkusTable = (userId, reportId, year, skus) => {
       acceptance,
       profit,
       insuranceFee,
-      costPrice,
+      costPriceTdElem,
       otherExpenses,
       profitMargin,
       finalProfit,
