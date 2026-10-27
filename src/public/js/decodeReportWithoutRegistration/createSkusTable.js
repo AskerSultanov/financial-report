@@ -1,6 +1,9 @@
 import createTdElement from "./createTdElement.js";
 import openEditableSkuFieldModal from "./utils/editableSkuFieldModal/index.js";
 
+var hasNoSalesMsg =
+  "Себестоимость не будет установлена: отсутствуют проданные единицы.";
+
 var createSkusTable = (report, skus) => {
   if (!skus.length) {
     return;
@@ -29,14 +32,23 @@ var createSkusTable = (report, skus) => {
       isCrossYearPeriod: report.isCrossYearPeriod,
     };
 
-    var costPriceModal = openEditableSkuFieldModal(dataToUpdate, "costPrice");
+    var hasNoSales = sku.profit === 0 || sku.qty === 0;
+
+    var costPriceTdElem;
+
+    if (!hasNoSales) {
+      var costPriceModal = openEditableSkuFieldModal(dataToUpdate, "costPrice");
+      costPriceTdElem = createTdElement(costPriceModal);
+    } else {
+      costPriceTdElem = createTdElement(0);
+      costPriceTdElem.title = hasNoSalesMsg;
+    }
 
     var otherExpensesModal = openEditableSkuFieldModal(
       dataToUpdate,
       "otherExpenses",
     );
 
-    var costPrice = createTdElement(costPriceModal);
     var otherExpenses = createTdElement(otherExpensesModal);
     var deliveryCost = createTdElement(sku.deliveryCost);
     var deductionOrPayment = createTdElement(sku.deductionOrPayment);
@@ -61,7 +73,7 @@ var createSkusTable = (report, skus) => {
       storageCost,
       acceptance,
       profit,
-      costPrice,
+      costPriceTdElem,
       otherExpenses,
       profitMargin,
       finalProfit,

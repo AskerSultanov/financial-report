@@ -27,9 +27,6 @@ var titlesStartPartMap = {
 
 var equalValuesMsg = "Значение совпадает с предыдущим";
 
-var hasNoSalesMsg =
-  "Себестоимость не будет установлена: отсутствуют проданные единицы.";
-
 var createEditableSkuFieldModal = (
   skuToUpdate,
   updateField,
@@ -72,14 +69,6 @@ var createEditableSkuFieldModal = (
 
   async function saveButtonHandler() {
     var newValue = +input.value;
-
-    var hasNoSales = skuToUpdate.profit === 0 || skuToUpdate.qty === 0;
-
-    if (hasNoSales) {
-      alert(hasNoSalesMsg);
-      modal.remove();
-      return;
-    }
 
     var isEqual = newValue === skuToUpdate[updateField];
 
