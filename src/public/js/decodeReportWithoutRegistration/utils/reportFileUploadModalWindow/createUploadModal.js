@@ -205,9 +205,6 @@ var createUploadBtn = () => {
   uploadBtn.className = "modal-btn modal-btn-upload";
 
   uploadBtn.addEventListener("click", async (e) => {
-    var formData = new FormData();
-    formData.append("userId", userId);
-
     if (!selectedFiles.length) {
       alert("Выберите хотя бы один файл");
       return;
