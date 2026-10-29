@@ -1,14 +1,15 @@
 import doRequest from "../utils/doRequest.js";
 import navigateTo from "../utils/navigateTo.js";
 import reportInfo from "../report/reportInfo.js";
+import getCookieByName from "../utils/getCookieByName.js";
 import createSkusTable from "../report/table/createSkusTable.js";
-import createTotalsTable from "../report/table/createTotalsTable.js";
 import deleteReportHandler from "../report/deleteReportHandler.js";
+import createTotalsTable from "../report/table/createTotalsTable.js";
 import calcReportTotalsFromSkus from "../report/table/calcReportTotalsFromSkus.js";
-import injectSignedUrlsIntoImgTags from "../report/table/services/injectSignedUrlsIntoImgTags.js";
-import downloadReportAsXLSXButtonHandler from "../report/downloadReportAsXLSXButtonHandler.js";
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
+import downloadReportAsXLSXButtonHandler from "../report/downloadReportAsXLSXButtonHandler.js";
 import setSkusLastCostPricesButtonHandler from "../report/setSkusLastCostPricesButtonHandler.js";
+import injectSignedUrlsIntoImgTags from "../report/table/services/injectSignedUrlsIntoImgTags.js";
 import financialAccountingStatusButtonHander from "../report/financialAccountingStatusButtonHander.js";
 
 var yearValueStub = "";
@@ -21,7 +22,7 @@ var splitedPathParts = window.location.pathname.split("/");
 var reportId = splitedPathParts.at(-1);
 var userId = splitedPathParts.includes("user")
   ? splitedPathParts[3]
-  : document.cookie.split("=")[1];
+  : getCookieByName("userId");
 
 var userMainPageUrl = "/admin/user/" + userId;
 

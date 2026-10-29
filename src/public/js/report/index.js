@@ -1,6 +1,7 @@
 import reportInfo from "./reportInfo.js";
 import getReportData from "./getReportData.js";
 import createSkusTable from "./table/createSkusTable.js";
+import getCookieByName from "../utils/getCookieByName.js";
 import deleteReportHandler from "./deleteReportHandler.js";
 import createTotalsTable from "./table/createTotalsTable.js";
 import resetReportButtonHandler from "./resetReportButtonHandler.js";
@@ -21,7 +22,7 @@ var reportSummaryLabelTextStub = "";
 var splitedPathName = window.location.pathname.split("/");
 var userId = splitedPathName.includes("user")
   ? splitedPathName[3]
-  : document.cookie.split("=")[1];
+  : getCookieByName("userId");
 
 var pathParts = window.location.pathname.split("/");
 
