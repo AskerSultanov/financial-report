@@ -1,7 +1,18 @@
+@import url("./theme.css");
+
 body {
-  background-color: #212529;
-  color: #f8f9fa;
-  font-family: Arial, sans-serif;
+  background-color: var(--bg-base);
+  background-image: radial-gradient(
+    ellipse at top,
+    #1a1f2e 0%,
+    var(--bg-base) 60%
+  );
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -29,45 +40,50 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 32px;
-  padding: 0 12px;
-  border: 1px solid #495057;
-  border-radius: 4px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
   background: transparent;
-  color: #f8f9fa;
+  color: var(--text-primary);
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
   text-decoration: none;
   text-align: center;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: var(--transition-base);
 }
 
 #registration {
-  background-color: rgba(52, 58, 64, 0.8);
+  background-color: var(--bg-elevated);
 }
 
 #auth:hover,
 #registration:hover {
-  background-color: #495057;
-  border-color: #6c757d;
-  color: #f8f9fa;
+  background-color: var(--bg-hover);
+  border-color: var(--border-accent);
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
 #decode-report-button {
-  background-color: #343a40;
-  color: #ffffff;
-  border: 1.6px solid #495057;
-  padding: 19.2px 38.4px;
-  border-radius: 6.4px;
-  font-size: 14.4px;
+  background: var(--accent-gradient);
+  color: #fff;
+  border: 1px solid transparent;
+  padding: 18px 38px;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: var(--transition-base);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+}
+
+#decode-report-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 @media (max-width: 600px) {
@@ -96,17 +112,24 @@ body {
 }
 
 #download-report-as-xlsx-button {
-  background-color: #343a40;
-  color: #ffffff;
-  border: 1px solid #495057;
-  padding: 0 12px;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  padding: 0 14px;
   min-height: 32px;
-  border-radius: 4px;
+  border-radius: var(--radius-full);
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: var(--transition-base);
+}
+
+#download-report-as-xlsx-button:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Кнопка скачивания архива, когда из файлов получилось несколько отчётов */
@@ -115,26 +138,23 @@ body {
   margin: 0 auto 24px;
   min-height: 44px;
   padding: 0 32px;
-  background-color: #343a40;
-  color: #ffffff;
-  border: 1.6px solid #495057;
-  border-radius: 6.4px;
+  background: var(--accent-gradient);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: var(--transition-base);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
 
 #download-reports-in-zip:hover {
-  background-color: #495057;
-  border-color: #6c757d;
+  filter: brightness(1.1);
+  border-color: transparent;
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 #download-reports-in-zip:active {
@@ -147,10 +167,12 @@ table {
   margin: 0 auto 24px;
   border-collapse: separate;
   border-spacing: 0;
-  background: #2d3439;
-  border-radius: 11.2px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 10.5px 31.5px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-md);
+  font-variant-numeric: tabular-nums;
 }
 
 th,
@@ -158,8 +180,7 @@ td {
   padding: 12.6px 9.8px;
   text-align: center;
   vertical-align: middle;
-  border-bottom: 1px solid #40484f;
-  border-right: 1px solid #40484f;
+  border-bottom: 1px solid var(--border);
 }
 
 /* Числовые значения (цены) не должны переноситься на другую строку */
@@ -168,20 +189,29 @@ td {
 }
 
 th {
-  background: linear-gradient(to bottom, #40484f, #343a40);
-  color: #dee2e6;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
   font-weight: 600;
   font-size: 10.5px;
   text-transform: uppercase;
-  letter-spacing: 0.56px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+tbody tr {
+  transition: background-color var(--transition-fast);
 }
 
 tbody tr:nth-child(even) {
-  background-color: rgba(52, 58, 64, 0.4);
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 tbody tr:hover {
-  background-color: rgba(80, 90, 100, 0.7);
+  background-color: var(--bg-hover);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
 }
 
 td:last-child,
@@ -198,10 +228,12 @@ th:last-child {
   display: inline-block;
   font-size: 21px;
   font-weight: 600;
-  color: #71b7ff;
-  padding: 5.6px 14px;
-  background: rgba(13, 110, 253, 0.15);
-  border-radius: 2.8px;
+  letter-spacing: -0.01em;
+  color: var(--text-accent);
+  padding: 6px 16px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-full);
   letter-spacing: 0.35px;
 }
 
@@ -222,10 +254,11 @@ th:last-child {
   gap: 16px;
   min-height: 56px;
   padding: 0 21px;
-  background: rgba(34, 39, 46, 0.97);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(73, 80, 87, 0.6);
-  box-shadow: 0 5.6px 21px rgba(0, 0, 0, 0.5);
+  background: rgba(22, 27, 34, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== Hero-блок ===== */
@@ -244,14 +277,14 @@ th:last-child {
   margin: 0;
   font-size: clamp(24px, 4vw, 36px);
   line-height: 1.25;
-  color: #f8f9fa;
+  color: var(--text-primary);
 }
 
 .hero .lead {
   margin: 0;
   font-size: 16px;
   line-height: 1.55;
-  color: #c1c7cd;
+  color: var(--text-secondary);
   max-width: 620px;
 }
 
@@ -265,14 +298,14 @@ th:last-child {
 .info-block h2 {
   margin: 0 0 12px;
   font-size: 22px;
-  color: #9ec5fe;
+  color: #c4b5fd;
 }
 
 .info-block ul,
 .info-block ol {
   margin: 0;
   padding-left: 22px;
-  color: #ced4da;
+  color: var(--text-secondary);
   line-height: 1.6;
   font-size: 15px;
 }
@@ -309,7 +342,7 @@ th:last-child {
 #auth:focus-visible,
 #registration:focus-visible,
 .info-block a:focus-visible {
-  outline: 2px solid #0d6efd;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -319,10 +352,10 @@ th:last-child {
   max-width: 1190px;
   margin: 0 auto 16px;
   overflow-x: auto;
-  border-radius: 11.2px;
-  border: 1px solid #40484f;
-  box-shadow: 0 10.5px 31.5px rgba(0, 0, 0, 0.6);
-  background: #2d3439;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-surface);
 }
 
 /* Радиус, фон и тень задаёт контейнер, иначе они дублируются */
@@ -384,7 +417,7 @@ th:last-child {
   max-width: 1190px;
   margin: 0 auto 12px;
   padding: 0 4px;
-  border-bottom: 1px solid #40484f;
+  border-bottom: 1px solid var(--border);
 }
 
 .tab {
@@ -393,7 +426,7 @@ th:last-child {
   gap: 8px;
   padding: 10px 18px;
   background: transparent;
-  color: #adb5bd;
+  color: var(--text-secondary);
   border: none;
   border-bottom: 2px solid transparent;
   font-family: inherit;
@@ -408,11 +441,11 @@ th:last-child {
 }
 
 .tab:hover {
-  color: #f8f9fa;
-  background: rgba(52, 58, 64, 0.7);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .tab.is-active {
-  color: #71b7ff;
-  border-bottom-color: #0d6efd;
+  color: var(--text-accent);
+  border-bottom-color: var(--accent);
 }

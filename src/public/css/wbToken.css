@@ -8,8 +8,15 @@
 
 body {
   font-family: var(--font-family);
-  background: var(--bg-base);
+  background-color: var(--bg-base);
+  background-image: radial-gradient(
+    ellipse at top,
+    #1a1f2e 0%,
+    var(--bg-base) 60%
+  );
+  background-attachment: fixed;
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,13 +35,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: rgba(52, 58, 64, 0.8);
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  border: 1px solid var(--border);
-  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  padding: 0 14px;
   height: 32px;
+  font-family: var(--font-family);
   font-size: 12px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   cursor: pointer;
   transition: var(--transition-base);
   margin-bottom: 32px;
@@ -46,20 +54,24 @@ body {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8f9fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: transform var(--transition-fast);
+  background-color: var(--text-secondary);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .btn-to-main:hover {
   background: var(--bg-hover);
-  border-color: var(--border-strong);
+  border-color: var(--border-accent);
   color: var(--text-primary);
 }
 
 .btn-to-main:hover::before {
+  background-color: var(--text-accent);
   transform: translateX(-2px);
 }
 
@@ -86,7 +98,7 @@ body {
 
 .wbtoken-eyebrow {
   margin: 0 0 8px;
-  color: var(--accent-hover);
+  color: var(--text-accent);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -119,13 +131,14 @@ body {
   gap: 8px;
   min-width: 160px;
   height: 40px;
-  padding: 0 16px;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: var(--text-primary);
-  font: 500 13px var(--font-family);
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--accent-gradient);
+  color: #fff;
+  font: 600 13px var(--font-family);
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
   transition: var(--transition-base);
 }
 
@@ -137,13 +150,13 @@ body {
 }
 
 .add-token-button:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
+  filter: brightness(1.1);
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 .add-token-button:focus-visible {
-  outline: 2px solid var(--accent-hover);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -182,8 +195,8 @@ body {
   color: var(--text-secondary);
   font-size: 15px;
   background: var(--bg-surface);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
 }
 
 /* ===== Требуемые категории (fieldset) ===== */
@@ -195,7 +208,7 @@ body {
 #required-token-categories fieldset {
   background: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   padding: 20px 24px;
   box-shadow: var(--shadow-sm);
   margin: 0;
@@ -237,30 +250,37 @@ body {
 #token-button,
 #remove-token-button {
   padding: 12px 20px;
+  font-family: var(--font-family);
   font-size: 15px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-weight: 600;
   cursor: pointer;
   transition: var(--transition-base);
 }
 
 #token-button {
-  background: var(--success);
-  color: var(--text-primary);
+  background: var(--accent-gradient);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
 
 #token-button:hover {
-  background: #218838;
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 #remove-token-button {
-  background: var(--danger);
-  color: var(--text-primary);
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: rgba(248, 113, 113, 0.3);
 }
 
 #remove-token-button:hover {
-  background: #c82333;
+  background: rgba(248, 113, 113, 0.25);
+  border-color: rgba(248, 113, 113, 0.5);
+  box-shadow: 0 4px 12px rgba(248, 113, 113, 0.2);
 }
 
 /* ===== Модальное окно ===== */
@@ -270,14 +290,15 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(14px);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--transition-base);
 }
 
 .modal-overlay.active {
@@ -287,7 +308,8 @@ body {
 
 .modal-content {
   background: var(--bg-elevated);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
   width: 100%;
   max-width: 420px;
   box-shadow: var(--shadow-lg);
@@ -319,7 +341,7 @@ body {
   border-bottom: 1px solid var(--border);
   font-size: 18px;
   font-weight: 600;
-  color: #71b7ff;
+  color: var(--text-accent);
   margin: 0;
   text-align: center;
 }
@@ -328,19 +350,23 @@ body {
   width: calc(100% - 48px);
   margin: 20px 24px;
   padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-base);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
   color: var(--text-primary);
+  font-family: var(--font-family);
   font-size: 15px;
   box-sizing: border-box;
   text-align: left;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .modal-input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .modal-buttons {
@@ -351,33 +377,54 @@ body {
   width: 100%;
 }
 
-.modal-button {
+.modal-button,
+.modal-btn {
   padding: 11px 22px;
+  font-family: var(--font-family);
   font-size: 14.5px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-weight: 600;
   cursor: pointer;
   transition: var(--transition-base);
   min-width: 115px;
 }
 
-.modal-button-cancel {
-  background: var(--text-secondary);
+.modal-button-cancel,
+.modal-btn-cancel {
+  background: var(--bg-hover);
   color: var(--text-primary);
+  border-color: var(--border-strong);
 }
 
-.modal-button-cancel:hover {
-  background: #5a6268;
+.modal-button-cancel:hover,
+.modal-btn-cancel:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.modal-button:active,
+.modal-btn:active {
+  transform: scale(0.98);
+}
+
+.modal-button:focus-visible,
+.modal-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .modal-button-save {
-  background: var(--accent);
-  color: var(--text-primary);
+  background: var(--accent-gradient);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
 
 .modal-button-save:hover {
-  background: var(--accent-hover);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 /* ===== Кнопка открытия модалки ===== */
@@ -388,7 +435,7 @@ body {
 #open-upload-token-modal:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.25);
 }
 
 #open-upload-token-modal:active {
@@ -398,7 +445,7 @@ body {
 
 #open-upload-token-modal:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.3);
 }
 
 /* ===== Информативная панель токенов ===== */
@@ -415,8 +462,8 @@ body {
 .token-info-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -426,7 +473,9 @@ body {
 }
 
 .token-info-card:hover {
-  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .token-info-card .token-name-group {
@@ -507,7 +556,7 @@ body {
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid var(--border-strong, #555);
+  border: 2px solid var(--border-strong);
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
@@ -517,7 +566,7 @@ body {
 }
 
 .modal-radio input[type="radio"]:hover {
-  border-color: var(--accent-hover);
+  border-color: var(--text-accent);
 }
 
 .modal-radio input[type="radio"]:checked {

@@ -1,3 +1,5 @@
+@import url("./theme.css");
+
 /* =========================================================
    Модалка загрузки файлов (#upload-modal)
    ========================================================= */
@@ -8,7 +10,7 @@
   min-width: 0;
   padding: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   margin: 0 auto;
 }
 
@@ -17,15 +19,15 @@
   align-items: center;
   justify-content: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #40484f;
-  background: #2b3238;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
   position: relative;
 }
 
 #upload-modal .modal-title {
   margin: 0;
   font-size: 16px;
-  color: #f8f9fa;
+  color: var(--text-primary);
   font-weight: 600;
   text-align: center;
 }
@@ -33,7 +35,7 @@
 #upload-modal .modal-close-btn {
   background: none;
   border: none;
-  color: #adb5bd;
+  color: var(--text-secondary);
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
@@ -46,12 +48,12 @@
 }
 
 #upload-modal .modal-close-btn:hover {
-  color: #f8f9fa;
+  color: var(--text-primary);
 }
 
 #upload-modal .modal-body {
   padding: 24px;
-  background: #2b3238;
+  background: var(--bg-elevated);
 }
 
 #upload-modal .modal-footer {
@@ -59,19 +61,19 @@
   justify-content: center;
   gap: 10px;
   padding: 16px 24px;
-  border-top: 1px solid #40484f;
-  background: #2b3238;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
 }
 
 /* ===== Drop-zone ===== */
 .drop-zone {
-  border: 2px dashed #495057;
-  border-radius: 8px;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
   padding: 40px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.25s ease;
-  background: #323a40;
+  background: var(--bg-hover);
   position: relative;
   min-height: 160px;
   display: flex;
@@ -80,20 +82,21 @@
 }
 
 .drop-zone:hover {
-  border-color: #6c757d;
-  background: #3a444b;
+  border-color: var(--border-accent);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-glow);
 }
 
 .drop-zone.dragover {
-  border-color: #0d6efd;
-  background: #1a2633;
+  border-color: var(--accent);
+  background: var(--accent-soft);
   transform: scale(1.01);
-  box-shadow: 0 0 20px rgba(13, 110, 253, 0.15);
+  box-shadow: 0 0 20px rgba(124, 92, 255, 0.15);
 }
 
 .drop-zone.has-files {
-  border-color: #28a745;
-  background: #1a2a1f;
+  border-color: var(--success);
+  background: var(--success-soft);
 }
 
 .drop-zone-content {
@@ -104,39 +107,39 @@
 .drop-zone-icon {
   width: 48px;
   height: 48px;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 0 auto 12px;
   display: block;
   transition: color 0.25s;
 }
 
 .drop-zone.dragover .drop-zone-icon {
-  color: #0d6efd;
+  color: var(--accent);
 }
 
 .drop-zone.has-files .drop-zone-icon {
-  color: #28a745;
+  color: var(--success);
 }
 
 .drop-zone-text {
-  color: #e9ecef;
+  color: var(--text-primary);
   font-size: 14px;
   margin: 0 0 4px 0;
 }
 
 .drop-zone-link {
-  color: #6ea8fe;
+  color: var(--text-accent);
   text-decoration: underline;
   cursor: pointer;
   pointer-events: auto;
 }
 
 .drop-zone-link:hover {
-  color: #9ec5fe;
+  color: #c4b5fd;
 }
 
 .drop-zone-hint {
-  color: #adb5bd;
+  color: var(--text-secondary);
   font-size: 12px;
   margin: 8px 0 0 0;
 }
@@ -156,7 +159,7 @@
   display: none;
   max-height: 150px;
   overflow-y: auto;
-  border-top: 1px solid #40484f;
+  border-top: 1px solid var(--border);
   padding-top: 12px;
 }
 
@@ -166,17 +169,17 @@
   justify-content: space-between;
   padding: 8px 12px;
   margin-bottom: 4px;
-  background: #323a40;
-  border-radius: 4px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-sm);
   transition: background 0.2s;
 }
 
 .file-item:hover {
-  background: #3a444b;
+  background: var(--bg-elevated);
 }
 
 .file-name {
-  color: #e9ecef;
+  color: var(--text-primary);
   font-size: 13px;
   flex: 1;
   overflow: hidden;
@@ -186,7 +189,7 @@
 }
 
 .file-size {
-  color: #adb5bd;
+  color: var(--text-secondary);
   font-size: 12px;
   margin-right: 12px;
   white-space: nowrap;
@@ -195,7 +198,7 @@
 .file-remove {
   background: none;
   border: none;
-  color: #dc3545;
+  color: var(--danger);
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
@@ -206,7 +209,7 @@
 }
 
 .file-remove:hover {
-  color: #ff6b7a;
+  color: var(--danger);
   transform: scale(1.1);
 }
 
@@ -216,34 +219,38 @@
 
 /* ===== Кнопки модалки ===== */
 .modal-btn {
-  padding: 8px 24px;
+  padding: 9px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-base);
   min-width: 120px;
 }
 
 .modal-btn-cancel {
-  background: #495057;
-  color: #f8f9fa;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
 }
 
 .modal-btn-cancel:hover {
-  background: #5a6268;
+  background: var(--bg-elevated);
+  border-color: var(--border-accent);
 }
 
 .modal-btn-upload {
-  background: #0d6efd;
-  color: white;
+  background: var(--accent-gradient);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
 
 .modal-btn-upload:hover {
-  background: #0b5ed7;
+  filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 .modal-btn-upload:active {
@@ -254,28 +261,28 @@
 .upload-description {
   margin-bottom: 20px;
   padding: 16px 20px;
-  background: #323a40;
-  border-radius: 8px;
-  border-left: 3px solid #0d6efd;
-  color: #e9ecef;
+  background: var(--bg-hover);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--accent);
+  color: var(--text-primary);
 }
 
 .upload-description-text {
   margin: 0 0 8px 0;
   font-size: 14px;
   line-height: 1.5;
-  color: #e9ecef;
+  color: var(--text-primary);
 }
 
 .upload-description-text strong {
-  color: #f8f9fa;
+  color: var(--text-primary);
 }
 
 .upload-description-list {
   margin: 8px 0 12px 0;
   padding-left: 24px;
   list-style-type: disc;
-  color: #ced4da;
+  color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -285,21 +292,21 @@
 }
 
 .upload-description-list li::marker {
-  color: #0d6efd;
+  color: var(--accent);
 }
 
 .upload-description-note {
   margin: 8px 0 0 0;
   padding: 8px 12px;
-  background: rgba(220, 53, 69, 0.1);
-  border-radius: 4px;
+  background: var(--danger-soft);
+  border-radius: var(--radius-sm);
   font-size: 13px;
-  color: #e9ecef;
-  border: 1px solid rgba(220, 53, 69, 0.2);
+  color: var(--text-primary);
+  border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
 .upload-description-note strong {
-  color: #ff6b7a;
+  color: var(--danger);
 }
 
 /* =========================================================
@@ -312,8 +319,8 @@
   min-width: 0;
   padding: 0;
   overflow: hidden;
-  border-radius: 12px;
-  border: 1px solid #40484f;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
   margin: 0 auto;
 }
 
@@ -322,15 +329,15 @@
   align-items: center;
   justify-content: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #40484f;
-  background: #2b3238;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
   position: relative;
 }
 
 #report-period-modal .modal-title {
   margin: 0;
   font-size: 16px;
-  color: #f8f9fa;
+  color: var(--text-primary);
   font-weight: 600;
   text-align: center;
 }
@@ -342,7 +349,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #adb5bd;
+  color: var(--text-secondary);
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
@@ -351,7 +358,7 @@
 }
 
 #report-period-modal .modal-close-btn:hover {
-  color: #f8f9fa;
+  color: var(--text-primary);
 }
 
 #report-period-modal .modal-body {
@@ -359,7 +366,7 @@
   flex-direction: column;
   gap: 16px;
   padding: 24px 24px 250px;
-  background: #2b3238;
+  background: var(--bg-elevated);
 }
 
 #report-period-modal .report-period-fields {
@@ -378,7 +385,7 @@
 
 #report-period-modal .report-period-field-label {
   display: block;
-  color: #ced4da;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
   line-height: 1.3;
@@ -387,10 +394,10 @@
 #report-period-modal .modal-input {
   width: 100%;
   padding: 12px 14px;
-  background: #323a40;
-  border: 1px solid #495057;
-  border-radius: 8px;
-  color: #f8f9fa;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
   font-size: 14px;
   box-sizing: border-box;
   transition:
@@ -400,8 +407,8 @@
 
 #report-period-modal .modal-input:focus {
   outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 #report-period-modal .modal-checkbox-label {
@@ -409,7 +416,7 @@
   align-items: center;
   gap: 10px;
   margin-top: 4px;
-  color: #ced4da;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.5;
   cursor: pointer;
@@ -418,7 +425,7 @@
 }
 
 #report-period-modal .modal-checkbox-label:hover {
-  color: #f8f9fa;
+  color: var(--text-primary);
 }
 
 #uploadAllReportsCheckbox {
@@ -428,9 +435,9 @@
   height: 16px;
   min-width: 16px;
   min-height: 16px;
-  background: #323a40;
-  border: 1px solid #495057;
-  border-radius: 4px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
   display: inline-block;
   position: relative;
   cursor: pointer;
@@ -441,18 +448,18 @@
 }
 
 #uploadAllReportsCheckbox:hover {
-  border-color: #6c757d;
+  border-color: var(--border-accent);
 }
 
 #uploadAllReportsCheckbox:focus-visible {
   outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15);
 }
 
 #uploadAllReportsCheckbox:checked {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
 #uploadAllReportsCheckbox:checked::after {
@@ -473,39 +480,43 @@
   align-items: center;
   gap: 10px;
   padding: 16px 24px;
-  border-top: 1px solid #40484f;
-  background: #2b3238;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
 }
 
 #report-period-modal .modal-btn {
-  padding: 8px 24px;
+  padding: 9px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-base);
   min-width: 120px;
 }
 
 #report-period-modal .modal-btn-cancel {
-  background: #495057;
-  color: #f8f9fa;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
 }
 
 #report-period-modal .modal-btn-cancel:hover {
-  background: #5a6268;
+  background: var(--bg-elevated);
+  border-color: var(--border-accent);
 }
 
 #report-period-modal .modal-btn-primary {
-  background: #0d6efd;
+  background: var(--accent-gradient);
   color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
 
 #report-period-modal .modal-btn-primary:hover {
-  background: #0b5ed7;
+  filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
 }
 
 #report-period-modal .modal-btn-primary:active {
@@ -517,7 +528,7 @@
     max-width: 100%;
     min-width: 0;
     margin: 0;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
   }
 
   #report-period-modal .modal-header {
@@ -556,7 +567,7 @@
     max-width: 100%;
     min-width: 0;
     margin: 0;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
   }
 
   #upload-modal .modal-header {

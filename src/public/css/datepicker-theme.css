@@ -3,12 +3,14 @@
 .datepicker-picker {
   background-color: var(--bg-elevated);
   color: var(--text-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .datepicker-dropdown .datepicker-picker {
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.5),
-    0 0 0 1px var(--border);
+    var(--shadow-lg),
+    0 0 0 1px var(--border-strong);
 }
 
 /* Заголовок (месяц/год) */
@@ -96,17 +98,17 @@
 }
 
 .datepicker-cell.disabled {
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 .datepicker-cell.next:not(.disabled),
 .datepicker-cell.prev:not(.disabled) {
-  color: #8a96a3;
+  color: var(--text-muted);
 }
 
 .datepicker-cell.next.selected,
 .datepicker-cell.prev.selected {
-  color: #e6e6e6;
+  color: var(--text-primary);
 }
 
 /* ===== «Сегодня» — БЕЗ подсветки, включая focused ===== */
@@ -189,13 +191,13 @@
 }
 
 .datepicker-cell.range.disabled {
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 .datepicker-cell.range-end:not(.selected),
 .datepicker-cell.range-start:not(.selected) {
-  background-color: var(--border);
-  color: var(--text-primary);
+  background-color: var(--accent-soft);
+  color: var(--text-accent);
 }
 
 /* Дни недели и номера недель */
@@ -214,7 +216,7 @@
 
 .datepicker-input.in-edit:active,
 .datepicker-input.in-edit:focus {
-  box-shadow: 0 0 0.25em 0.25em rgba(13, 110, 253, 0.2);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 /* ===== Поднять datepicker над модалкой ===== */

@@ -12,17 +12,19 @@
   cursor: pointer;
   outline: none;
   text-decoration: none;
+  font-family: var(--font-family);
   font-size: 14px;
+  font-weight: 500;
   vertical-align: middle;
   color: var(--text-primary);
   text-align: center;
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-surface);
+  border-radius: var(--radius-full);
+  background-color: var(--bg-elevated);
   line-height: 22px;
   height: 40px;
-  padding: 10px 20px;
+  padding: 9px 20px;
   box-sizing: border-box;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   margin: 0;
   transition: var(--transition-base);
 }
@@ -37,15 +39,19 @@
 }
 
 .input-file input[type="file"]:focus + span {
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .input-file:hover span {
   background-color: var(--bg-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .input-file:active span {
-  background-color: var(--accent-hover);
+  background-color: var(--accent-soft);
+  border-color: var(--border-accent);
 }
 
 .input-file input[type="file"]:disabled + span {

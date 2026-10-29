@@ -1,7 +1,11 @@
+@import url("./theme.css");
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,13 +13,14 @@
 }
 
 .modal-content {
-  background: #2b3238;
-  color: #e9ecef;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
   padding: 26px;
-  border-radius: 10px;
+  border-radius: var(--radius-xl);
   width: 90%;
   max-width: 370px;
-  border: 1px solid #40484f;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
   min-width: 300px;
 }
 
@@ -23,24 +28,30 @@
   margin: 0 0 18px;
   text-align: center;
   font-size: 17px;
-  color: #71b7ff;
+  color: var(--text-accent);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .modal-input {
   width: 100%;
-  padding: 11px 12px;
-  background: #343a40;
-  border: 1px solid #555;
-  border-radius: 6px;
-  color: #fff;
+  padding: 12px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-family);
   font-size: 15px;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
   box-sizing: border-box;
 }
 
 .modal-input:focus {
   outline: none;
-  border-color: #71b7ff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .modal-buttons {
@@ -53,18 +64,34 @@
 .modal-button {
   padding: 9px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
   font-weight: 600;
   cursor: pointer;
+  transition: var(--transition-base);
 }
 
 .modal-button-save {
-  background: #2d9d78;
+  background: var(--accent-gradient);
   color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
+
+.modal-button-save:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.4);
+}
+
 .modal-button-cancel {
-  background: #717d8a;
-  color: #fff;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+.modal-button-cancel:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-accent);
 }
 
 /* Контейнер внутри ячейки — на всю ширину */
@@ -79,7 +106,7 @@
 .editable-field-value {
   flex: 1;
   min-width: 0;
-  color: #71b7ff;
+  color: var(--text-accent);
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -103,7 +130,7 @@
 }
 
 .editable-field-button:hover {
-  background: rgba(113, 183, 255, 0.15);
+  background: var(--accent-soft);
 }
 
 .editable-field-button:active {
@@ -111,15 +138,14 @@
 }
 
 .editable-field-button:focus-visible {
-  outline: 2px solid #71b7ff;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 .last-cost-prices-modal {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-family);
   font-size: 14px;
   line-height: 1.5;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .last-cost-prices-modal__list {
@@ -150,7 +176,7 @@
 .last-cost-prices-modal__price {
   flex-shrink: 0;
   font-weight: 600;
-  color: #ff5252;
+  color: var(--danger);
   min-width: 70px;
   text-align: right;
 }
@@ -162,9 +188,9 @@
   background: transparent;
 }
 .last-cost-prices-modal__list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
 }
 .last-cost-prices-modal__list::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.28);
 }
