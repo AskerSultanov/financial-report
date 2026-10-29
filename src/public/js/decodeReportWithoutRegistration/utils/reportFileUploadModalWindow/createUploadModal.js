@@ -8,7 +8,6 @@ import downloadReportAsXLSXButtonHandler from "../../downloadReportAsXLSXButtonH
 
 var maxFilesCount = 15;
 var selectedFiles = [];
-var userId = document.cookie.split("=")[1];
 var paidStorageReportFileName = "Отчёт по платному хранению (номенклатуры)";
 var weeklyFinancialReportFileName = "Еженедельный детализированный отчет №";
 var allowedFileMimeTypes = [

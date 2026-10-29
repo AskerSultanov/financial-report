@@ -1,7 +1,8 @@
 import doRequest from "../../../../../utils/doRequest.js";
+import getCookieByName from "../../../../../utils/getCookieByName.js";
 
 var url = "/report/skus/cost-prices";
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 var reportId = +window.location.pathname.split("/").at(-1);
 
 var sendCostPrices = async (year, costPrices) => {

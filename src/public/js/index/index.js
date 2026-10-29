@@ -1,5 +1,6 @@
 import logoutButtonHandler from "./logout/index.js";
 import getMainPageData from "./utils/getMainPageData.js";
+import getCookieByName from "../utils/getCookieByName.js";
 import { createReportTree } from "./reportTreeBuilder/index.js";
 import enableButtonToAdminPanel from "./utils/enableButtonToAdminPanel.js";
 import accountedFinancesPanelHandler from "./accountedFinancesPanel/index.js";
@@ -12,7 +13,7 @@ import getWBTokenPageButtonHandler from "./utils/getWBTokenPageButtonHandler.js"
 import getTaxParamsPageButtonHandler from "./utils/getTaxParamsPageButtonHandler.js";
 
 var isMainPageLoad = true;
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 
 var bootstrapUserPage = async () => {
   var { data, role } = await getMainPageData(userId);

@@ -1,6 +1,7 @@
 import createTaxTable from "./taxTable.js";
 import getTaxParams from "./getTaxParams.js";
 import taxRateHandler from "./taxRateHandler.js";
+import getCookieByName from "../utils/getCookieByName.js";
 import handleTaxYearSelection from "./handleTaxYearSelection.js";
 import getMainPageButtonHandler from "./getMainPageButtonHandler.js";
 import insertTaxYearsToSelectElem from "./insertTaxYearsToSelectElem.js";
@@ -9,7 +10,7 @@ import mandatoryInsuranceRateHandler from "./mandatoryInsuranceRateHandler.js";
 
 import writeTaxParamsToLocalStorage from "./writeTaxParamsToLocalStorage.js";
 
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 
 var main = async () => {
   var { taxParams } = await getTaxParams(userId);
@@ -18,12 +19,16 @@ var main = async () => {
     return;
   }
 
-  var { taxRate, mandatoryInsuranceFeeRate, mandatoryInsuranceFee } = taxParams[0];
+  var { taxRate, mandatoryInsuranceFeeRate, mandatoryInsuranceFee } =
+    taxParams[0];
 
   writeTaxParamsToLocalStorage(taxParams);
-  document.getElementById("tax-rate").placeholder = "сейчас процент равен " + taxRate;
-  document.getElementById("mandatory-insurance-fee").placeholder = "сейчас сумма равна " + mandatoryInsuranceFee + "р.";
-  document.getElementById("mandatory-insurance-fee-rate").placeholder = "сейчас процент равен " + mandatoryInsuranceFeeRate;
+  document.getElementById("tax-rate").placeholder =
+    "сейчас процент равен " + taxRate;
+  document.getElementById("mandatory-insurance-fee").placeholder =
+    "сейчас сумма равна " + mandatoryInsuranceFee + "р.";
+  document.getElementById("mandatory-insurance-fee-rate").placeholder =
+    "сейчас процент равен " + mandatoryInsuranceFeeRate;
 
   createTaxTable(taxParams);
 
@@ -33,7 +38,7 @@ var main = async () => {
   handleTaxYearSelection(taxParams);
   insertTaxYearsToSelectElem(taxParams);
 
-  getMainPageButtonHandler()
+  getMainPageButtonHandler();
 };
 
 main();

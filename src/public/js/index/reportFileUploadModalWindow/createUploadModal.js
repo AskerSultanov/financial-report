@@ -1,4 +1,5 @@
 import doRequest from "../../utils/doRequest.js";
+import getCookieByName from "../../utils/getCookieByName.js";
 import { insertNewReportToTree } from "../reportTreeBuilder/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
 import showReport from "../../decodeReportWithoutRegistration/showReport.js";
@@ -11,7 +12,7 @@ import writeReportToLocalStorage from "../../decodeReportWithoutRegistration/wri
 var maxFilesCount = 15;
 var selectedFiles = [];
 var url = "/report/files";
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 var paidStorageReportFileName = "Отчёт по платному хранению (номенклатуры)";
 var weeklyFinancialReportFileName = "Еженедельный детализированный отчет №";
 var allowedFileMimeTypes = [

@@ -1,9 +1,10 @@
 import doRequest from "../../utils/doRequest.js";
 import getCurrentDayMSK from "./getCurrentDayMSK.js";
+import getCookieByName from "../../utils/getCookieByName.js";
 
 var yes = "да";
 var no = "нет";
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 var url = "/goods/status-of-participation-in-promo/";
 var weekDaySelector = document.getElementById("week-days-select");
 

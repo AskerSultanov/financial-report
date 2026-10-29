@@ -1,8 +1,9 @@
 import doRequest from "../../../utils/doRequest.js";
+import getCookieByName from "../../../utils/getCookieByName.js";
 
 var sendNewDisableStatus = async (skuName, nmID, disableStatus) => {
   var url = "/goods/sku-disable-status";
-  var userId = document.cookie.split("=")[1];
+  var userId = getCookieByName("userId");
 
   disableStatus = disableStatus === false;
 

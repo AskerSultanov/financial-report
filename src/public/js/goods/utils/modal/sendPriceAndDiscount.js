@@ -1,7 +1,8 @@
 import doRequest from "../../../utils/doRequest.js";
+import getCookieByName from "../../../utils/getCookieByName.js";
 
 var url = "/goods/prices-discounts/";
-var userId = document.cookie.split("=")[1];
+var userId = getCookieByName("userId");
 
 var sendPriceAndDiscount = async (
   skuId,
