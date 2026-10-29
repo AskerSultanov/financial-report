@@ -4,12 +4,12 @@ import { generateReportXlsxBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
 var button = document.getElementById("download-report-as-xlsx-button");
 
-var downloadReportAsXLSXButtonHandler = (reportId) => {
+var downloadReportAsXLSXButtonHandler = () => {
   button.onclick = async () => {
     try {
       await loadExcelLibs();
 
-      var { report } = getReportFromLocalStorage(reportId);
+      var { report } = getReportFromLocalStorage();
       var { buffer } = await generateReportXlsxBuffer(report);
 
       var blob = new Blob([buffer]);

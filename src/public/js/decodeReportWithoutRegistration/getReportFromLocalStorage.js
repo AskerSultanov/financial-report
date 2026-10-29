@@ -1,5 +1,5 @@
-var getReportFromLocalStorage = (reportId) => {
-  var reportInJson = localStorage.getItem(reportId);
+var getReportFromLocalStorage = () => {
+  var reportInJson = localStorage.getItem("report");
 
   var report = JSON.parse(reportInJson);
   return { report };

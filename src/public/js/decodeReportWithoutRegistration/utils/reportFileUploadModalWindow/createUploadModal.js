@@ -255,7 +255,7 @@ var createUploadBtn = () => {
 
       showReport(report);
       writeReportToLocalStorage(report);
-      downloadReportAsXLSXButtonHandler(report.reportId);
+      downloadReportAsXLSXButtonHandler();
     }
   });
 
