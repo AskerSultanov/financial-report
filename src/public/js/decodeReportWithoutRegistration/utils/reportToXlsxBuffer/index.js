@@ -1,4 +1,4 @@
 import generateReportXlsxBuffer from "./generateReportXlsxBuffer.js";
-import generateMonthlySummaryXlsxBuffer from "./generateMonthlySummaryXlsxBuffer.js";
+import generateReportsSummaryXlsxBuffer from "./generateReportsSummaryXlsxBuffer.js";
 
-export { generateReportXlsxBuffer, generateMonthlySummaryXlsxBuffer };
+export { generateReportXlsxBuffer, generateReportsSummaryXlsxBuffer };

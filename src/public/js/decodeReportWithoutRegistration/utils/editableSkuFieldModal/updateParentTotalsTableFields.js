@@ -1,43 +1,29 @@
 import calcProfitMargin from "../calcUtils/utils/profitMargin.js";
 
 var updateParentTotalsTableFields = (year, childTablePrevData) => {
-  var parentTableFinalProfitElemId = "finalProfit-";
-  var parentTableRetailAmountElemId = "retailAmount-";
-  var parentTableProfitMarginElemId = "profitMargin-";
+  var finalProfitId = "finalProfit-";
+  var retailAmountId = "retailAmount-";
+  var profitMarginId = "profitMargin-";
 
-  var parentTableFinalProfitElem = document.getElementById(
-    parentTableFinalProfitElemId,
-  );
+  var finalProfitEl = document.getElementById(finalProfitId);
+  var retailAmountEl = document.getElementById(retailAmountId);
+  var profitMarginEl = document.getElementById(profitMarginId);
 
-  var parentTableRetailAmountElem = document.getElementById(
-    parentTableRetailAmountElemId,
-  );
+  var prevFinalProfit = +finalProfitEl.textContent;
+  var retailAmount = +retailAmountEl.textContent;
 
-  var parentTableProfitMarginElem = document.getElementById(
-    parentTableProfitMarginElemId,
-  );
+  var childFinalProfitEl = document.getElementById("finalProfit-" + year);
+  var childFinalProfit = +childFinalProfitEl.textContent;
 
-  var parentTablePrevFinalProfitElemVal =
-    +parentTableFinalProfitElem.textContent;
-
-  var parentTableRetailAmountElemVal = +parentTableRetailAmountElem.textContent;
-
-  var childFinalProfitElemId = "finalProfit-" + year;
-  var childFinalProfitElem = document.getElementById(childFinalProfitElemId);
-  var childFinalProfitElemValue = +childFinalProfitElem.textContent;
-
-  var recalculatedFinalProfit =
-    parentTablePrevFinalProfitElemVal -
+  var newFinalProfit =
+    prevFinalProfit -
     childTablePrevData.childPrevFinalProfitElemVal +
-    childFinalProfitElemValue;
+    childFinalProfit;
 
-  var profitMargin = calcProfitMargin(
-    recalculatedFinalProfit,
-    parentTableRetailAmountElemVal,
-  );
+  var margin = calcProfitMargin(newFinalProfit, retailAmount);
 
-  parentTableProfitMarginElem.textContent = profitMargin;
-  parentTableFinalProfitElem.textContent = recalculatedFinalProfit.toFixed(2);
+  profitMarginEl.textContent = margin;
+  finalProfitEl.textContent = newFinalProfit.toFixed(2);
 };
 
 export default updateParentTotalsTableFields;

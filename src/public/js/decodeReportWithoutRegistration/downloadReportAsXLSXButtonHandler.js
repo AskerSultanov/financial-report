@@ -1,3 +1,4 @@
+import loadExcelLibs from "./loadExcelLibs.js";
 import getReportFromLocalStorage from "./getReportFromLocalStorage.js";
 import { generateReportXlsxBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
@@ -5,23 +6,32 @@ var button = document.getElementById("download-report-as-xlsx-button");
 
 var downloadReportAsXLSXButtonHandler = (reportId) => {
   button.onclick = async () => {
-    var { report } = getReportFromLocalStorage(reportId);
-    var { buffer } = await generateReportXlsxBuffer(report);
+    try {
+      await loadExcelLibs();
 
-    var blob = new Blob([buffer]);
-    var downloadUrl = window.URL.createObjectURL(blob);
+      var { report } = getReportFromLocalStorage(reportId);
+      var { buffer } = await generateReportXlsxBuffer(report);
 
-    var a = document.createElement("a");
-    a.href = downloadUrl;
+      var blob = new Blob([buffer]);
+      var downloadUrl = window.URL.createObjectURL(blob);
 
-    var fileName = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
+      var a = document.createElement("a");
+      a.href = downloadUrl;
 
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(downloadUrl);
+      var fileName = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
 
-    a.remove();
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(downloadUrl);
+
+      a.remove();
+    } catch (err) {
+      console.error("Не удалось загрузить библиотеку для экспорта:", err);
+      alert(
+        "Не удалось загрузить библиотеку для экспорта. Проверьте интернет и попробуйте снова.",
+      );
+    }
   };
 };
 export default downloadReportAsXLSXButtonHandler;

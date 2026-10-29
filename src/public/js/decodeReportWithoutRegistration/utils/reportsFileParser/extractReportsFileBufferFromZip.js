@@ -1,3 +1,4 @@
+import loadExcelLibs from "../../loadExcelLibs.js";
 import getReportIdFromFileName from "./getReportIdFromFileName.js";
 
 var zipFileMimeTypes = ["application/zip", "application/x-zip-compressed"];
@@ -8,6 +9,8 @@ var paidStorageReportFileName = "Отчёт по платному хранени
 var weeklyFinancialReportFileName = "Еженедельный детализированный отчет №";
 
 var extractReportsFileBufferFromZip = async (fileBuffers) => {
+  var { JSZip } = await loadExcelLibs();
+
   var paidStorageReportsBuffer = [];
   var weeklyFinancialReportsBuffer = [];
 

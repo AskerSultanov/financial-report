@@ -1,84 +1,113 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/css/loader.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Расшифровка финансового отчёта Wildberries без регистрации — бесплатно
+    </title>
+    <meta
+      name="description"
+      content="Бесплатная расшифровка финансового отчёта Wildberries без регистрации. Расшифровка SKU, расходов и итогов в понятной таблице. Скачать в Excel."
+    />
+    <link rel="canonical" href="https://free-report-scanner.ru/" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Расшифровка финансового отчёта Wildberries без регистрации"
+    />
+    <meta
+      property="og:description"
+      content="Загрузите отчёт WB — получите понятную таблицу с расшифровкой SKU и итогами. Бесплатно, без регистрации."
+    />
+    <meta property="og:url" content="https://free-report-scanner.ru/" />
+    <!-- TODO: добавить файл og-preview.png 1200x630 в public/image -->
+    <meta
+      property="og:image"
+      content="https://free-report-scanner.ru/public/image/og-preview.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="icon" href="/public/image/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/css/modalWindow.css" type="text/css" />
     <link rel="stylesheet" href="/css/uploadFilesModal.css" type="text/css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css"
-    />
     <link
       rel="stylesheet"
       href="/css/decodeReportWithoutRegistration.css"
       type="text/css"
     />
-    <link rel="stylesheet" href="/css/datepicker-theme.css" type="text/css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Расшифровка финансового отчета wildberries без регистрации</title>
-  </head>
-  <body>
-    <button id="decode-report-button" type="button">
-      Расшифровка отчета без регистрации
-    </button>
-    <div class="auth-buttons">
-      <a href="/auth" id="auth" onclick="window.localStorage.clear()">Войти</a>
-      <a href="/reg" id="registration" onclick="window.localStorage.clear()"
-        >Регистрация</a
-      >
-    </div>
-    <dialog id="dialog">
-      <form>
-        <div class="dialog-information">
-          <section class="dialog-information-item">
-            <h2>Какие права нужны</h2>
-            <p>
-              Для получения отчета необходим токен с категориями
-              <strong>Финансы</strong>, <strong>Продвижение</strong> и
-              <strong>Аналитика</strong>.
-            </p>
-          </section>
-          <section class="dialog-information-item">
-            <h2>Конфиденциальность</h2>
-            <p>Введённый вами токен не сохраняется.</p>
-          </section>
-          <section class="dialog-information-item">
-            <h2>Нет доверяете свой токен?</h2>
-            <p>Вы можете загрузить файлы вместо токена.</p>
-          </section>
-        </div>
-        <button type="button" id="upload-files-btn">Загрузить файлы</button>
-        <label for="token">Введите токен</label>
-        <input type="text" id="token" autofocus />
-        <div class="dialog-date-area">
-          <div class="dialog-date-fields">
-            <label for="dateFrom">Введите начало периода</label>
-            <input type="text" id="dateFrom" placeholder="гггг-мм-дд" />
-            <label for="dateTo">Введите конец периода</label>
-            <input type="text" id="dateTo" placeholder="гггг-мм-дд" />
-          </div>
-          <div class="dialog-datepicker-area" id="dialog-datepicker-area"></div>
-        </div>
-        <div class="dialog-actions">
-          <button type="button" onclick="window.dialog.close()">Закрыть</button>
-          <button type="button" id="get-report">Получить отчет</button>
-        </div>
-      </form>
-    </dialog>
-    <div id="tables-container"></div>
-    <!-- <button id="reset-report-button" class="top-btn">Обнулить отчет</button> -->
-    <button hidden id="download-report-as-xlsx-button">
-      Скачать отчет как эксель
-    </button>
-    <script>
-      src = "/js/report/resetReportButtonHandler.js";
-      type = "module";
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Расшифровка финансового отчёта Wildberries",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" },
+        "description": "Бесплатная расшифровка финансового отчёта Wildberries без регистрации."
+      }
     </script>
-    <script
-      src="/js/decodeReportWithoutRegistration/index.js"
-      type="module"
-    ></script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="auth-buttons">
+        <a href="$SITE/auth" id="auth" onclick="window.localStorage.clear()"
+          >Войти</a
+        >
+        <a
+          href="$SITE/reg"
+          id="registration"
+          onclick="window.localStorage.clear()"
+          >Регистрация</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Расшифровка финансового отчёта Wildberries</h1>
+        <p class="lead">
+          Загрузите отчёт WB — получите понятную таблицу с расшифровкой SKU,
+          расходами и итогами. Бесплатно, локально, файлы не покидают эту
+          страницу.
+        </p>
+        <button id="decode-report-button" type="button">
+          Загрузите ваши отчеты
+        </button>
+        <button hidden id="download-report-as-xlsx-button">
+          Скачать отчёт как эксель
+        </button>
+      </section>
+
+      <div class="info-blocks-row">
+        <section class="info-block">
+          <h2>Что вы получите</h2>
+          <ul>
+            <li>Расшифровку всех SKU из отчёта Wildberries</li>
+            <li>Расчёт расходов, удержаний и комиссий</li>
+            <li>Итоговые суммы по отчёту</li>
+            <li>Возможность скачать результат в Excel</li>
+          </ul>
+        </section>
+
+        <section class="info-block">
+          <h2>Как это работает</h2>
+          <ol>
+            <li>Нажмите «Загрузите ваши отчеты»</li>
+            <li>Загрузите файл отчёта WB</li>
+            <li>Получите таблицу с расшифровкой</li>
+            <li>
+              Скачайте результат в Excel с формулами <br />
+              с возможность указать себестоимость
+            </li>
+          </ol>
+        </section>
+      </div>
+
+      <div id="tables-container" aria-live="polite"></div>
+    </main>
+
     <script
       src="/js/decodeReportWithoutRegistration/showReportIfExist.js"
       type="module"
@@ -87,9 +116,7 @@
       src="/js/decodeReportWithoutRegistration/decodeReportButtonHandler.js"
       type="module"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/locales/ru.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script> -->
   </body>
 </html>

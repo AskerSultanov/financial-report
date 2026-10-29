@@ -7,45 +7,55 @@ body {
   min-height: 100vh;
 }
 
+/* Перекрывает display у элементов, которые скрываются через hidden
+   (например, сводку и таблицу второй половины периода) */
+[hidden] {
+  display: none !important;
+}
+
+/* ===== Группа кнопок входа в верхней панели ===== */
 .auth-buttons {
-  position: absolute;
-  top: 40px;
-  right: 80px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 #auth,
 #registration {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid #495057;
+  border-radius: 4px;
+  background: transparent;
+  color: #f8f9fa;
+  font-size: 12px;
+  font-weight: 500;
   text-decoration: none;
   text-align: center;
-  display: inline-block;
-}
-
-#auth {
-  background-color: transparent;
-  color: #ffffff;
-  border: 1.6px solid #495057;
-  padding: 12.8px 25.6px;
-  border-radius: 4px;
-  font-size: 11.2px;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 #registration {
-  background-color: #495057;
-  color: #ffffff;
-  border: 1.6px solid #495057;
-  padding: 12.8px 25.6px;
-  border-radius: 4px;
-  font-size: 11.2px;
-  cursor: pointer;
+  background-color: rgba(52, 58, 64, 0.8);
 }
 
 #auth:hover,
 #registration:hover {
-  background-color: #6c757d;
+  background-color: #495057;
+  border-color: #6c757d;
+  color: #f8f9fa;
+  transform: translateY(-1px);
 }
 
 #decode-report-button {
@@ -57,243 +67,32 @@ body {
   font-size: 14.4px;
   cursor: pointer;
   transition: all 0.3s;
-  position: absolute;
-  top: 300px;
-  left: 50%;
-  transform: translate(-50%, -50%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#dialog {
-  box-sizing: border-box;
-  background-color: #2b3238;
-  color: #f8f9fa;
-  border: 1px solid #40484f;
-  border-radius: 12px;
-  padding: 0;
-  width: 560px;
-  max-width: calc(100vw - 32px);
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
-}
-
-#dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-#dialog[open] {
-  display: flex;
-  flex-direction: column;
-}
-
-#dialog form {
-  box-sizing: border-box;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-#dialog label {
-  color: #ced4da;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: -8px;
-}
-
-#dialog input {
-  background-color: #323a40;
-  color: #f8f9fa;
-  border: 1px solid #495057;
-  border-radius: 8px;
-  padding: 11px 12px;
-  font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-#dialog input:focus {
-  outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
-}
-
-/* Кнопки самого диалога. Селектор намеренно не захватывает кнопки
-   календаря, который открывается внутри .dialog-datepicker-area */
-#dialog form > button,
-#dialog .dialog-actions button {
-  background-color: #495057;
-  color: #f8f9fa;
-  border: none;
-  padding: 8px 24px;
-  min-height: 36px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 0;
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
-  min-width: 120px;
-  width: auto;
-  align-self: center;
-}
-
-#dialog form > button:hover,
-#dialog .dialog-actions button:hover {
-  background-color: #5a6268;
-}
-
-#dialog #get-report {
-  background-color: #0d6efd;
-  color: #fff;
-}
-
-#dialog #get-report:hover {
-  background-color: #0b5ed7;
-  transform: translateY(-1px);
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 4px;
-}
-
-.dialog-actions button {
-  box-sizing: border-box;
-  flex: 1;
-  max-width: 180px;
-}
-
-/* ===== Поля дат и место под датапикер ===== */
-/* Поля дат укорачиваются, справа от них остаётся пустое место под календарь */
-.dialog-date-area {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.dialog-date-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-/* Зарезервированное место: высота фиксирована, чтобы при открытии
-   календаря содержимое диалога не сдвигалось.
-   16rem — ширина календаря, 18rem — его высота (в тех же единицах,
-   что использует библиотека) */
-.dialog-datepicker-area {
-  box-sizing: border-box;
-  flex: 0 0 16rem;
-  width: 16rem;
-  min-height: 18rem;
-}
-
-/* Календарь раскрывается в отведённом месте, а не поверх полей и кнопок.
-   Стили общие для датапикера не меняются — только внутри этого диалога. */
-#dialog .datepicker-dropdown {
-  position: static;
-  width: auto;
-}
-
-/* datepicker-theme.css рассчитан на переменные из theme.css, но на эту
-   страницу theme.css не подключён. Значения задаются только вокруг
-   календаря, поэтому на остальные стили страницы они не влияют. */
-#dialog .dialog-datepicker-area {
-  --bg-surface: #343a40;
-  --bg-elevated: #3a4047;
-  --bg-hover: #495057;
-  --border: #495057;
-  --text-primary: #f8f9fa;
-  --text-secondary: #adb5bd;
-  --accent: #0d6efd;
-  --success: #28a745;
-}
-
-.dialog-information {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dialog-information-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #40484f;
-}
-
-.dialog-information-item:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-.dialog-information-item h2 {
-  margin: 0;
-  color: #f8f9fa;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.dialog-information-item p {
-  color: #adb5bd;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
-}
-
-.dialog-information-item strong {
-  color: #9ec5fe;
-  font-weight: 600;
-}
-
 @media (max-width: 600px) {
-  #dialog {
-    max-width: calc(100vw - 24px);
-    max-height: calc(100vh - 24px);
-    border-radius: 10px;
+  .site-header {
+    min-height: 52px;
+    padding: 0 16px;
   }
 
-  #dialog form {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  #dialog .dialog-date-area {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  #dialog .dialog-datepicker-area {
-    flex: 0 0 auto;
+  .auth-buttons {
     width: 100%;
+    justify-content: center;
+  }
+
+  .hero {
+    padding: 24px 16px;
+  }
+
+  #download-reports-in-zip {
+    width: calc(100% - 32px);
+    max-width: 320px;
   }
 }
 
 #skus-table {
-  margin-top: 60px;
-}
-
-#totals-table {
-  margin-top: 500px;
+  margin-top: 40px;
 }
 
 #download-report-as-xlsx-button {
@@ -307,17 +106,45 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
-  position: absolute;
-  top: 450px;
-  left: 50%;
-  transform: translate(-50%, -50%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Кнопка скачивания архива, когда из файлов получилось несколько отчётов */
+#download-reports-in-zip {
+  display: block;
+  margin: 0 auto 24px;
+  min-height: 44px;
+  padding: 0 32px;
+  background-color: #343a40;
+  color: #ffffff;
+  border: 1.6px solid #495057;
+  border-radius: 6.4px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#download-reports-in-zip:hover {
+  background-color: #495057;
+  border-color: #6c757d;
+  transform: translateY(-1px);
+}
+
+#download-reports-in-zip:active {
+  transform: translateY(0);
 }
 
 table {
   width: 100%;
   max-width: 1190px;
-  margin: 105px auto 42px;
+  margin: 0 auto 24px;
   border-collapse: separate;
   border-spacing: 0;
   background: #2d3439;
@@ -335,6 +162,11 @@ td {
   border-right: 1px solid #40484f;
 }
 
+/* Числовые значения (цены) не должны переноситься на другую строку */
+td {
+  white-space: nowrap;
+}
+
 th {
   background: linear-gradient(to bottom, #40484f, #343a40);
   color: #dee2e6;
@@ -350,7 +182,6 @@ tbody tr:nth-child(even) {
 
 tbody tr:hover {
   background-color: rgba(80, 90, 100, 0.7);
-  transform: scale(1.0028);
 }
 
 td:last-child,
@@ -360,8 +191,7 @@ th:last-child {
 
 .report-summary-label-wrapper {
   text-align: center;
-  margin-top: 105px;
-  margin-bottom: -77px;
+  margin: 0 0 12px;
 }
 
 .report-summary-label {
@@ -376,5 +206,213 @@ th:last-child {
 }
 
 #tables-container {
-  margin-top: 500px;
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+/* ===== Верхняя панель (адаптация .top-bar эталона) ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  min-height: 56px;
+  padding: 0 21px;
+  background: rgba(34, 39, 46, 0.97);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(73, 80, 87, 0.6);
+  box-shadow: 0 5.6px 21px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Hero-блок ===== */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 40px 16px 32px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 1.25;
+  color: #f8f9fa;
+}
+
+.hero .lead {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #c1c7cd;
+  max-width: 620px;
+}
+
+/* ===== Информационные блоки ===== */
+.info-block {
+  max-width: 760px;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+}
+
+.info-block h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  color: #9ec5fe;
+}
+
+.info-block ul,
+.info-block ol {
+  margin: 0;
+  padding-left: 22px;
+  color: #ced4da;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.info-block li + li {
+  margin-top: 6px;
+}
+
+.info-blocks-row {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  width: 100%;
+  /* 792px = 760px контента hero + его внутренние отступы по 16px */
+  max-width: 792px;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.info-block {
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+#decode-report-button:focus-visible,
+#download-report-as-xlsx-button:focus-visible,
+#download-reports-in-zip:focus-visible,
+#auth:focus-visible,
+#registration:focus-visible,
+.info-block a:focus-visible {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+.table-scroll {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1190px;
+  margin: 0 auto 16px;
+  overflow-x: auto;
+  border-radius: 11.2px;
+  border: 1px solid #40484f;
+  box-shadow: 0 10.5px 31.5px rgba(0, 0, 0, 0.6);
+  background: #2d3439;
+}
+
+/* Радиус, фон и тень задаёт контейнер, иначе они дублируются */
+.table-scroll > table {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  overflow: visible;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Заголовки переносятся, чтобы не растягивать таблицу */
+.table-scroll > table th {
+  overflow-wrap: break-word;
+}
+
+/* Артикул — единственное текстовое значение, ему перенос разрешён */
+.table-scroll > table th:nth-child(1),
+.table-scroll > table td:nth-child(1) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.table-scroll > table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Артикул */
+.table-scroll > table th:nth-child(1),
+.table-scroll > table td:nth-child(1) {
+  width: 160px;
+}
+
+/* Маржинальность % и Итого */
+.table-scroll > table th:nth-child(12),
+.table-scroll > table td:nth-child(12),
+.table-scroll > table th:nth-child(13),
+.table-scroll > table td:nth-child(13) {
+  width: 110px;
+}
+
+.table-scroll {
+  margin-bottom: 100px;
+}
+/* ============================================================
+    Табы переключения годов (адаптация .tabs из эталона)
+    ============================================================ */
+.tabs {
+  position: relative;
+  z-index: 10;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+  max-width: 1190px;
+  margin: 0 auto 12px;
+  padding: 0 4px;
+  border-bottom: 1px solid #40484f;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: transparent;
+  color: #adb5bd;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+  margin-bottom: -1px;
+}
+
+.tab:hover {
+  color: #f8f9fa;
+  background: rgba(52, 58, 64, 0.7);
+}
+
+.tab.is-active {
+  color: #71b7ff;
+  border-bottom-color: #0d6efd;
 }

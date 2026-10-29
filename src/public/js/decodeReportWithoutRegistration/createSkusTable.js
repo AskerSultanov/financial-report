@@ -1,4 +1,5 @@
 import createTdElement from "./createTdElement.js";
+import wrapTableToScrollElem from "./wrapTableToScroll.js";
 import openEditableSkuFieldModal from "./utils/editableSkuFieldModal/index.js";
 
 var hasNoSalesMsg =
@@ -89,8 +90,10 @@ var createSkusTable = (report, skus) => {
 
   table.append(tableHead, tableBody);
 
+  var wrappedToScrollTable = wrapTableToScrollElem(table);
+
   var tablesContainer = document.getElementById("tables-container");
-  tablesContainer.append(table);
+  tablesContainer.append(wrappedToScrollTable);
 };
 
 export default createSkusTable;

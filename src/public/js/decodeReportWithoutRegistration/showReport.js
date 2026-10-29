@@ -1,6 +1,10 @@
+import splitReport from "./splitReport.js";
 import createSkusTable from "./createSkusTable.js";
 import createTotalsTable from "./createTotalsTable.js";
+import switchToFirstTable from "./switchToFirstTable.js";
 import getReportPeriodText from "./getReportPeriodText.js";
+import enableTablesSwitcher from "./enableTablesSwitcher.js";
+import tablesSwitcherHandler from "./tablesSwitcherHandler.js";
 import downloadReportAsXlsxuttonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import calcReportTotalsFromSkus from "./utils/calcUtils/utils/calcReportTotalsFromSkus.js";
 import { enableDownloadReportAsXLSXButton } from "./toggleDownloadReportAsXlsxButtonVisibility.js";
@@ -21,61 +25,73 @@ var showReport = async (report) => {
   var { reportTotals } = calcReportTotalsFromSkus(skus);
 
   if (isCrossYearPeriod) {
-    var startYearSkus = skus.filter((sku) => sku.year === startYear);
-    var endYearSkus = skus.filter((sku) => sku.year === endYear);
+    var { splitedReport } = splitReport(report);
 
-    var fullReportPeriodText = getReportPeriodText(
-      dateFrom,
-      dateTo,
-    ).reportPeriodText;
+    var hasSinglePeriodData = splitedReport.length === 1;
 
-    createTotalsTable(
-      reportTotals,
-      yearValueStub,
-      isCrossYearPeriod,
-      fullReportPeriodText,
-    );
+    if (!hasSinglePeriodData) {
+      var fullReportPeriodText = getReportPeriodText(
+        dateFrom,
+        dateTo,
+      ).reportPeriodText;
 
-    var startYearReportTotals =
-      calcReportTotalsFromSkus(startYearSkus).reportTotals;
-    var startReportPeriodText = getReportPeriodText(
-      dateFrom,
-      dateTo,
-      dateFrom,
-    ).reportPeriodText;
+      createTotalsTable(
+        reportTotals,
+        yearValueStub,
+        isCrossYearPeriod,
+        fullReportPeriodText,
+      );
 
-    createTotalsTable(
-      startYearReportTotals,
-      startYear,
-      isCrossYearPeriod,
-      startReportPeriodText,
-    );
-    createSkusTable(report, startYearSkus, startYear);
+      enableTablesSwitcher([startYear, endYear]);
 
-    var endYearReportTotals =
-      calcReportTotalsFromSkus(endYearSkus).reportTotals;
-    var endReportPeriodText = getReportPeriodText(
-      dateFrom,
-      dateTo,
-      dateTo,
-    ).reportPeriodText;
+      var isFirstIteration = true;
 
-    createTotalsTable(
-      endYearReportTotals,
-      endYear,
-      isCrossYearPeriod,
-      endReportPeriodText,
-    );
-    createSkusTable(report, endYearSkus, endYear);
-  } else {
-    createTotalsTable(
-      reportTotals,
-      yearValueStub,
-      isCrossYearPeriod,
-      reportSummaryLabelTextStub,
-    );
-    createSkusTable(report, skus, startYear);
+      for (var { year, reportPart } of splitedReport) {
+        var { reportTotals } = calcReportTotalsFromSkus(reportPart);
+
+        var targetPeriod;
+
+        if (isFirstIteration) {
+          targetPeriod = dateFrom;
+
+          isFirstIteration = false;
+        } else {
+          targetPeriod = dateTo;
+        }
+
+        var { reportPeriodText } = getReportPeriodText(
+          dateFrom,
+          dateTo,
+          targetPeriod,
+        );
+
+        createTotalsTable(
+          reportTotals,
+          year,
+          isCrossYearPeriod,
+          reportPeriodText,
+        );
+
+        createSkusTable(report, reportPart);
+      }
+
+      switchToFirstTable(startYear);
+      tablesSwitcherHandler(startYear, endYear);
+      return;
+    }
+
+    isCrossYearPeriod = false;
+    report.isCrossYearPeriod = false;
   }
+
+  createTotalsTable(
+    reportTotals,
+    yearValueStub,
+    isCrossYearPeriod,
+    reportSummaryLabelTextStub,
+  );
+
+  createSkusTable(report, skus);
 
   enableDownloadReportAsXLSXButton();
   downloadReportAsXlsxuttonHandler(reportId);

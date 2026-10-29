@@ -1,4 +1,3 @@
-import wrapInputElementsIntoDatepicker from "./wrapInputElementsIntoDatepicker.js";
 import createUploadModal from "./utils/reportFileUploadModalWindow/createUploadModal.js";
 import { disableDownloadReportAsXLSXButton } from "./toggleDownloadReportAsXlsxButtonVisibility.js";
 
@@ -10,9 +9,6 @@ var textContentToDecodeReportButton = "Расшифровка отчета бе�
 
 var decodeReportButtonHandler = () => {
   decodeReportButton.onclick = () => {
-    createUploadModal();
-    // wrapInputElementsIntoDatepicker();
-
     var reportSummaryLabels = document.querySelectorAll(
       ".report-summary-label-wrapper",
     );
@@ -36,10 +32,10 @@ var decodeReportButtonHandler = () => {
           )
           .forEach((table) => table.remove());
 
-        // window["dialog"].show();
+        createUploadModal();
       }
     } else {
-      // window["dialog"].show();
+      createUploadModal();
     }
   };
 };

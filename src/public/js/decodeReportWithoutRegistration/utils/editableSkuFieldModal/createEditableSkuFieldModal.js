@@ -97,17 +97,24 @@ var createEditableSkuFieldModal = (
 
     updateSkusTableFields(year, skuName, updatedSku);
 
-    updateTotalsTableFields(
-      year,
-      updatedSku,
-      prevSkuFieldsValues,
-      isCrossYearPeriod,
-    );
-
     if (isCrossYearPeriod) {
       var { childTablePrevData } = getChildTablePrevFieldsValue(year);
 
+      updateTotalsTableFields(
+        year,
+        updatedSku,
+        prevSkuFieldsValues,
+        isCrossYearPeriod,
+      );
+
       updateParentTotalsTableFields(year, childTablePrevData);
+    } else {
+      updateTotalsTableFields(
+        year,
+        updatedSku,
+        prevSkuFieldsValues,
+        isCrossYearPeriod,
+      );
     }
   }
 

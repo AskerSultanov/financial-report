@@ -1,3 +1,4 @@
+import loadExcelLibs from "../../loadExcelLibs.js";
 import getReportPeriod from "./getReportPeriod.js";
 import generateColumnNames from "./generateColumnNames.js";
 import { checkAndFixMonday, checkAndFixSunday } from "./checkDate.js";
@@ -16,6 +17,8 @@ var extractWorkSheetFromFile = async (
   weeklyFinancialReportsBuffer,
   paidStorageReportsBuffer,
 ) => {
+  var { ExcelJS } = await loadExcelLibs();
+
   var workSheets = [];
 
   for (var { reportId, buffer } of weeklyFinancialReportsBuffer) {
