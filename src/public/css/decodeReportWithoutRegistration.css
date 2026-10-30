@@ -1,4 +1,5 @@
 @import url("./theme.css");
+@import url("./footer.css");
 
 body {
   background-color: var(--bg-base);
@@ -15,16 +16,19 @@ body {
   -webkit-font-smoothing: antialiased;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-/* Перекрывает display у элементов, которые скрываются через hidden
-   (например, сводку и таблицу второй половины периода) */
+main {
+  flex: 1 0 auto;
+}
+
 [hidden] {
   display: none !important;
 }
 
-/* ===== Группа кнопок входа в верхней панели ===== */
 .auth-buttons {
   display: flex;
   flex-direction: row;
@@ -356,7 +360,7 @@ th:last-child {
   box-sizing: border-box;
   width: 100%;
   max-width: 1190px;
-  margin: 0 auto 16px;
+  margin: 0 auto 24px;
   overflow-x: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
@@ -406,9 +410,6 @@ th:last-child {
   width: 110px;
 }
 
-.table-scroll {
-  margin-bottom: 100px;
-}
 /* ============================================================
     Табы переключения годов (адаптация .tabs из эталона)
     ============================================================ */
@@ -454,120 +455,4 @@ th:last-child {
 .tab.is-active {
   color: var(--text-accent);
   border-bottom-color: var(--accent);
-}
-
-/* ===== Футер ===== */
-.site-footer {
-  box-sizing: border-box;
-  margin-top: 40px;
-  padding: 32px 16px 40px;
-  background: var(--bg-surface);
-  border-top: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-size: 13px;
-}
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 24px;
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-/* --- Контакты --- */
-.footer-contacts h2 {
-  margin: 0 0 16px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
-  opacity: 0.7;
-}
-
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-/* Стили для кнопок-контактов */
-.footer-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* Отступ между иконкой и текстом */
-  min-height: 36px;
-  padding: 0 16px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-full);
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  transition: var(--transition-base);
-}
-
-.footer-btn:hover {
-  background-color: var(--bg-hover);
-  border-color: var(--border-accent);
-  transform: translateY(-1px);
-}
-
-/* Иконки наследуют цвет текста */
-.footer-btn svg {
-  flex-shrink: 0;
-  transition: var(--transition-base);
-  color: var(--text-accent); /* Иконка будет акцентного цвета */
-}
-
-.footer-btn:hover svg {
-  color: var(--text-primary); /* При наведении иконка становится белой */
-}
-
-/* --- Текст и копирайт --- */
-.footer-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 600px;
-}
-
-.footer-cta {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 13.5px;
-  line-height: 1.5;
-}
-
-.footer-note {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  opacity: 0.6;
-}
-
-@media (max-width: 600px) {
-  .site-footer {
-    margin-top: 32px;
-    padding: 24px 16px;
-  }
-
-  .footer-links {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .footer-btn {
-    width: 100%;
-    max-width: 280px; /* Чтобы кнопки не растягивались на весь экран смартфона */
-  }
 }
