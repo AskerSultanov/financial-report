@@ -28,7 +28,7 @@ var deleteReportHandler = (userId, reportId) =>
 
         var urlToMainPage = splitedPathName.includes("user")
           ? "/admin/user/" + userId
-          : "/";
+          : "/my";
 
         navigateTo(urlToMainPage);
       } else {

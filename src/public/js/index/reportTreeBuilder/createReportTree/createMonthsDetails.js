@@ -2,7 +2,7 @@ import doRequest from "../../../utils/doRequest.js";
 import createReportsTable from "./createReportsTable.js";
 import createMonthlyReportDownloadButton from "./createMonthlyReportDownloadButton.js";
 
-var url = "/api/required-reports/";
+var url = "/my/api/required-reports/";
 
 var getRequiredReports = async (userId, reportIds) => {
   var res = await doRequest(url, {
@@ -35,10 +35,14 @@ var createDetailsToReportsContainer = (userId, year, month, reportIds) => {
 
       if (!document.getElementById(reportTbodyId)) {
         var { reports } = await getRequiredReports(userId, reportIds);
-        var [reportsTable, downloadBtn] = await Promise.all([
-          createReportsTable(year, month, reportIds, reports),
-          createMonthlyReportDownloadButton(userId, reportIds, year, month),
-        ]);
+
+        var reportsTable = createReportsTable(year, month, reportIds, reports);
+        var downloadBtn = createMonthlyReportDownloadButton(
+          userId,
+          reportIds,
+          year,
+          month,
+        );
 
         monthReportsContainer.append(reportsTable, downloadBtn);
         monthReportsContainer.open = true;

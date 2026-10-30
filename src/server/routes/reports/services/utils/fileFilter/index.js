@@ -4,7 +4,7 @@ var validMimeTypes = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
 
-var validUrls = ["/report/files", "/decode-report-without-registration/files"];
+var validUrls = ["/files", "/report/files"];
 
 var fileFilter = (req, file, cb) => {
   return validUrls.includes(req.originalUrl) &&

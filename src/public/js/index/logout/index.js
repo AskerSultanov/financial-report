@@ -10,7 +10,8 @@ var logoutButtonHandler = () => {
 
     if (confirmed) {
       await doRequest("/logout", { method: "POST" });
-      navigateTo("/decode-report-without-registration/");
+
+      navigateTo("/");
     }
   });
 };

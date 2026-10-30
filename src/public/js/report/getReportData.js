@@ -7,11 +7,12 @@ var getReportData = async (url) => {
   var res = await doRequest(url);
 
   var urlToMainPage;
+
   if (splitedPathParts.includes("user")) {
     var userId = splitedPathParts.at(-1);
     urlToMainPage = "/admin/user/" + userId;
   } else {
-    urlToMainPage = "/";
+    urlToMainPage = "/my";
   }
 
   if (res.status === 404) {

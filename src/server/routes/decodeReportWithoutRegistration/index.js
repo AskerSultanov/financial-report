@@ -2,7 +2,6 @@ import multer from "multer";
 import { Router } from "express";
 import schemas from "./JoiSchemas/index.js";
 import setCostPriceController from "./controllers/setCostPrice.js";
-import getReportPageController from "./controllers/getReportPage.js";
 import tokenValidatorController from "./controllers/tokenValidator.js";
 import fileFilter from "../reports/services/utils/fileFilter/index.js";
 import setOtherExpensesController from "./controllers/setOtherExpenses.js";
@@ -18,8 +17,6 @@ var upload = multer({ storage, fileFilter });
 var router = Router({ caseSensitive: true, strict: true });
 
 router.get("/", getDecodeReportWithoutRegistrationPageController);
-
-router.get("/report/:id", getReportPageController);
 
 router.post("/xlsx/", downloadReportAsXLSXController);
 

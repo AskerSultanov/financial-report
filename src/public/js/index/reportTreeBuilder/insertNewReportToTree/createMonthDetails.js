@@ -2,15 +2,10 @@ import createReportRow from "./createReportRow.js";
 import createReportsTable from "./createReportsTable.js";
 
 var createMonthDetails = (reportData) => {
-  var { year, month, reportId } = reportData;
+  var { year, month } = reportData;
 
   var summaryToMonthReportsContainer = document.createElement("summary");
   summaryToMonthReportsContainer.append(month);
-
-  var reportRowIsNot = document.getElementById(reportId) === null;
-
-  if (reportRowIsNot) {
-  }
 
   var reportRow = createReportRow(reportData);
   var reportsTable = createReportsTable(reportData, reportRow);

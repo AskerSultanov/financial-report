@@ -88,10 +88,7 @@ async function runErrorServer() {
   errorApp.use(express.json());
   errorApp.use(express.static(join(import.meta.dirname, "../public")));
 
-  errorApp.use(
-    "/decode-report-without-registration/",
-    decodeReportWithoutRegistrationRouter,
-  );
+  errorApp.use("/", decodeReportWithoutRegistrationRouter);
 
   errorApp.all(/.*/, temporarilyUnavailableHandler);
 
@@ -135,13 +132,10 @@ async function runMainServer() {
   app.use("/auth", authRouter);
   app.use("/reg", registrationRouter);
   app.use("/background-tasks", backgroundTasksRouter);
-  app.use(
-    "/decode-report-without-registration/",
-    decodeReportWithoutRegistrationRouter,
-  );
+  app.use("/", decodeReportWithoutRegistrationRouter);
 
   app.use(verifyAuthentication, verifyAuthorization);
-  app.use("/", checkRoles(["admin", "user"]), rootRouter);
+  app.use("/my", checkRoles(["admin", "user"]), rootRouter);
   app.use("/wbtoken", checkRoles(["admin", "user"]), tokenRouter);
   app.use("/admin", checkRoles(["admin"]), adminRouter);
   app.use("/tax-params", checkRoles(["admin", "user"]), taxParamsRouter);

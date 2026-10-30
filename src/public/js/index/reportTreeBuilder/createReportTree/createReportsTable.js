@@ -26,7 +26,8 @@ var createReportsTable = (year, month, reportIds, reports) => {
     if (isFinancesAccounted) {
       financesAccountedTd.innerHTML = "<p> &#9989;</p>";
     } else {
-      financesAccountedTd.innerHTML = '<span style="color: red;">&#10008;</span>';
+      financesAccountedTd.innerHTML =
+        '<span style="color: red;">&#10008;</span>';
     }
 
     tr.append(fullPeriodTd, financesAccountedTd, reportLink);

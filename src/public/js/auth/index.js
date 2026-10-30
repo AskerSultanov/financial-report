@@ -20,23 +20,17 @@ var sendAuthData = async (login, passwd) => {
 
   var { redirectUrl } = await res.json();
 
-  return redirectUrl;
+  navigateTo(redirectUrl);
 };
 
-var authFormHandler = async () =>
+var authFormHandler = () =>
   (document.getElementById("auth-form").onsubmit = async (e) => {
     e.preventDefault();
 
     var login = document.getElementById("login").value;
     var passwd = document.getElementById("passwd").value;
 
-    var redirectUrl = await sendAuthData(login, passwd);
-
-    if (!redirectUrl) {
-      return;
-    }
-
-    navigateTo(redirectUrl);
+    await sendAuthData(login, passwd);
   });
 
 authFormHandler();

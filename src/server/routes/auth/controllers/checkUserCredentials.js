@@ -26,17 +26,19 @@ var checkUserCredentialsController = async (req, res) => {
   var accessTokenTTLInMs = ms(process.env.ACCESS_TOKEN_TTL);
   var refreshTokenTTLInMs = ms(process.env.REFRESH_TOKEN_TTL);
 
-  return res
-    .cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      maxAge: refreshTokenTTLInMs,
-    })
-    .cookie("access_token", accessToken, {
-      httpOnly: true,
-      maxAge: accessTokenTTLInMs,
-    })
-    .cookie("userId", userId, { httpOnly: false, maxAge: accessTokenTTLInMs })
-    .json({ redirectUrl: "/" });
+  res.cookie("refresh_token", refreshToken, {
+    httpOnly: true,
+    maxAge: refreshTokenTTLInMs,
+  });
+
+  res.cookie("access_token", accessToken, {
+    httpOnly: true,
+    maxAge: accessTokenTTLInMs,
+  });
+
+  res.cookie("userId", userId, { httpOnly: false, maxAge: accessTokenTTLInMs });
+
+  return res.json({ redirectUrl: "/my" });
 };
 
 export default checkUserCredentialsController;

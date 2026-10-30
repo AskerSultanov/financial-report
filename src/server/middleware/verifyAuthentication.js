@@ -8,7 +8,7 @@ var verifyAuthentication = async (req, res, next) => {
     res.clearCookie("access_token");
 
     if (wantsHtml) {
-      return res.redirect(process.env.REDIRECT_URL);
+      return res.redirect("/");
     }
 
     return res.sendStatus(401);
@@ -23,7 +23,7 @@ var verifyAuthentication = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
     );
     var { payload } = await jose.jwtVerify(accessToken, accessTokenSecret);
-    } catch {
+  } catch {
     return deny();
   }
 

@@ -19,7 +19,9 @@ import tablesSwitcherHandler from "./table/tablesSwitcherHandler.js";
 
 var yearValueStub = "";
 var reportSummaryLabelTextStub = "";
+
 var splitedPathName = window.location.pathname.split("/");
+
 var userId = splitedPathName.includes("user")
   ? splitedPathName[3]
   : getCookieByName("userId");
@@ -29,7 +31,6 @@ var pathParts = window.location.pathname.split("/");
 var reportId = pathParts.at(-1);
 
 var url = "/report/" + userId + "/" + reportId;
-var urlToDownloadReportAsXLSX = "/report/xlsx/";
 
 var main = async () => {
   var { report, signedUrls, skusWithLastCostPrices } = await getReportData(url);
@@ -141,9 +142,9 @@ var main = async () => {
   reportInfo(report);
   deleteReportHandler(userId, reportId);
 
+  downloadReportAsXLSXButtonHandler(report);
   injectSignedUrlsIntoImgTags(userId, signedUrls);
   setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
-  downloadReportAsXLSXButtonHandler(report, urlToDownloadReportAsXLSX);
   financialAccountingStatusButtonHander(userId, reportId, dateFrom, dateTo);
 };
 

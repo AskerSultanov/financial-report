@@ -17,7 +17,7 @@ var doRequest = async (url, options = {}) => {
   var refreshRes = await refreshPromise;
 
   if (!refreshRes.ok) {
-    window.location.replace("/decode-report-without-registration/");
+    window.location.replace("/");
 
     throw new Error("session expired");
   }

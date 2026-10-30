@@ -5,6 +5,7 @@ import navigateTo from "../utils/navigateTo.js";
 var buttonToMainPage = document.getElementById("back-to-main-page");
 
 var url = "/admin/api";
+var urlToMainPage = "/my";
 
 var getMainPageData = async () => {
   var res = await doRequest(url);
@@ -20,4 +21,5 @@ var main = async () => {
 };
 
 main();
-buttonToMainPage.onclick = () => navigateTo("/");
+
+buttonToMainPage.onclick = () => navigateTo(urlToMainPage);

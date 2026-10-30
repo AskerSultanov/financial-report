@@ -1,4 +1,4 @@
-var deleteEmptyMonth = (userId) => {
+var deleteEmptyMonth = () => {
   var tableBodies = document.querySelectorAll("tbody");
 
   var year,

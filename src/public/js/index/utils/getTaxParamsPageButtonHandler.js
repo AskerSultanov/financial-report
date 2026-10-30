@@ -1,11 +1,12 @@
 import navigateTo from "../../utils/navigateTo.js";
 
+var urlToTaxParamsPage = "/tax-params/";
 var button = document.getElementById("tax-params-page");
 
 var getTaxParamsPageButtonHandler = () => {
   button.addEventListener("click", () => {
-    navigateTo('/tax-params/')
-});
+    navigateTo(urlToTaxParamsPage);
+  });
 };
 
 export default getTaxParamsPageButtonHandler;

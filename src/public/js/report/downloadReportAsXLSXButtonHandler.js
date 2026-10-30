@@ -1,25 +1,17 @@
 import doRequest from "../utils/doRequest.js";
 
+var url = "/report/xlsx/";
 var button = document.getElementById("download-report-as-xlsx-button");
 
-var downloadReportAsXLSXButtonHandler = (report, url, isGuestAccess) =>
+var downloadReportAsXLSXButtonHandler = (report) =>
   (button.onclick = async (e) => {
     e.preventDefault();
 
     var { userId, reportId, dateFrom, dateTo } = report;
-    var body;
-
-    if (isGuestAccess) {
-      body = JSON.stringify({
-        report: JSON.parse(localStorage.getItem(report.userId)),
-      });
-    } else {
-      body = JSON.stringify({ userId, reportId });
-    }
 
     var res = await doRequest(url, {
       method: "POST",
-      body,
+      body: JSON.stringify({ userId, reportId }),
       headers: { "Content-Type": "application/json" },
     });
 
