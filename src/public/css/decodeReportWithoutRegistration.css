@@ -114,6 +114,11 @@ main {
     width: calc(100% - 32px);
     max-width: 320px;
   }
+
+  #download-report-as-xlsx-button {
+    width: 100%;
+    max-width: 320px;
+  }
 }
 
 #skus-table {
@@ -124,11 +129,11 @@ main {
   background-color: var(--bg-elevated);
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
-  padding: 0 14px;
-  min-height: 32px;
+  padding: 0 24px;
+  min-height: 44px;
   border-radius: var(--radius-full);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition-base);
@@ -139,6 +144,19 @@ main {
   border-color: var(--border-accent);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
+}
+
+.download-xlsx-wrapper {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.download-xlsx-wrapper:has(#download-report-as-xlsx-button:not([hidden])) {
+  margin: 32px auto 24px;
 }
 
 /* Кнопка скачивания архива, когда из файлов получилось несколько отчётов */
