@@ -140,10 +140,11 @@ main {
 }
 
 #download-report-as-xlsx-button:hover {
-  background-color: var(--bg-hover);
-  border-color: var(--border-accent);
+  background-color: #217346;
+  border-color: #217346;
+  color: #fff;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(33, 115, 70, 0.3);
 }
 
 .download-xlsx-wrapper {
