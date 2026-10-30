@@ -50,13 +50,13 @@ var createDropZoneContent = () => {
 };
 
 var updateFileList = () => {
-  if (!selectedFiles.length) {
-    return;
-  }
-
   var fileList = document.getElementById("file-list");
   fileList.innerHTML = "";
   fileList.style.display = "block";
+
+  if (!selectedFiles.length) {
+    return;
+  }
 
   selectedFiles.forEach((file, index) => {
     var fileListItem = document.createElement("div");
