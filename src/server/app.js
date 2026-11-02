@@ -24,7 +24,7 @@ import taxParamsRouter from "./routes/taxParams/index.js";
 import registrationRouter from "./routes/registration/index.js";
 import personalAccountRouter from "./routes/personalAccount/index.js";
 import backgroundTasksRouter from "./routes/backgroundTasks/index.js";
-import decodeReportWithoutRegistrationRouter from "./routes/decodeReportWithoutRegistration/index.js";
+import getDecodeReportWithoutRegistrationPageController from "./routes/decodeReportWithoutRegistration/getDecodeReportWithoutRegistrationPage.js";
 
 var mainServerIsListen = false;
 var errorServerIsListen = false;
@@ -120,19 +120,13 @@ async function runMainServer() {
   app.use(express.urlencoded());
   app.use(express.json());
   app.use(express.static(join(import.meta.dirname, "../public")));
-  app.use(
-    "/vendor/exceljs",
-    express.static(
-      join(import.meta.dirname, "../../node_modules/exceljs-community/dist"),
-    ),
-  );
 
   app.use(cookieParser());
 
   app.use("/auth", authRouter);
   app.use("/reg", registrationRouter);
   app.use("/background-tasks", backgroundTasksRouter);
-  app.use("/", decodeReportWithoutRegistrationRouter);
+  app.use("/", getDecodeReportWithoutRegistrationPageController);
 
   app.use(verifyAuthentication, verifyAuthorization);
   app.use("/my", checkRoles(["admin", "user"]), rootRouter);
