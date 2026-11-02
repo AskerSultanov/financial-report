@@ -25,6 +25,10 @@ var createTotalsTable = (
   tableBody.append(tableRow);
   tableBody.id = "table-body-" + year;
 
+  if (year) {
+    tableBody.setAttribute("year", year);
+  }
+
   var { tableHead } = createTotalsTableHead(year);
 
   var table = document.createElement("table");

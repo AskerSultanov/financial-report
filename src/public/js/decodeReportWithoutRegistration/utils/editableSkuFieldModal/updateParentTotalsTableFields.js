@@ -1,6 +1,31 @@
 import calcProfitMargin from "../calcUtils/utils/profitMargin.js";
+import getYearsFromChildTables from "./getYearsFromChildTables.js";
 
-var updateParentTotalsTableFields = (year, childTablePrevData) => {
+var fieldsToUpdate = ["costPrice-", "finalProfit-", "otherExpenses-"];
+
+var updateParentTotalsTableFields = (year) => {
+  var { years } = getYearsFromChildTables();
+
+  for (var field of fieldsToUpdate) {
+    var totalValue = 0;
+
+    for (var year of years) {
+      var childTbodyElemId = field + year;
+      var childTbodyElem = document.getElementById(childTbodyElemId);
+
+      var elemVal = +childTbodyElem.textContent;
+
+      totalValue += elemVal;
+    }
+
+    var totalTbodyElemId = field;
+    var totalTbodyElem = document.getElementById(totalTbodyElemId);
+
+    if (Number.isFinite(totalValue)) {
+      totalTbodyElem.textContent = totalValue;
+    }
+  }
+
   var finalProfitId = "finalProfit-";
   var retailAmountId = "retailAmount-";
   var profitMarginId = "profitMargin-";
@@ -9,21 +34,12 @@ var updateParentTotalsTableFields = (year, childTablePrevData) => {
   var retailAmountEl = document.getElementById(retailAmountId);
   var profitMarginEl = document.getElementById(profitMarginId);
 
-  var prevFinalProfit = +finalProfitEl.textContent;
+  var finalProfit = +finalProfitEl.textContent;
   var retailAmount = +retailAmountEl.textContent;
 
-  var childFinalProfitEl = document.getElementById("finalProfit-" + year);
-  var childFinalProfit = +childFinalProfitEl.textContent;
-
-  var newFinalProfit =
-    prevFinalProfit -
-    childTablePrevData.childPrevFinalProfitElemVal +
-    childFinalProfit;
-
-  var margin = calcProfitMargin(newFinalProfit, retailAmount);
+  var margin = calcProfitMargin(finalProfit, retailAmount);
 
   profitMarginEl.textContent = margin;
-  finalProfitEl.textContent = newFinalProfit.toFixed(2);
 };
 
 export default updateParentTotalsTableFields;
