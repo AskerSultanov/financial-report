@@ -1,3 +1,4 @@
+import doRequest from "../utils/doRequest.js";
 import navigateTo from "../utils/navigateTo.js";
 
 var sendRegistationData = async (login, passwd) => {
