@@ -4,27 +4,46 @@ import calcInsuranceFee from "../calcUtils/utils/insuranceFee.js";
 var recalculateSkuAndTaxParams = (sku, taxParams) => {
   var updatedTaxParams = { ...taxParams };
 
-  var { skuAdditionalInsuranceFee, newTaxRetailAmount, hasExcessIncomeForInsurance, requiresAdditionalInsuranceFee } = recalculateTaxParamRetailAmountAndSkuAdditionalInsuranceFee(
-    sku.retailAmount,
-    taxParams,
-  );
+  // var {
+  //   skuAdditionalInsuranceFee,
+  //   newTaxRetailAmount,
+  //   hasExcessIncomeForInsurance,
+  //   requiresAdditionalInsuranceFee,
+  // } = recalculateTaxParamRetailAmountAndSkuAdditionalInsuranceFee(
+  //   sku.retailAmount,
+  //   taxParams,
+  // );
 
-  updatedTaxParams = Object.assign(updatedTaxParams, { hasExcessIncomeForInsurance, requiresAdditionalInsuranceFee, retailAmount: newTaxRetailAmount });
+  // updatedTaxParams = Object.assign(updatedTaxParams, {
+  //   hasExcessIncomeForInsurance,
+  //   requiresAdditionalInsuranceFee,
+  //   retailAmount: newTaxRetailAmount,
+  // });
 
-  var { recalculatedSkuAdditionalInsuranceFee, newTaxParamsAdditionalInsuranceFee, ...restUpdatedTaxParams } = recalculateInsuranceFee(skuAdditionalInsuranceFee, updatedTaxParams);
+  // var {
+  //   recalculatedSkuAdditionalInsuranceFee,
+  //   newTaxParamsAdditionalInsuranceFee,
+  //   ...restUpdatedTaxParams
+  // } = recalculateInsuranceFee(skuAdditionalInsuranceFee, updatedTaxParams);
 
-  updatedTaxParams = Object.assign(updatedTaxParams, { additionalInsuranceFee: newTaxParamsAdditionalInsuranceFee, ...restUpdatedTaxParams });
+  // updatedTaxParams = Object.assign(updatedTaxParams, {
+  //   additionalInsuranceFee: newTaxParamsAdditionalInsuranceFee,
+  //   ...restUpdatedTaxParams,
+  // });
 
   updatedTaxParams.paidTaxAmount = taxParams.paidTaxAmount + sku.tax;
-
+  updatedTaxParams.retailAmount = taxParams.retailAmount + sku.retailAmount;
   updatedTaxParams.taxableAmount = taxParams.taxableAmount + sku.taxableAmount;
 
-  return { skuAdditionalInsuranceFee: recalculatedSkuAdditionalInsuranceFee, updatedTaxParams };
+  return { updatedTaxParams };
 };
 
 export default recalculateSkuAndTaxParams;
 
-var recalculateTaxParamRetailAmountAndSkuAdditionalInsuranceFee = function (skuRetailAmount, taxParams) {
+var recalculateTaxParamRetailAmountAndSkuAdditionalInsuranceFee = function (
+  skuRetailAmount,
+  taxParams,
+) {
   var prevRetailAmount = taxParams.retailAmount;
   var newTaxRetailAmount = taxParams.retailAmount + skuRetailAmount;
 
@@ -36,17 +55,29 @@ var recalculateTaxParamRetailAmountAndSkuAdditionalInsuranceFee = function (skuR
     hasExcessIncomeForInsurance = true;
     requiresAdditionalInsuranceFee = true;
 
-    var difference = taxParams.excessIncomeForAdditionalInsuranceFee - prevRetailAmount;
+    var difference =
+      taxParams.excessIncomeForAdditionalInsuranceFee - prevRetailAmount;
 
     if (difference > 0) {
       difference = skuRetailAmount - difference;
-      skuAdditionalInsuranceFee = calcInsuranceFee(difference, taxParams.excessInsuranceRate);
+      skuAdditionalInsuranceFee = calcInsuranceFee(
+        difference,
+        taxParams.excessInsuranceRate,
+      );
     } else {
-      skuAdditionalInsuranceFee = calcInsuranceFee(skuRetailAmount, taxParams.excessInsuranceRate);
+      skuAdditionalInsuranceFee = calcInsuranceFee(
+        skuRetailAmount,
+        taxParams.excessInsuranceRate,
+      );
     }
   }
 
-  return { skuAdditionalInsuranceFee, hasExcessIncomeForInsurance, requiresAdditionalInsuranceFee, newTaxRetailAmount };
+  return {
+    skuAdditionalInsuranceFee,
+    hasExcessIncomeForInsurance,
+    requiresAdditionalInsuranceFee,
+    newTaxRetailAmount,
+  };
 };
 
 var recalculateInsuranceFee = function (skuAdditionalInsuranceFee, taxParams) {
@@ -57,7 +88,8 @@ var recalculateInsuranceFee = function (skuAdditionalInsuranceFee, taxParams) {
   var excessInsuranceRate = taxParams.excessInsuranceRate;
   var insuranceFeePercentage = taxParams.insuranceFeePercentage;
   var recalculatedSkuAdditionalInsuranceFee = skuAdditionalInsuranceFee;
-  var newTaxParamsAdditionalInsuranceFee = taxParams.additionalInsuranceFee + skuAdditionalInsuranceFee;
+  var newTaxParamsAdditionalInsuranceFee =
+    taxParams.additionalInsuranceFee + skuAdditionalInsuranceFee;
 
   if (!requiresAdditionalInsuranceFee) {
     return {
@@ -74,8 +106,10 @@ var recalculateInsuranceFee = function (skuAdditionalInsuranceFee, taxParams) {
 
   var prevAdditionalInsuranceFee = taxParams.additionalInsuranceFee;
 
-  var paidInsuranceFee = taxParams.paidInsuranceFee + newTaxParamsAdditionalInsuranceFee;
-  var maxAdditionalInsuranceFee = taxParams.maxInsuranceFee - taxParams.mandatoryInsuranceFee;
+  var paidInsuranceFee =
+    taxParams.paidInsuranceFee + newTaxParamsAdditionalInsuranceFee;
+  var maxAdditionalInsuranceFee =
+    taxParams.maxInsuranceFee - taxParams.mandatoryInsuranceFee;
 
   if (newTaxParamsAdditionalInsuranceFee > maxAdditionalInsuranceFee) {
     additionalInsuranceFeeIsPaid = true;
@@ -84,7 +118,8 @@ var recalculateInsuranceFee = function (skuAdditionalInsuranceFee, taxParams) {
     var difference = maxAdditionalInsuranceFee - prevAdditionalInsuranceFee;
 
     if (difference > 0) {
-      var recalculatedSkuAdditionalInsuranceFee = skuAdditionalInsuranceFee + difference;
+      var recalculatedSkuAdditionalInsuranceFee =
+        skuAdditionalInsuranceFee + difference;
     }
   }
 
