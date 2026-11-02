@@ -24,7 +24,7 @@ import taxParamsRouter from "./routes/taxParams/index.js";
 import registrationRouter from "./routes/registration/index.js";
 import personalAccountRouter from "./routes/personalAccount/index.js";
 import backgroundTasksRouter from "./routes/backgroundTasks/index.js";
-import getDecodeReportWithoutRegistrationPageController from "./routes/decodeReportWithoutRegistration/getDecodeReportWithoutRegistrationPage.js";
+import decodeReportWithoutRegistrationRouter from "./routes/decodeReportWithoutRegistration/index.js";
 
 var mainServerIsListen = false;
 var errorServerIsListen = false;
@@ -126,7 +126,7 @@ async function runMainServer() {
   app.use("/auth", authRouter);
   app.use("/reg", registrationRouter);
   app.use("/background-tasks", backgroundTasksRouter);
-  app.use("/", getDecodeReportWithoutRegistrationPageController);
+  app.use("/", decodeReportWithoutRegistrationRouter);
 
   app.use(verifyAuthentication, verifyAuthorization);
   app.use("/my", checkRoles(["admin", "user"]), rootRouter);
