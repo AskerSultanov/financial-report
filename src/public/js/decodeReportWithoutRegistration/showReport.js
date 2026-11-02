@@ -5,7 +5,7 @@ import switchToFirstTable from "./switchToFirstTable.js";
 import getReportPeriodText from "./getReportPeriodText.js";
 import enableTablesSwitcher from "./enableTablesSwitcher.js";
 import tablesSwitcherHandler from "./tablesSwitcherHandler.js";
-import downloadReportAsXlsxuttonHandler from "./downloadReportAsXLSXButtonHandler.js";
+import downloadReportAsXlsxButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import calcReportTotalsFromSkus from "./utils/calcUtils/utils/calcReportTotalsFromSkus.js";
 import { enableDownloadReportAsXLSXButton } from "./toggleDownloadReportAsXlsxButtonVisibility.js";
 
@@ -36,6 +36,7 @@ var showReport = async (report) => {
       ).reportPeriodText;
 
       createTotalsTable(
+        reportId,
         reportTotals,
         yearValueStub,
         isCrossYearPeriod,
@@ -66,6 +67,7 @@ var showReport = async (report) => {
         );
 
         createTotalsTable(
+          reportId,
           reportTotals,
           year,
           isCrossYearPeriod,
@@ -85,6 +87,7 @@ var showReport = async (report) => {
   }
 
   createTotalsTable(
+    reportId,
     reportTotals,
     yearValueStub,
     isCrossYearPeriod,
@@ -94,7 +97,7 @@ var showReport = async (report) => {
   createSkusTable(report, skus);
 
   enableDownloadReportAsXLSXButton();
-  downloadReportAsXlsxuttonHandler(reportId);
+  downloadReportAsXlsxButtonHandler(reportId);
 
   if (isCrossYearPeriod) {
     window.scrollTo({ top: 500, behavior: "smooth" });

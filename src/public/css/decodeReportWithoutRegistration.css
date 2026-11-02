@@ -374,9 +374,13 @@ th:last-child {
 .table-scroll {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1190px;
+  max-width: 1250px;
   margin: 0 auto 24px;
   overflow-x: auto;
+  overflow-y: auto;
+  /* Без ограничения высоты контейнер растягивается по таблице и вертикальной
+     прокрутки не будет. 70vh — как в эталонных стилях */
+  max-height: 70vh;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
@@ -402,7 +406,9 @@ th:last-child {
 .table-scroll > table th:nth-child(1),
 .table-scroll > table td:nth-child(1) {
   white-space: normal;
-  overflow-wrap: anywhere;
+  /* break-word, а не anywhere: anywhere уменьшает min-content колонки,
+     из-за чего браузер ужимает её до 1 символа и строки вырастают в высоту */
+  overflow-wrap: break-word;
 }
 
 .table-scroll > table thead th {

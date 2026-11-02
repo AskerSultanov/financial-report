@@ -1,7 +1,8 @@
-var updateSkusTableFields = (year, skuName, updatedSku) => {
+var updateSkusTableFields = (year, skuName, reportId, updatedSku) => {
   for (var key in updatedSku) {
-    var skuFieldId = key + "-" + skuName + "-" + year;
-    var skuField = document.getElementById(skuFieldId);
+    var fieldId = `${key}-${skuName}-${reportId}-${year}`;
+
+    var skuField = document.getElementById(fieldId);
 
     if (skuField) {
       var val = +updatedSku[key].toFixed(2);

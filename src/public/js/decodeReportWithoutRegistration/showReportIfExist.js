@@ -1,14 +1,13 @@
 import showReport from "./showReport.js";
+import getReportsFromLocalStorage from "./getReportsFromLocalStorage.js";
 
 var showReportIfExist = () => {
   try {
-    var reportAsJSON = localStorage.getItem("report");
+    var { reports } = getReportsFromLocalStorage();
 
-    if (reportAsJSON) {
-      var report = JSON.parse(reportAsJSON);
+    var report = reports[0];
 
-      showReport(report);
-    }
+    showReport(report);
   } catch {
     return;
   }

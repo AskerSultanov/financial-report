@@ -10,9 +10,9 @@ var openEditableSkuFieldModal = (sku, updateField) => {
   editableFieldDisplayElement.className = "editable-field-value";
   editableFieldDisplayElement.textContent = sku[updateField];
 
-  var { year, skuName } = sku;
+  var { year, skuName, reportId } = sku;
 
-  editableFieldDisplayElement.id = updateField + `-${skuName}-${year}`;
+  editableFieldDisplayElement.id = `${updateField}-${skuName}-${reportId}-${year}`;
 
   var openModalButton = document.createElement("button");
   openModalButton.className = "editable-field-button";

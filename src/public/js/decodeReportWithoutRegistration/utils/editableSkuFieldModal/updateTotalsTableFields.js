@@ -4,12 +4,13 @@ var updateTotalsTableFields = (
   year,
   updatedSku,
   prevSku,
+  reportId,
   isCrossYearPeriod,
 ) => {
   var yearKeyPart = isCrossYearPeriod ? year : "";
 
   for (var key in updatedSku) {
-    var totalFieldId = key + "-" + yearKeyPart;
+    var totalFieldId = `${key}-${reportId}-${yearKeyPart}`;
     var totalField = document.getElementById(totalFieldId);
 
     if (totalField && Number.isFinite(prevSku[key])) {
@@ -31,9 +32,9 @@ var updateTotalsTableFields = (
     }
   }
 
-  var finalProfitElemId = "finalProfit-" + yearKeyPart;
-  var retailAmountElemId = "retailAmount-" + yearKeyPart;
-  var profitMarginElemId = "profitMargin-" + yearKeyPart;
+  var finalProfitElemId = `finalProfit-${reportId}-${yearKeyPart}`;
+  var retailAmountElemId = `retailAmount-${reportId}-${yearKeyPart}`;
+  var profitMarginElemId = `profitMargin-${reportId}-${yearKeyPart}`;
 
   var finalProfitElem = document.getElementById(finalProfitElemId);
   var retailAmountElem = document.getElementById(retailAmountElemId);

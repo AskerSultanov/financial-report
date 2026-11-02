@@ -3,14 +3,14 @@ import getYearsFromChildTables from "./getYearsFromChildTables.js";
 
 var fieldsToUpdate = ["costPrice-", "finalProfit-", "otherExpenses-"];
 
-var updateParentTotalsTableFields = (year) => {
+var updateParentTotalsTableFields = (year, reportId) => {
   var { years } = getYearsFromChildTables();
 
   for (var field of fieldsToUpdate) {
     var totalValue = 0;
 
     for (var year of years) {
-      var childTbodyElemId = field + year;
+      var childTbodyElemId = field + reportId + "-" + year;
       var childTbodyElem = document.getElementById(childTbodyElemId);
 
       var elemVal = +childTbodyElem.textContent;
@@ -26,9 +26,9 @@ var updateParentTotalsTableFields = (year) => {
     }
   }
 
-  var finalProfitId = "finalProfit-";
-  var retailAmountId = "retailAmount-";
-  var profitMarginId = "profitMargin-";
+  var finalProfitId = `finalProfit-${reportId}-`;
+  var retailAmountId = `retailAmount-${reportId}-`;
+  var profitMarginId = `profitMargin-${reportId}-`;
 
   var finalProfitEl = document.getElementById(finalProfitId);
   var retailAmountEl = document.getElementById(retailAmountId);

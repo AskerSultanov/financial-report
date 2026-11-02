@@ -8,7 +8,6 @@ import getPrevSkuValues from "./getPrevSkuValues.js";
 import updateSkusTableFields from "./updateSkusTableFields.js";
 import updateTotalsTableFields from "./updateTotalsTableFields.js";
 import replaceCommaToDotCallback from "./replaceCommaToDotCallback.js";
-import getChildTablePrevFieldsValue from "./getChildTablePrevFieldsValue.js";
 import updateReportFromLocalStorage from "./updateReportFromLocalStorage.js";
 import updateParentTotalsTableFields from "./updateParentTotalsTableFields.js";
 
@@ -79,13 +78,14 @@ var createEditableSkuFieldModal = (
 
     modal.remove();
 
-    var { year, skuName, isCrossYearPeriod } = skuToUpdate;
+    var { year, skuName, reportId, isCrossYearPeriod } = skuToUpdate;
 
     var skuBeforeUpdation = { ...skuToUpdate };
 
     var { prevSkuFieldsValues } = getPrevSkuValues(
       year,
       skuName,
+      reportId,
       skuBeforeUpdation,
     );
 
@@ -93,26 +93,27 @@ var createEditableSkuFieldModal = (
     displayElement.textContent = newValue;
 
     var { updatedSku } = calcUtils.sku.restParams(skuToUpdate);
-    updateReportFromLocalStorage(year, skuName, updatedSku);
 
-    updateSkusTableFields(year, skuName, updatedSku);
+    updateReportFromLocalStorage(year, skuName, reportId, updatedSku);
+
+    updateSkusTableFields(year, skuName, reportId, updatedSku);
 
     if (isCrossYearPeriod) {
-      var { childTablePrevData } = getChildTablePrevFieldsValue(year);
-
       updateTotalsTableFields(
         year,
         updatedSku,
         prevSkuFieldsValues,
+        reportId,
         isCrossYearPeriod,
       );
 
-      updateParentTotalsTableFields(year, childTablePrevData);
+      updateParentTotalsTableFields(year, reportId);
     } else {
       updateTotalsTableFields(
         year,
         updatedSku,
         prevSkuFieldsValues,
+        reportId,
         isCrossYearPeriod,
       );
     }

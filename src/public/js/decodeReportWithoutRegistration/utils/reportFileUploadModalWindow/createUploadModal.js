@@ -77,8 +77,11 @@ var updateFileList = () => {
   document.querySelectorAll(".file-remove").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
+
       var index = parseInt(this.dataset.index);
+
       selectedFiles.splice(index, 1);
+
       updateFileList();
 
       var dropZone = document.getElementById("drop-zone");
@@ -87,6 +90,7 @@ var updateFileList = () => {
       if (selectedFiles.length === 0) {
         dropZone.classList.remove("dragover", "has-files");
       }
+
       fileInput.value = "";
     });
   });
@@ -251,7 +255,7 @@ var createUploadBtn = () => {
 
       showReport(report);
       writeReportToLocalStorage(report);
-      downloadReportAsXLSXButtonHandler();
+      downloadReportAsXLSXButtonHandler(report.reportId);
     }
   });
 
