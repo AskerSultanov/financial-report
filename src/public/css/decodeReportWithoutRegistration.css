@@ -111,7 +111,7 @@ main {
     max-width: 320px;
   }
 
-  #download-report-as-xlsx-button {
+  .download-report-as-xlsx-button {
     width: 100%;
     max-width: 320px;
   }
@@ -121,7 +121,7 @@ main {
   margin-top: 40px;
 }
 
-#download-report-as-xlsx-button {
+.download-report-as-xlsx-button {
   background-color: var(--bg-elevated);
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
@@ -135,7 +135,7 @@ main {
   transition: var(--transition-base);
 }
 
-#download-report-as-xlsx-button:hover {
+.download-report-as-xlsx-button:hover {
   background-color: #217346;
   border-color: #217346;
   color: #fff;
@@ -152,7 +152,7 @@ main {
   padding: 0 16px;
 }
 
-.download-xlsx-wrapper:has(#download-report-as-xlsx-button:not([hidden])) {
+.download-xlsx-wrapper:has(.download-report-as-xlsx-button:not([hidden])) {
   margin: 32px auto 24px;
 }
 
@@ -361,7 +361,7 @@ th:last-child {
 }
 
 #decode-report-button:focus-visible,
-#download-report-as-xlsx-button:focus-visible,
+.download-report-as-xlsx-button:focus-visible,
 #download-reports-in-zip:focus-visible,
 #auth:focus-visible,
 #registration:focus-visible,
@@ -369,6 +369,148 @@ th:last-child {
 .info-block a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* ============================================================
+    Панель управления отчётами: контекст слева, действия справа
+    ============================================================ */
+#report-controls {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  /* 1250px — как у .table-scroll, панель не выходит за таблицы */
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Селектор есть — разводим два полюса по краям панели */
+#report-controls:has(#selector-container) {
+  justify-content: space-between;
+}
+
+#report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Прижимает действия к правому краю и когда они переносятся на свою строку */
+#report-controls:has(#selector-container) > #report-actions {
+  margin-left: auto;
+}
+
+#report-actions > #download-reports-in-zip {
+  margin: 0;
+}
+
+#report-actions > .download-xlsx-wrapper {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+    Селектор выбора отчёта (появляется, если загружено 2+ отчёта)
+    ============================================================ */
+#selector-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+#selector-container label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Стрелка рисуется фоном, поэтому у самого select отключён нативный вид */
+#selector {
+  box-sizing: border-box;
+  min-height: 44px;
+  min-width: 240px;
+  max-width: 100%;
+  padding: 0 44px 0 18px;
+  background-color: var(--bg-elevated);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a8b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  appearance: none;
+  -webkit-appearance: none;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+#selector:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+#selector:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--border-accent);
+}
+
+/* Раскрытый список (наследует color-scheme: dark из :root) */
+#selector option {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* На узких экранах панель и элементы селектора идут в столбец */
+@media (max-width: 600px) {
+  #report-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #report-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  #report-actions > #download-reports-in-zip,
+  #report-actions > .download-xlsx-wrapper,
+  #selector-container {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  #selector-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #selector {
+    width: 100%;
+    /* min-width из десктопного правила не должен вылезать за отступы */
+    min-width: 0;
+  }
 }
 
 .table-scroll {

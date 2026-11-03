@@ -1,10 +1,10 @@
-import showReport from "../../showReport.js";
-import loadExcelLibs from "../../loadExcelLibs.js";
+import buildReportBlock from "../../buildReportBlock.js";
 import reportFileParser from "../reportsFileParser/index.js";
-import { generateReportXlsxBuffer } from "../reportToXlsxBuffer/index.js";
+import createReportSelector from "../../createReportSelector.js";
 import writeReportToLocalStorage from "../../writeReportToLocalStorage.js";
 import insertButtonToDownloadReportsInZip from "./insertButtonToDownloadReportsInZip.js";
-import downloadReportAsXLSXButtonHandler from "../../downloadReportAsXLSXButtonHandler.js";
+import downloadReportAsXlsxButtonHandler from "../../downloadReportAsXLSXButtonHandler.js";
+import { enableDownloadReportAsXLSXButton } from "../../toggleDownloadReportAsXlsxButtonVisibility.js";
 
 var maxFilesCount = 15;
 var selectedFiles = [];
@@ -226,36 +226,28 @@ var createUploadBtn = () => {
 
     closeModal();
 
-    var { reportsData } = await reportFileParser(files);
+    var { reports } = await reportFileParser(files);
 
-    if (reportsData.length > 1) {
-      var { JSZip } = await loadExcelLibs();
+    if (!reports.length) {
+      alert("Пусто...");
+      return;
+    }
 
-      var zip = new JSZip();
-      var folder = zip.folder("Отчёты");
+    var firstReport = reports[0];
+    var restReports = reports.slice(1, reports.length);
 
-      for (var report of reportsData) {
-        var { buffer } = await generateReportXlsxBuffer(report);
+    buildReportBlock(firstReport);
+    enableDownloadReportAsXLSXButton();
+    writeReportToLocalStorage(firstReport);
+    downloadReportAsXlsxButtonHandler(firstReport);
 
-        var fileNameForSeparateReport = `Расшифровка отчета с ${report.dateFrom} по ${report.dateTo} .xlsx`;
-
-        folder.file(fileNameForSeparateReport, buffer);
+    if (restReports.length) {
+      for (var report of restReports) {
+        writeReportToLocalStorage(report);
       }
 
-      // var { buffer } = await generateReportsSummaryXlsxBuffer(reportsData);
-
-      var zipBuffer = await zip.generateAsync({
-        type: "arrayBuffer",
-        compression: "DEFLATE",
-      });
-
-      insertButtonToDownloadReportsInZip(zipBuffer);
-    } else {
-      var report = reportsData[0];
-
-      showReport(report);
-      writeReportToLocalStorage(report);
-      downloadReportAsXLSXButtonHandler(report.reportId);
+      insertButtonToDownloadReportsInZip();
+      createReportSelector(reports);
     }
   });
 

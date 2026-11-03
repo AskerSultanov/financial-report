@@ -1,7 +1,6 @@
 import createTdElement from "./createTdElement.js";
 
 var createTotalsTable = (
-  reportId,
   report,
   year,
   isCrossYearPeriod,
@@ -13,8 +12,8 @@ var createTotalsTable = (
   tableRow.append(yearTd);
 
   for (var key in report) {
-    var keyWithoutYear = `${key}-${reportId}-`;
-    var keyWithYear = `${key}-${reportId}-${year}`;
+    var keyWithoutYear = `${key}-`;
+    var keyWithYear = `${key}-${year}`;
 
     var elemId = year ? keyWithYear : keyWithoutYear;
 
@@ -23,6 +22,7 @@ var createTotalsTable = (
   }
 
   var tableBody = document.createElement("tbody");
+
   tableBody.append(tableRow);
   tableBody.id = "table-body-" + year;
 

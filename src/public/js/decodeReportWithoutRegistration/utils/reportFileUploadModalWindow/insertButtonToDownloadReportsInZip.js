@@ -1,15 +1,14 @@
 import downloadReportsInZip from "./downloadReportsInZip.js";
+import { getReportActionsContainer } from "../../getReportControlsContainer.js";
 
-var tablesContainer = document.getElementById("tables-container");
-
-var insertButtonToDownloadReportsInZip = (zipBuffer) => {
+var insertButtonToDownloadReportsInZip = () => {
   var button = document.createElement("button");
 
   button.id = "download-reports-in-zip";
   button.textContent = "Скачать отчеты";
-  button.onclick = () => downloadReportsInZip(zipBuffer);
+  button.onclick = () => downloadReportsInZip();
 
-  tablesContainer.before(button);
+  getReportActionsContainer().append(button);
 };
 
 export default insertButtonToDownloadReportsInZip;

@@ -1,16 +1,20 @@
 import calcProfitMargin from "../calcUtils/utils/profitMargin.js";
 import getYearsFromChildTables from "./getYearsFromChildTables.js";
 
+var finalProfitId = `finalProfit-`;
+var retailAmountId = `retailAmount-`;
+var profitMarginId = `profitMargin-`;
+
 var fieldsToUpdate = ["costPrice-", "finalProfit-", "otherExpenses-"];
 
-var updateParentTotalsTableFields = (year, reportId) => {
+var updateParentTotalsTableFields = (year) => {
   var { years } = getYearsFromChildTables();
 
   for (var field of fieldsToUpdate) {
     var totalValue = 0;
 
     for (var year of years) {
-      var childTbodyElemId = field + reportId + "-" + year;
+      var childTbodyElemId = field + year;
       var childTbodyElem = document.getElementById(childTbodyElemId);
 
       var elemVal = +childTbodyElem.textContent;
@@ -25,10 +29,6 @@ var updateParentTotalsTableFields = (year, reportId) => {
       totalTbodyElem.textContent = totalValue;
     }
   }
-
-  var finalProfitId = `finalProfit-${reportId}-`;
-  var retailAmountId = `retailAmount-${reportId}-`;
-  var profitMarginId = `profitMargin-${reportId}-`;
 
   var finalProfitEl = document.getElementById(finalProfitId);
   var retailAmountEl = document.getElementById(retailAmountId);

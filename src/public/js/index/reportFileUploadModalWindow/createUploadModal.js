@@ -2,12 +2,10 @@ import doRequest from "../../utils/doRequest.js";
 import getCookieByName from "../../utils/getCookieByName.js";
 import { insertNewReportToTree } from "../reportTreeBuilder/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
-import showReport from "../../decodeReportWithoutRegistration/showReport.js";
 import {
   showSpinner,
   hideSpinner,
 } from "../reportLoaderModalWindow/services/loaderSpinner.js";
-import writeReportToLocalStorage from "../../decodeReportWithoutRegistration/writeReportToLocalStorage.js";
 
 var maxFilesCount = 15;
 var selectedFiles = [];

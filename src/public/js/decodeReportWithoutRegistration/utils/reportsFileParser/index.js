@@ -34,7 +34,7 @@ var reportFileParser = async (files) => {
     }
   }
 
-  return { reportsData };
+  return { reports: reportsData };
 };
 
 export default reportFileParser;

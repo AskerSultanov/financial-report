@@ -1,36 +1,28 @@
 import createUploadModal from "./utils/reportFileUploadModalWindow/createUploadModal.js";
 import { disableDownloadReportAsXLSXButton } from "./toggleDownloadReportAsXlsxButtonVisibility.js";
 
-var tablesContainer = document.getElementById("tables-container");
-
 var decodeReportButton = document.getElementById("decode-report-button");
 
 var textContentToDecodeReportButton = "Расшифровка отчета без регистрации";
 
 var decodeReportButtonHandler = () => {
   decodeReportButton.onclick = () => {
-    var reportSummaryLabels = document.querySelectorAll(
-      ".report-summary-label-wrapper",
-    );
+    var tablesContainers = document.getElementById("tables-container");
 
-    if (tablesContainer.childNodes.length) {
+    if (tablesContainers.childNodes.length) {
       var confirmed = confirm(
-        "Получение нового отчета привёдет к потере текущего.\nПродолжить?",
+        "Получение новых отчетов привёдет к потере текущих.\nПродолжить?",
       );
 
       if (confirmed) {
         localStorage.clear();
-        tablesContainer.innerHTML = "";
-        reportSummaryLabels.forEach((label) => label.remove());
-        decodeReportButton.textContent = textContentToDecodeReportButton;
-
+        removeReportSelector();
+        removeReportsSummaryLabels();
+        removeDownloadReportsInZipButton();
         disableDownloadReportAsXLSXButton();
+        removeTablesContainerContent(tablesContainers);
 
-        document
-          .querySelectorAll(
-            'table[id^="skus-table-"], table[id^="totals-table-"]',
-          )
-          .forEach((table) => table.remove());
+        decodeReportButton.textContent = textContentToDecodeReportButton;
 
         createUploadModal();
       }
@@ -41,3 +33,22 @@ var decodeReportButtonHandler = () => {
 };
 
 decodeReportButtonHandler();
+
+function removeTablesContainerContent(tablesContainers) {
+  tablesContainers.innetHTML = "";
+}
+
+function removeReportSelector() {
+  var selectorContainer = document.getElementById("selector-container");
+  selectorContainer?.remove();
+}
+
+function removeReportsSummaryLabels() {
+  var labels = document.querySelectorAll(".report-summary-label-wrapper");
+  labels.forEach((label) => label.remove());
+}
+
+function removeDownloadReportsInZipButton() {
+  var button = document.getElementById("download-reports-in-zip");
+  button?.remove();
+}

@@ -28,7 +28,7 @@
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link rel="icon" href="/public/image/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../image/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/css/modalWindow.css" type="text/css" />
     <link rel="stylesheet" href="/css/uploadFilesModal.css" type="text/css" />
     <link
@@ -68,7 +68,7 @@
       </div>
     </header>
 
-    <main>
+    <main id="main">
       <section class="hero">
         <h1>Расшифровка финансового отчёта Wildberries</h1>
         <p class="lead">
@@ -81,7 +81,7 @@
         </button>
       </section>
 
-      <div class="info-blocks-row">
+      <div class="info-blocks-row" id="info-blocks-row">
         <section class="info-block">
           <h2>Что вы получите</h2>
           <ul>
@@ -102,13 +102,14 @@
           </ol>
         </section>
       </div>
-
-      <div class="download-xlsx-wrapper">
-        <button hidden id="download-report-as-xlsx-button">
+      <div hidden class="download-xlsx-wrapper" id="download-xlsx-wrapper">
+        <button
+          class="download-report-as-xlsx-button"
+          id="download-report-as-xlsx-button"
+        >
           Скачать отчёт как эксель
         </button>
       </div>
-
       <div id="tables-container" aria-live="polite"></div>
     </main>
     <footer class="site-footer">

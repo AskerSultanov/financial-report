@@ -13,10 +13,17 @@ var yearValueStub = "";
 var reportSummaryLabelTextStub = "";
 
 var textContentToDecodeButton = "Получить новый отчёт";
-
 var decodeReportButton = document.getElementById("decode-report-button");
 
-var showReport = async (report) => {
+var buildReportBlock = async (report) => {
+  decodeReportButton.textContent = textContentToDecodeButton;
+
+  var tablesContainer = document.getElementById("tables-container");
+  tablesContainer.innerHTML = "";
+
+  enableDownloadReportAsXLSXButton();
+  downloadReportAsXlsxButtonHandler(report);
+
   var { dateFrom, dateTo, isCrossYearPeriod, skus, reportId } = report;
 
   var startYear = +report.dateFrom.split("-")[0];
@@ -36,14 +43,13 @@ var showReport = async (report) => {
       ).reportPeriodText;
 
       createTotalsTable(
-        reportId,
         reportTotals,
         yearValueStub,
         isCrossYearPeriod,
         fullReportPeriodText,
       );
 
-      enableTablesSwitcher([startYear, endYear]);
+      enableTablesSwitcher([startYear, endYear], reportId);
 
       var isFirstIteration = true;
 
@@ -67,7 +73,6 @@ var showReport = async (report) => {
         );
 
         createTotalsTable(
-          reportId,
           reportTotals,
           year,
           isCrossYearPeriod,
@@ -79,6 +84,7 @@ var showReport = async (report) => {
 
       switchToFirstTable(startYear);
       tablesSwitcherHandler(startYear, endYear);
+
       return;
     }
 
@@ -87,7 +93,6 @@ var showReport = async (report) => {
   }
 
   createTotalsTable(
-    reportId,
     reportTotals,
     yearValueStub,
     isCrossYearPeriod,
@@ -96,16 +101,11 @@ var showReport = async (report) => {
 
   createSkusTable(report, skus);
 
-  enableDownloadReportAsXLSXButton();
-  downloadReportAsXlsxButtonHandler(reportId);
-
   if (isCrossYearPeriod) {
     window.scrollTo({ top: 500, behavior: "smooth" });
   } else {
     window.scrollTo({ top: 900, behavior: "smooth" });
   }
-
-  decodeReportButton.textContent = textContentToDecodeButton;
 };
 
-export default showReport;
+export default buildReportBlock;

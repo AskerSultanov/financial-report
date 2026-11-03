@@ -1,15 +1,14 @@
 import loadExcelLibs from "./loadExcelLibs.js";
-import getReportFromLocalStorage from "./getReportFromLocalStorage.js";
 import { generateReportXlsxBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
-var button = document.getElementById("download-report-as-xlsx-button");
+var buttonId = "download-report-as-xlsx-button";
+var button = document.getElementById(buttonId);
 
-var downloadReportAsXLSXButtonHandler = (reportId) => {
+var downloadReportAsXlsxButtonHandler = (report) => {
   button.onclick = async () => {
     try {
       await loadExcelLibs();
 
-      var { report } = getReportFromLocalStorage(reportId);
       var { buffer } = await generateReportXlsxBuffer(report);
 
       var blob = new Blob([buffer]);
@@ -34,4 +33,4 @@ var downloadReportAsXLSXButtonHandler = (reportId) => {
     }
   };
 };
-export default downloadReportAsXLSXButtonHandler;
+export default downloadReportAsXlsxButtonHandler;
