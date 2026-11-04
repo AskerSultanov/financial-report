@@ -14,7 +14,7 @@ var showReportIfExist = () => {
     }
 
     var firstReport = reports[0];
-    var restReports = reports.slice(1, reports.length - 1);
+    var restReports = reports.slice(1, reports.length);
 
     buildReportBlock(firstReport);
     enableDownloadReportAsXLSXButton();
