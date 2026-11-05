@@ -1,11 +1,14 @@
 import createTdElement from "./createTdElement.js";
+import createActionBar from "./createActionBar.js";
 import wrapTableToScrollElem from "./wrapTableToScroll.js";
 import openEditableSkuFieldModal from "./utils/editableSkuFieldModal/index.js";
 
 var hasNoSalesMsg =
   "Себестоимость не будет установлена: отсутствуют проданные единицы.";
 
-var createSkusTable = (report, skus) => {
+var tablesContainer = document.getElementById("tables-container");
+
+var createSkusTable = (skus, reportId, isCrossYearPeriod) => {
   if (!skus.length) {
     return;
   }
@@ -14,23 +17,25 @@ var createSkusTable = (report, skus) => {
 
   for (var sku of skus) {
     var tableRow = document.createElement("tr");
+    tableRow.id = `sku-table-row-${sku.skuName}-${sku.year}`;
 
     var qty = createTdElement(sku.qty);
     var skuName = createTdElement(sku.skuName);
     var returnAmount = createTdElement(sku.returnAmount);
 
     var dataToUpdate = {
+      reportId,
+      isCrossYearPeriod,
+
       qty: sku.qty,
       year: sku.year,
       profit: sku.profit,
       skuName: sku.skuName,
       costPrice: sku.costPrice,
-      reportId: report.reportId,
       finalProfit: sku.finalProfit,
       retailAmount: sku.retailAmount,
       preTaxProfit: sku.preTaxProfit,
       otherExpenses: sku.otherExpenses,
-      isCrossYearPeriod: report.isCrossYearPeriod,
     };
 
     var hasNoSales = sku.profit === 0 || sku.qty === 0;
@@ -86,20 +91,31 @@ var createSkusTable = (report, skus) => {
   var table = document.createElement("table");
   table.id = "skus-table-" + sku.year;
 
-  var { tableHead } = createSkusTableHead();
+  var { tableHead } = createSkusTableHead(sku.year);
 
   table.append(tableHead, tableBody);
 
   var wrappedToScrollTable = wrapTableToScrollElem(table);
 
-  var tablesContainer = document.getElementById("tables-container");
-  tablesContainer.append(wrappedToScrollTable);
+  if (skus.length > 1) {
+    var { actionBar } = createActionBar(
+      skus,
+      reportId,
+      isCrossYearPeriod,
+      wrappedToScrollTable,
+    );
+
+    tablesContainer.append(actionBar, wrappedToScrollTable);
+  } else {
+    tablesContainer.append(wrappedToScrollTable);
+  }
 };
 
 export default createSkusTable;
 
-var tableHeadContent = `
-   <tr>
+function createSkusTableHead(year) {
+  var tableHeadContent = `
+   <tr id="thead-tr-${year}">
           <th>Артикул</th>
           <th>Количество</th>
           <th>Возвраты</th>
@@ -108,14 +124,13 @@ var tableHeadContent = `
           <th>Штрафы</th>
           <th>Хранение</th>
           <th>Приёмка</th>
-          <th>Выплата с вычетом всех услуг WB</th>
+          <th>Перечисления продавцу</th>
           <th>Себестоимость 1ед.</th>
           <th>Прочие расходы</th>
-          <th>Маржинальность %</th>
+          <th>Маржа %</th>
           <th>Итого</th>
   </tr>`;
 
-function createSkusTableHead() {
   var tableHead = document.createElement("thead");
   tableHead.innerHTML = tableHeadContent;
   return { tableHead };

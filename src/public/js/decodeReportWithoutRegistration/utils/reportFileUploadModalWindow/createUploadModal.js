@@ -1,12 +1,14 @@
+import file2Buffer from "./file2Buffer.js";
 import buildReportBlock from "../../buildReportBlock.js";
 import reportFileParser from "../reportsFileParser/index.js";
 import createReportSelector from "../../createReportSelector.js";
 import writeReportToLocalStorage from "../../writeReportToLocalStorage.js";
+import insertReportPeriodToTotalsTable from "../../insertReportPeriodToTotalsTable.js";
 import insertButtonToDownloadReportsInZip from "./insertButtonToDownloadReportsInZip.js";
 import downloadReportAsXlsxButtonHandler from "../../downloadReportAsXLSXButtonHandler.js";
 import { enableDownloadReportAsXLSXButton } from "../../toggleDownloadReportAsXlsxButtonVisibility.js";
 
-var maxFilesCount = 15;
+var maxFilesCount = 30;
 var selectedFiles = [];
 var paidStorageReportFileName = "Отчёт по платному хранению (номенклатуры)";
 var weeklyFinancialReportFileName = "Еженедельный детализированный отчет №";
@@ -248,24 +250,14 @@ var createUploadBtn = () => {
 
       insertButtonToDownloadReportsInZip();
       createReportSelector(reports);
+    } else {
+      var { dateFrom, dateTo } = firstReport;
+      insertReportPeriodToTotalsTable(dateFrom, dateTo);
     }
   });
 
   return { uploadBtn };
 };
-
-async function file2Buffer(file) {
-  return await new Promise(function (resolve) {
-    var reader = new FileReader();
-    var readFile = function () {
-      var buffer = reader.result;
-      resolve(buffer);
-    };
-
-    reader.addEventListener("load", readFile);
-    reader.readAsArrayBuffer(file);
-  });
-}
 
 var createModalFooterButtons = () => {
   var { cancelBtn } = createCancelBtn();

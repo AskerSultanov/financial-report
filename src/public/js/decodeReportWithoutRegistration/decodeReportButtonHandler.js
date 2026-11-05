@@ -32,7 +32,7 @@ var decodeReportButtonHandler = () => {
   };
 };
 
-decodeReportButtonHandler();
+export default decodeReportButtonHandler;
 
 function removeTablesContainerContent(tablesContainers) {
   tablesContainers.innetHTML = "";

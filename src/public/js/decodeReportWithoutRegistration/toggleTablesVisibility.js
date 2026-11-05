@@ -27,6 +27,13 @@ var toggleTablesVisibility = (year, action) => {
     summaryTextElem.hidden = action;
   }
 
+  var actionBarId = "action-bar-" + year;
+  var actionBarElem = document.getElementById(actionBarId);
+
+  if (actionBarElem) {
+    actionBarElem.hidden = action;
+  }
+
   toggleTabActiveState(year, !action);
 };
 

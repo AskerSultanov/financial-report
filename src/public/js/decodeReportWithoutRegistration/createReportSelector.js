@@ -37,7 +37,6 @@ var createReportSelector = (reports) => {
   selectorContainer.id = "selector-container";
   selectorContainer.append(label, selector);
 
-  // Селектор — левый полюс панели (контекст), действия живут в #report-actions
   getReportControlsContainer().prepend(selectorContainer);
 };
 

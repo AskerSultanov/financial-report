@@ -1,5 +1,6 @@
 import toggleTablesVisibility from "./toggleTablesVisibility.js";
 import scrollToTablesSwitcher from "./scrollToTablesSwitcher.js";
+import { enableActionBar, disableActionBar } from "./toggleActionBar.js";
 
 var bindTabSwitcher = (year, otherYear) => {
   var tab = document.getElementById(year);
@@ -9,7 +10,10 @@ var bindTabSwitcher = (year, otherYear) => {
       return;
     }
 
+    disableActionBar(otherYear);
     toggleTablesVisibility(otherYear, "disable");
+
+    enableActionBar(year);
     toggleTablesVisibility(year, "enable");
 
     scrollToTablesSwitcher();

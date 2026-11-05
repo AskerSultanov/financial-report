@@ -1,15 +1,7 @@
 import createTdElement from "./createTdElement.js";
 
-var createTotalsTable = (
-  report,
-  year,
-  isCrossYearPeriod,
-  reportSummaryLabelText,
-) => {
+var createTotalsTable = (report, year = "") => {
   var tableRow = document.createElement("tr");
-
-  var yearTd = createTdElement(year);
-  tableRow.append(yearTd);
 
   for (var key in report) {
     var keyWithoutYear = `${key}-`;
@@ -30,7 +22,7 @@ var createTotalsTable = (
     tableBody.setAttribute("year", year);
   }
 
-  var { tableHead } = createTotalsTableHead(year);
+  var { tableHead } = createTotalsTableHead();
 
   var table = document.createElement("table");
   table.id = "totals-table-" + year;
@@ -39,19 +31,10 @@ var createTotalsTable = (
 
   var tablesContainer = document.getElementById("tables-container");
 
-  if (isCrossYearPeriod) {
-    var { reportSummaryLabel } = createReportSummaryLabel(
-      reportSummaryLabelText,
-      year,
-    );
-    tablesContainer.append(reportSummaryLabel, table);
-  } else {
-    tablesContainer.append(table);
-  }
+  tablesContainer.append(table);
 };
 
-var tableHeadContent = `
-            <th>Отчётный год</th>
+var tableHeadContent = `<tr>
             <th>WB реализовал</th>
             <th>Продано шт.</th>
             <th>Возвратов</th>
@@ -61,11 +44,12 @@ var tableHeadContent = `
             <th>Штрафы</th>
             <th>Удержания/Выплаты</th>
             <th>Хранение</th>
-            <th>Себестоимость товаров</th>
+            <th>Себестоимость</th>
             <th>Прочие расходы</th>
             <th>Реклама</th>
-            <th>Маржинальность %</th>
+            <th>Маржа %</th>
             <th>Итого</th>
+            </tr>
           `;
 
 function createTotalsTableHead() {
@@ -73,19 +57,6 @@ function createTotalsTableHead() {
   tableHead.innerHTML = tableHeadContent;
 
   return { tableHead };
-}
-
-function createReportSummaryLabel(reportSummaryLabelText, year) {
-  var reportSummaryLabel = document.createElement("span");
-  reportSummaryLabel.className = "report-summary-label";
-  reportSummaryLabel.textContent = "Сводка " + reportSummaryLabelText;
-
-  var reportSummaryLabelWrapper = document.createElement("div");
-  reportSummaryLabelWrapper.className = "report-summary-label-wrapper";
-  reportSummaryLabelWrapper.id = "summary-text-" + year;
-  reportSummaryLabelWrapper.append(reportSummaryLabel);
-
-  return { reportSummaryLabel: reportSummaryLabelWrapper };
 }
 
 export default createTotalsTable;

@@ -1,26 +1,29 @@
-var enableTablesSwitcher = (years) => {
+import getReportPeriodText from "./getReportPeriodText.js";
+
+var enableTablesSwitcher = (dateFrom, dateTo) => {
   var switcher = document.createElement("nav");
   switcher.className = "tabs";
   switcher.ariaLabel = "Переключение таблиц";
 
-  var isFirstItem = true;
+  var startYearButton = document.createElement("button");
+  var startYear = dateFrom.split("-")[0];
+  startYearButton.id = startYear;
+  startYearButton.type = "button";
+  startYearButton.className = "tab";
+  startYearButton.ariaSelected = true;
+  var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo, dateFrom);
+  startYearButton.textContent = "Отчет " + reportPeriodText;
 
-  for (var year of years) {
-    var button = document.createElement("button");
-    button.id = year;
-    button.type = "button";
-    button.className = "tab";
-    button.textContent = "Отчет за " + year;
+  var endYearButton = document.createElement("button");
+  var endYear = dateTo.split("-")[0];
+  endYearButton.id = endYear;
+  endYearButton.type = "button";
+  endYearButton.className = "tab";
+  endYearButton.ariaSelected = false;
+  var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo, dateTo);
+  endYearButton.textContent = "Отчет " + reportPeriodText;
 
-    if (isFirstItem) {
-      button.ariaSelected = true;
-      isFirstItem = false;
-    } else {
-      button.ariaSelected = false;
-    }
-
-    switcher.append(button);
-  }
+  switcher.append(startYearButton, endYearButton);
 
   var tablesContainer = document.getElementById("tables-container");
 
