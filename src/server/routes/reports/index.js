@@ -13,6 +13,7 @@ import getReportPageController from "./controllers/getReportPage.js";
 import skuPhotoUploadController from "./controllers/skuPhotoUpload.js";
 import setCostPriceToSkuController from "./controllers/setCostPriceToSku.js";
 import checkReportExistsController from "./controllers/checkReportExists.js";
+import bulkEditableToSkusController from "./controllers/bulkEditableToSkus.js";
 import setExtraAmountsToReport from "./controllers/setExtraAmountsToReport.js";
 import reportLoadDelegateController from "./controllers/reportLoadDelegate.js";
 import checkReportPeriodsController from "./controllers/checkReportPeriods.js";
@@ -113,6 +114,12 @@ router.patch(
   "/skus/other-expenses",
   joiSchemaValidator(joiSchemas.setOtherExpensesToSkuSchema),
   setOtherExpensesToSkuController,
+);
+
+router.post(
+  "/bulk-editable",
+  joiSchemaValidator(joiSchemas.bulkEditableToSkusSchema),
+  bulkEditableToSkusController,
 );
 
 router.patch(

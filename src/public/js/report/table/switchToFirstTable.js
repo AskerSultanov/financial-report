@@ -1,8 +1,12 @@
+import { enableActionBar } from "./toggleActionBar.js";
 import toggleTablesVisibility from "./visibilityToggle/toggleTablesVisibility.js";
 
 var switchToFirstTable = (year) => {
+  enableActionBar(year);
   toggleTablesVisibility(year, "enable");
-  toggleTablesVisibility(year + 1, "disable");
+
+  var nextYear = year + 1;
+  toggleTablesVisibility(nextYear, "disable");
 };
 
 export default switchToFirstTable;

@@ -1,3 +1,4 @@
+import { enableActionBar, disableActionBar } from "./toggleActionBar.js";
 import toggleTablesVisibility from "./visibilityToggle/toggleTablesVisibility.js";
 
 var tablesSwitcherHandler = (startYear, endYear) => {
@@ -5,14 +6,18 @@ var tablesSwitcherHandler = (startYear, endYear) => {
   var endYearTableSwitcher = document.getElementById(endYear);
 
   startYearTableSwitcher.addEventListener("click", () => {
+    disableActionBar(endYear);
     toggleTablesVisibility(endYear, "disable");
 
+    enableActionBar(startYear);
     toggleTablesVisibility(startYear, "enable");
   });
 
   endYearTableSwitcher.addEventListener("click", () => {
+    disableActionBar(startYear);
     toggleTablesVisibility(startYear, "disable");
 
+    enableActionBar(endYear)
     toggleTablesVisibility(endYear, "enable");
   });
 };

@@ -1,10 +1,11 @@
 import getReportSchema from "./getReport.js";
-import resetReportSchema from './resetReport.js'
+import resetReportSchema from "./resetReport.js";
 import saveReportsSchema from "./saveReports.js";
 import deleteImageSchema from "./deleteImage.js";
 import deleteReportSchema from "./deleteReport.js";
 import skuPhotoUploadSchema from "./skuPhotoUpload.js";
 import setCostPriceToSkuSchema from "./setCostPriceToSku.js";
+import bulkEditableToSkusSchema from "./bulkEditableToSkus.js";
 import setCostPriceToSkusSchema from "./setCostPriceToSkus.js";
 import downloadReportAsXLSXSchema from "./downloadReportAsXLSX.js";
 import downloadReportsAsZipSchema from "./downloadReportsAsZip.js";
@@ -22,6 +23,7 @@ export {
   deleteReportSchema,
   skuPhotoUploadSchema,
   setCostPriceToSkuSchema,
+  bulkEditableToSkusSchema,
   setCostPriceToSkusSchema,
   downloadReportsAsZipSchema,
   downloadReportAsXLSXSchema,

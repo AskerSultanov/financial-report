@@ -1,6 +1,7 @@
 import createTdElement from "./services/createTdElement.js";
 import openTotalsModal from "./services/modal/totalsModal/openTotalsModal.js";
 
+var tablesContainer = document.getElementById("tables-container");
 var fieldsWithModal = ["tax", "insuranceFee", "additionalInsuranceFee"];
 
 var createTotalsTable = (
@@ -11,12 +12,8 @@ var createTotalsTable = (
   year,
   isCrossYearPeriod,
   tableNeedModal,
-  reportSummaryLabelText,
 ) => {
   var tableRow = document.createElement("tr");
-
-  var yearTd = createTdElement(year);
-  tableRow.append(yearTd);
 
   for (var key in reportTotals) {
     var keyWithoutYear = key + "-";
@@ -56,23 +53,12 @@ var createTotalsTable = (
 
   table.append(tableHead, tableBody);
 
-  var tablesContainer = document.getElementById("tables-container");
-
-  if (isCrossYearPeriod) {
-    var { reportSummaryLabel } = createReportSummaryLabel(
-      reportSummaryLabelText,
-      year,
-    );
-    tablesContainer.append(reportSummaryLabel, table);
-  } else {
-    tablesContainer.append(table);
-  }
+  tablesContainer.append(table);
 };
 
 export default createTotalsTable;
 
 var tableHeadContent = `
-            <th>Отчётный год</th>
             <th>WB реализовал</th>
             <th>Продано шт.</th>
             <th>Возвратов</th>
@@ -97,17 +83,4 @@ function createTotalsTableHead() {
   tableHead.innerHTML = tableHeadContent;
 
   return { tableHead };
-}
-
-function createReportSummaryLabel(reportSummaryLabelText, year) {
-  var reportSummaryLabel = document.createElement("span");
-  reportSummaryLabel.className = "reportTotals-summary-label";
-  reportSummaryLabel.textContent = "Сводка " + reportSummaryLabelText;
-  reportSummaryLabel.id = "summary-text-" + year;
-
-  var reportSummaryLabelWrapper = document.createElement("div");
-  reportSummaryLabelWrapper.className = "reportTotals-summary-label-wrapper";
-  reportSummaryLabelWrapper.append(reportSummaryLabel);
-
-  return { reportSummaryLabel: reportSummaryLabelWrapper };
 }

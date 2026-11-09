@@ -1,3 +1,4 @@
+import createActionBar from "./createActionBar.js";
 import wrapTableToScrollElem from "./wrapTableToScroll.js";
 import createTdElement from "./services/createTdElement.js";
 import createSkuPhotoUploader from "./services/skuPhotoUploader/index.js";
@@ -6,13 +7,15 @@ import openEditableSkuFieldModal from "./services/modal/editableSkuFieldModal/in
 var hasNoSalesMsg =
   "Себестоимость не будет установлена: отсутствуют проданные единицы.";
 
-var createSkusTable = (userId, reportId, year, skus) => {
+var tablesContainer = document.getElementById("tables-container");
+
+var createSkusTable = (userId, reportId, year, skus, isCrossYearPeriod) => {
   var tableBody = document.createElement("tbody");
   tableBody.id = "skus-tbody-" + year;
 
   for (var sku of skus) {
     var tr = document.createElement("tr");
-    tr.id = sku.skuName + "-" + sku.year;
+    tr.id = `sku-table-row-${sku.skuName}-${sku.year}`;
 
     sku.userId = userId;
     sku.reportId = reportId;
@@ -99,19 +102,31 @@ var createSkusTable = (userId, reportId, year, skus) => {
   var table = document.createElement("table");
   table.id = "skus-table-" + year;
 
-  var { tableHead } = createSkusTableHead();
+  var { tableHead } = createSkusTableHead(year);
 
   table.append(tableHead, tableBody);
   var wrappedToScrollTable = wrapTableToScrollElem(table);
 
-  var tablesContainer = document.getElementById("tables-container");
-  tablesContainer.append(wrappedToScrollTable);
+  if (skus.length > 1) {
+    var { actionBar } = createActionBar(
+      skus,
+      userId,
+      reportId,
+      isCrossYearPeriod,
+      wrappedToScrollTable,
+    );
+
+    tablesContainer.append(actionBar, wrappedToScrollTable);
+  } else {
+    tablesContainer.append(wrappedToScrollTable);
+  }
 };
 
 export default createSkusTable;
 
-var tableHeadContent = `
-        <tr>
+function createSkusTableHead(year) {
+  var tableHeadContent = `
+        <tr id="thead-tr-${year}">
           <th>Фото</th>
           <th>Артикул</th>
           <th>Продано</th>
@@ -128,8 +143,6 @@ var tableHeadContent = `
           <th>Маржинальность %</th>
           <th>Итого</th>
         </tr>`;
-
-function createSkusTableHead() {
   var tableHead = document.createElement("thead");
   tableHead.innerHTML = tableHeadContent;
   return { tableHead };
