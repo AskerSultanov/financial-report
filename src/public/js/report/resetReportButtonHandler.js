@@ -3,6 +3,7 @@ import { resetSkusTable, resetTotalsTable } from "./table/resetTables.js";
 
 var resetReportButton = document.getElementById("reset-report-button");
 
+var url = "/report/reset/";
 var confirmMsg = "Обнулить отчет?";
 
 var resetReportButtonHandler = (
@@ -14,8 +15,6 @@ var resetReportButtonHandler = (
   endYearSkus,
 ) => {
   resetReportButton.addEventListener("click", async () => {
-    var url = "/" + window.location.pathname.split("/")[1] + "/reset/";
-
     var confirmed = confirm(confirmMsg);
 
     if (confirmed) {

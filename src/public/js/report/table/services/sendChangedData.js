@@ -8,8 +8,7 @@ var sendChangedData = async (data, targetUrlEnding) => {
   targetUrlEnding =
     targetUrlEnding === "costPrice" ? "cost-price" : "other-expenses";
 
-  var targetRouterPath = window.location.pathname.split("/")[1];
-  var url = "/" + targetRouterPath + "/skus/" + targetUrlEnding;
+  var url = "/report/skus/" + targetUrlEnding;
 
   var res = await doRequest(url, {
     method: "PATCH",
