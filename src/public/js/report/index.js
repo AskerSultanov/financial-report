@@ -1,4 +1,5 @@
 import getReportData from "./getReportData.js";
+import navigateTo from "../utils/navigateTo.js";
 import splitReport from "./table/splitReport.js";
 import createSkusTable from "./table/createSkusTable.js";
 import getCookieByName from "../utils/getCookieByName.js";
@@ -6,17 +7,15 @@ import deleteReportHandler from "./deleteReportHandler.js";
 import createTotalsTable from "./table/createTotalsTable.js";
 import { enableActionBar } from "./table/toggleActionBar.js";
 import updateReportInfoElem from "./updateReportInfoElem.js";
+import switchToFirstTable from "./table/switchToFirstTable.js";
+import enableTablesSwitcher from "./table/enableTablesSwitcher.js";
+import tablesSwitcherHandler from "./table/tablesSwitcherHandler.js";
 import resetReportButtonHandler from "./resetReportButtonHandler.js";
 import calcReportTotalsFromSkus from "./table/calcReportTotalsFromSkus.js";
-import getMainPageButtonHandler from "../taxParams/getMainPageButtonHandler.js";
 import downloadReportAsXLSXButtonHandler from "./downloadReportAsXLSXButtonHandler.js";
 import setSkusLastCostPricesButtonHandler from "./setSkusLastCostPricesButtonHandler.js";
 import injectSignedUrlsIntoImgTags from "./table/services/injectSignedUrlsIntoImgTags.js";
 import financialAccountingStatusButtonHander from "./financialAccountingStatusButtonHander.js";
-
-import switchToFirstTable from "./table/switchToFirstTable.js";
-import enableTablesSwitcher from "./table/enableTablesSwitcher.js";
-import tablesSwitcherHandler from "./table/tablesSwitcherHandler.js";
 
 var splitedPathName = window.location.pathname.split("/");
 
@@ -30,7 +29,14 @@ var reportId = pathParts.at(-1);
 
 var url = "/report/" + userId + "/" + reportId;
 
-var main = async () => {
+var userMainPageUrl = splitedPathName.includes("user")
+  ? "/admin/user/" + userId
+  : "/my";
+
+var btnToUserMainPage = document.getElementById("main");
+btnToUserMainPage.onclick = () => navigateTo(userMainPageUrl);
+
+var bootstrapReportPage = async (url) => {
   var { report, signedUrls, skusWithLastCostPrices } = await getReportData(url);
 
   var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } =
@@ -123,5 +129,6 @@ var main = async () => {
   resetReportButtonHandler(userId, reportId, isCrossYearPeriod, skus);
 };
 
-main();
-getMainPageButtonHandler();
+bootstrapReportPage(url);
+
+export default bootstrapReportPage;
