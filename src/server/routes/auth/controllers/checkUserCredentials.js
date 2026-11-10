@@ -1,23 +1,26 @@
 import ms from "ms";
-import validateUser from "../services/validateUser.js";
+import argon2 from "argon2";
+import dbUtils from "../../../database/modelsUtil/index.js";
 import generageAuthTokens from "../services/utils/generageAuthTokens.js";
+
+var { getUserByLogin } = dbUtils.userModelUtils;
 
 var checkUserCredentialsController = async (req, res) => {
   var { login, passwd } = req.body;
-  var { credentialInvalid, userNotExist, userId } = await validateUser(
-    login,
-    passwd,
-  );
 
-  if (userNotExist) {
+  var user = await getUserByLogin(login);
+
+  if (!user) {
+    return res.sendStatus(404);
+  }
+
+  var passwdInvalid = !(await argon2.verify(user.passwd, passwd));
+
+  if (passwdInvalid) {
     return res.sendStatus(401);
   }
 
-  if (credentialInvalid) {
-    return res.sendStatus(401);
-  }
-
-  var role = login === process.env.adminName ? "admin" : "user";
+  var { role, userId } = user;
 
   var payload = { role, userId };
 

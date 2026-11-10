@@ -30,9 +30,8 @@ var createUserService = async (candidate) => {
 
     var userId = randomUUID();
 
+    candidate.role = "user";
     candidate.userId = userId;
-    candidate.role =
-      candidate.login === process.env.adminName ? "admin" : "user";
 
     await createUserToDb(candidate, session);
 
