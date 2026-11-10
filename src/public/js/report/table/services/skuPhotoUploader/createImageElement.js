@@ -5,7 +5,10 @@ var createImageElement = (base64, skuName) => {
   img.id = "img-" + skuName;
   img.className = "cell-photo";
   img.setAttribute("skuName", skuName);
-  img.src = `data:image/png=;base64,${base64}`;
+
+  if (base64) {
+    img.src = `data:image/png=;base64,${base64}`;
+  }
 
   return img;
 };
