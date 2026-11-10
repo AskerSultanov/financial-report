@@ -1,8 +1,9 @@
 var reportRange = 6;
 
 var belongsToCurrentMonth = (year, month, day) => {
-  var daysInMonth = new Date(year, month, day).getDate();
-  return daysInMonth - day >= reportRange;
+  var daysInMonth = new Date(year, month, 0).getDate();
+
+  return daysInMonth - day <= reportRange;
 };
 
 var getReportTargetYearAndMonth = (dateFrom, dateTo) => {
