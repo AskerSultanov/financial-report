@@ -1,6 +1,5 @@
 import { Router } from "express";
 import logoutController from "./controllers/logout.js";
-import getReportsController from "./controllers/getReports.js";
 import getMainPageController from "./controllers/getMainPage.js";
 import getMainPageDataController from "./controllers/getMainPageData.js";
 
@@ -13,7 +12,10 @@ var router = Router({ caseSensitive: true, strict: true });
 
 router.get("/", getMainPageController);
 router.post("/logout", logoutController);
-router.get("/api/:userId", joiSchemaValidator(joiSchemas.getMainPageDataSchema, needToValidateReqParams), getMainPageDataController);
-router.post("/api/required-reports/", joiSchemaValidator(joiSchemas.getRequiredReportsSchema), getReportsController);
+router.get(
+  "/api/:userId",
+  joiSchemaValidator(joiSchemas.getMainPageDataSchema, needToValidateReqParams),
+  getMainPageDataController,
+);
 
 export default router;

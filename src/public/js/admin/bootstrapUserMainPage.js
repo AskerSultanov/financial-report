@@ -13,15 +13,10 @@ var userId = window.location.pathname.split("/").at(-1);
 var bootstrapUserMainPage = async () => {
   var { data } = await getMainPageData(userId);
 
-  var {
-    lastReports,
-    reportTree,
-    reportLoadingState,
-    reportsWithAccountedFinances,
-  } = data;
+  var { reportTree, reportLoadingState, reportsWithAccountedFinances } = data;
 
   updateLinks(userId);
-  createReportTree(userId, lastReports, reportTree);
+  createReportTree(userId, reportTree);
   accountedFinancesPanelHandler(reportsWithAccountedFinances);
 };
 

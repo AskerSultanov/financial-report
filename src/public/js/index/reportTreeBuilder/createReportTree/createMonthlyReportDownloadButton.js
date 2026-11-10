@@ -2,7 +2,7 @@ import doRequest from "../../../utils/doRequest.js";
 
 var url = "/report/zip/";
 
-var createMonthlyReportDownloadButton = (userId, reportIds, year, month) => {
+var createMonthlyReportDownloadButton = (userId, year, month, reportIds) => {
   reportIds = extractNumericReportIds(reportIds);
 
   var button = document.createElement("button");
@@ -21,7 +21,8 @@ var createMonthlyReportDownloadButton = (userId, reportIds, year, month) => {
     });
 
     if (res.status !== 200) {
-      return alert("Не удалось создать месячную сводку...");
+      alert("Не удалось создать месячную сводку...");
+      return;
     }
 
     var blob = await res.blob();
@@ -47,7 +48,7 @@ var createMonthlyReportDownloadButton = (userId, reportIds, year, month) => {
 export default createMonthlyReportDownloadButton;
 
 var extractNumericReportIds = function (reportIds) {
-  if (typeof reportIds[0] === "number" && !isNaN(reportIds[0])) {
+  if (Number.isFinite(reportIds[0])) {
     return reportIds;
   }
 

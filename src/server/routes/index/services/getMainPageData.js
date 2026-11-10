@@ -2,8 +2,6 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import sortReportsByAccountingDate from "./utils/sortReportsByAccountingDate.js";
 import sortReportPeriodsByYearAndMonths from "./utils/sortReportPeriodsByYearAndMonths.js";
 
-var projectonFields = ["reports.reportId", "reports.isFinancesAccounted"];
-
 var session = null;
 
 var selectedFieldsToLoadingState = [
@@ -16,60 +14,38 @@ var selectedFieldsToLoadingState = [
   "isReportLoadingIsStopped",
 ];
 
+var { getReportLoadingState } = dbUtils.reportLoadingStateModelUtils;
+var { getReportPeriods } = dbUtils.reportPeriodsModelUtils;
+var { getReportsWithAccountedFinances } =
+  dbUtils.reportsWithAccountedFinancesModelUtils;
+
 var getMainPageDataService = async (userId) => {
-  var reportLoadingStateUrl = "/report/loading-state/" + userId + "/";
-
-  var { reportPeriods } =
-    await dbUtils.reportPeriodsModelUtils.getReportPeriods(userId);
-  var { sortedReportPeriods } = sortReportPeriodsByYearAndMonths(reportPeriods);
-
-  var reportLoadingState =
-    await dbUtils.reportLoadingStateModelUtils.getReportLoadingState(
-      userId,
-      session,
-      selectedFieldsToLoadingState,
-    );
+  var { reportPeriods } = await getReportPeriods(userId);
 
   if (!reportPeriods.length) {
     return {
       reportLoadingState,
-      reportLoadingStateUrl,
       reportTree: [],
-      lastReports: [],
       reportsWithAccountedFinances: [],
     };
   }
-
-  var lastReportIds = sortedReportPeriods[0].months[0].reportIds.map(
-    ({ reportId }) => reportId,
-  );
-
-  if (!lastReportIds || !lastReportIds.length) {
-    return {
-      reportLoadingState,
-      reportLoadingStateUrl,
-      reportTree: [],
-      lastReports: [],
-      reportsWithAccountedFinances: [],
-    };
-  }
-
-  var { reports } = await dbUtils.reportModelUtils.getReportsByUserId(
-    userId,
-    session,
-    projectonFields,
-    lastReportIds,
-  );
 
   var { reportsWithAccountedFinances } =
-    await dbUtils.reportsWithAccountedFinancesModelUtils.getReportsWithAccountedFinances(
-      userId,
-    );
+    await getReportsWithAccountedFinances(userId);
+
+  var { sortedReportPeriods } = sortReportPeriodsByYearAndMonths(
+    reportPeriods,
+    reportsWithAccountedFinances,
+  );
+
+  var reportLoadingState = await getReportLoadingState(
+    userId,
+    session,
+    selectedFieldsToLoadingState,
+  );
 
   return {
     reportLoadingState,
-    reportLoadingStateUrl,
-    lastReports: reports,
     reportTree: sortedReportPeriods,
     reportsWithAccountedFinances: sortReportsByAccountingDate(
       reportsWithAccountedFinances,

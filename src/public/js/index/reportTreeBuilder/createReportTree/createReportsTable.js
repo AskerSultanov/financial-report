@@ -1,28 +1,32 @@
 import getReportLink from "../insertNewReportToTree/table/getReportLink.js";
-import getReportPeriod from "../insertNewReportToTree/table/getReportPeriod.js";
 import createTdElement from "../../../report/table/services/createTdElement.js";
+import getReportPeriodText from "../../accountedFinancesPanel/getReportPeriodText.js";
 import createReportsTableHead from "../insertNewReportToTree/table/createReportsTableHead.js";
 
-var createReportsTable = (year, month, reportIds, reports) => {
-  var tbody = document.createElement("tbody");
+var createReportsTable = (year, monthName, reportIds) => {
+  var reportsTableBodyId = `tbody_year_${year}_month_${monthName}`;
+  var reportsTableBody = document.getElementById(reportsTableBodyId);
 
-  tbody.id = `tbody_year_${year}_month_${month}`;
+  if (reportsTableBody) {
+    return reportsTableBody;
+  }
 
-  for (var { reportId, dateFrom, dateTo } of reportIds) {
-    var tr = document.createElement("tr");
-    tr.id = reportId;
+  reportsTableBody = document.createElement("tbody");
+  reportsTableBody.id = reportsTableBodyId;
 
-    var report = reports.find((report) => report.reportId == reportId);
+  for (var { reportId, dateFrom, dateTo, isFinancesAccounted } of reportIds) {
+    var tableRow = document.createElement("tr");
+    tableRow.id = reportId;
 
-    var { isFinancesAccounted } = report;
+    var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
+    var reportPeriodTextTd = createTdElement(reportPeriodText);
 
-    var fullPeriodTd = getReportPeriod(dateFrom, dateTo);
-
-    var reportLink = getReportLink(reportId);
+    var linkToReport = getReportLink(reportId);
 
     var financesAccountedTd = createTdElement();
 
     financesAccountedTd.textContent = "";
+
     if (isFinancesAccounted) {
       financesAccountedTd.innerHTML = "<p> &#9989;</p>";
     } else {
@@ -30,16 +34,16 @@ var createReportsTable = (year, month, reportIds, reports) => {
         '<span style="color: red;">&#10008;</span>';
     }
 
-    tr.append(fullPeriodTd, financesAccountedTd, reportLink);
+    tableRow.append(reportPeriodTextTd, financesAccountedTd, linkToReport);
 
-    tbody.append(tr);
+    reportsTableBody.append(tableRow);
   }
 
   var tableHead = createReportsTableHead();
 
   var table = document.createElement("table");
 
-  table.append(tableHead, tbody);
+  table.append(tableHead, reportsTableBody);
 
   return table;
 };

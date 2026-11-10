@@ -1,56 +1,36 @@
-import doRequest from "../../../utils/doRequest.js";
 import createReportsTable from "./createReportsTable.js";
 import createMonthlyReportDownloadButton from "./createMonthlyReportDownloadButton.js";
 
-var url = "/my/api/required-reports/";
+var createDetailsToReportsTable = (userId, year, month, reportIds) => {
+  var monthDetails = document.createElement("details");
 
-var getRequiredReports = async (userId, reportIds) => {
-  var res = await doRequest(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId,
-      reportIds: reportIds.map((item) => item.reportId),
-    }),
-  });
+  var monthDetailsId = `reports_container_${year}_${month}`;
+  monthDetails.id = monthDetailsId;
 
-  var { reports } = await res.json();
+  var summary = document.createElement("summary");
 
-  return { reports };
-};
-
-var createDetailsToReportsContainer = (userId, year, month, reportIds) => {
-  var summaryToMonthReportsContainer = document.createElement("summary");
-  summaryToMonthReportsContainer.append(month);
-
-  var monthReportsContainerId = `reports_container_${year}_${month}`;
-  var monthReportsContainer = document.createElement("details");
-  monthReportsContainer.id = monthReportsContainerId;
-
-  monthReportsContainer.append(summaryToMonthReportsContainer);
-
-  monthReportsContainer.addEventListener("click", async () => {
-    if (!monthReportsContainer.open) {
-      var reportTbodyId = `tbody_year_${year}_month_${month}`;
-
-      if (!document.getElementById(reportTbodyId)) {
-        var { reports } = await getRequiredReports(userId, reportIds);
-
-        var reportsTable = createReportsTable(year, month, reportIds, reports);
-        var downloadBtn = createMonthlyReportDownloadButton(
-          userId,
-          reportIds,
-          year,
-          month,
-        );
-
-        monthReportsContainer.append(reportsTable, downloadBtn);
-        monthReportsContainer.open = true;
-      }
+  summary.onclick = () => {
+    if (monthDetails?.open) {
+      monthDetails.open = true;
+    } else {
+      monthDetails.open = false;
     }
-  });
+  };
 
-  return monthReportsContainer;
+  summary.append(month);
+  monthDetails.append(summary);
+
+  var reportsTable = createReportsTable(year, month, reportIds);
+  var downloadBtn = createMonthlyReportDownloadButton(
+    userId,
+    year,
+    month,
+    reportIds,
+  );
+
+  monthDetails.append(reportsTable, downloadBtn);
+
+  return monthDetails;
 };
 
 var createMonthsDetails = (userId, months, year) => {
@@ -59,13 +39,14 @@ var createMonthsDetails = (userId, months, year) => {
   monthsContainer.id = `months_container_${year}`;
 
   for (var { month, reportIds } of months) {
-    var reportsContainer = createDetailsToReportsContainer(
+    var monthDetails = createDetailsToReportsTable(
       userId,
       year,
       month,
       reportIds,
     );
-    monthsContainer.append(reportsContainer);
+
+    monthsContainer.append(monthDetails);
   }
 
   return monthsContainer;

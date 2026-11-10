@@ -2,7 +2,7 @@ import navigateTo from "../utils/navigateTo.js";
 import createRemoveUserButton from "./createRemoveUserButton.js";
 import createTdElement from "../report/table/services/createTdElement.js";
 
-var needToOpenNewWindow = true;
+var needToOpenNewWindow = false;
 
 var usersTable = (users) => {
   var tableBody = document.getElementById("tbody");

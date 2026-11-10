@@ -1,19 +1,32 @@
-import deleteEmptyMonth from "./deleteEmptyMonth.js";
-import fillYearContainer from "./fillYearContainer.js";
+import createMonthsDetails from "./createMonthsDetails.js";
 import showNoReportsMessage from "./showNoReportsMessage.js";
-import insertLastReportsToTree from "./insertLastReportsToTree.js";
+import openLastYearAndMonthDetails from "./openLastYearAndMonthDetails.js";
 
-var createReportTree = async (userId, lastReports, reportTree) => {
+var createReportTree = async (userId, reportTree) => {
   if (!reportTree.length) {
     return showNoReportsMessage();
   }
 
-  var lastMonthData = reportTree[0].months.shift();
+  var yearsContainer = document.getElementById("years_container");
 
-  fillYearContainer(userId, reportTree);
-  insertLastReportsToTree(userId, reportTree, lastReports, lastMonthData);
+  for (var { year, months } of reportTree) {
+    var summary = document.createElement("summary");
+    summary.append(year);
 
-  deleteEmptyMonth(userId);
+    var monthsDetails = createMonthsDetails(userId, months, year);
+
+    var yearDetails = document.createElement("details");
+    yearDetails.id = year;
+
+    yearDetails.append(summary, monthsDetails);
+
+    yearsContainer.append(yearDetails);
+  }
+
+  var lastYear = reportTree[0].year;
+  var lastMonthName = reportTree[0].months[0].month;
+
+  openLastYearAndMonthDetails(lastYear, lastMonthName);
 };
 
 export default createReportTree;
