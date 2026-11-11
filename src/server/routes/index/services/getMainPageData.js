@@ -22,6 +22,12 @@ var { getReportsWithAccountedFinances } =
 var getMainPageDataService = async (userId) => {
   var { reportPeriods } = await getReportPeriods(userId);
 
+  var reportLoadingState = await getReportLoadingState(
+    userId,
+    session,
+    selectedFieldsToLoadingState,
+  );
+
   if (!reportPeriods.length) {
     return {
       reportLoadingState,
@@ -36,12 +42,6 @@ var getMainPageDataService = async (userId) => {
   var { sortedReportPeriods } = sortReportPeriodsByYearAndMonths(
     reportPeriods,
     reportsWithAccountedFinances,
-  );
-
-  var reportLoadingState = await getReportLoadingState(
-    userId,
-    session,
-    selectedFieldsToLoadingState,
   );
 
   return {

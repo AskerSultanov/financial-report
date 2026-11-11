@@ -3,8 +3,11 @@ import checkDateFrom from "./checkDateFrom.js";
 import sendReportPeriod from "./sendReportPeriod.js";
 import navigateTo from "../../../utils/navigateTo.js";
 import { showSpinner, hideSpinner } from "./loaderSpinner.js";
+import bootstrapYearSelector from "../../yearSelector/index.js";
 import { insertNewReportToTree } from "../../reportTreeBuilder/index.js";
+import switchToRequiredYear from "../../yearSelector/switchToRequiredYear.js";
 import reportLoadingStatePanelBuilder from "../../reportLoadingStatePanel/index.js";
+import createOptionToYearSelector from "../../yearSelector/createOptionToYearSelector.js";
 
 var isMainPageLoad = false;
 var reportLoadState = null;
@@ -102,12 +105,21 @@ async function handleSameWeekPeriod(userId, dateFrom, dateTo) {
 
   insertNewReportToTree(reportData);
 
+  var { option, isExist } = createOptionToYearSelector(reportData.year);
+
+  var yearSelector = bootstrapYearSelector();
+
+  if (!isExist) {
+    yearSelector.prepend(option);
+  }
+
+  switchToRequiredYear(reportData.year);
+
   var confirmed = confirm("Отчет успешно сохранен.\nПерейти к отчету?");
 
   if (confirmed) {
     var url = "/report/" + reportData.reportId;
-    navigateTo(url)
-
+    navigateTo(url);
   }
 }
 

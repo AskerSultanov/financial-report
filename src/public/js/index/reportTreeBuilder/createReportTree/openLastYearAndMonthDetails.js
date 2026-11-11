@@ -1,9 +1,16 @@
-var openLastYearAndMonthDetails = (year, monthName) => {
-  var lastYearDetails = document.getElementById(year);
-  lastYearDetails.open = true;
+var lastMonthDetailsIndex = 0;
 
-  var lastMonthDetailsId = `reports_container_${year}_${monthName}`;
-  var lastMonthDetails = document.getElementById(lastMonthDetailsId);
+var openLastYearAndMonthDetails = (year) => {
+  var lastYearDetails = document.getElementById(year);
+
+  lastYearDetails.open = true;
+  lastYearDetails.hidden = false;
+
+  var monthsContainerId = "months_container_" + year;
+  var monthsContainer = document.getElementById(monthsContainerId);
+
+  var lastMonthDetails = monthsContainer.children.item(lastMonthDetailsIndex );
+
   lastMonthDetails.open = true;
 };
 

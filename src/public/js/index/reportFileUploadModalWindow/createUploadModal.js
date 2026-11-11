@@ -1,7 +1,10 @@
 import doRequest from "../../utils/doRequest.js";
 import getCookieByName from "../../utils/getCookieByName.js";
+import bootstrapYearSelector from "../yearSelector/index.js";
 import { insertNewReportToTree } from "../reportTreeBuilder/index.js";
 import createNewReportsModalWindow from "./createNewReportsModalWindow.js";
+import switchYearSelectorToRequiredYear from "../yearSelector/switchToRequiredYear.js";
+import createOptionToYearSelector from "../yearSelector/createOptionToYearSelector.js";
 import {
   showSpinner,
   hideSpinner,
@@ -234,9 +237,21 @@ var createUploadBtn = () => {
       if (reportsData.length) {
         createNewReportsModalWindow(reportsData);
 
+        var yearSelector = bootstrapYearSelector();
+
         for (var report of reportsData) {
           insertNewReportToTree(report);
+
+          var { option, isExist } = createOptionToYearSelector(report.year);
+
+          if (!isExist) {
+            console.log({ option, isExist, bool: Boolean(isExist) });
+            yearSelector.append(option);
+          }
         }
+
+        var lastYear = reportsData[reportsData.length - 1].year;
+        switchYearSelectorToRequiredYear(lastYear);
       } else {
         alert("Отчёты не были добавлены");
       }

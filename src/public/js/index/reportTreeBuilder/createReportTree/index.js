@@ -17,6 +17,7 @@ var createReportTree = async (userId, reportTree) => {
 
     var yearDetails = document.createElement("details");
     yearDetails.id = year;
+    yearDetails.hidden = true;
 
     yearDetails.append(summary, monthsDetails);
 
@@ -24,9 +25,8 @@ var createReportTree = async (userId, reportTree) => {
   }
 
   var lastYear = reportTree[0].year;
-  var lastMonthName = reportTree[0].months[0].month;
 
-  openLastYearAndMonthDetails(lastYear, lastMonthName);
+  openLastYearAndMonthDetails(lastYear);
 };
 
 export default createReportTree;
