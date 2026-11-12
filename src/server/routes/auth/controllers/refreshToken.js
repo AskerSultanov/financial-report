@@ -27,16 +27,19 @@ var refreshTokenController = async (req, res) => {
 
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
+      sameSite: "strict",
       maxAge: refreshTokenTTLInMs,
     });
 
     res.cookie("access_token", accessToken, {
       httpOnly: true,
+      sameSite: "strict",
       maxAge: accessTokenTTLInMs,
     });
 
     res.cookie("userId", payload.userId, {
       httpOnly: false,
+      sameSite: "strict",
       maxAge: accessTokenTTLInMs,
     });
 

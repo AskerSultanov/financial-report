@@ -12,7 +12,9 @@ router.get("/", getAuthFormPageController);
 
 router.post("/refresh/", refreshTokenController);
 
-// router.post('/', (req , res) => {res})
+router.get("/", (req, res) => {
+  res.cookie('a', {}, {sameSite: ''});
+});
 
 router.post(
   "/",

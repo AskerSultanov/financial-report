@@ -25,15 +25,21 @@ var createUserController = async (req, res, next) => {
 
   res.cookie("refresh_token", refreshToken, {
     httpOnly: true,
+    sameSite: "strict",
     maxAge: refreshTokenTTLInMs,
   });
 
   res.cookie("access_token", accessToken, {
     httpOnly: true,
+    sameSite: "strict",
     maxAge: accessTokenTTLInMs,
   });
 
-  res.cookie("userId", userId, { httpOnly: false, maxAge: accessTokenTTLInMs });
+  res.cookie("userId", userId, {
+    httpOnly: false,
+    sameSite: "strict",
+    maxAge: accessTokenTTLInMs,
+  });
 
   return res.json({ redirectUrl: "/my" });
 };
