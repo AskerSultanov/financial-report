@@ -12,10 +12,6 @@ router.get("/", getAuthFormPageController);
 
 router.post("/refresh/", refreshTokenController);
 
-router.get("/", (req, res) => {
-  res.cookie('a', {}, {sameSite: ''});
-});
-
 router.post(
   "/",
   joiSchemaValidator(schemas.checkUserCredentials),
