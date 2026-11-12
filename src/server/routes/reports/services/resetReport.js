@@ -13,6 +13,11 @@ var resetReportService = async (userId, reportId) => {
 
   return await session.withTransaction(async () => {
     var { report } = await getReportById(userId, reportId, session);
+
+    if (!report) {
+      return { reportNotFound: true };
+    }
+
     var taxParams = await getTaxParamsFromDb(userId, null, session);
 
     var updatedSkus = [];
@@ -119,6 +124,8 @@ var resetReportService = async (userId, reportId) => {
     await removeReportFromAccounted(userId, reportId, session);
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
     await saveUpdatedReport(userId, reportId, updatedSkus, session);
+
+    return { reportNotFound: false };
   });
 };
 
