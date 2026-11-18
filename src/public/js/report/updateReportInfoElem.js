@@ -18,7 +18,7 @@ var updateReportInfoElem = ({ dateFrom, dateTo, isFinancesAccounted }) => {
     financialAccountingStatusElem.textContent = yes;
     financialAccountingStatusElem.setAttribute("is-finances-accounted", "");
   } else {
-    financialAccountingStatusElem.textContent = false;
+    financialAccountingStatusElem.textContent = no;
   }
 };
 
