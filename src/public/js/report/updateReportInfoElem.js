@@ -1,7 +1,7 @@
 import getReportPeriodText from "../index/accountedFinancesPanel/getReportPeriodText.js";
 
 var reportPeriodElem = document.getElementById("report-period");
-var reportFinancesAccountedStatusElem = document.getElementById(
+var financialAccountingStatusElem = document.getElementById(
   "financial-accounting-status",
 );
 
@@ -12,9 +12,14 @@ var updateReportInfoElem = ({ dateFrom, dateTo, isFinancesAccounted }) => {
   var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
   reportPeriodElem.textContent = reportPeriodText;
 
-  reportFinancesAccountedStatusElem.textContent = isFinancesAccounted
-    ? yes
-    : no;
+  financialAccountingStatusElem.textContent = isFinancesAccounted ? yes : no;
+
+  if (isFinancesAccounted) {
+    financialAccountingStatusElem.textContent = yes;
+    financialAccountingStatusElem.setAttribute("is-finances-accounted", "");
+  } else {
+    financialAccountingStatusElem.textContent = false;
+  }
 };
 
 export default updateReportInfoElem;

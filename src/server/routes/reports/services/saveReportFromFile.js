@@ -6,7 +6,7 @@ import extractWorkSheetFromFile from "./utils/reportsFileParser/extractWorkSheet
 import extractReportsFileBufferFromZip from "./utils/reportsFileParser/extractReportsFileBufferFromZip.js";
 import extractReportDataFromWorkSheets from "./utils/reportsFileParser/extractReportDataFromWorkSheets.js";
 
-var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
+var { checkReportExistByDate } = dbUtils.basicReportsDataModelUtils;
 var { getEmptyReportPeriods, addReportToEmptyReportPeriods } =
   dbUtils.reportLoadingStateModelUtils;
 

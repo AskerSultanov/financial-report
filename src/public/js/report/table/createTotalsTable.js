@@ -5,14 +5,13 @@ var tablesContainer = document.getElementById("tables-container");
 var fieldsWithModal = ["tax", "insuranceFee", "additionalInsuranceFee"];
 
 var createTotalsTable = (
-  userId,
-  reportId,
-  recordedTo,
+  basicReportData,
   reportTotals,
   year,
-  isCrossYearPeriod,
   tableNeedModal,
 ) => {
+  var { userId, reportId, dateFrom, dateTo, isCrossYearPeriod } =
+    basicReportData;
   var tableRow = document.createElement("tr");
 
   for (var key in reportTotals) {
@@ -24,11 +23,14 @@ var createTotalsTable = (
     var value = reportTotals[key];
 
     if (fieldsWithModal.includes(key) && tableNeedModal) {
-      var yearToClient = isCrossYearPeriod ? year : recordedTo.year;
+      var yearToClient = isCrossYearPeriod ? year : basicReportData.year;
 
       var data = {
         userId,
         reportId,
+        dateFrom,
+        dateTo,
+        isCrossYearPeriod,
         year: yearToClient,
         updateField: { key, value },
       };

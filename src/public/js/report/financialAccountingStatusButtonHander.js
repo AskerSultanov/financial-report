@@ -6,73 +6,48 @@ var button = document.getElementById("financial-accounting-status-button");
 var yes = "Да";
 var no = "Нет";
 
-var financialAccountingStatusButtonHander = (
-  userId,
-  reportId,
-  dateFrom,
-  dateTo,
-) => {
+var financialAccountingStatusButtonHander = (userId, reportId) => {
   button.onclick = async () => {
-    var financialAccountingStatusSpanElem = document.getElementById(
+    var financialAccountingStatusElem = document.getElementById(
       "financial-accounting-status",
     );
+
     var currentStatus = false;
 
-    if (
-      financialAccountingStatusSpanElem.hasAttribute("is-finances-accounted")
-    ) {
+    var isFinancesAccounted = financialAccountingStatusElem.hasAttribute(
+      "is-finances-accounted",
+    );
+
+    if (isFinancesAccounted) {
       currentStatus = true;
     }
 
-    var newStatusIsTrue = currentStatus !== true;
+    var newStatus = !currentStatus;
     var newTextContent = currentStatus ? no : yes;
     var message = `Изменить статус учета финансов отчета на <${newTextContent}>`;
-
     var confirmed = confirm(message);
 
     if (confirmed) {
-      var success = await sendNewFinancialAccountingStatus(
-        userId,
-        reportId,
-        dateFrom,
-        dateTo,
-        newStatusIsTrue,
-      );
+      var res = await doRequest(url, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ userId, reportId, newStatus }),
+      });
 
-      if (!success) {
+      if (!res.ok) {
         alert("Не удалось изменить статус...");
         return;
       }
 
-      financialAccountingStatusSpanElem.textContent = newTextContent;
+      financialAccountingStatusElem.textContent = newTextContent;
 
-      if (newStatusIsTrue) {
-        financialAccountingStatusSpanElem.setAttribute(
-          "is-finances-accounted",
-          "",
-        );
+      if (newStatus) {
+        financialAccountingStatusElem.setAttribute("is-finances-accounted", "");
       } else {
-        financialAccountingStatusSpanElem.removeAttribute(
-          "is-finances-accounted",
-        );
+        financialAccountingStatusElem.removeAttribute("is-finances-accounted");
       }
     }
   };
 };
 
 export default financialAccountingStatusButtonHander;
-
-async function sendNewFinancialAccountingStatus(
-  userId,
-  reportId,
-  dateFrom,
-  dateTo,
-  newStatus,
-) {
-  var res = await doRequest(url, {
-    method: "PATCH",
-    body: JSON.stringify({ userId, reportId, dateFrom, dateTo, newStatus }),
-    headers: { "Content-type": "application/json" },
-  });
-  return res.status === 200;
-}

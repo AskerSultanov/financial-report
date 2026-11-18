@@ -15,12 +15,12 @@ var selectedFields = [
   "reports.dateTo",
 ];
 
-var { getReportsByUserId } = dbUtils.reportModelUtils;
+var { getReports } = dbUtils.basicReportsDataModelUtils;
 
 var downloadReportsAsZipService = async (data) => {
   var { userId, reportIds } = data;
 
-  var { reports } = await getReportsByUserId(
+  var { reports } = await getReports(
     userId,
     session,
     selectedFields,

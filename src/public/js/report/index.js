@@ -37,12 +37,18 @@ var btnToUserMainPage = document.getElementById("main");
 btnToUserMainPage.onclick = () => navigateTo(userMainPageUrl);
 
 var bootstrapReportPage = async (url) => {
-  var { report, signedUrls, skusWithLastCostPrices } = await getReportData(url);
+  var { report, signedUrls, lastCostPrices } = await getReportData(url);
 
-  var { reportId, dateFrom, dateTo, recordedTo, skus, isCrossYearPeriod } =
-    report;
+  var { year, reportId, dateFrom, dateTo, skus, isCrossYearPeriod } = report;
 
-  var { year } = recordedTo;
+  var basicReportData = {
+    year,
+    userId,
+    reportId,
+    dateFrom,
+    dateTo,
+    isCrossYearPeriod,
+  };
 
   var startYear = +dateFrom.split("-")[0];
   var endYear = +dateTo.split("-")[0];
@@ -52,8 +58,14 @@ var bootstrapReportPage = async (url) => {
   deleteReportHandler(userId, reportId);
   downloadReportAsXLSXButtonHandler(report);
   injectSignedUrlsIntoImgTags(userId, signedUrls);
-  setSkusLastCostPricesButtonHandler(years, skusWithLastCostPrices);
-  financialAccountingStatusButtonHander(userId, reportId, dateFrom, dateTo);
+  financialAccountingStatusButtonHander(userId, reportId);
+
+  setSkusLastCostPricesButtonHandler(
+    skus,
+    years,
+    basicReportData,
+    lastCostPrices,
+  );
 
   var { reportTotals } = calcReportTotalsFromSkus(skus);
 
@@ -63,32 +75,16 @@ var bootstrapReportPage = async (url) => {
     var hasSinglePeriodData = splitedReport.length === 1;
 
     if (!hasSinglePeriodData) {
-      createTotalsTable(
-        reportTotals,
-        reportId,
-        recordedTo,
-        reportTotals,
-        "",
-        isCrossYearPeriod,
-        true,
-      ); //parent totals table
+      createTotalsTable(basicReportData, reportTotals, "", true); //parent totals table
 
       enableTablesSwitcher(dateFrom, dateTo);
 
       for (var { year, reportPart } of splitedReport) {
         var { reportTotals } = calcReportTotalsFromSkus(reportPart);
 
-        createTotalsTable(
-          userId,
-          reportId,
-          recordedTo,
-          reportTotals,
-          year,
-          isCrossYearPeriod,
-          false,
-        ); //child totals table
+        createTotalsTable(basicReportData, reportTotals, year, false); //child totals table
 
-        createSkusTable(userId, reportId, year, reportPart, isCrossYearPeriod);
+        createSkusTable(basicReportData, year, reportPart);
       }
 
       switchToFirstTable(startYear);
@@ -113,17 +109,9 @@ var bootstrapReportPage = async (url) => {
     report.isCrossYearPeriod = false;
   }
 
-  createTotalsTable(
-    userId,
-    reportId,
-    recordedTo,
-    reportTotals,
-    "",
-    isCrossYearPeriod,
-    true,
-  );
+  createTotalsTable(basicReportData, reportTotals, "", true);
 
-  createSkusTable(userId, reportId, startYear, skus, isCrossYearPeriod);
+  createSkusTable(basicReportData, startYear, skus);
   enableActionBar(startYear);
 
   resetReportButtonHandler(userId, reportId, isCrossYearPeriod, skus);

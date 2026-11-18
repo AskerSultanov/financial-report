@@ -2,7 +2,7 @@ import createTotalsModal from "./createTotalsModal.js";
 
 var editablePen = "&#9999;&#65039;";
 
-var openTotalsModal = (data, isGuestAccess = false) => {
+var openTotalsModal = (data) => {
   var container = document.createElement("div");
   container.className = "editable-field";
 
@@ -19,7 +19,7 @@ var openTotalsModal = (data, isGuestAccess = false) => {
     var hasActiveModal = document.getElementById("modal-window");
 
     if (!hasActiveModal) {
-      createTotalsModal(data, displayElement, isGuestAccess);
+      createTotalsModal(data, displayElement);
     }
   });
 

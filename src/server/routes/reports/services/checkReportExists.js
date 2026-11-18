@@ -1,7 +1,7 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { checkReportExistByDate } = dbUtils.reportPeriodsModelUtils;
 var { getEmptyReportPeriods } = dbUtils.reportLoadingStateModelUtils;
+var { checkReportExistByDate } = dbUtils.basicReportsDataModelUtils;
 
 var checkReportExistsService = async (data) => {
   var { userId, dateFrom } = data;

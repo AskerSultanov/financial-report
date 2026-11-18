@@ -1,7 +1,7 @@
 import setCostPriceToSkusService from "../services/setCostPriceToSkus.js";
 
 var setCostPriceToSkusController = async (req, res, next) => {
-  var { reportNotFound, dataIsInvalid, updatedSkusData } =
+  var { updatedSkus, reportNotFound, dataIsInvalid, updatedSkusData } =
     await setCostPriceToSkusService(req.body);
 
   if (reportNotFound) {
@@ -12,7 +12,7 @@ var setCostPriceToSkusController = async (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  return res.json(updatedSkusData);
+  return res.json({ updatedSkus });
 };
 
 export default setCostPriceToSkusController;

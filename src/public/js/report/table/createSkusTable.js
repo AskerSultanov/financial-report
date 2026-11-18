@@ -9,7 +9,9 @@ var hasNoSalesMsg =
 
 var tablesContainer = document.getElementById("tables-container");
 
-var createSkusTable = (userId, reportId, year, skus, isCrossYearPeriod) => {
+var createSkusTable = (basicReportData, year, skus) => {
+  var { userId, reportId, isCrossYearPeriod } = basicReportData;
+
   var tableBody = document.createElement("tbody");
   tableBody.id = "skus-tbody-" + year;
 

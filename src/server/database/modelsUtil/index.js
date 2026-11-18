@@ -9,7 +9,11 @@ import * as reportLoadingStateModelUtils from "./reportLoadingState/index.js";
 import * as weeklyPricesAndDiscountsModelUtils from "./weeklyPricesAndDiscounts/index.js";
 import * as reportsWithAccountedFinancesModelUtils from "./reportsWithAccountedFinances/index.js";
 
+import * as skuModelUtils from "./sku/index.js";
+import * as basicReportsDataModelUtils from "./basicReportData/index.js";
+
 export default {
+  skuModelUtils,
   reportModelUtils,
   userModelUtils,
   goodsModelUtils,
@@ -20,4 +24,6 @@ export default {
   reportLoadingStateModelUtils,
   weeklyPricesAndDiscountsModelUtils,
   reportsWithAccountedFinancesModelUtils,
+
+  basicReportsDataModelUtils,
 };

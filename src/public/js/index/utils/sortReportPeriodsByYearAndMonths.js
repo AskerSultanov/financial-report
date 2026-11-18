@@ -1,19 +1,28 @@
-var sortReportPeriodsByYearAndMonths = (
-  reportPeriods,
-  reportsWithAccountedFinances,
-) => {
-  var sortedReportPeriods = [];
+var monthList = [
+  "январь",
+  "февраль",
+  "марта",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
 
-  for (var period of reportPeriods) {
-    var { year, monthName, monthIndex, reportId, dateFrom, dateTo } = period;
+var sortReportPeriodsByYearAndMonths = (reports) => {
+  var reportTree = [];
 
-    var existReport = reportsWithAccountedFinances.find(
-      (item) => item.reportId === reportId,
-    );
+  for (var report of reports) {
+    var { year, monthIndex, reportId, isFinancesAccounted, dateFrom, dateTo } =
+      report;
 
-    var isFinancesAccounted = Boolean(existReport);
+    var month = monthList[monthIndex];
 
-    var existYear = sortedReportPeriods.find((item) => item?.year === year);
+    var existYear = reportTree.find((item) => item?.year === year);
 
     if (!existYear) {
       var reportsContainer = [
@@ -26,14 +35,14 @@ var sortReportPeriodsByYearAndMonths = (
       ];
 
       var monthsContainer = [
-        { monthIndex, month: monthName, reportIds: reportsContainer },
+        { month, monthIndex, reportIds: reportsContainer },
       ];
 
-      sortedReportPeriods.push({ year, months: monthsContainer });
+      reportTree.push({ year, months: monthsContainer });
     } else {
       var { months } = existYear;
 
-      var existMonth = months.find((item) => item.month === period.monthName);
+      var existMonth = months.find((item) => item.month === month);
 
       if (!existMonth) {
         var reportsContainer = [
@@ -41,8 +50,8 @@ var sortReportPeriodsByYearAndMonths = (
         ];
 
         months.push({
+          month,
           monthIndex,
-          month: monthName,
           reportIds: reportsContainer,
         });
 
@@ -63,9 +72,9 @@ var sortReportPeriodsByYearAndMonths = (
     }
   }
 
-  sortedReportPeriods.sort((a, b) => b.year - a.year);
+  reportTree.sort((a, b) => b.year - a.year);
 
-  return { sortedReportPeriods };
+  return { reportTree };
 };
 
 export default sortReportPeriodsByYearAndMonths;

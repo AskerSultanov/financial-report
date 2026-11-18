@@ -9,11 +9,9 @@ var recalculateReportsWithNewTaxRate = (
 ) => {
   var finalProfit = 0;
 
-  var updatedReports = [];
+  var updatedSkus = [];
 
   for (var { reportId, skus } of reports) {
-    var updatedSkus = [];
-
     for (var sku of skus) {
       if (sku.year === taxYear) {
         var updatedSkuFields = {};
@@ -32,17 +30,18 @@ var recalculateReportsWithNewTaxRate = (
           updatedSkuFields.finalProfit = truncateNum(newSkuFinalProfit);
         }
 
-        updatedSkus.push({ skuName: sku.skuName, data: updatedSkuFields });
+        updatedSkus.push({
+          reportId,
+          year: sku.year,
+          skuName: sku.skuName,
+          data: updatedSkuFields,
+        });
       }
-    }
-
-    if (Object.keys(updatedSkus).length) {
-      updatedReports.push({ reportId, updatedSkus });
     }
   }
 
   return {
-    updatedReports,
+    updatedSkus,
     finalProfit: truncateNum(finalProfit),
     paidTaxAmount: truncateNum(paidTaxAmount),
   };

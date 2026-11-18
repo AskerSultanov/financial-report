@@ -2,7 +2,8 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import recalculateReportsWithNewTaxRate from "./utils/recalculateReportsWithNewTaxRate.js";
 
-var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportModelUtils;
+var { updateSkus } = dbUtils.skuModelUtils;
+var { getReports } = dbUtils.basicReportsDataModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var updateTaxRateService = async (
@@ -20,43 +21,43 @@ var updateTaxRateService = async (
       return { taxRateIsEqual: true };
     }
 
-    //var { reports } = await getReportsByUserId(userId, session);
+    //var { reports } = await getReports(userId, session);
 
     var updatedTaxParams = [];
 
-   // if (!reportsNeedRecalculation) {
-      updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
+    // if (!reportsNeedRecalculation) {
+    updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { taxRateIsEqual: false };
-  //  }
+    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    return { taxRateIsEqual: false };
+    //  }
 
     //if (reports.length) {
-      // var resetPaidTaxAmount = -taxParams.mandatoryInsuranceFee;
+    // var resetPaidTaxAmount = -taxParams.mandatoryInsuranceFee;
 
-      // var { updatedReports, finalProfit, paidTaxAmount } =
-      //   recalculateReportsWithNewTaxRate(
-      //     reports,
-      //     resetPaidTaxAmount,
-      //     newTaxRate,
-      //     year,
-      //   );
+    // var { updatedSkus, finalProfit, paidTaxAmount } =
+    //   recalculateReportsWithNewTaxRate(
+    //     reports,
+    //     resetPaidTaxAmount,
+    //     newTaxRate,
+    //     year,
+    //   );
 
-      // await saveUpdatedReports(userId, updatedReports, session);
+    // await updateSkus(userId, updatedSkus, session);
 
-      // updatedTaxParams.push({
-      //   year,
-      //   data: { finalProfit, paidTaxAmount, taxRate: newTaxRate },
-      // });
+    // updatedTaxParams.push({
+    //   year,
+    //   data: { finalProfit, paidTaxAmount, taxRate: newTaxRate },
+    // });
 
-      // await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      // return { taxRateIsEqual: false };
-   // } else {
-      // updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
+    // await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    // return { taxRateIsEqual: false };
+    // } else {
+    // updatedTaxParams.push({ year, data: { taxRate: newTaxRate } });
 
-      // await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      // return { taxRateIsEqual: false };
-  //  }
+    // await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    // return { taxRateIsEqual: false };
+    //  }
   });
 };
 

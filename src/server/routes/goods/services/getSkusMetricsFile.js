@@ -4,10 +4,10 @@ import sortSkusBySkuNameAndYear from "./utils/skusMetrics/sortSkusBySkuNameAndYe
 import mergeSkuDataBySkuNameAndYear from "./utils/skusMetrics/mergeSkuDataBySkuNameAndYear.js";
 
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
-var { getReportsByUserId } = dbUtils.reportModelUtils;
+var { getReports } = dbUtils.basicReportsDataModelUtils;
 
 var getSkusMetricsFileService = async (userId) => {
-  var { reports } = await getReportsByUserId(userId);
+  var { reports } = await getReports(userId);
   var { listGoods } = await getListGoodsFromDb(userId);
 
   var { sortedSkusBySkuNameAndYear } = sortSkusBySkuNameAndYear(

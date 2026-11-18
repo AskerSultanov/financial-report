@@ -10,6 +10,8 @@ var schema = Joi.object({
   userId: Joi.string().uuid().required(),
   reportId: Joi.number().required(),
   year: Joi.number().required(),
+  dateFrom: Joi.string().required(),
+  dateTo: Joi.string().required(),
   costPrices: Joi.array().items(costPricesItemSchema).required(),
 });
 

@@ -5,11 +5,19 @@ import truncateNum from "./utils/reportParsing/truncateNum.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import calcBaseAndRemainder from "./utils/different/calcBaseAndRemainder.js";
 
-var { getReportById, saveUpdatedReport } = dbUtils.reportModelUtils;
+var { getSkusFromReport,updateSkus } = dbUtils.skuModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setExtraAmountsToReportService = async (data) => {
-  var { userId, reportId, updateField, year } = data;
+  var {
+    year,
+    dateTo,
+    userId,
+    reportId,
+    dateFrom,
+    updateField,
+    isCrossYearPeriod,
+  } = data;
 
   var skusDataToClient = [];
 
@@ -20,19 +28,24 @@ var setExtraAmountsToReportService = async (data) => {
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
-    var { report } = await getReportById(userId, reportId, session);
+    var { skusFromReport } = await getSkusFromReport(
+      userId,
+      reportId,
+      [],
+      session,
+    );
 
-    if (!report) {
+    if (!skusFromReport.length) {
       return { reportNotFound: true, data: {} };
     }
 
     var skusFilteredByYear;
     var taxParam = await getTaxParamsFromDb(userId, year, session);
 
-    if (report.isCrossYearPeriod) {
-      skusFilteredByYear = report.skus.filter((sku) => sku.year === year);
+    if (isCrossYearPeriod) {
+      skusFilteredByYear = skusFromReport.filter((sku) => sku.year === year);
     } else {
-      skusFilteredByYear = report.skus;
+      skusFilteredByYear = skusFromReport;
     }
 
     var { baseCents, remainderCents } = calcBaseAndRemainder(
@@ -71,7 +84,8 @@ var setExtraAmountsToReportService = async (data) => {
       newFinalProfit += updatedSkuFields.finalProfit;
 
       var updatedSku = {
-        year: sku.year,
+        year,
+        reportId,
         skuName: sku.skuName,
         data: { ...updatedSkuFields, [key]: sku[key] },
       };
@@ -118,11 +132,11 @@ var setExtraAmountsToReportService = async (data) => {
       },
     ];
 
+    await updateSkus(userId, updatedSkus, session);
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
-    await saveUpdatedReport(userId, reportId, updatedSkus, session);
 
-    var startYear = +report.dateFrom.split("-")[0];
-    var endYear = +report.dateTo.split("-")[0];
+    var startYear = +dateFrom.split("-")[0];
+    var endYear = +dateTo.split("-")[0];
 
     return {
       reportNotFound: false,
@@ -130,7 +144,6 @@ var setExtraAmountsToReportService = async (data) => {
         skusDataToClient,
         requiredYear: year,
         years: [startYear, endYear],
-        isCrossYearPeriod: report.isCrossYearPeriod,
       },
     };
   });

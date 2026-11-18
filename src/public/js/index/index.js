@@ -12,6 +12,7 @@ import openLastYearAndMonthDetails from "./reportTreeBuilder/createReportTree/op
 import getGoodsPageButtonHandler from "./utils/getGoodsPageButtonHandler.js";
 import getWBTokenPageButtonHandler from "./utils/getWBTokenPageButtonHandler.js";
 import getTaxParamsPageButtonHandler from "./utils/getTaxParamsPageButtonHandler.js";
+import sortReportPeriodsByYearAndMonths from "./utils/sortReportPeriodsByYearAndMonths.js";
 
 var isMainPageLoad = true;
 var userId = getCookieByName("userId");
@@ -19,15 +20,16 @@ var userId = getCookieByName("userId");
 var bootstrapUserPage = async () => {
   var { data } = await getMainPageData(userId);
 
-  var { reportTree, reportLoadingState, reportsWithAccountedFinances } = data;
+  var { basicReportData, reportLoadingState } = data;
 
-  createReportTree(userId, reportTree);
+  var { reportTree } = sortReportPeriodsByYearAndMonths(basicReportData);
 
   logoutButtonHandler(userId);
   reportFileUploadModalWindow(userId);
+  createReportTree(userId, reportTree);
   reportLoaderModalWindowHandler(userId);
 
-  accountedFinancesPanelHandler(reportsWithAccountedFinances);
+  accountedFinancesPanelHandler(basicReportData);
   reportLoadingStatePanelBuilder(userId, reportLoadingState, isMainPageLoad);
 
   getGoodsPageButtonHandler();

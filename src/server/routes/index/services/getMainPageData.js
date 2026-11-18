@@ -1,6 +1,4 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
-import sortReportsByAccountingDate from "./utils/sortReportsByAccountingDate.js";
-import sortReportPeriodsByYearAndMonths from "./utils/sortReportPeriodsByYearAndMonths.js";
 
 var session = null;
 
@@ -14,13 +12,11 @@ var selectedFieldsToLoadingState = [
   "isReportLoadingIsStopped",
 ];
 
+var { getBasicReportsData } = dbUtils.basicReportsDataModelUtils;
 var { getReportLoadingState } = dbUtils.reportLoadingStateModelUtils;
-var { getReportPeriods } = dbUtils.reportPeriodsModelUtils;
-var { getReportsWithAccountedFinances } =
-  dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var getMainPageDataService = async (userId) => {
-  var { reportPeriods } = await getReportPeriods(userId);
+  var { basicReportData } = await getBasicReportsData(userId);
 
   var reportLoadingState = await getReportLoadingState(
     userId,
@@ -28,28 +24,16 @@ var getMainPageDataService = async (userId) => {
     selectedFieldsToLoadingState,
   );
 
-  if (!reportPeriods.length) {
+  if (!basicReportData.length) {
     return {
+      basicReportData: [],
       reportLoadingState,
-      reportTree: [],
-      reportsWithAccountedFinances: [],
     };
   }
 
-  var { reportsWithAccountedFinances } =
-    await getReportsWithAccountedFinances(userId);
-
-  var { sortedReportPeriods } = sortReportPeriodsByYearAndMonths(
-    reportPeriods,
-    reportsWithAccountedFinances,
-  );
-
   return {
+    basicReportData,
     reportLoadingState,
-    reportTree: sortedReportPeriods,
-    reportsWithAccountedFinances: sortReportsByAccountingDate(
-      reportsWithAccountedFinances,
-    ),
   };
 };
 

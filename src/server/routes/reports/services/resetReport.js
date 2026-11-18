@@ -3,16 +3,15 @@ import resetSkus from "./utils/different/resetSkus.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import truncateNum from "./utils/reportParsing/truncateNum.js";
 
-var { getReportById, saveUpdatedReport } = dbUtils.reportModelUtils;
+var { updateSkus } = dbUtils.skuModelUtils;
+var { getReport, updateReport } = dbUtils.basicReportsDataModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
-var { removeReportFromAccounted } =
-  dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var resetReportService = async (userId, reportId) => {
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
-    var { report } = await getReportById(userId, reportId, session);
+    var { report } = await getReport(userId, reportId, session);
 
     if (!report) {
       return { reportNotFound: true };
@@ -121,9 +120,11 @@ var resetReportService = async (userId, reportId) => {
       }
     });
 
-    await removeReportFromAccounted(userId, reportId, session);
+    await updateSkus(userId, updatedSkus, session);
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
-    await saveUpdatedReport(userId, reportId, updatedSkus, session);
+
+    var updatedBasicReportDataField = { isFinancesAccounted: false };
+    await updateReport(userId, reportId, updatedBasicReportDataField, session);
 
     return { reportNotFound: false };
   });

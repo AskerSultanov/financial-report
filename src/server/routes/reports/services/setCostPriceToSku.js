@@ -6,7 +6,7 @@ import excludeEqualParams from "./utils/different/excludeEqualParams.js";
 import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
 
 var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
-var { saveUpdatedReport, getSkuFromReport } = dbUtils.reportModelUtils;
+var { getSkuFromReport, updateSkus } = dbUtils.skuModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setCostPriceToSkuService = async (data) => {
@@ -15,9 +15,15 @@ var setCostPriceToSkuService = async (data) => {
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
-    var { report } = await getSkuFromReport(userId, reportId, skuName, session);
+    var { skuFromReport } = await getSkuFromReport(
+      userId,
+      reportId,
+      skuName,
+      year,
+      session,
+    );
 
-    if (!report) {
+    if (!skuFromReport) {
       return {
         reportNotFound: true,
         updatedSkuData: {},
@@ -26,15 +32,7 @@ var setCostPriceToSkuService = async (data) => {
       };
     }
 
-    var sku;
-
-    if (report.skus.length > 1) {
-      sku = report.skus.find((sku) => sku.year === year);
-    } else {
-      sku = report.skus[0];
-    }
-
-    var hasNoSales = sku.profit === 0 || sku.qty === 0;
+    var hasNoSales = skuFromReport.profit === 0 || skuFromReport.qty === 0;
 
     if (hasNoSales) {
       return {
@@ -45,7 +43,7 @@ var setCostPriceToSkuService = async (data) => {
       };
     }
 
-    if (sku.costPrice === costPrice) {
+    if (skuFromReport.costPrice === costPrice) {
       return {
         costPriceIsEqual: true,
         reportNotFound: false,
@@ -56,17 +54,17 @@ var setCostPriceToSkuService = async (data) => {
 
     var taxParams = await getTaxParamsFromDb(userId, year, session);
 
-    var prevSkuData = getPrevSkuData(sku);
+    var prevSkuData = getPrevSkuData(skuFromReport);
 
-    sku.costPrice = costPrice;
+    skuFromReport.costPrice = costPrice;
 
     var { updatedSkuFields, updatedTaxParamsFieldsBySku } = calc.sku.restParams(
-      sku,
+      skuFromReport,
       prevSkuData,
       taxParams,
     );
 
-    var updatedSkus = [{ skuName, year: sku.year, data: updatedSkuFields }];
+    var updatedSkus = [{ reportId, skuName, year, data: updatedSkuFields }];
 
     var { updatedTaxParamsField } = recalculateTaxParams(
       updatedTaxParamsFieldsBySku,
@@ -76,8 +74,8 @@ var setCostPriceToSkuService = async (data) => {
 
     var updatedTaxParams = [{ year, data: updatedTaxParamsField }];
 
+    await updateSkus(userId, updatedSkus, session);
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
-    await saveUpdatedReport(userId, reportId, updatedSkus, session);
     await updateSkuInListGoods(
       userId,
       skuName,
@@ -93,7 +91,6 @@ var setCostPriceToSkuService = async (data) => {
       reportNotFound: false,
       updatedSkuData: {
         updatedSku: skuDataToClient,
-        isCrossYearPeriod: report.isCrossYearPeriod,
       },
     };
   });

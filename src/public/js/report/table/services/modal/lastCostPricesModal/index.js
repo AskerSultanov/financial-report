@@ -3,20 +3,27 @@ import sendCostPrices from "./sendCostPrices.js";
 import createTitle from "../utils/createTitle.js";
 import getSelectedYear from "./getSelectedYear.js";
 import createButton from "../utils/createButton.js";
-import getPrevSkuFieldsValue from "../../getPrevSkuFieldsValue.js";
+import getPrevSkuValues from "../../getPrevSkuFieldsValue.js";
 import updateSkusTableFields from "../../updateSkusTableFields.js";
-import updateTotalsTableFields from "../../updateTotalsTableFields.js";
 import getSelectedLastCostPrices from "./getSelectedLastCostPrices.js";
+import updateTotalsTableFields from "../../updateTotalsTableFieldsNew.js";
 import createSkusCostPriceContainer from "./createSkusCostPriceContainer.js";
+import updateParentTotalsTableFields from "../../updateParentTotalsTableFields.js";
 
 var event = "click";
 var cancelButtonTextContent = "Отмена";
 var saveButtonTextContent = "Установить";
 var titleContent = `Последние себестоимости для:`;
 
-var skusLastCostPriceModal = (requiredYear, skusLastCostPrice) => {
+var skusLastCostPriceModal = (
+  skus,
+  requiredYear,
+  basicReportData,
+  lastCostPrices,
+) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
+
   var modalContent = createDiv("modal-content");
 
   var title = createTitle("modal-title", titleContent);
@@ -32,11 +39,11 @@ var skusLastCostPriceModal = (requiredYear, skusLastCostPrice) => {
   var cancelButton = createButton(
     "modal-button modal-button-cancel",
     cancelButtonTextContent,
-    { event, cb: cancelButtonHandler },
+    { event, cb: () => modal?.remove() },
   );
 
   var skusCostPriceContainer = createSkusCostPriceContainer(
-    skusLastCostPrice,
+    lastCostPrices,
     requiredYear,
   );
 
@@ -48,7 +55,7 @@ var skusLastCostPriceModal = (requiredYear, skusLastCostPrice) => {
 
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
-      document.body.removeChild(modal);
+      modal?.remove();
     }
   });
 
@@ -62,26 +69,45 @@ var skusLastCostPriceModal = (requiredYear, skusLastCostPrice) => {
       return;
     }
 
-    var { skusDataToClient, requiredYear, isCrossYearPeriod } =
-      await sendCostPrices(selectedYear, skusLastCostPrice);
+    var { updatedSkus } = await sendCostPrices(
+      selectedYear,
+      basicReportData,
+      lastCostPrices,
+    );
 
-    skusDataToClient.forEach((sku) => {
-      var { prevSkuFieldsValue } = getPrevSkuFieldsValue(sku);
+    for (var updatedSku of updatedSkus) {
+      var { year, skuName, data } = updatedSku;
 
-      updateSkusTableFields(sku, requiredYear);
-      updateTotalsTableFields(
-        sku.data,
-        requiredYear,
-        prevSkuFieldsValue,
-        isCrossYearPeriod,
+      var skuBeforeUpdation = skus.find(
+        (sku) => sku.skuName === skuName && sku.year === year,
       );
-    });
 
-    document.body.removeChild(modal);
-  }
+      if (!skuBeforeUpdation) {
+        continue;
+      }
 
-  function cancelButtonHandler() {
-    document.body.removeChild(modal);
+      var { prevSkuFieldsValue } = getPrevSkuValues(
+        year,
+        skuName,
+        skuBeforeUpdation,
+      );
+
+      data.qty = skuBeforeUpdation.qty;
+      updateSkusTableFields(year, skuName, data);
+
+      updateTotalsTableFields(
+        year,
+        data,
+        prevSkuFieldsValue,
+        basicReportData.isCrossYearPeriod,
+      );
+
+      if (basicReportData.isCrossYearPeriod) {
+        updateParentTotalsTableFields(year, reportId);
+      }
+    }
+
+    modal?.remove();
   }
 };
 

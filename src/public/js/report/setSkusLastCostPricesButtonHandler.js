@@ -4,7 +4,12 @@ var button = document.getElementById(
   "set-cost-prices-from-previous-report-period",
 );
 
-var setSkusLastCostPricesButtonHandler = (years, skusLastCostPrice) =>
+var setSkusLastCostPricesButtonHandler = (
+  skus,
+  years,
+  basicReportData,
+  lastCostPrices,
+) =>
   (button.onclick = () => {
     var hasActiveModal = document.getElementById("modal-window");
 
@@ -12,8 +17,8 @@ var setSkusLastCostPricesButtonHandler = (years, skusLastCostPrice) =>
       return;
     }
 
-    if (skusLastCostPrice.length) {
-      skusLastCostPriceModal(years, skusLastCostPrice);
+    if (lastCostPrices.length) {
+      skusLastCostPriceModal(skus, years, basicReportData, lastCostPrices);
     } else {
       alert("Для текущих товаров нет последних себестоимостей.");
     }

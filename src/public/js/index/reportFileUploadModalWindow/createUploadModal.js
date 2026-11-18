@@ -245,7 +245,6 @@ var createUploadBtn = () => {
           var { option, isExist } = createOptionToYearSelector(report.year);
 
           if (!isExist) {
-            console.log({ option, isExist, bool: Boolean(isExist) });
             yearSelector.append(option);
           }
         }

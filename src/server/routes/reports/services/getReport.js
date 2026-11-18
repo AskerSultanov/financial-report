@@ -2,22 +2,22 @@ import dbUtils from "../../../database/modelsUtil/index.js";
 import getSignedUrlsToSkuImages from "./utils/different/getSignedUrlsToSkuImages.js";
 import filterCostsForReportSkus from "./utils/different/filterCostsForReportSkus.js";
 
-var { getReportById } = dbUtils.reportModelUtils;
 var { getListGoodsFromDb } = dbUtils.goodsModelUtils;
+var { getReport } = dbUtils.basicReportsDataModelUtils;
 
 var selectedFields = { "listGoods.skuName": 1, "listGoods.lastCostPrice": 1 };
 
 var getReportService = async (data) => {
   var { userId, reportId } = data;
 
-  var { report } = await getReportById(userId, reportId);
+  var { report } = await getReport(userId, reportId);
 
   if (!report) {
     return {
       report: {},
       signedUrls: [],
       reportNotFound: true,
-      skusWithLastCostPrices: [],
+      lastCostPrices: [],
     };
   }
 
@@ -40,7 +40,7 @@ var getReportService = async (data) => {
     report,
     signedUrls,
     reportNotFound: false,
-    skusWithLastCostPrices: filteredSkusWithLastCostPrices,
+    lastCostPrices: filteredSkusWithLastCostPrices,
   };
 };
 

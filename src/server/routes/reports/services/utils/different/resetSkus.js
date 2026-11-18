@@ -30,13 +30,15 @@ var resetSkus = (skus) => {
     prevInsuranceFee = truncateNum(prevInsuranceFee);
     prevAdditionalInsuranceFee = truncateNum(prevAdditionalInsuranceFee);
 
-    var { year, skuName } = sku;
+    var { year, skuName, reportId } = sku;
+    
     var finalProfit = sku.profit;
     var profitMargin = calcProfitMargin(finalProfit, sku.retailAmount);
 
     cleanSkusData.push({
       year,
       skuName,
+      reportId,
       data: { ...cleanSku, finalProfit, profitMargin },
     });
   }

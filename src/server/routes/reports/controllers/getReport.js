@@ -1,7 +1,7 @@
 import getReportService from "../services/getReport.js";
 
 var getReportController = async (req, res, next) => {
-  var { report, reportNotFound, signedUrls, skusWithLastCostPrices } =
+  var { report, reportNotFound, signedUrls, lastCostPrices } =
     await getReportService(req.params);
 
   if (reportNotFound) {
@@ -11,7 +11,7 @@ var getReportController = async (req, res, next) => {
   return res.json({
     report,
     signedUrls,
-    skusWithLastCostPrices,
+    lastCostPrices,
   });
 };
 

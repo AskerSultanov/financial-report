@@ -5,6 +5,7 @@ import accountedFinancesPanelHandler from "../index/accountedFinancesPanel/index
 import reportLoaderModalWindowHandler from "../index/reportLoaderModalWindow/index.js";
 import reportLoadingStatePanelBuilder from "../index/reportLoadingStatePanel/index.js";
 import reportFileUploadModalWindow from "../index/reportFileUploadModalWindow/index.js";
+import sortReportPeriodsByYearAndMonths from "../index/utils/sortReportPeriodsByYearAndMonths.js";
 
 var isMainPageLoad = true;
 
@@ -13,11 +14,14 @@ var userId = window.location.pathname.split("/").at(-1);
 var bootstrapUserMainPage = async () => {
   var { data } = await getMainPageData(userId);
 
-  var { reportTree, reportLoadingState, reportsWithAccountedFinances } = data;
+  var { basicReportData, reportLoadingState } = data;
+
+  var { reportTree } = sortReportPeriodsByYearAndMonths(basicReportData);
 
   updateLinks(userId);
   createReportTree(userId, reportTree);
-  accountedFinancesPanelHandler(reportsWithAccountedFinances);
+  accountedFinancesPanelHandler(basicReportData);
+  reportLoadingStatePanelBuilder(userId, reportLoadingState, isMainPageLoad);
 };
 
 bootstrapUserMainPage();

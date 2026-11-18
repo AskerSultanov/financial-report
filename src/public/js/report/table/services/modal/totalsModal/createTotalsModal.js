@@ -25,7 +25,7 @@ var titlesMap = {
   additionalInsuranceFee: "Добавить доп. страховые взносы к отчету",
 };
 
-var createTotalsModal = (dataToUpdate, displayElement, isGuestAccess) => {
+var createTotalsModal = (dataToUpdate, displayElement) => {
   var modal = createDiv("modal-overlay");
   modal.id = "modal-window";
 

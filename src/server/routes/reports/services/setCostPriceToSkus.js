@@ -6,36 +6,38 @@ import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
 import verifyAllSkusExistInReport from "./utils/different/verifyAllSkusExistInReport.js";
 
 var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
-var { saveUpdatedReport, getSkusFromReport } = dbUtils.reportModelUtils;
+var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setCostPriceToSkusService = async (data, res, next) => {
-  var { userId, reportId, year, costPrices } = data;
+  var { userId, reportId, year, dateFrom, dateTo, costPrices } = data;
 
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
     var skuNames = costPrices.map(({ skuName }) => skuName);
 
-    var { report } = await getSkusFromReport(
+    var { skusFromReport } = await getSkusFromReport(
       userId,
       reportId,
       skuNames,
       session,
     );
 
-    if (!report) {
+    if (!skusFromReport.length) {
       return {
+        updatedSkus: [],
         reportNotFound: true,
         dataIsInvalid: false,
         updatedSkusData: {},
       };
     }
 
-    var { allSkusExist } = verifyAllSkusExistInReport(report.skus, skuNames);
+    var { allSkusExist } = verifyAllSkusExistInReport(skusFromReport, skuNames);
 
     if (!allSkusExist) {
       return {
+        updatedSkus: [],
         dataIsInvalid: true,
         reportNotFound: false,
         updatedSkusData: {},
@@ -44,16 +46,14 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
     var taxParams = await getTaxParamsFromDb(userId, year, session);
 
-    var { skus } = report;
-
     var updatedSkus = [];
-    var skusDataToClient = [];
+    var updatedSkusToClient = [];
     var updatedSkusToListGoods = [];
 
     for (var { skuName, lastCostPrice } of costPrices) {
-      var skuIndex = skus.findIndex((sku) => sku.skuName === skuName);
+      var skuIndex = skusFromReport.findIndex((sku) => sku.skuName === skuName);
 
-      var sku = skus[skuIndex];
+      var sku = skusFromReport[skuIndex];
 
       var hasNoSales = sku.profit === 0 || sku.qty === 0;
 
@@ -71,6 +71,7 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
       var { updatedSkuFields, updatedTaxParamsFieldsBySku } =
         calc.sku.restParams(sku, prevSkuData, taxParams);
+
       var { updatedTaxParamsField } = recalculateTaxParams(
         updatedTaxParamsFieldsBySku,
         prevSkuData,
@@ -79,46 +80,48 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
       taxParams = Object.assign(taxParams, updatedTaxParamsField);
 
-      updatedSkus.push({ skuName, year: sku.year, data: updatedSkuFields });
+      updatedSkus.push({
+        skuName,
+        reportId,
+        year: sku.year,
+        data: updatedSkuFields,
+      });
+
       updatedSkusToListGoods.push({
         skuName,
         year: sku.year,
         data: { lastCostPrice },
       });
 
-      skusDataToClient.push({
+      updatedSkusToClient.push({
         skuName,
-        year: year,
-        data: { ...updatedSkuFields },
+        year: sku.year,
+        data: updatedSkuFields,
       });
     }
 
-    if (!skusDataToClient.length) {
+    if (!updatedSkusToClient.length) {
       return {
+        updatedSkus: [],
         dataIsInvalid: true,
         reportNotFound: false,
         updatedSkusData: {},
       };
     }
 
-    var requiredYear = year;
-    var startYear = +report.dateFrom.split("-")[0];
-    var endYear = +report.dateTo.split("-")[0];
-
     var updatedTaxParams = [{ year, data: taxParams }];
 
+    await updateSkus(userId, updatedSkus, session);
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
-    await saveUpdatedReport(userId, reportId, updatedSkus, session);
     await updateSkusInListGoods(userId, updatedSkusToListGoods, session);
 
     return {
       dataIsInvalid: false,
       reportNotFound: false,
+      updatedSkus: updatedSkusToClient,
       updatedSkusData: {
-        requiredYear,
-        skusDataToClient,
-        years: [startYear, endYear],
-        isCrossYearPeriod: report.isCrossYearPeriod,
+        // years: [startYear, endYear],
+        updatedSkus: updatedSkusToClient,
       },
     };
   });

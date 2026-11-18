@@ -1,16 +1,20 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
 
-var { addReportToAccounted, removeReportFromAccounted } =
-  dbUtils.reportsWithAccountedFinancesModelUtils;
+var { updateReport } = dbUtils.basicReportsDataModelUtils;
 
 var changeFinancialAccountingStatusService = async (data) => {
-  var { userId, reportId, dateFrom, dateTo, newStatus } = data;
+  var { userId, reportId, newStatus } = data;
+
+  var updatedFields = {};
 
   if (newStatus) {
-    await addReportToAccounted(userId, reportId, dateFrom, dateTo);
+    updatedFields.isFinancesAccounted = true;
+    updatedFields.financesAccountedAt = new Date();
   } else {
-    await removeReportFromAccounted(userId, reportId);
+    updatedFields.isFinancesAccounted = false;
   }
+
+  await updateReport(userId, reportId, updatedFields);
 };
 
 export default changeFinancialAccountingStatusService;

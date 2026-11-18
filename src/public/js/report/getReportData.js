@@ -23,9 +23,9 @@ var getReportData = async (url) => {
     navigateTo(urlToMainPage);
   }
 
-  var { report, signedUrls, skusWithLastCostPrices } = await res.json();
+  var { report, signedUrls, lastCostPrices } = await res.json();
 
-  return { report, signedUrls, skusWithLastCostPrices };
+  return { report, signedUrls, lastCostPrices };
 };
 
 export default getReportData;

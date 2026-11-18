@@ -2,7 +2,8 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import recalculateReportsWithNewMandatoryInsuranceRate from "./utils/recalculateReportsWithNewMandatoryInsuranceRate.js";
 
-var { getReportsByUserId, saveUpdatedReports } = dbUtils.reportModelUtils;
+var { updateSkus } = dbUtils.skuModelUtils;
+var { getReports } = dbUtils.basicReportsDataModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var updateMandatoryInsuranceFeeRateService = async (
@@ -20,24 +21,24 @@ var updateMandatoryInsuranceFeeRateService = async (
       return { mandatoryInsuranceFeeRateIsEqual: true };
     }
 
-    // var { reports } = await getReportsByUserId(userId, session);
+    // var { reports } = await getReports(userId, session);
 
     var updatedTaxParams = [];
 
     // if (!reportsNeedRecalculation) {
-      updatedTaxParams.push({
-        year,
-        data: { mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate },
-      });
+    updatedTaxParams.push({
+      year,
+      data: { mandatoryInsuranceFeeRate: newMandatoryInsuranceFeeRate },
+    });
 
-      await updateTaxParamsToDb(userId, updatedTaxParams, session);
-      return { mandatoryInsuranceFeeRateIsEqual: false };
+    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    return { mandatoryInsuranceFeeRateIsEqual: false };
     // }
 
     // if (reports.length) {
     //   var { mandatoryInsuranceFee } = taxParams;
     //   var {
-    //     updatedReports,
+    //     updatedSkus,
     //     finalProfit,
     //     paidInsuranceFee,
     //     mandatoryInsuranceFeeIsPaid,
@@ -48,7 +49,7 @@ var updateMandatoryInsuranceFeeRateService = async (
     //     newMandatoryInsuranceFeeRate,
     //   );
 
-    //   await saveUpdatedReports(userId, updatedReports, session);
+    //   await updateSkus(userId, updatedSkus, session);
 
     //   updatedTaxParams.push({
     //     year,

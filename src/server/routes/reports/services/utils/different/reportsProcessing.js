@@ -3,14 +3,14 @@ import getNewSkusToListGoods from "./getNewSkusToListGoods.js";
 import dbutils from "../../../../../database/modelsUtil/index.js";
 import getReportTargetYearAndMonth from "./getReportTargetYearAndMonth.js";
 
-var { saveReportToDb } = dbutils.reportModelUtils;
-var { addReportToReportPeriods } = dbutils.reportPeriodsModelUtils;
+var { createReport } = dbutils.basicReportsDataModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
 var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } =
   dbutils.reportLoadingStateModelUtils;
 
 var selectedFields = ["listGoods.id", "listGoods.skuName"];
+
 var monthList = [
   "январь",
   "февраль",
@@ -40,6 +40,7 @@ var reportsProcessing = async (
 
   var reportSkus = [];
   var updatedTaxParams = [];
+
   var { reportId } = reports.weeklyFinancialReport[0];
   var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(
     dateFrom,
@@ -64,27 +65,17 @@ var reportsProcessing = async (
     return { reportPeriodIsEmpty: true, reportData: {} };
   }
 
-  var report = {};
-  report.skus = reportSkus;
+  var basicReportData = {};
 
-  report.dateTo = dateTo;
-  report.userId = userId;
-  report.dateFrom = dateFrom;
-  report.reportId = reportId;
-  report.isCrossYearPeriod = isCrossYearPeriod;
-  report.recordedTo = { year: targetYear, month: monthList[targetMonthIndex] };
+  basicReportData.userId = userId;
+  basicReportData.reportId = reportId;
+  basicReportData.dateFrom = dateFrom;
+  basicReportData.dateTo = dateTo;
+  basicReportData.year = targetYear;
+  basicReportData.monthIndex = targetMonthIndex;
+  basicReportData.isCrossYearPeriod = isCrossYearPeriod;
 
-  var newReportPeriod = {
-    reportId,
-    dateFrom,
-    dateTo,
-    year: targetYear,
-    monthIndex: targetMonthIndex,
-    monthName: monthList[targetMonthIndex],
-  };
-
-  await saveReportToDb(report, session);
-  await addReportToReportPeriods(userId, newReportPeriod, session);
+  await createReport(basicReportData, reportSkus, session);
 
   if (!isReportFromFile) {
     await setLastReportRequestTimestamp(userId, session);
@@ -92,7 +83,7 @@ var reportsProcessing = async (
 
   await updateTaxParamsToDb(userId, updatedTaxParams, session);
 
-  var skuNames = report.skus.map((sku) => sku.skuName);
+  var skuNames = reportSkus.map((sku) => sku.skuName);
 
   var { listGoods } = await getListGoodsFromDb(
     userId,
@@ -117,8 +108,8 @@ var reportsProcessing = async (
       reportId,
       dateFrom,
       dateTo,
-      month: monthList[targetMonthIndex],
       year: targetYear,
+      month: monthList[targetMonthIndex],
     },
   };
 };

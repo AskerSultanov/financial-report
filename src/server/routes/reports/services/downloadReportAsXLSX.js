@@ -1,12 +1,12 @@
 import dbUtils from "../../../database/modelsUtil/index.js";
 import { generateReportXlsxBuffer } from "./utils/reportToXlsxBuffer/index.js";
 
-var { getReportById } = dbUtils.reportModelUtils;
+var { getReport } = dbUtils.basicReportsDataModelUtils;
 
 var downloadReportAsXLSXService = async (data) => {
   var { userId, reportId } = data;
 
-  var { report } = await getReportById(userId, reportId);
+  var { report } = await getReport(userId, reportId);
 
   var { buffer } = await generateReportXlsxBuffer(report);
 

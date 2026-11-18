@@ -7,15 +7,13 @@ var recalculateReportsWithNewMandatoryInsuranceRate = (
   mandatoryInsuranceFee,
   mandatoryInsuranceRate,
 ) => {
-  var updatedReports = [];
+  var updatedSkus = [];
 
   var finalProfit = 0;
   var paidInsuranceFee = 0;
   var mandatoryInsuranceFeeIsPaid = false;
 
   for (var { reportId, skus } of reports) {
-    var updatedSkus = [];
-
     for (var sku of skus) {
       if (sku.year === taxYear) {
         var updatedSkuFields = {};
@@ -47,16 +45,19 @@ var recalculateReportsWithNewMandatoryInsuranceRate = (
         }
 
         if (Object.keys(updatedSkuFields).length) {
-          updatedSkus.push({ skuName: sku.skuName, data: updatedSkuFields });
+          updatedSkus.push({
+            reportId,
+            year: sku.year,
+            skuName: sku.skuName,
+            data: updatedSkuFields,
+          });
         }
       }
     }
-
-    updatedReports.push({ reportId, updatedSkus });
   }
 
   return {
-    updatedReports,
+    updatedSkus,
     mandatoryInsuranceFeeIsPaid,
     finalProfit: truncateNum(finalProfit),
     paidInsuranceFee: truncateNum(paidInsuranceFee),

@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
+import basicReportDataSchema from "./basicReportData.js";
 
-var skusSchema = new Schema(
+var skuSchema = new Schema(
   {
     userId: { type: String, required: true },
     reportId: { type: Number, required: true },
@@ -38,9 +39,15 @@ var skusSchema = new Schema(
   { autoIndex: false },
 );
 
-skusSchema.index({ userId: 1 });
-skusSchema.index({ reportId: 1 });
-skusSchema.index(
+skuSchema.index({ userId: 1 });
+skuSchema.index({ reportId: 1 });
+skuSchema.index(
   { userId: 1, reportId: 1, skuName: 1, year: 1 },
   { unique: true },
 );
+
+basicReportDataSchema.pre("deleteOne", async (next) => {
+  await skuS
+});
+
+export default skuSchema;

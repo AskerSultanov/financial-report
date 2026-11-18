@@ -3,8 +3,6 @@ import Joi from "joi";
 var schema = Joi.object({
   userId: Joi.string().uuid().required(),
   reportId: Joi.number().required(),
-  dateFrom: Joi.string().required(),
-  dateTo: Joi.string().required(),
   newStatus: Joi.boolean().required(),
 });
 

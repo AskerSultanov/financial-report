@@ -2,11 +2,8 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import recalculateTaxParamsAfterReportDeletion from "./utils/different/recalculateTaxParamsAfterReportDeletion.js";
 
-var { deleteReportFromDb } = dbUtils.reportModelUtils;
-var { removeReportFromReportPeriods } = dbUtils.reportPeriodsModelUtils;
+var { deleteReport } = dbUtils.basicReportsDataModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
-var { removeReportFromAccounted } =
-  dbUtils.reportsWithAccountedFinancesModelUtils;
 
 var deleteReportService = async (data) => {
   var { userId, reportId } = data;
@@ -16,7 +13,7 @@ var deleteReportService = async (data) => {
   return await session.withTransaction(async () => {
     var taxParams = await getTaxParamsFromDb(userId, null, session);
 
-    var { reportBeforeDeletion } = await deleteReportFromDb(
+    var { reportBeforeDeletion } = await deleteReport(
       userId,
       reportId,
       session,
@@ -43,9 +40,6 @@ var deleteReportService = async (data) => {
 
       updatedTaxParams.push({ year, data: recalculatedTaxParams });
     }
-
-    await removeReportFromAccounted(userId, reportId, session);
-    await removeReportFromReportPeriods(userId, dateFrom, dateTo, session);
 
     await updateTaxParamsToDb(userId, updatedTaxParams, session);
 
