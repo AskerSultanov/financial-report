@@ -1,5 +1,5 @@
 import createTdElement from "../../report/table/services/createTdElement.js";
-import getReportPeriod from "../reportTreeBuilder/insertNewReportToTree/table/getReportPeriod.js";
+import getReportPeriodText from "../accountedFinancesPanel/getReportPeriodText.js";
 
 var insertDataToTable = (data, tbodyId) => {
   var tbody = document.getElementById(tbodyId);
@@ -10,8 +10,8 @@ var insertDataToTable = (data, tbodyId) => {
     tableRow.setAttribute("dateFrom", dateFrom);
     tableRow.setAttribute("dateTo", dateTo);
 
-    var period = getReportPeriod(dateFrom, dateTo);
-    var periodTdElement = createTdElement(period);
+    var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
+    var periodTdElement = createTdElement(reportPeriodText);
 
     var failedCountTdElement = createTdElement(failedCount);
 

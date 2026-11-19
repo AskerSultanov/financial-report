@@ -12,6 +12,14 @@ var saveReportsService = async (data) => {
   var { dateTo, dateFrom, userId, wbtoken } = data;
   var reports = await wbapi.getReports(userId, dateFrom, dateTo, wbtoken);
 
+  if (!reports.weeklyFinancialReport.length) {
+    return {
+      infoText: "Нет данных за отчетный период",
+      reportData: {},
+      errorText: "",
+    };
+  }
+
   var { nextMonday } = getNextMonday(dateFrom);
   var currentDate = new Date().toISOString().slice(0, 10);
 

@@ -1,11 +1,12 @@
 import getReportLink from "./table/getReportLink.js";
-import getReportPeriod from "./table/getReportPeriod.js";
 import createTdElement from "../../../report/table/services/createTdElement.js";
+import getReportPeriodText from "../../accountedFinancesPanel/getReportPeriodText.js";
 
 var createReportRow = (reportData) => {
   var { dateFrom, dateTo, reportId } = reportData;
 
-  var reportPeriod = getReportPeriod(dateFrom, dateTo);
+  var { reportPeriodText } = getReportPeriodText(dateFrom, dateTo);
+  var reportPeriodTextTd = createTdElement(reportPeriodText);
 
   var reportLink = getReportLink(reportId);
 
@@ -17,7 +18,7 @@ var createReportRow = (reportData) => {
   var tr = document.createElement("tr");
   tr.id = reportId;
 
-  tr.append(reportPeriod, financesAccountedTd, reportLink);
+  tr.append(reportPeriodTextTd, financesAccountedTd, reportLink);
 
   return tr;
 };
