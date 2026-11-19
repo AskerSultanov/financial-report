@@ -12,7 +12,6 @@ var skuSchema = new Schema(
     taxableAmount: { type: Number, required: true, default: 0 },
     costPrice: { type: Number, required: true, default: 0 },
     otherExpenses: { type: Number, required: true, default: 0 },
-    revenue: { type: Number, required: true, default: 0 },
     sellerPayoutAmount: { type: Number, required: true, default: 0 },
     fines: { type: Number, required: true, default: 0 },
     returnAmount: { type: Number, required: true, default: 0 },
