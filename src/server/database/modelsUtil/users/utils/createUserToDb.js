@@ -7,22 +7,23 @@ var createUserToDb = async (user, session) => {
   var registeredAt = new Date();
   var hashedPasswd = await argon2.hash(passwd + "", process.env.SECRET_KEY);
 
-  await models.taxParamModel.create([{ userId }], { session: session });
+  await models.taxParamModel.create([{ userId }], { session });
+
   await models.reportLoadingStateModel.create([{ userId }], {
-    session: session,
+    session,
   });
+
   await models.goodsModel.create([{ userId, listGoods: [] }], {
-    session: session,
+    session,
   });
-  await models.reportPeriodModel.create([{ userId, reportPeriods: [] }], {
-    session: session,
-  });
+
   await models.weeklyPricesAndDiscountsModel.create([{ userId }], {
-    session: session,
+    session,
   });
+
   await models.userModel.create(
     [{ login, userId, role, registeredAt, passwd: hashedPasswd }],
-    { session: session },
+    { session },
   );
 };
 

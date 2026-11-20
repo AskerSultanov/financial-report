@@ -24,45 +24,39 @@ var resetUserData = async (userId) => {
 
   try {
     await session.withTransaction(async () => {
-      await models.skuModel.deleteMany({ userId }, { session: session });
+      await models.skuModel.deleteMany({ userId }, { session });
 
-      await models.basicReportDataModel.deleteMany(
-        { userId },
-        { session: session },
-      );
+      await models.basicReportDataModel.deleteMany({ userId }, { session });
 
       await models.taxParamModel.updateOne(
         { userId },
         { $set: { years: [] } },
-        { session: session },
+        { session },
       );
 
       await models.goodsModel.updateOne(
         { userId },
         { $set: { listGoods: [] } },
-        { session: session },
+        { session },
       );
 
       await models.weeklyPricesAndDiscountsModel.updateOne(
         { userId },
         { $set: { weeklyPricesAndDiscounts: [] } },
+        { session },
       );
 
       await models.reportLoadingStateModel.updateOne(
         { userId },
         { $set: defaultReportLoadingState },
-        { session: session },
+        { session },
       );
     });
   } catch (err) {
     errorLogger.fatal({ userId, err });
     success = false;
-  } finally {
-    if (session?.inTransaction()) {
-      await session.endSession();
-    }
   }
-
+  
   return { success };
 };
 

@@ -140,7 +140,7 @@ async function runMainServer() {
     checkRoles(["admin", "user"]),
     personalAccountRouter,
   );
-  app.use("/delete", userDeleteRouter);
+  app.use("/delete", checkRoles(["admin"]), userDeleteRouter);
 
   app.all(/.*/, pageNotFoundHandler);
 
