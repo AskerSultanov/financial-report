@@ -14,10 +14,13 @@ var createSkusCostPriceContainer = (skusCostPrice, years) => {
   if (!allYearsIsEqual(years)) {
     var firstYear = years[0];
 
-    var { skusNameFromSelectedSkusTable } = getSkuNamesFromSelectedYearSkusTable(firstYear);
+    var { skusNameFromSelectedSkusTable } =
+      getSkuNamesFromSelectedYearSkusTable(firstYear);
 
     for (var skuNameFromTable of skusNameFromSelectedSkusTable) {
-      var existSkuInSelectedYear = skusCostPrice.find((item) => item.skuName === skuNameFromTable);
+      var existSkuInSelectedYear = skusCostPrice.find(
+        (item) => item.skuName === skuNameFromTable,
+      );
 
       if (existSkuInSelectedYear) {
         var { item } = createCostPricesListItem(existSkuInSelectedYear);

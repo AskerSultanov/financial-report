@@ -5,7 +5,7 @@ import truncateNum from "./utils/reportParsing/truncateNum.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import calcBaseAndRemainder from "./utils/different/calcBaseAndRemainder.js";
 
-var { getSkusFromReport,updateSkus } = dbUtils.skuModelUtils;
+var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setExtraAmountsToReportService = async (data) => {
@@ -32,6 +32,7 @@ var setExtraAmountsToReportService = async (data) => {
       userId,
       reportId,
       [],
+      year,
       session,
     );
 

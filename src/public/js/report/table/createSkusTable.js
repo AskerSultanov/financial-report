@@ -16,8 +16,10 @@ var createSkusTable = (basicReportData, year, skus) => {
   tableBody.id = "skus-tbody-" + year;
 
   for (var sku of skus) {
-    var tr = document.createElement("tr");
-    tr.id = `sku-table-row-${sku.skuName}-${sku.year}`;
+    var tableRowId = `sku-table-row-${sku.skuName}-${sku.year}`;
+
+    var tableRow = document.createElement("tr");
+    tableRow.id = tableRowId;
 
     sku.userId = userId;
     sku.reportId = reportId;
@@ -80,7 +82,7 @@ var createSkusTable = (basicReportData, year, skus) => {
       finalProfit.style.color = "red";
     }
 
-    tr.append(
+    tableRow.append(
       skuPhotoUploaderTd,
       skuName,
       qty,
@@ -98,7 +100,7 @@ var createSkusTable = (basicReportData, year, skus) => {
       finalProfit,
     );
 
-    tableBody.append(tr);
+    tableBody.append(tableRow);
   }
 
   var table = document.createElement("table");

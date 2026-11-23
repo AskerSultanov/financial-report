@@ -103,7 +103,7 @@ var skusLastCostPriceModal = (
       );
 
       if (basicReportData.isCrossYearPeriod) {
-        updateParentTotalsTableFields(year, reportId);
+        updateParentTotalsTableFields(year, basicReportData.reportId);
       }
     }
 

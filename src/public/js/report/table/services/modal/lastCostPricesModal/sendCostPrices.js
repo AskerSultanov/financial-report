@@ -3,19 +3,12 @@ import doRequest from "../../../../../utils/doRequest.js";
 var url = "/report/skus/cost-prices";
 
 var sendCostPrices = async (year, basicReportData, costPrices) => {
-  var { dateFrom, dateTo, userId, reportId } = basicReportData;
+  var { userId, reportId } = basicReportData;
 
   var res = await doRequest(url, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId,
-      reportId,
-      dateFrom,
-      dateTo,
-      year,
-      costPrices,
-    }),
+    body: JSON.stringify({ userId, reportId, year, costPrices }),
   });
 
   if (!res.ok) {

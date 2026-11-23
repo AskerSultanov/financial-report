@@ -1,12 +1,12 @@
 import { skuModel } from "../../../models/index.js";
 
-var getSkusFromReport = async (userId, reportId, skuNames, session) => {
+var getSkusFromReport = async (userId, reportId, skuNames, year, session) => {
   var sessionOptions = session
     ? { session }
     : { readPreference: "secondaryPreferred" };
 
   var skusFromReport = await skuModel.find(
-    { userId, reportId, skuName: { $in: skuNames } },
+    { userId, reportId, year, skuName: { $in: skuNames } },
     {},
     { ...sessionOptions },
   );

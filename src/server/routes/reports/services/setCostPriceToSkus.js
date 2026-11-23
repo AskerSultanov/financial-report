@@ -10,7 +10,7 @@ var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
 var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
 
 var setCostPriceToSkusService = async (data, res, next) => {
-  var { userId, reportId, year, dateFrom, dateTo, costPrices } = data;
+  var { userId, reportId, year, costPrices } = data;
 
   var session = await dbClient.startSession();
 
@@ -21,6 +21,7 @@ var setCostPriceToSkusService = async (data, res, next) => {
       userId,
       reportId,
       skuNames,
+      year,
       session,
     );
 
@@ -29,7 +30,6 @@ var setCostPriceToSkusService = async (data, res, next) => {
         updatedSkus: [],
         reportNotFound: true,
         dataIsInvalid: false,
-        updatedSkusData: {},
       };
     }
 
@@ -40,7 +40,6 @@ var setCostPriceToSkusService = async (data, res, next) => {
         updatedSkus: [],
         dataIsInvalid: true,
         reportNotFound: false,
-        updatedSkusData: {},
       };
     }
 
@@ -105,7 +104,6 @@ var setCostPriceToSkusService = async (data, res, next) => {
         updatedSkus: [],
         dataIsInvalid: true,
         reportNotFound: false,
-        updatedSkusData: {},
       };
     }
 
@@ -119,10 +117,6 @@ var setCostPriceToSkusService = async (data, res, next) => {
       dataIsInvalid: false,
       reportNotFound: false,
       updatedSkus: updatedSkusToClient,
-      updatedSkusData: {
-        // years: [startYear, endYear],
-        updatedSkus: updatedSkusToClient,
-      },
     };
   });
 };
