@@ -13,7 +13,7 @@ var deleteUserFromDb = async (userId) => {
 
     await models.goodsModel.deleteOne({ userId }, { session });
 
-    await models.taxParamModel.deleteOne({ userId }, { session });
+    await models.taxSettingModel.deleteMany({ userId }, { session });
 
     await models.basicReportDataModel.deleteMany({ userId }, { session });
 

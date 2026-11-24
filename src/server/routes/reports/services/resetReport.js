@@ -5,7 +5,7 @@ import truncateNum from "./utils/reportParsing/truncateNum.js";
 
 var { updateSkus } = dbUtils.skuModelUtils;
 var { getReport, updateReport } = dbUtils.basicReportsDataModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingsByYears, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var resetReportService = async (userId, reportId) => {
   var session = await dbClient.startSession();
@@ -17,17 +17,17 @@ var resetReportService = async (userId, reportId) => {
       return { reportNotFound: true };
     }
 
-    var taxParams = await getTaxParamsFromDb(userId, null, session);
+    var { taxSettings } = await getTaxSettingsByYears(userId, session);
 
     var updatedSkus = [];
-    var updatedTaxParams = [];
+    var updatedTaxSettings = [];
 
     var { dateFrom, dateTo, skus, isCrossYearPeriod } = report;
 
     if (isCrossYearPeriod) {
       var startYear = +dateFrom.split("-")[0];
       var startYearSkus = skus.filter((sku) => sku.year === startYear);
-      var startYearTaxTarams = taxParams.find((i) => i.year === startYear);
+      var startYearTaxTarams = taxSettings.find((i) => i.year === startYear);
 
       var startYearFinalProfit = startYearTaxTarams.finalProfit;
       var startYearPaidTaxAmount = startYearTaxTarams.paidTaxAmount;
@@ -44,21 +44,21 @@ var resetReportService = async (userId, reportId) => {
       startYearAdditionalInsuranceFee -=
         prevSkusData.prevAdditionalInsuranceFee;
 
-      var updatedStartYearTaxParams = {
+      var updatedStartYearTaxSetting = {
         finalProfit: startYearFinalProfit,
         paidTaxAmount: startYearPaidTaxAmount,
         paidInsuranceFee: startYearPaidInsuranceFee,
         additionalInsuranceFee: startYearAdditionalInsuranceFee,
       };
 
-      updatedTaxParams.push({
+      updatedTaxSettings.push({
         year: startYear,
-        data: updatedStartYearTaxParams,
+        data: updatedStartYearTaxSetting,
       });
 
       var endYear = +dateTo.split("-")[0];
       var endYearSkus = skus.filter((sku) => sku.year === endYear);
-      var endYearTaxTarams = taxParams.find((i) => i.year === endYear);
+      var endYearTaxTarams = taxSettings.find((i) => i.year === endYear);
 
       var { cleanSkusData, prevSkusData } = resetSkus(endYearSkus);
       updatedSkus.push(...cleanSkusData);
@@ -74,25 +74,25 @@ var resetReportService = async (userId, reportId) => {
       endYearPaidInsuranceFee -= prevSkusData.prevInsuranceFee;
       endYearAdditionalInsuranceFee -= prevSkusData.prevAdditionalInsuranceFee;
 
-      var updatedEndYearTaxParams = {
+      var updatedEndYearTaxSetting = {
         finalProfit: endYearFinalProfit,
         paidTaxAmount: endYearPaidTaxAmount,
         paidInsuranceFee: endYearPaidInsuranceFee,
         additionalInsuranceFee: endYearAdditionalInsuranceFee,
       };
 
-      updatedTaxParams.push({
+      updatedTaxSettings.push({
         year: endYear,
-        data: updatedEndYearTaxParams,
+        data: updatedEndYearTaxSetting,
       });
     } else {
       var year = skus[0].year;
-      var taxParam = taxParams.find((i) => i.year === year);
+      var taxSetting = taxSettings.find((i) => i.year === year);
 
-      var finalProfit = taxParam.finalProfit;
-      var paidTaxAmount = taxParam.paidTaxAmount;
-      var paidInsuranceFee = taxParam.paidInsuranceFee;
-      var additionalInsuranceFee = taxParam.additionalInsuranceFee;
+      var finalProfit = taxSetting.finalProfit;
+      var paidTaxAmount = taxSetting.paidTaxAmount;
+      var paidInsuranceFee = taxSetting.paidInsuranceFee;
+      var additionalInsuranceFee = taxSetting.additionalInsuranceFee;
 
       var { cleanSkusData, prevSkusData } = resetSkus(skus);
 
@@ -103,7 +103,7 @@ var resetReportService = async (userId, reportId) => {
 
       updatedSkus.push(...cleanSkusData);
 
-      updatedTaxParams.push({
+      updatedTaxSettings.push({
         year,
         data: {
           paidTaxAmount,
@@ -114,14 +114,14 @@ var resetReportService = async (userId, reportId) => {
       });
     }
 
-    updatedTaxParams.forEach((item) => {
+    updatedTaxSettings.forEach((item) => {
       for (var key in item.data) {
         item.data[key] = truncateNum(item.data[key]);
       }
     });
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
 
     var updatedBasicReportDataField = { isFinancesAccounted: false };
     await updateReport(userId, reportId, updatedBasicReportDataField, session);

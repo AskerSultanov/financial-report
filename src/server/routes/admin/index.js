@@ -8,7 +8,7 @@ import getUserReportPageController from "./controllers/getUserReportPage.js";
 import checkAuthAdminDataController from "./controllers/checkAuthAdminData.js";
 import getUserWbTokenPageController from "./controllers/getUserWbTokenPage.js";
 import getAdminMainPageDataController from "./controllers/getAdminMainPageData.js";
-import getUserTaxParamsPageController from "./controllers/getUserTaxParamsPage.js";
+import getUserTaxSettingsPageController from "./controllers/getUserTaxSettingsPage.js";
 
 import * as joiSchemas from "./joiSchemas/index.js";
 import joiSchemaValidator from "../../middleware/joiSchemaValidator.js";
@@ -19,12 +19,16 @@ router.get("/", getAdminMainPageController);
 router.get("/api", getAdminMainPageDataController);
 router.get("/auth", getAdminAuthPageController);
 router.post("/", checkAuthAdminDataController);
-router.delete("/", joiSchemaValidator(joiSchemas.removeUserSchema), removeUserController);
+router.delete(
+  "/",
+  joiSchemaValidator(joiSchemas.removeUserSchema),
+  removeUserController,
+);
 
 router.get("/user/:userId", getUserMainPageController);
 router.get("/user/goods/:userId", getUserGoodsPageController);
 router.get("/user/wbtoken/:userId", getUserWbTokenPageController);
-router.get("/user/tax-params/:userId", getUserTaxParamsPageController);
+router.get("/user/tax-settings/:userId", getUserTaxSettingsPageController);
 router.get("/user/:userId/report/:reportId", getUserReportPageController);
 
 export default router;

@@ -2,11 +2,11 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import calcUtils from "../services/utils/calcUtils/index.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
-import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
+import recalculateTaxSetting from "./utils/different/recalculateTaxSetting.js";
 
 var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
 var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingByYear, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var bulkEditableToSkusService = async (data) => {
   var { userId, reportId, updateField, newValue, skusToUpdate } = data;
@@ -18,12 +18,14 @@ var bulkEditableToSkusService = async (data) => {
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
+    var { year } = skusToUpdate[0];
     var skuNames = skusToUpdate.map(({ skuName }) => skuName);
 
     var { skusFromReport } = await getSkusFromReport(
       userId,
       reportId,
       skuNames,
+      year,
       session,
     );
 
@@ -31,8 +33,7 @@ var bulkEditableToSkusService = async (data) => {
       return { invalidData: true, updatedSkus: [], reportNotFound: false };
     }
 
-    var { year } = skusToUpdate[0];
-    var taxParams = await getTaxParamsFromDb(userId, year, session);
+    var { taxSetting } = await getTaxSettingByYear(userId, year, session);
 
     var updatedSkus = [];
     var updatedSkusToClient = [];
@@ -59,16 +60,16 @@ var bulkEditableToSkusService = async (data) => {
 
         requiredSku[updateField] = newValue;
 
-        var { updatedSkuFields, updatedTaxParamsFieldsBySku } =
-          calcUtils.sku.restParams(requiredSku, prevSkuData, taxParams);
+        var { updatedSkuFields, updatedTaxSettingFieldsBySku } =
+          calcUtils.sku.restParams(requiredSku, prevSkuData, taxSetting);
 
-        var { updatedTaxParamsField } = recalculateTaxParams(
-          updatedTaxParamsFieldsBySku,
+        var { updatedTaxSettingField } = recalculateTaxSetting(
+          updatedTaxSettingFieldsBySku,
           prevSkuData,
           updatedSkuFields,
         );
 
-        taxParams = Object.assign(taxParams, updatedTaxParamsField);
+        taxSetting = Object.assign(taxSetting, updatedTaxSettingField);
 
         updatedSkusToClient.push({ skuName, year, data: updatedSkuFields });
         updatedSkus.push({ skuName, reportId, year, data: updatedSkuFields });
@@ -79,10 +80,10 @@ var bulkEditableToSkusService = async (data) => {
       return { invalidData: true, updatedSkus: [], reportNotFound: false };
     }
 
-    var updatedTaxParams = [{ year, data: taxParams }];
+    var updatedTaxSettings = [{ year, data: taxSetting }];
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
 
     if (updateField === "costPrice") {
       var updatedSkusToListGoods = skusToUpdate.map((item) => {

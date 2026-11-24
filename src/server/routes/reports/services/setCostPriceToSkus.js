@@ -2,14 +2,14 @@ import calc from "./utils/calcUtils/index.js";
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
-import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
+import recalculateTaxSetting from "./utils/different/recalculateTaxSetting.js";
 import verifyAllSkusExistInReport from "./utils/different/verifyAllSkusExistInReport.js";
 
 var { updateSkusInListGoods } = dbUtils.goodsModelUtils;
 var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingsByYears, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
-var setCostPriceToSkusService = async (data, res, next) => {
+var setCostPriceToSkusService = async (data) => {
   var { userId, reportId, year, costPrices } = data;
 
   var session = await dbClient.startSession();
@@ -43,7 +43,7 @@ var setCostPriceToSkusService = async (data, res, next) => {
       };
     }
 
-    var taxParams = await getTaxParamsFromDb(userId, year, session);
+    var { taxSettings } = await getTaxSettingsByYears(userId, session);
 
     var updatedSkus = [];
     var updatedSkusToClient = [];
@@ -68,16 +68,16 @@ var setCostPriceToSkusService = async (data, res, next) => {
 
       sku.costPrice = lastCostPrice;
 
-      var { updatedSkuFields, updatedTaxParamsFieldsBySku } =
-        calc.sku.restParams(sku, prevSkuData, taxParams);
+      var { updatedSkuFields, updatedTaxSettingFieldsBySku } =
+        calc.sku.restParams(sku, prevSkuData, taxSettings);
 
-      var { updatedTaxParamsField } = recalculateTaxParams(
-        updatedTaxParamsFieldsBySku,
+      var { updatedTaxSettingField } = recalculateTaxSetting(
+        updatedTaxSettingFieldsBySku,
         prevSkuData,
         updatedSkuFields,
       );
 
-      taxParams = Object.assign(taxParams, updatedTaxParamsField);
+      taxSettings = Object.assign(taxSettings, updatedTaxSettingField);
 
       updatedSkus.push({
         skuName,
@@ -107,10 +107,10 @@ var setCostPriceToSkusService = async (data, res, next) => {
       };
     }
 
-    var updatedTaxParams = [{ year, data: taxParams }];
+    var updatedTaxSettings = [{ year, data: taxSettings }];
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
     await updateSkusInListGoods(userId, updatedSkusToListGoods, session);
 
     return {

@@ -1,9 +1,9 @@
 import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
-import recalculateTaxParamsAfterReportDeletion from "./utils/different/recalculateTaxParamsAfterReportDeletion.js";
+import recalculateTaxSettingAfterReportDeletion from "./utils/different/recalculateTaxSettingAfterReportDeletion.js";
 
 var { deleteReport } = dbUtils.basicReportsDataModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingsByYears, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var deleteReportService = async (data) => {
   var { userId, reportId } = data;
@@ -11,7 +11,7 @@ var deleteReportService = async (data) => {
   var session = await dbClient.startSession();
 
   return await session.withTransaction(async () => {
-    var taxParams = await getTaxParamsFromDb(userId, null, session);
+    var { taxSettings } = await getTaxSettingsByYears(userId, session);
 
     var { reportBeforeDeletion } = await deleteReport(
       userId,
@@ -28,20 +28,20 @@ var deleteReportService = async (data) => {
     var startYear = +dateFrom.split("-")[0];
     var endYear = +dateTo.split("-")[0];
 
-    var updatedTaxParams = [];
+    var updatedTaxSettings = [];
 
     for (var year = startYear; year <= endYear; year++) {
-      var taxParamsOfYear = taxParams.find((item) => item.year === year);
+      var taxSetting = taxSettings.find((item) => item.year === year);
 
-      var { recalculatedTaxParams } = recalculateTaxParamsAfterReportDeletion(
-        taxParamsOfYear,
+      var { recalculatedTaxSetting } = recalculateTaxSettingAfterReportDeletion(
+        taxSetting,
         skus,
       );
 
-      updatedTaxParams.push({ year, data: recalculatedTaxParams });
+      updatedTaxSettings.push({ year, data: recalculatedTaxSetting });
     }
 
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
 
     return { reportNotFound: false, reportDeleted: true };
   });

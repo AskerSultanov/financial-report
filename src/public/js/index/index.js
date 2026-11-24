@@ -11,13 +11,13 @@ import openLastYearAndMonthDetails from "./reportTreeBuilder/createReportTree/op
 
 import getGoodsPageButtonHandler from "./utils/getGoodsPageButtonHandler.js";
 import getWBTokenPageButtonHandler from "./utils/getWBTokenPageButtonHandler.js";
-import getTaxParamsPageButtonHandler from "./utils/getTaxParamsPageButtonHandler.js";
+import getTaxSettingsPageButtonHandler from "./utils/getTaxSettingsPageButtonHandler.js";
 import sortReportPeriodsByYearAndMonths from "./utils/sortReportPeriodsByYearAndMonths.js";
 
 var isMainPageLoad = true;
 var userId = getCookieByName("userId");
 
-var bootstrapUserPage = async () => {
+var bootstrapUserPage = async (userId) => {
   var { data } = await getMainPageData(userId);
 
   var { basicReportData, reportLoadingState } = data;
@@ -34,7 +34,7 @@ var bootstrapUserPage = async () => {
 
   getGoodsPageButtonHandler();
   getWBTokenPageButtonHandler();
-  getTaxParamsPageButtonHandler();
+  getTaxSettingsPageButtonHandler();
 
   if (reportTree.length) {
     bootstrapYearSelector(reportTree);
@@ -43,4 +43,4 @@ var bootstrapUserPage = async () => {
   }
 };
 
-bootstrapUserPage();
+bootstrapUserPage(userId);

@@ -5,7 +5,7 @@ import getReportTargetYearAndMonth from "./getReportTargetYearAndMonth.js";
 
 var { createReport } = dbutils.basicReportsDataModelUtils;
 var { getListGoodsFromDb, saveNewSkusToDb } = dbutils.goodsModelUtils;
-var { addNewTaxYearToDb, updateTaxParamsToDb } = dbutils.taxParamsModelUtils;
+var { addNewUserTaxSetting, updateTaxSettings } = dbutils.taxSettingModelUtils;
 var { setLastReportRequestTimestamp, addReportToEmptyReportPeriods } =
   dbutils.reportLoadingStateModelUtils;
 
@@ -39,7 +39,7 @@ var reportsProcessing = async (
   var isCrossYearPeriod = startYear !== endYear;
 
   var reportSkus = [];
-  var updatedTaxParams = [];
+  var updatedTaxSettings = [];
 
   var { reportId } = reports.weeklyFinancialReport[0];
   var { targetYear, targetMonthIndex } = getReportTargetYearAndMonth(
@@ -48,15 +48,24 @@ var reportsProcessing = async (
   );
 
   for (var currentYear = startYear; currentYear <= endYear; currentYear++) {
-    var taxParams = await addNewTaxYearToDb(userId, currentYear, session);
-    var { skus, recalculatedTaxParams } = await processReportSkus(
+    var { taxSetting } = await addNewUserTaxSetting(
+      userId,
+      currentYear,
+      session,
+    );
+
+    var { skus, recalculatedTaxSetting } = await processReportSkus(
       reports,
-      taxParams,
+      taxSetting,
       isCrossYearPeriod,
     );
 
     reportSkus.push(...skus);
-    updatedTaxParams.push({ year: currentYear, data: recalculatedTaxParams });
+
+    updatedTaxSettings.push({
+      year: currentYear,
+      data: recalculatedTaxSetting,
+    });
   }
 
   if (!reportSkus.length) {
@@ -81,7 +90,7 @@ var reportsProcessing = async (
     await setLastReportRequestTimestamp(userId, session);
   }
 
-  await updateTaxParamsToDb(userId, updatedTaxParams, session);
+  await updateTaxSettings(userId, updatedTaxSettings, session);
 
   var skuNames = reportSkus.map((sku) => sku.skuName);
 

@@ -6,7 +6,7 @@ import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import calcBaseAndRemainder from "./utils/different/calcBaseAndRemainder.js";
 
 var { getSkusFromReport, updateSkus } = dbUtils.skuModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingByYear, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var setExtraAmountsToReportService = async (data) => {
   var {
@@ -41,7 +41,7 @@ var setExtraAmountsToReportService = async (data) => {
     }
 
     var skusFilteredByYear;
-    var taxParam = await getTaxParamsFromDb(userId, year, session);
+    var { taxSetting } = await getTaxSettingByYear(userId, year, session);
 
     if (isCrossYearPeriod) {
       skusFilteredByYear = skusFromReport.filter((sku) => sku.year === year);
@@ -79,7 +79,7 @@ var setExtraAmountsToReportService = async (data) => {
       var { updatedSkuFields } = calcUtils.sku.restParams(
         sku,
         prevSkuData,
-        taxParam,
+        taxSetting,
       );
 
       newFinalProfit += updatedSkuFields.finalProfit;
@@ -96,7 +96,7 @@ var setExtraAmountsToReportService = async (data) => {
     }
 
     var recalculatedFinalProfit =
-      taxParam.finalProfit - prevFinalProfit + newFinalProfit;
+      taxSetting.finalProfit - prevFinalProfit + newFinalProfit;
 
     var recalculatedAmount = 0;
 
@@ -104,7 +104,7 @@ var setExtraAmountsToReportService = async (data) => {
       case "tax":
         key = "paidTaxAmount";
         recalculatedAmount =
-          taxParam.paidTaxAmount - prevAmount + updateField.value;
+          taxSetting.paidTaxAmount - prevAmount + updateField.value;
 
         break;
 
@@ -112,18 +112,18 @@ var setExtraAmountsToReportService = async (data) => {
         key = "paidInsuranceFee";
 
         recalculatedAmount =
-          taxParam.paidInsuranceFee - prevAmount + updateField.value;
+          taxSetting.paidInsuranceFee - prevAmount + updateField.value;
         break;
 
       case "additionalInsuranceFee":
         key = "additionalInsuranceFee";
 
         recalculatedAmount =
-          taxParam.additionalInsuranceFee - prevAmount + updateField.value;
+          taxSetting.additionalInsuranceFee - prevAmount + updateField.value;
         break;
     }
 
-    var updatedTaxParams = [
+    var updatedTaxSettings = [
       {
         year,
         data: {
@@ -134,7 +134,7 @@ var setExtraAmountsToReportService = async (data) => {
     ];
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
 
     var startYear = +dateFrom.split("-")[0];
     var endYear = +dateTo.split("-")[0];

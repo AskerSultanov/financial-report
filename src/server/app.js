@@ -20,7 +20,7 @@ import adminRouter from "./routes/admin/index.js";
 import tokenRouter from "./routes/WBToken/index.js";
 import reportsRouter from "./routes/reports/index.js";
 import userDeleteRouter from "./routes/delete/index.js";
-import taxParamsRouter from "./routes/taxParams/index.js";
+import taxSettingsRouter from "./routes/taxSettings/index.js";
 import registrationRouter from "./routes/registration/index.js";
 import personalAccountRouter from "./routes/personalAccount/index.js";
 import backgroundTasksRouter from "./routes/backgroundTasks/index.js";
@@ -132,7 +132,7 @@ async function runMainServer() {
   app.use("/my", checkRoles(["admin", "user"]), rootRouter);
   app.use("/wbtoken", checkRoles(["admin", "user"]), tokenRouter);
   app.use("/admin", checkRoles(["admin"]), adminRouter);
-  app.use("/tax-params", checkRoles(["admin", "user"]), taxParamsRouter);
+  app.use("/tax-settings", checkRoles(["admin", "user"]), taxSettingsRouter);
   app.use("/report", checkRoles(["admin", "user"]), reportsRouter);
   app.use("/goods", checkRoles(["admin", "user"]), goodsRouter);
   app.use(
@@ -145,7 +145,6 @@ async function runMainServer() {
   app.all(/.*/, pageNotFoundHandler);
 
   app.use(errorHandler);
-
   mainServerIsListen = true;
   mainServerInstance = app.listen(process.env.PORT, process.env.HOST);
   logger.info("---------- SERVER RUN ----------");

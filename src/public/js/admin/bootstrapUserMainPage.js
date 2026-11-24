@@ -2,9 +2,7 @@ import navigateTo from "../utils/navigateTo.js";
 import getMainPageData from "../index/utils/getMainPageData.js";
 import { createReportTree } from "../index/reportTreeBuilder/index.js";
 import accountedFinancesPanelHandler from "../index/accountedFinancesPanel/index.js";
-import reportLoaderModalWindowHandler from "../index/reportLoaderModalWindow/index.js";
 import reportLoadingStatePanelBuilder from "../index/reportLoadingStatePanel/index.js";
-import reportFileUploadModalWindow from "../index/reportFileUploadModalWindow/index.js";
 import sortReportPeriodsByYearAndMonths from "../index/utils/sortReportPeriodsByYearAndMonths.js";
 
 var isMainPageLoad = true;
@@ -29,7 +27,7 @@ bootstrapUserMainPage();
 var btnToUserGoodsPage = document.getElementById("goods-page");
 var btnToUserWbTokenPage = document.getElementById("wb-token-page");
 var btnToBackToAdminPanel = document.getElementById("back-to-admin-panel");
-var btnToUserTaxParamsPage = document.getElementById("tax-params-page");
+var btnToUserTaxSettingsPage = document.getElementById("tax-settings-page");
 
 function updateLinks(userId) {
   btnToUserGoodsPage.onclick = () => {
@@ -40,8 +38,8 @@ function updateLinks(userId) {
     var url = "/admin/user/wbtoken/" + userId;
     navigateTo(url);
   };
-  btnToUserTaxParamsPage.onclick = () => {
-    var url = "/admin/user/tax-params/" + userId;
+  btnToUserTaxSettingsPage.onclick = () => {
+    var url = "/admin/user/tax-settings/" + userId;
     navigateTo(url);
   };
 

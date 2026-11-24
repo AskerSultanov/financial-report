@@ -3,10 +3,10 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import excludeEqualParams from "./utils/different/excludeEqualParams.js";
-import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
+import recalculateTaxSetting from "./utils/different/recalculateTaxSetting.js";
 
 var { getSkuFromReport, updateSkus } = dbUtils.skuModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingByYear, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var setOtherExpensesToSkuService = async (data) => {
   var { userId, reportId, skuName, year, otherExpenses } = data;
@@ -40,28 +40,25 @@ var setOtherExpensesToSkuService = async (data) => {
     }
 
     var prevSkuData = getPrevSkuData(skuFromReport);
-    var taxParams = await getTaxParamsFromDb(userId, year, session);
+    var { taxSetting } = await getTaxSettingByYear(userId, year, session);
 
     skuFromReport.otherExpenses = otherExpenses;
 
-    var { updatedSkuFields, updatedTaxParamsFieldsBySku } = calc.sku.restParams(
-      skuFromReport,
-      prevSkuData,
-      taxParams,
-    );
+    var { updatedSkuFields, updatedTaxSettingFieldsBySku } =
+      calc.sku.restParams(skuFromReport, prevSkuData, taxSetting);
 
     var updatedSkus = [{ skuName, year, reportId, data: updatedSkuFields }];
 
-    var { updatedTaxParamsField } = recalculateTaxParams(
-      updatedTaxParamsFieldsBySku,
+    var { updatedTaxSettingField } = recalculateTaxSetting(
+      updatedTaxSettingFieldsBySku,
       prevSkuData,
       updatedSkuFields,
     );
 
-    var updatedTaxParams = [{ year, data: updatedTaxParamsField }];
+    var updatedTaxSettings = [{ year, data: updatedTaxSettingField }];
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
 
     var skuDataToClient = excludeEqualParams(prevSkuData, updatedSkuFields);
 

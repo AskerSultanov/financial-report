@@ -3,7 +3,7 @@ import skuSchema from "../schemas/skus.js";
 import usersSchema from "../schemas/users.js";
 import goodsSchema from "../schemas/goods.js";
 import tokenSchema from "../schemas/token.js";
-import taxParamsSchema from "../schemas/taxParams.js";
+import taxSettingSchema from "../schemas/taxSetting.js";
 import basicReportDataSchema from "../schemas/basicReportData.js";
 import reportLoadingStateSchema from "../schemas/reportLoadingState.js";
 import weeklyPricesAndDiscountsSchema from "../schemas/weeklyPricesAndDiscounts.js";
@@ -12,7 +12,7 @@ var skuModel = dbClient.model("Sku", skuSchema);
 var userModel = dbClient.model("User", usersSchema);
 var goodsModel = dbClient.model("Goods", goodsSchema);
 var tokenModel = dbClient.model("Token", tokenSchema);
-var taxParamModel = dbClient.model("Tax_Param", taxParamsSchema);
+var taxSettingModel = dbClient.model("Tax_setting", taxSettingSchema);
 
 var reportLoadingStateModel = dbClient.model(
   "Report_Loading_State",
@@ -35,7 +35,7 @@ export {
   userModel,
   goodsModel,
   tokenModel,
-  taxParamModel,
+  taxSettingModel,
   basicReportDataModel,
   reportLoadingStateModel,
   weeklyPricesAndDiscountsModel,

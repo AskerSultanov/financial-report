@@ -22,21 +22,21 @@ var deleteUsersFromDb = async (adminUserId) => {
       { session },
     );
 
-    await models.taxParamModel.deleteMany(
+    await models.taxSettingModel.deleteMany(
       { userId: { $ne: adminUserId } },
       { session },
     );
-    
+
     await models.basicReportDataModel.deleteMany(
       { userId: { $ne: adminUserId } },
       { session },
     );
-    
+
     await models.reportLoadingStateModel.deleteMany(
       { userId: { $ne: adminUserId } },
       { session },
     );
-    
+
     await models.weeklyPricesAndDiscountsModel.deleteMany(
       { userId: { $ne: adminUserId } },
       { session },

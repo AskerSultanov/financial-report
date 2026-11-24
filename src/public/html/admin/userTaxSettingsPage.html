@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/options.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon" />
+    <title>Настройки</title>
+  </head>
+  <body>
+    <table id="tax-table">
+      <thead>
+        <tr>
+          <th>Год</th>
+          <th>Процент <br />налогообложения</th>
+          <th>Обязательные <br />страховые взносы</th>
+          <th>
+            Процент от чистой <br />
+            прибыли в пользу взносов
+          </th>
+          <th>Годовой оборот</th>
+          <th>Налогооблагаемая база</th>
+          <th>Уплачено налогов</th>
+          <th>Уплачено дополнительных <br />страховых взносов</th>
+          <th>Чистая прибыль</th>
+        </tr>
+      </thead>
+      <tbody id="tax-tbody"></tbody>
+    </table>
+    <button id="main">На главную</button>
+    <form>
+      <label for="tax-year">Отчетный год</label>
+      <select id="tax-year" name="tax-year"></select>
+    </form>
+    <form>
+      <label for="tax-rate">Установить процент налогообложения</label>
+      <input id="tax-rate" type="text" />
+      <div class="radio-group">
+        <div class="radio-item">
+          <input
+            type="radio"
+            id="recalculate-all-reports-tax-amount"
+            name="tax-rate"
+            checked
+          />
+          <label for="recalculate-all-reports-tax-amount"
+            >Пересчитать сумму налога для имеющихся отчетов (если есть)</label
+          >
+        </div>
+        <div class="radio-item">
+          <input
+            type="radio"
+            id="calculate-tax-amount-for-future-reports"
+            name="tax-rate"
+          />
+          <label for="calculate-tax-amount-for-future-reports"
+            >Применить новое значение к будущим отчетам</label
+          >
+        </div>
+      </div>
+      <button id="tax-rate-button">Сохранить</button>
+    </form>
+    <form>
+      <label for="mandatory-insurance-fee"
+        >Установить сумму обязательных страховых взносов, уплачиваемых за
+        год</label
+      ><input id="mandatory-insurance-fee" type="text" />
+      <button id="mandatory-insurance-fee-button">Сохранить</button>
+    </form>
+    <form>
+      <label for="mandatory-insurance-fee-rate"
+        >Установить процент от прибыли, который будет уходить на погашение
+        обязательных страховых взносов</label
+      ><input id="mandatory-insurance-fee-rate" type="text" />
+      <div class="radio-group">
+        <div class="radio-item">
+          <input
+            type="radio"
+            id="recalculate-all-reports-mandatory-insurance-fee-rate"
+            name="mandatory-insurance-fee-rate"
+            checked
+          />
+          <label for="recalculate-all-reports-mandatory-insurance-fee-rate"
+            >Пересчитать сумму погашения обязательных страховых взносов с новым
+            значением % в отчетах (если есть)</label
+          >
+        </div>
+        <div class="radio-item">
+          <input
+            type="radio"
+            id="calculate-mandatory-insurance-fee-rate-for-future-reports"
+            name="mandatory-insurance-fee-rate"
+          />
+          <label for="calculate-mandatory-insurance-fee-rate-for-future-reports"
+            >Применить новое значение к будущим отчетам</label
+          >
+        </div>
+      </div>
+      <button id="mandatory-insurance-fee-rate-button">Сохранить</button>
+    </form>
+
+    <script
+      src="/js/admin/bootstrapUserTaxSettingsPage.js"
+      type="module"
+    ></script>
+  </body>
+</html>

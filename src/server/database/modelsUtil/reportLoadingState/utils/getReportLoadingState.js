@@ -5,10 +5,11 @@ var getReportLoadingState = async (userId, session, selectedFields = [""]) => {
     ? { session }
     : { readPreference: "secondaryPreferred" };
 
-  var doc = await reportLoadingStateModel
+  var reportLoadingState = await reportLoadingStateModel
     .findOne({ userId }, { _id: 0 }, { ...sessionOptions })
     .select(selectedFields);
-  return doc.toObject();
+
+  return reportLoadingState?.toObject();
 };
 
 export default getReportLoadingState;

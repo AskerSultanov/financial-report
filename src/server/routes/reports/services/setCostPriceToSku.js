@@ -3,11 +3,11 @@ import { dbClient } from "../../../database/index.js";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import getPrevSkuData from "./utils/different/getPrevSkuData.js";
 import excludeEqualParams from "./utils/different/excludeEqualParams.js";
-import recalculateTaxParams from "./utils/different/recalculateTaxParams.js";
+import recalculateTaxSetting from "./utils/different/recalculateTaxSetting.js";
 
 var { updateSkuInListGoods } = dbUtils.goodsModelUtils;
 var { getSkuFromReport, updateSkus } = dbUtils.skuModelUtils;
-var { getTaxParamsFromDb, updateTaxParamsToDb } = dbUtils.taxParamsModelUtils;
+var { getTaxSettingByYear, updateTaxSettings } = dbUtils.taxSettingModelUtils;
 
 var setCostPriceToSkuService = async (data) => {
   var { userId, reportId, skuName, year, costPrice } = data;
@@ -52,30 +52,27 @@ var setCostPriceToSkuService = async (data) => {
       };
     }
 
-    var taxParams = await getTaxParamsFromDb(userId, year, session);
+    var { taxSetting } = await getTaxSettingByYear(userId, year, session);
 
     var prevSkuData = getPrevSkuData(skuFromReport);
 
     skuFromReport.costPrice = costPrice;
 
-    var { updatedSkuFields, updatedTaxParamsFieldsBySku } = calc.sku.restParams(
-      skuFromReport,
-      prevSkuData,
-      taxParams,
-    );
+    var { updatedSkuFields, updatedTaxSettingFieldsBySku } =
+      calc.sku.restParams(skuFromReport, prevSkuData, taxSetting);
 
     var updatedSkus = [{ reportId, skuName, year, data: updatedSkuFields }];
 
-    var { updatedTaxParamsField } = recalculateTaxParams(
-      updatedTaxParamsFieldsBySku,
+    var { updatedTaxSettingField } = recalculateTaxSetting(
+      updatedTaxSettingFieldsBySku,
       prevSkuData,
       updatedSkuFields,
     );
 
-    var updatedTaxParams = [{ year, data: updatedTaxParamsField }];
+    var updatedTaxSettings = [{ year, data: updatedTaxSettingField }];
 
     await updateSkus(userId, updatedSkus, session);
-    await updateTaxParamsToDb(userId, updatedTaxParams, session);
+    await updateTaxSettings(userId, updatedTaxSettings, session);
     await updateSkuInListGoods(
       userId,
       skuName,

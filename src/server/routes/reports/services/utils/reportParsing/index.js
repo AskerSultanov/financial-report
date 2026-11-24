@@ -3,40 +3,45 @@ import calc from "../calcUtils/index.js";
 import getSkuByYear from "./getSkuByYear.js";
 import truncateSkuNums from "./truncateSkuNums.js";
 import parsePaidStorageReport from "./parsePaidStorageReport.js";
-import recalculateSkuAndTaxParams from "./recalculateSkuAndTaxParams.js";
+import recalculateSkuAndTaxSetting from "./recalculateSkuAndTaxSetting.js";
 import getPaidStorageReportByYear from "./getPaidStorageReportByYear.js";
 import getAdvertisingReportByYear from "./getAdvertisingReportByYear.js";
 import getWeeklyFinancialReportByYear from "./getWeeklyFinancialReportByYear.js";
 import getSkuNamesFromWeeklyFinancialReport from "./getSkuNamesFromWeeklyFinancialReport.js";
 
-var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
-  var recalculatedTaxParams = { ...taxParams };
+var processReportSkus = async (reports, taxSetting, isCrossYearPeriod) => {
+  var recalculatedTaxSetting = { ...taxSetting };
 
   var { weeklyFinancialReport, paidStorageReport, advertisingReport } = reports;
 
   var { storageReportByYear } = getPaidStorageReportByYear(
     paidStorageReport,
-    taxParams.year,
+    taxSetting.year,
     isCrossYearPeriod,
   );
+
   var { advertisingReportByYear } = getAdvertisingReportByYear(
     advertisingReport,
-    taxParams.year,
+    taxSetting.year,
     isCrossYearPeriod,
   );
+
   var { weeklyFinancialReportByYear } = getWeeklyFinancialReportByYear(
     weeklyFinancialReport,
-    taxParams.year,
+    taxSetting.year,
     isCrossYearPeriod,
   );
 
   var { parsedPaidStorageReport } = parsePaidStorageReport(storageReportByYear);
 
   var reportTotals = {};
+
   reportTotals.totalSold = calc.total.sold(weeklyFinancialReportByYear);
+
   reportTotals.totalStorageCost = calc.total.storageCost(
     weeklyFinancialReportByYear,
   );
+
   reportTotals.totalAdvertisingCosts = calc.total.advertisingCosts(
     advertisingReportByYear,
   );
@@ -55,7 +60,7 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
 
     var { skuByYear } = getSkuByYear(
       skuFilteredReport,
-      recalculatedTaxParams.year,
+      recalculatedTaxSetting.year,
     );
 
     var sku = await parseSku(
@@ -63,19 +68,19 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
       skuNamesFromWeeklyFinancialReport.length,
       skuByYear,
       skuStorageCost,
-      taxParams.taxRate,
+      taxSetting.taxRate,
       reportTotals,
     );
 
     if (sku) {
-      var { updatedTaxParams } = recalculateSkuAndTaxParams(
+      var { updatedTaxSettings } = recalculateSkuAndTaxSetting(
         sku,
-        recalculatedTaxParams,
+        recalculatedTaxSetting,
       );
 
-      recalculatedTaxParams = Object.assign(
-        recalculatedTaxParams,
-        updatedTaxParams,
+      recalculatedTaxSetting = Object.assign(
+        recalculatedTaxSetting,
+        updatedTaxSettings,
       );
 
       skus.push(sku);
@@ -84,7 +89,7 @@ var processReportSkus = async (reports, taxParams, isCrossYearPeriod) => {
     skus = truncateSkuNums(skus);
   }
 
-  return { skus, recalculatedTaxParams };
+  return { skus, recalculatedTaxSetting };
 };
 
 export default processReportSkus;
