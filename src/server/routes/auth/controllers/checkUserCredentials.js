@@ -3,7 +3,7 @@ import argon2 from "argon2";
 import dbUtils from "../../../database/modelsUtil/index.js";
 import generageAuthTokens from "../services/utils/generageAuthTokens.js";
 
-var { getUserByLogin } = dbUtils.userModelUtils;
+var { getUserByLogin, updateLastLoginDate } = dbUtils.userModelUtils;
 
 var checkUserCredentialsController = async (req, res) => {
   var { login, passwd } = req.body;
@@ -24,6 +24,7 @@ var checkUserCredentialsController = async (req, res) => {
 
   var payload = { role, userId };
 
+  await updateLastLoginDate(userId);
   var { accessToken, refreshToken } = await generageAuthTokens(payload);
 
   var accessTokenTTLInMs = ms(process.env.ACCESS_TOKEN_TTL);

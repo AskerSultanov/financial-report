@@ -4,7 +4,10 @@ import * as models from "../../../models/index.js";
 var createUserToDb = async (user, session) => {
   var { userId, role, login, passwd } = user;
 
-  var registeredAt = new Date();
+  var date = new Date();
+  var lastLogin = date;
+  var registeredAt = date;
+
   var hashedPasswd = await argon2.hash(passwd + "", process.env.SECRET_KEY);
 
   await models.reportLoadingStateModel.create([{ userId }], {
@@ -20,7 +23,7 @@ var createUserToDb = async (user, session) => {
   });
 
   await models.userModel.create(
-    [{ login, userId, role, registeredAt, passwd: hashedPasswd }],
+    [{ login, userId, role, lastLogin, registeredAt, passwd: hashedPasswd }],
     { session },
   );
 };

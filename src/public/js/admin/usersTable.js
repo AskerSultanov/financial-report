@@ -8,35 +8,44 @@ var usersTable = (users) => {
   var tableBody = document.getElementById("tbody");
 
   for (var user of users) {
-    if (user.role !== "admin") {
-      var { userId, login, registeredAt } = user;
+    var { userId, login, lastLogin, registeredAt } = user;
 
-      var loginTdElement = createTdElement(login);
-      var userIdTdElement = createTdElement(userId);
-      var registeredAtTdElem = createTdElement(registeredAt);
-      var removeUserButton = createRemoveUserButton(login, userId);
-      var removeUserButtonTdElem = createTdElement(removeUserButton);
+    lastLogin = new Date(lastLogin).toLocaleString("ru-RU", {
+      timeZone: "Europe/Moscow",
+    });
 
-      var buttonToUser = document.createElement("button");
+    registeredAt = new Date(registeredAt).toLocaleString("ru-RU", {
+      timeZone: "Europe/Moscow",
+    });
 
-      var urlToUserPage = "/admin/user/" + userId;
+    var loginTdElement = createTdElement(login);
+    var userIdTdElement = createTdElement(userId);
+    var lastLoginTdElement = createTdElement(lastLogin);
+    var registeredAtTdElem = createTdElement(registeredAt);
+    var removeUserButton = createRemoveUserButton(login, userId);
+    var removeUserButtonTdElem = createTdElement(removeUserButton);
 
-      buttonToUser.textContent = "открыть";
-      buttonToUser.onclick = () =>
-        navigateTo(urlToUserPage, needToOpenNewWindow);
+    var buttonToUser = document.createElement("button");
 
-      var tableRow = document.createElement("tr");
-      tableRow.id = userId;
+    var urlToUserPage = "/admin/user/" + userId;
 
-      tableRow.append(
-        userIdTdElement,
-        loginTdElement,
-        registeredAtTdElem,
-        buttonToUser,
-        removeUserButtonTdElem,
-      );
-      tableBody.append(tableRow);
-    }
+    buttonToUser.textContent = "открыть";
+    buttonToUser.onclick = () => navigateTo(urlToUserPage, needToOpenNewWindow);
+
+    var buttonToUserTdElement = createTdElement(buttonToUser);
+
+    var tableRow = document.createElement("tr");
+    tableRow.id = userId;
+
+    tableRow.append(
+      userIdTdElement,
+      loginTdElement,
+      lastLoginTdElement,
+      registeredAtTdElem,
+      buttonToUserTdElement,
+      removeUserButtonTdElem,
+    );
+    tableBody.append(tableRow);
   }
 };
 

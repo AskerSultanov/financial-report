@@ -1,6 +1,6 @@
 import { dbClient } from "../index.js";
 import skuSchema from "../schemas/skus.js";
-import usersSchema from "../schemas/users.js";
+import userSchema from "../schemas/users.js";
 import goodsSchema from "../schemas/goods.js";
 import tokenSchema from "../schemas/token.js";
 import taxSettingSchema from "../schemas/taxSetting.js";
@@ -9,7 +9,7 @@ import reportLoadingStateSchema from "../schemas/reportLoadingState.js";
 import weeklyPricesAndDiscountsSchema from "../schemas/weeklyPricesAndDiscounts.js";
 
 var skuModel = dbClient.model("Sku", skuSchema);
-var userModel = dbClient.model("User", usersSchema);
+var userModel = dbClient.model("User", userSchema);
 var goodsModel = dbClient.model("Goods", goodsSchema);
 var tokenModel = dbClient.model("Token", tokenSchema);
 var taxSettingModel = dbClient.model("Tax_setting", taxSettingSchema);

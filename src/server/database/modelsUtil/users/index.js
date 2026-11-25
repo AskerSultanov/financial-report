@@ -4,5 +4,14 @@ import getAllUsersFromDb from "./utils/getAllUsers.js";
 import createUserToDb from "./utils/createUserToDb.js";
 import deleteUserFromDb from "./utils/deleteUserFromDb.js";
 import deleteUsersFromDb from "./utils/deleteUsersFromDb.js";
+import updateLastLoginDate from "./utils/updateLastLoginDate.js";
 
-export { resetUserData, getUserByLogin, getAllUsersFromDb, createUserToDb, deleteUserFromDb, deleteUsersFromDb };
+export {
+  resetUserData,
+  getUserByLogin,
+  getAllUsersFromDb,
+  createUserToDb,
+  deleteUserFromDb,
+  deleteUsersFromDb,
+  updateLastLoginDate,
+};

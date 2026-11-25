@@ -1,0 +1,76 @@
+/* Основные стили для страницы */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  margin: 0;
+  padding: 24px;
+  background: #fff;
+  color: #000;
+}
+
+/* Кнопка "На главную" */
+#back-to-main-page {
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#back-to-main-page:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* Контейнер таблицы */
+.users-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Таблица */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+/* Заголовки */
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid #000;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Ячейки */
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ccc;
+  white-space: nowrap;
+}
+
+/* Чередование строк — очень мягкое, чтобы не было "разноцветности" */
+tbody tr:nth-child(even) {
+  background: #f7f7f7;
+}
+
+/* Ховер на строку */
+tbody tr:hover {
+  background: #eee;
+}
+
+/* Пустое состояние (если нет данных) */
+tbody tr td[colspan] {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+}

@@ -7,15 +7,15 @@ var buttonToMainPage = document.getElementById("back-to-main-page");
 var url = "/admin/api";
 var urlToMainPage = "/my";
 
-var getMainPageData = async () => {
+var main = async () => {
   var res = await doRequest(url);
 
-  var { users } = await res.json();
-  return { users };
-};
+  if (!res.ok) {
+    alert("Возникла ошибка при получении пользователей");
+    return;
+  }
 
-var main = async () => {
-  var { users } = await getMainPageData();
+  var { users } = await res.json();
 
   usersTable(users);
 };
