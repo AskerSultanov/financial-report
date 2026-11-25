@@ -1,4 +1,4 @@
-import usersTable from "./usersTable.js";
+import createUsersTable from "./createUsersTable.js";
 import doRequest from "../utils/doRequest.js";
 import navigateTo from "../utils/navigateTo.js";
 
@@ -17,7 +17,7 @@ var main = async () => {
 
   var { users } = await res.json();
 
-  usersTable(users);
+  createUsersTable(users);
 };
 
 main();

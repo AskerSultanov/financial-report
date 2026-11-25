@@ -2,21 +2,24 @@ import navigateTo from "../utils/navigateTo.js";
 import createRemoveUserButton from "./createRemoveUserButton.js";
 import createTdElement from "../report/table/services/createTdElement.js";
 
-var needToOpenNewWindow = false;
+var localizeTheDate = (dateInStr) => {
+  if (dateInStr) {
+    return new Date(dateInStr).toLocaleString("ru-RU", {
+      timeZone: "Europe/Moscow",
+    });
+  }
 
-var usersTable = (users) => {
+  return "-";
+};
+
+var createUsersTable = (users) => {
   var tableBody = document.getElementById("tbody");
 
   for (var user of users) {
     var { userId, login, lastLogin, registeredAt } = user;
 
-    lastLogin = new Date(lastLogin).toLocaleString("ru-RU", {
-      timeZone: "Europe/Moscow",
-    });
-
-    registeredAt = new Date(registeredAt).toLocaleString("ru-RU", {
-      timeZone: "Europe/Moscow",
-    });
+    lastLogin = localizeTheDate(lastLogin);
+    registeredAt = localizeTheDate(registeredAt);
 
     var loginTdElement = createTdElement(login);
     var userIdTdElement = createTdElement(userId);
@@ -30,7 +33,7 @@ var usersTable = (users) => {
     var urlToUserPage = "/admin/user/" + userId;
 
     buttonToUser.textContent = "открыть";
-    buttonToUser.onclick = () => navigateTo(urlToUserPage, needToOpenNewWindow);
+    buttonToUser.onclick = () => navigateTo(urlToUserPage);
 
     var buttonToUserTdElement = createTdElement(buttonToUser);
 
@@ -49,4 +52,4 @@ var usersTable = (users) => {
   }
 };
 
-export default usersTable;
+export default createUsersTable;
